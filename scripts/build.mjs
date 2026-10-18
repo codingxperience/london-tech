@@ -1,4 +1,5 @@
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { buildSeoPages } from './seo-pages.mjs';
@@ -24,6 +25,9 @@ const [builtStorefrontHtml, builtAdminHtml] = await Promise.all([
   precompileDcDocument({ html: storefrontHtml, output, label: 'index.html', names: ['Root', 'index'], scriptFile: 'app-logic.js' }),
   precompileDcDocument({ html: adminHtml, output, label: 'admin.html', names: ['admin'], scriptFile: 'admin-logic.js' })
 ]);
+for (const scriptFile of ['app-logic.js', 'admin-logic.js']) {
+  execFileSync(process.execPath, ['--check', path.join(output, scriptFile)], { stdio: 'inherit' });
+}
 await Promise.all([
   writeFile(path.join(output, 'index.html'), builtStorefrontHtml, 'utf8'),
   writeFile(path.join(output, 'admin.html'), builtAdminHtml, 'utf8')
