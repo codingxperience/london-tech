@@ -67,7 +67,7 @@ const absoluteUrl = (value) => /^https?:\/\//i.test(value)
   : `${siteUrl}/${String(value).replace(/^\//, '')}`;
 const collectionUrl = (slug) => `${siteUrl}/collections/${slug}/`;
 const productUrl = (id) => `${siteUrl}/products/${encodeURIComponent(id)}/`;
-const productImage = (product) => absoluteUrl(product.img || 'assets/london-tech-social-card.png');
+const productImage = (product) => absoluteUrl(product.img || 'assets/london-tech-logo.png');
 const categoryName = (category) => categoryLabels[category] || 'Technology';
 
 const appleProductPattern = /(?:iphone|ipad|macbook|apple watch|airpods|beats)/i;
@@ -97,7 +97,7 @@ const organization = {
   alternateName: 'London Technology Store',
   url: `${siteUrl}/`,
   logo: absoluteUrl('assets/london-tech-logo.png'),
-  image: absoluteUrl('assets/london-tech-social-card.png'),
+  image: absoluteUrl('assets/london-tech-logo.png'),
   description: 'London Tech is a London technology store with a catalogue of phones, computers, audio, gaming and accessories.',
   areaServed: { '@type': 'City', name: 'London' },
   knowsAbout: ['consumer electronics', 'phones', 'computers', 'audio', 'gaming', 'accessories']
@@ -233,7 +233,7 @@ const renderFaq = (faqs = collectionFaqs) => `<section class="faq" aria-labelled
 const renderCollection = (page, catalog) => {
   const canonical = collectionUrl(page.slug);
   const products = productsForCollection(page, catalog);
-  const image = products.length ? productImage(products[0]) : absoluteUrl('assets/london-tech-social-card.png');
+  const image = products.length ? productImage(products[0]) : absoluteUrl('assets/london-tech-logo.png');
   const listRoute = page.productFilter === 'iphone' || page.productFilter === 'samsung-ultra'
     ? '/#/shop/mobiles'
     : page.slug === 'shop' || page.productFilter === 'apple'

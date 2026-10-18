@@ -44,7 +44,7 @@
       "@id": "https://london-tech.vercel.app/#organization",
       "name": "London Tech",
       "url": "https://london-tech.vercel.app/",
-      "image": "https://london-tech.vercel.app/assets/london-tech-social-card.png",
+      "image": "https://london-tech.vercel.app/assets/london-tech-logo.png",
       "logo": {
         "@type": "ImageObject",
         "url": "https://london-tech.vercel.app/assets/london-tech-logo.png",
@@ -1022,9 +1022,9 @@ class Component extends DCLogic {
     if (canonical) canonical.href = root;
     if (ogTitle) ogTitle.content = title;
     if (ogUrl) ogUrl.content = root;
-    if (ogImage) ogImage.content = root + 'assets/london-tech-social-card.png';
+    if (ogImage) ogImage.content = root + 'assets/london-tech-logo.png';
     if (twitterTitle) twitterTitle.content = title;
-    if (twitterImage) twitterImage.content = root + 'assets/london-tech-social-card.png';
+    if (twitterImage) twitterImage.content = root + 'assets/london-tech-logo.png';
   }
 
   componentDidMount() {

@@ -21,7 +21,7 @@ const catalog = parseCatalog(html);
 requireText(html, '<title>London Tech | London Technology Store</title>', 'storefront title');
 requireText(html, 'assets/london-tech-logo.png', 'owner-supplied London Tech logo');
 requireText(html, 'assets/london-tech-mark.png', 'compact London Tech brand mark');
-requireText(html, 'assets/london-tech-social-card.png', 'London Tech social preview');
+requireText(html, 'property="og:image" content="https://london-tech.vercel.app/assets/london-tech-logo.png"', 'London Tech white-logo social preview');
 requireText(html, 'data-word-subtitle', 'London Technology Store wordmark');
 requireText(adminHtml, 'No real orders, customers, payments or business systems are connected.', 'admin prototype boundary');
 requireText(adminHtml, 'sample records stored in this browser', 'admin sample-data disclosure');
