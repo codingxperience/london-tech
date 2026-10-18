@@ -1,0 +1,17 @@
+{
+  "name": "London Tech — London Technology Store",
+  "short_name": "London Tech",
+  "description": "A considered catalogue of phones, computers, audio and everyday technology.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#081b33",
+  "theme_color": "#081b33",
+  "icons": [
+    {
+      "src": "assets/london-tech-mark.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}

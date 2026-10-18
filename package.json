@@ -1,0 +1,16 @@
+{
+  "name": "london-tech-store",
+  "private": true,
+  "version": "1.0.0",
+  "homepage": "https://london-tech.vercel.app/",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/build.mjs",
+    "preview": "vite preview",
+    "qa": "node scripts/qa.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.1.4"
+  }
+}
