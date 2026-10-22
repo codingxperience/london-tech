@@ -1,0 +1,2 @@
+# Store assets directly in Git; no Git LFS quota is required.
+* -filter

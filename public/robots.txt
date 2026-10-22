@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://london-tech.vercel.app/sitemap.xml
