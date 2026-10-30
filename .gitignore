@@ -19,3 +19,8 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+
+!.env.example
+.data/
+.vercel/
+coverage/

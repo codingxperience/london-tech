@@ -1,3 +1,4 @@
+import { useStore, navigate } from "./store.jsx"
 import { useState, useEffect, type ReactNode } from "react"
 import logoImg from "@/imports/london/london-tech-logo.png"
 import iphone18 from "@/imports/london/iphone-18-pro.png"
@@ -70,7 +71,7 @@ const SEARCH_WORDS = [
 const UTILITY_MESSAGES = [
   "Original technology. Local expertise.",
   "Discover phones, audio & everyday essentials.",
-  "Talk to our team on WhatsApp: +256 792 261590",
+  "Talk to our team on WhatsApp: 0788341111 / 0709417273",
 ]
 
 function WhatsAppIcon({ size = 20 }: { size?: number }) {
@@ -107,7 +108,7 @@ interface CDTime {
 const ugx = (n: number) => "UGX " + n.toLocaleString("en-UG")
 const ugxArabic = (n: number) => n.toLocaleString("ar-UG") + " شلن أوغندي"
 const whatsapp = (p: Product) =>
-  `https://wa.me/256792261590?text=${encodeURIComponent(`Hello London Tech, I am interested in ${p.name} (${ugx(p.price)}).`)}`
+  `https://wa.me/256788341111?text=${encodeURIComponent(`Hello London Tech, I am interested in $<a href={"/products/" + commerceId(p) + "/"}>{p.name}</a> (${ugx(p.price)}).`)}`
 
 function Stars({ r }: { r: number }) {
   return (
@@ -464,14 +465,27 @@ const HERO_SLIDES = [
   },
 ]
 
+
+const COMMERCE_IDS: Record<number, string> = { 1:'iphone-18-pro-max',2:'iphone-18-pro-max-burgundy',3:'galaxy-s25-ultra',4:'galaxy-z-fold8',5:'honor-x9b',6:'infinix-smart-10-plus',7:'samsung-galaxy-tablet',8:'apple-ipad-pro',9:'soundcore-wireless-earbuds',10:'green-lion-usbc-cable',11:'dji-pocket-camera',12:'apple-watch-series',101:'iphone-18-pro-max',102:'galaxy-z-fold8',103:'apple-ipad-pro',104:'dji-pocket-camera',201:'galaxy-s25-ultra',202:'soundcore-wireless-earbuds' }
+const commerceId = (p: Product) => COMMERCE_IDS[p.id] || String(p.id)
+const categoryId = (name: string) => ({ All:'shop','All Categories':'shop',Smartphones:'mobiles','Smart Watches':'watches','Laptops & PC':'laptops',Laptops:'laptops',Tablets:'tablets',Earbuds:'audio',Speakers:'audio',Headphones:'audio',Audio:'audio','Audio & Earbuds':'audio',Cameras:'cameras',Gaming:'gaming',Accessories:'accessories' } as Record<string,string>)[name.split(' · ')[0]] || 'shop'
+const navigationPath = (label: string) => label === 'Home' ? '/' : label === 'About Us' ? '/about/' : '/collections/' + categoryId(label) + '/'
+function hydrateProduct(p: Product, catalogue: any[]): Product {
+  const live = catalogue.find((product) => product.id === commerceId(p))
+  return live ? { ...p, name:live.name, image:live.image, price:live.price ?? p.price, oldPrice:live.comparePrice ?? undefined, rating:0, badge:p.badge?.startsWith('-') ? 'PICK' : p.badge, sold:undefined, available:live.stock ?? undefined } : p
+}
+
 // ── Product Card ──────────────────────────────────────────────────────────────
 function ProductCard({ p }: { p: Product }) {
-  const [wished, setWished] = useState(false)
-  const [added, setAdded] = useState(false)
+  const { products, wishlist, toggleWish, addCart, cart } = useStore()
+  const item = products.find((item: { id: string }) => item.id === commerceId(p))
+  const wished = wishlist.includes(commerceId(p))
+  const added = cart.some((line: { id: string }) => line.id === commerceId(p))
   const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0
   return (
     <div
       className="pcard"
+      onClick={(e) => { if (!(e.target as HTMLElement).closest("button,a")) navigate("/products/" + commerceId(p) + "/") }}
       style={{
         background: "#fff",
         border: "1px solid #eee",
@@ -491,6 +505,7 @@ function ProductCard({ p }: { p: Product }) {
       >
         <img
           src={p.image}
+          loading="lazy" decoding="async"
           alt={p.name}
           className="pimg"
           style={{
@@ -536,7 +551,7 @@ function ProductCard({ p }: { p: Product }) {
           }}
         >
           <button
-            onClick={() => setAdded(!added)}
+            onClick={() => item && addCart(item)}
             style={{
               fontSize: 11,
               fontWeight: 700,
@@ -552,7 +567,7 @@ function ProductCard({ p }: { p: Product }) {
             {added ? "✓ Added" : "+ Add to Cart"}
           </button>
           <button
-            onClick={() => setWished(!wished)}
+            onClick={() => toggleWish(commerceId(p))} aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
             style={{
               background: "none",
               border: "none",
@@ -589,7 +604,7 @@ function ProductCard({ p }: { p: Product }) {
             fontFamily: "Nunito,sans-serif",
           }}
         >
-          {p.name}
+          <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
         </div>
         {p.arabicName && (
           <div
@@ -605,7 +620,8 @@ function ProductCard({ p }: { p: Product }) {
             {p.arabicName}
           </div>
         )}
-        <Stars r={p.rating} />
+        <Stars r={0} />
+        <span style={{ display: "block", fontSize: 9, color: "#8c98a8", marginTop: 5 }}>Guide price · confirm with store</span>
         <div
           style={{
             display: "flex",
@@ -693,7 +709,7 @@ function ProductCard({ p }: { p: Product }) {
             <WhatsAppIcon size={15} /> Chat
           </a>
           <button
-            onClick={() => setAdded(!added)}
+            onClick={() => item && addCart(item)}
             style={{
               background: added ? B_GOLD : B_BLUE,
               color: "#fff",
@@ -773,18 +789,19 @@ function SectionHeader({
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
-export default function App() {
+export default function App({ children }: { children?: ReactNode }) {
+  const { products: catalogue, cart: cartItems, user, setCartOpen, settings } = useStore()
+  const cart = cartItems.reduce((sum: number, line: { quantity: number }) => sum + line.quantity, 0)
   const [slide, setSlide] = useState(0)
+  const [latestOffset, setLatestOffset] = useState(0)
+  const [dealOffset, setDealOffset] = useState(0)
   const [tcat, setTcat] = useState("All")
   const [q, setQ] = useState("")
-  const [cart, setCart] = useState(0)
   const [navOpen, setNavOpen] = useState(false)
   const [utility, setUtility] = useState(0)
   const [word, setWord] = useState(0)
   const [searchCategory, setSearchCategory] = useState("All Categories")
   const [heroHovered, setHeroHovered] = useState(false)
-  const c1 = useCountdown(7 * 3600 + 41 * 60 + 36)
-  const c2 = useCountdown(3 * 86400 + 7 * 3600 + 41 * 60 + 36)
 
   useEffect(() => {
     if (
@@ -811,7 +828,7 @@ export default function App() {
   }, [])
 
   const hero = HERO_SLIDES[slide]
-  const filtered = PRODUCTS.filter(
+  const filtered = PRODUCTS.map((p) => hydrateProduct(p, catalogue)).filter(
     (p) =>
       (tcat === "All" || p.category === tcat) &&
       p.name.toLowerCase().includes(q.toLowerCase()) &&
@@ -820,19 +837,13 @@ export default function App() {
         (searchCategory.startsWith("Earbuds") && p.category === "Audio")),
   )
   const shopCategory = (category: string) => {
-    setTcat(category)
-    document
-      .getElementById("trending")
-      ?.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "instant"
-          : "smooth",
-        block: "start",
-      })
+    navigate('/collections/' + categoryId(category) + '/' + (q.trim() ? '?q=' + encodeURIComponent(q.trim()) : ''))
   }
+
 
   return (
     <div
+      className="reference-storefront"
       style={{
         background: "#f2f4f8",
         minHeight: "100vh",
@@ -917,7 +928,7 @@ export default function App() {
           }}
         >
           {/* Supplied London Tech logo */}
-          <a href="#" style={{ flexShrink: 0 }}>
+          <a href="/" style={{ flexShrink: 0 }}>
             <img
               src={logoImg}
               alt="London Tech"
@@ -1010,6 +1021,7 @@ export default function App() {
             ].map((u) => (
               <button
                 key={u.label}
+                onClick={() => navigate(u.label === "Account" ? (user ? "/account/" : "/login/") : "/wishlist/")}
                 style={{
                   background: "none",
                   border: "none",
@@ -1030,7 +1042,7 @@ export default function App() {
               </button>
             ))}
             <button
-              onClick={() => setCart((c) => c + 1)}
+              onClick={() => setCartOpen(true)} aria-label="Open shopping cart"
               style={{
                 background: "none",
                 border: "none",
@@ -1102,7 +1114,7 @@ export default function App() {
                   whiteSpace: "nowrap",
                 }}
               >
-                +256 792 261590
+                0788341111 / 0709417273
               </div>
             </div>
           </div>
@@ -1122,6 +1134,7 @@ export default function App() {
         >
           {/* ALL CATEGORIES pill */}
           <button
+            onClick={() => shopCategory("All")}
             style={{
               background: B_BLUE,
               color: "#fff",
@@ -1150,7 +1163,7 @@ export default function App() {
             {NAV_LINKS.map((lnk, i) => (
               <a
                 key={lnk}
-                href="#"
+                href={navigationPath(lnk)}
                 style={{
                   padding: "10px 12px",
                   fontSize: 13,
@@ -1206,7 +1219,7 @@ export default function App() {
           {NAV_LINKS.map((lnk, i) => (
             <a
               key={lnk}
-              href="#"
+              href={navigationPath(lnk)}
               onClick={() => setNavOpen(false)}
               style={{
                 display: "flex",
@@ -1228,8 +1241,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* ── Page body ─────────────────────────────────────────────────── */}
-      <div className="page-wrap">
+      {/* The current repository storefront is the visual source of truth. */}
+      {children ? <div className="commerce-surface">{children}</div> : <div className="page-wrap">
         {/* ── Sidebar ── */}
         <aside className="sidebar-col">
           {/* Category list */}
@@ -1245,6 +1258,7 @@ export default function App() {
             {CATS.map((cat) => (
               <div
                 key={cat.name}
+                role="link" tabIndex={0} onClick={() => shopCategory(cat.name)} onKeyDown={(e) => { if (e.key === "Enter") shopCategory(cat.name) }}
                 style={{
                   padding: "9px 12px",
                   borderBottom: "1px solid #f5f5f5",
@@ -1288,7 +1302,7 @@ export default function App() {
                 gap: 6,
               }}
             >
-              <Sparkles size={13} /> More Categories
+              <a href="/collections/shop/" style={{ display: "flex", alignItems: "center", gap: 6 }}><Sparkles size={13} /> More Categories</a>
             </div>
           </div>
 
@@ -1382,7 +1396,7 @@ export default function App() {
             >
               <Flame size={13} color={B_GOLD} /> Latest Products
               <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-                <button
+                <button onClick={() => setLatestOffset((i) => (i + LATEST.length - 1) % LATEST.length)} aria-label="Previous latest products"
                   style={{
                     background: "#345888",
                     border: "none",
@@ -1398,7 +1412,7 @@ export default function App() {
                 >
                   <ChevronLeft size={12} />
                 </button>
-                <button
+                <button onClick={() => setLatestOffset((i) => (i + 1) % LATEST.length)} aria-label="Next latest products"
                   style={{
                     background: B_GOLD,
                     border: "none",
@@ -1416,7 +1430,7 @@ export default function App() {
                 </button>
               </div>
             </div>
-            {LATEST.map((p) => (
+            {[...LATEST.slice(latestOffset), ...LATEST.slice(0, latestOffset)].map((p) => hydrateProduct(p, catalogue)).map((p) => (
               <div
                 key={p.id}
                 style={{
@@ -1452,9 +1466,10 @@ export default function App() {
                       marginBottom: 3,
                     }}
                   >
-                    {p.name}
+                    <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
                   </div>
-                  <Stars r={p.rating} />
+                  <Stars r={0} />
+        <span style={{ display: "block", fontSize: 9, color: "#8c98a8", marginTop: 5 }}>Guide price · confirm with store</span>
                   <div
                     style={{
                       marginTop: 3,
@@ -1503,8 +1518,8 @@ export default function App() {
             {[
               {
                 icon: <Truck size={20} color={B_BLUE} />,
-                title: "FREE DELIVERY",
-                sub: "On orders over UGX 180,000",
+                title: "DELIVERY & COLLECTION",
+                sub: "Confirm arrangements with the store",
               },
               {
                 icon: <ShieldCheck size={20} color={B_BLUE} />,
@@ -1635,12 +1650,12 @@ export default function App() {
                 {
                   src: appleWatch,
                   label: "Smart Watches",
-                  price: "From UGX 1,190,000",
+                  price: "Guide UGX 1,190,000",
                 },
                 {
                   src: soundcore,
                   label: "Audio & Earbuds",
-                  price: "From UGX 265,000",
+                  price: "Guide UGX 265,000",
                 },
               ].map((b) => (
                 <div
@@ -1700,7 +1715,7 @@ export default function App() {
                       {b.price}
                     </div>
                     <a
-                      href="#"
+                      href={"/collections/" + categoryId(b.label) + "/"}
                       style={{
                         color: "#fff",
                         fontSize: 10,
@@ -1758,7 +1773,7 @@ export default function App() {
                 تقنية أصلية، خدمة موثوقة
               </strong>
             </span>
-            <Btn small>Shop Offers</Btn>
+            <Btn small onClick={() => shopCategory("All")}>Shop Offers</Btn>
           </div>
 
           {/* Daily Deals */}
@@ -1775,7 +1790,7 @@ export default function App() {
               icon={<Flame size={16} color={B_BLUE} />}
               controls={
                 <>
-                  <button
+                  <button onClick={() => setDealOffset((i) => (i + DEALS.length - 1) % DEALS.length)} aria-label="Previous featured products"
                     style={{
                       background: "#f5f5f5",
                       border: "1px solid #ddd",
@@ -1791,7 +1806,7 @@ export default function App() {
                   >
                     <ChevronLeft size={14} />
                   </button>
-                  <button
+                  <button onClick={() => setDealOffset((i) => (i + 1) % DEALS.length)} aria-label="Next featured products"
                     style={{
                       background: B_BLUE,
                       border: "none",
@@ -1811,7 +1826,7 @@ export default function App() {
               }
             />
             <div className="deals-grid">
-              {DEALS.map((p, i) => (
+              {[...DEALS.slice(dealOffset), ...DEALS.slice(0, dealOffset)].map((p) => hydrateProduct(p, catalogue)).map((p, i) => (
                 <div
                   key={p.id}
                   className="deal-item"
@@ -1870,7 +1885,7 @@ export default function App() {
                         marginBottom: 4,
                       }}
                     >
-                      {p.name}
+                      <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
                     </div>
                     {p.arabicName && (
                       <div
@@ -1932,8 +1947,7 @@ export default function App() {
                     <div
                       style={{ fontSize: 11, color: "#888", marginBottom: 8 }}
                     >
-                      Available: <strong>{p.available}</strong> &nbsp;|&nbsp;
-                      Sold: <strong>{p.sold}</strong>
+                      Stock: <strong>{p.available == null ? "Confirm with store" : p.available}</strong>
                     </div>
                     <div
                       style={{
@@ -1953,15 +1967,7 @@ export default function App() {
                         }}
                       />
                     </div>
-                    <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                      <CDBox label="Days" value={i === 0 ? c1.days : c2.days} />
-                      <CDBox
-                        label="Hours"
-                        value={i === 0 ? c1.hours : c2.hours}
-                      />
-                      <CDBox label="Mins" value={i === 0 ? c1.mins : c2.mins} />
-                      <CDBox label="Secs" value={i === 0 ? c1.secs : c2.secs} />
-                    </div>
+                    <div style={{ fontSize: 10, color: "#7d8b9d", lineHeight: 1.7 }}>Guide price · Confirm configuration and availability before payment.</div>
                   </div>
                 </div>
               ))}
@@ -2042,7 +2048,7 @@ export default function App() {
             </div>
           </div>
         </main>
-      </div>
+      </div>}
 
       {/* ── Footer ───────────────────────────────────────────────────── */}
       <footer className="site-footer">
@@ -2054,7 +2060,7 @@ export default function App() {
             </div>
             <div className="footer-conversation">
               <p>A little advice makes all the difference.<br />Talk tech with our team.</p>
-              <a className="footer-whatsapp whatsapp-cta" href="https://wa.me/256792261590" target="_blank" rel="noreferrer">
+              <a className="footer-whatsapp whatsapp-cta" href="https://wa.me/256788341111" target="_blank" rel="noreferrer">
                 <WhatsAppIcon size={20} /> Let’s talk on WhatsApp <ArrowUpRight size={17} />
               </a>
             </div>
@@ -2062,7 +2068,7 @@ export default function App() {
 
           <div className="footer-grid">
             <div className="footer-brand">
-              <a href="#" aria-label="London Tech home" className="footer-logo"><img src={logoImg} alt="London Tech" /></a>
+              <a href="/" aria-label="London Tech home" className="footer-logo"><img src={logoImg} alt="London Tech" /></a>
               <p>Original technology.<br />Thoughtfully chosen. Locally trusted.</p>
               <span className="footer-arabic" lang="ar" dir="rtl">متجرك الموثوق للتكنولوجيا الأصلية</span>
             </div>
@@ -2082,15 +2088,20 @@ export default function App() {
             <div className="footer-column">
               <h3>Here to help</h3>
               <ul>
-                <li><a href="tel:+256792261590">+256 792 261590</a></li>
-                <li><a href="mailto:sales@londontech.store">sales@londontech.store</a></li>
-                <li><a href="https://wa.me/256792261590?text=Hello%20London%20Tech%2C%20I%20have%20a%20question%20about%20an%20order." target="_blank" rel="noreferrer">Order enquiries <ArrowUpRight size={13} /></a></li>
+                <li><a href="tel:+256788341111">0788341111</a></li>
+                <li><a href="tel:+256709417273">0709417273</a></li>
+                <li><a href="/about/">About us</a></li>
+                <li><a href="/account/orders/">My orders</a></li>
+                <li><a href="/delivery/">Delivery & collection</a></li>
+                <li><a href="/returns/">Returns & warranty</a></li>
+                <li><a href="/admin/">Store admin</a></li>
+                <li><a href="https://wa.me/256788341111?text=Hello%20London%20Tech%2C%20I%20have%20a%20question%20about%20an%20order." target="_blank" rel="noreferrer">Order enquiries <ArrowUpRight size={13} /></a></li>
               </ul>
             </div>
             <div className="footer-column footer-visit">
               <h3>Find us</h3>
-              <p>Kampala, Uganda</p>
-              <p>Monday – Saturday<br /><span>8:00 am – 8:00 pm</span></p>
+              <p>{settings.address}</p>
+              <p>{settings.hours || "Call to confirm opening hours."}</p>
               <span className="footer-local"><MapPin size={13} /> Your local tech people.</span>
             </div>
           </div>
@@ -2102,7 +2113,7 @@ export default function App() {
       </footer>
       <a
         className="floating-whatsapp whatsapp-cta"
-        href="https://wa.me/256792261590"
+        href="https://wa.me/256788341111"
         target="_blank"
         rel="noreferrer"
         aria-label="Chat with London Tech on WhatsApp"

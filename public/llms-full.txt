@@ -1,0 +1,18 @@
+# London Tech — London Technology Store
+
+London Tech is a technology store in Uganda. The shop is at Arua Park, NYUMBA KUBUA building, second floor, shop FN:19.
+
+Public phone numbers: 0788341111 and 0709417273. Currency: UGX.
+
+The catalogue includes phones, laptops, tablets, audio, smart watches, gaming, cameras, accessories, games, bags, travel and lifestyle products.
+
+Guide prices are draft estimates. They are not confirmed offers. Current price, configuration, condition and stock are confirmed by the store. Online payments require confirmed prices and stock or an administrator-confirmed quote.
+
+Customers can browse, compare up to four products, save favourites, maintain a cart, register an account, submit confirmation requests, review quotes and track orders. Configured checkout supports MTN Mobile Money, Airtel Money and Visa / card through Flutterwave. Payment status is determined by server verification.
+
+Canonical store: https://london-tech.vercel.app/
+Shop: https://london-tech.vercel.app/collections/shop/
+Contact: https://london-tech.vercel.app/contact/
+About: https://london-tech.vercel.app/about/
+Delivery: https://london-tech.vercel.app/delivery/
+Returns: https://london-tech.vercel.app/returns/

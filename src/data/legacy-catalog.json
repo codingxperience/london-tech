@@ -1,0 +1,2024 @@
+[
+  {
+    "id": "iphone-17-pro-max",
+    "cat": "mobiles",
+    "name": "iPhone 17 Pro Max",
+    "tag": "Featured",
+    "img": "assets/official-apple-iphone17-pro-cosmic-orange.jpg",
+    "gallery": [
+      "assets/official-apple-iphone17-pro-cosmic-orange.jpg",
+      "assets/official-apple-iphone17-pro-lineup.jpg"
+    ],
+    "blurb": "Apple’s current largest Pro model, with A19 Pro, three 48MP Fusion cameras and its longest iPhone battery life.",
+    "specs": [
+      [
+        "Display",
+        "6.9″ Super Retina XDR, 120Hz"
+      ],
+      [
+        "Chip",
+        "A19 Pro"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB / 2TB"
+      ],
+      [
+        "Camera",
+        "48MP Pro Fusion triple"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-17-pro",
+    "cat": "mobiles",
+    "name": "iPhone 17 Pro",
+    "tag": "Featured",
+    "img": "assets/official-apple-iphone17-pro-lineup.jpg",
+    "gallery": [
+      "assets/official-apple-iphone17-pro-lineup.jpg",
+      "assets/official-apple-iphone17-pro-cosmic-orange.jpg"
+    ],
+    "blurb": "Apple’s 6.3-inch current Pro model, with the A19 Pro chip and an all-48MP Fusion camera system.",
+    "specs": [
+      [
+        "Display",
+        "6.3″ Super Retina XDR, 120Hz"
+      ],
+      [
+        "Chip",
+        "A19 Pro"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB"
+      ],
+      [
+        "Camera",
+        "48MP Pro Fusion triple"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-17",
+    "cat": "mobiles",
+    "name": "iPhone 17",
+    "tag": "Featured",
+    "img": "assets/official-apple-iphone17-base.jpg",
+    "gallery": [
+      "assets/official-apple-iphone17-base.jpg",
+      "assets/official-apple-iphone17-lineup.jpg"
+    ],
+    "blurb": "The latest iPhone 17 with a 6.3-inch ProMotion display, A19 chip and 48MP Dual Fusion camera system.",
+    "specs": [
+      [
+        "Display",
+        "6.3″ Super Retina XDR, 120Hz"
+      ],
+      [
+        "Chip",
+        "A19"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB"
+      ],
+      [
+        "Camera",
+        "48MP Dual Fusion"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-17-orange",
+    "cat": "mobiles",
+    "name": "iPhone 17 Pro — Cosmic Orange",
+    "tag": "Featured",
+    "img": "assets/official-apple-iphone17-pro-cosmic-orange.jpg",
+    "gallery": [
+      "assets/official-apple-iphone17-pro-cosmic-orange.jpg",
+      "assets/official-apple-iphone17-pro-lineup.jpg"
+    ],
+    "blurb": "The official Cosmic Orange finish for Apple’s current iPhone 17 Pro range.",
+    "specs": [
+      [
+        "Finish",
+        "Cosmic Orange"
+      ],
+      [
+        "Chip",
+        "A19 Pro"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB"
+      ],
+      [
+        "Camera",
+        "48MP Pro Fusion triple"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-s26-ultra",
+    "cat": "mobiles",
+    "name": "Samsung Galaxy S26 Ultra",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-samsung-galaxy-s26-ultra-cobalt-violet.jpg",
+    "gallery": [
+      "assets/official-samsung-galaxy-s26-ultra-cobalt-violet.jpg",
+      "assets/official-samsung-galaxy-s26-ultra-black.jpg",
+      "assets/official-samsung-galaxy-s26-ultra-share.jpg",
+      "assets/official-samsung-galaxy-s26-ultra-key-visual.jpg"
+    ],
+    "blurb": "Samsung’s latest Ultra flagship: a 6.9-inch display, 200MP main camera, built-in privacy display and S Pen support.",
+    "specs": [
+      [
+        "Display",
+        "6.9″ Dynamic AMOLED 2X"
+      ],
+      [
+        "Camera",
+        "200MP Wide + dual 50MP"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB"
+      ],
+      [
+        "Memory",
+        "12GB / 16GB (1TB)"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-s26-ultra-black",
+    "cat": "mobiles",
+    "name": "Samsung Galaxy S26 Ultra — Black",
+    "tag": "Featured",
+    "img": "assets/official-samsung-galaxy-s26-ultra-black.jpg",
+    "gallery": [
+      "assets/official-samsung-galaxy-s26-ultra-black.jpg",
+      "assets/official-samsung-galaxy-s26-ultra-cobalt-violet.jpg",
+      "assets/official-samsung-galaxy-s26-ultra-share.jpg",
+      "assets/official-samsung-galaxy-s26-ultra-key-visual.jpg"
+    ],
+    "blurb": "The latest Galaxy S26 Ultra in Black, with its integrated S Pen, 200MP camera system and privacy-focused flagship display.",
+    "specs": [
+      [
+        "Finish",
+        "Black"
+      ],
+      [
+        "Display",
+        "6.9″ Dynamic AMOLED 2X"
+      ],
+      [
+        "Camera",
+        "200MP Wide + dual 50MP"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-16-plus",
+    "cat": "mobiles",
+    "name": "iPhone 16 Plus",
+    "img": "assets/iphone16-blue.jpeg",
+    "blurb": "Big-screen iPhone 16 in ultramarine — all-day battery and the Camera Control button.",
+    "specs": [
+      [
+        "Display",
+        "6.7″ Super Retina XDR"
+      ],
+      [
+        "Chip",
+        "A18"
+      ],
+      [
+        "Storage",
+        "128GB / 256GB / 512GB"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-15-pro-used",
+    "cat": "mobiles",
+    "name": "iPhone 15 Pro",
+    "img": "assets/iphone15pro-black.jpeg",
+    "blurb": "iPhone 15 Pro with the A17 Pro chip and a 48MP camera system.",
+    "specs": [
+      [
+        "Chip",
+        "A17 Pro"
+      ],
+      [
+        "Camera",
+        "48MP Pro camera system"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-14-pro-used",
+    "cat": "mobiles",
+    "name": "iPhone 14 Pro",
+    "img": "assets/iphone14pro-silver.jpeg",
+    "blurb": "iPhone 14 Pro with Dynamic Island, an A16 Bionic chip and a 48MP camera system.",
+    "specs": [
+      [
+        "Chip",
+        "A16 Bionic"
+      ],
+      [
+        "Camera",
+        "48MP camera system"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-s25",
+    "cat": "mobiles",
+    "name": "Galaxy S25",
+    "img": "assets/samsung-green.jpeg",
+    "gallery": [
+      "assets/samsung-green.jpeg",
+      "assets/samsung-s25-lineup.jpeg"
+    ],
+    "blurb": "Compact flagship — Snapdragon 8 Elite, Galaxy AI, and that clean matte glass.",
+    "specs": [
+      [
+        "Display",
+        "6.2″ Dynamic AMOLED 2X"
+      ],
+      [
+        "Chip",
+        "Snapdragon 8 Elite"
+      ],
+      [
+        "Storage",
+        "128GB / 256GB"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-z-fold8-ultra",
+    "cat": "mobiles",
+    "name": "Galaxy Z Fold8 Ultra",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-samsung-fold8-ultra-graphite.jpg",
+    "gallery": [
+      "assets/official-samsung-fold8-ultra-graphite.jpg",
+      "assets/official-samsung-fold8-ultra-cream.jpg",
+      "assets/official-samsung-fold8-ultra-violet.jpg",
+      "assets/official-samsung-fold8-ultra-green.jpg",
+      "assets/official-samsung-fold8-ultra-hero.jpg"
+    ],
+    "blurb": "Samsung’s book-style foldable, shown with product imagery across a range of finishes.",
+    "specs": [
+      [
+        "Model",
+        "Galaxy Z Fold8 Ultra"
+      ],
+      [
+        "Finishes",
+        "Graphite / Cream / Violet Shadow / Green Shadow"
+      ],
+      [
+        "Storage",
+        "Configurations vary by market"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-z-fold8",
+    "cat": "mobiles",
+    "name": "Galaxy Z Fold8",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-samsung-fold8-lavender.jpg",
+    "gallery": [
+      "assets/official-samsung-fold8-lavender.jpg",
+      "assets/official-samsung-fold8-graphite.jpg",
+      "assets/official-samsung-fold8-cream.jpg",
+      "assets/official-samsung-fold8-pistachio.jpg",
+      "assets/official-samsung-fold8-hero.jpg"
+    ],
+    "blurb": "Samsung’s book-style foldable, shown with product imagery across a range of finishes.",
+    "specs": [
+      [
+        "Model",
+        "Galaxy Z Fold8"
+      ],
+      [
+        "Finishes",
+        "Lavender / Graphite / Cream / Pistachio"
+      ],
+      [
+        "Storage",
+        "Configurations vary by market"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-z-flip8",
+    "cat": "mobiles",
+    "name": "Galaxy Z Flip8",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-samsung-flip8-pink.jpg",
+    "gallery": [
+      "assets/official-samsung-flip8-pink.jpg",
+      "assets/official-samsung-flip8-graphite.jpg",
+      "assets/official-samsung-flip8-cream.jpg",
+      "assets/official-samsung-flip8-mint.jpg",
+      "assets/official-samsung-flip8-hero.jpg"
+    ],
+    "blurb": "Samsung’s compact clamshell foldable, shown with product imagery across a range of finishes.",
+    "specs": [
+      [
+        "Model",
+        "Galaxy Z Flip8"
+      ],
+      [
+        "Finishes",
+        "Pink / Graphite / Cream / Mint"
+      ],
+      [
+        "Storage",
+        "Configurations vary by market"
+      ]
+    ]
+  },
+  {
+    "id": "airpods-max",
+    "cat": "audio",
+    "name": "AirPods Max",
+    "img": "assets/audio-airpods-max.jpeg",
+    "gallery": [
+      "assets/audio-airpods-max.jpeg",
+      "assets/audio-headphones-white.jpeg"
+    ],
+    "blurb": "Over-ear audio the way Apple hears it — aluminium, memory foam, and silence on demand.",
+    "specs": [
+      [
+        "Type",
+        "Over-ear, wireless"
+      ],
+      [
+        "ANC",
+        "Active noise cancellation + transparency"
+      ],
+      [
+        "Battery",
+        "20 hours with ANC"
+      ],
+      [
+        "Connector",
+        "USB-C"
+      ]
+    ]
+  },
+  {
+    "id": "bose-qc-ultra",
+    "cat": "audio",
+    "name": "Bose QuietComfort Ultra Headphones",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-bose-qc-ultra-white.png",
+    "gallery": [
+      "assets/official-bose-qc-ultra-white.png",
+      "assets/official-bose-qc-ultra-black.png",
+      "assets/official-bose-qc-ultra-flat-black.png",
+      "assets/official-bose-qc-ultra-threequarter-white.png",
+      "assets/official-bose-qc-ultra-case-black.png"
+    ],
+    "blurb": "Premium over-ear comfort, immersive audio and adjustable noise cancellation for focused listening anywhere.",
+    "specs": [
+      [
+        "Type",
+        "Around-ear, wireless"
+      ],
+      [
+        "ANC",
+        "Adjustable active noise cancellation"
+      ],
+      [
+        "Battery",
+        "Up to 24 hours"
+      ],
+      [
+        "Modes",
+        "Quiet, Aware and Immersion"
+      ]
+    ]
+  },
+  {
+    "id": "watch-ultra-3",
+    "cat": "watches",
+    "name": "Apple Watch Ultra 3 — 49mm Titanium",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-apple-watch-ultra3-og.png",
+    "gallery": [
+      "assets/official-apple-watch-ultra3-og.png",
+      "assets/official-apple-watch-ultra3-hero.jpg",
+      "assets/official-apple-watch-ultra3-start.jpg",
+      "assets/official-apple-watch-ultra3-satellite.jpg",
+      "assets/official-apple-watch-ultra3-running.jpg"
+    ],
+    "blurb": "Apple’s latest rugged 49mm watch with built-in satellite communications, advanced training tools and the longest battery life of any Apple Watch.",
+    "specs": [
+      [
+        "Case",
+        "49mm titanium"
+      ],
+      [
+        "Finishes",
+        "Natural / Black titanium"
+      ],
+      [
+        "Battery",
+        "Up to 42 hours normal use"
+      ],
+      [
+        "Rating",
+        "WR100 and IP6X"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-watch-8",
+    "cat": "watches",
+    "name": "Samsung Galaxy Watch8 44mm — Silver",
+    "tag": "Featured",
+    "img": "assets/official-samsung-watch8-silver-perspective.jpg",
+    "gallery": [
+      "assets/official-samsung-watch8-silver-perspective.jpg",
+      "assets/official-samsung-watch8-silver-front.jpg",
+      "assets/official-samsung-watch8-silver-side.jpg"
+    ],
+    "blurb": "The official 44mm silver Galaxy Watch8 with a bright Super AMOLED display, advanced health sensors and Bedtime guidance.",
+    "specs": [
+      [
+        "Model",
+        "SM-L330NZSAEUA"
+      ],
+      [
+        "Case",
+        "44mm aluminium"
+      ],
+      [
+        "Connectivity",
+        "Bluetooth + Wi-Fi"
+      ],
+      [
+        "Colour",
+        "Silver"
+      ]
+    ]
+  },
+  {
+    "id": "switch-2",
+    "cat": "gaming",
+    "name": "Nintendo Switch 2",
+    "tag": "Featured",
+    "img": "assets/gaming-white.jpeg",
+    "blurb": "Bigger screen, magnetic Joy-Cons, and your whole library comes along.",
+    "specs": [
+      [
+        "Display",
+        "7.9″ 1080p, 120Hz"
+      ],
+      [
+        "Storage",
+        "256GB + microSD Express"
+      ],
+      [
+        "Modes",
+        "TV / tabletop / handheld"
+      ],
+      [
+        "Extras",
+        "Backwards compatible"
+      ]
+    ]
+  },
+  {
+    "id": "ps5-pro",
+    "cat": "gaming",
+    "name": "PlayStation 5 Pro",
+    "img": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=1200&q=80&auto=format",
+    "blurb": "8K-ready, 2TB, and frame rates your TV has been waiting for.",
+    "specs": [
+      [
+        "GPU",
+        "16.7 TFLOPs RDNA"
+      ],
+      [
+        "Storage",
+        "2TB custom SSD"
+      ],
+      [
+        "Output",
+        "Up to 8K, 120fps"
+      ],
+      [
+        "Includes",
+        "DualSense controller"
+      ]
+    ]
+  },
+  {
+    "id": "elite-controller",
+    "cat": "gaming",
+    "name": "Elite Wireless Controller",
+    "img": "assets/gaming-controller.jpeg",
+    "blurb": "Adjustable-tension sticks, hair triggers, swappable everything. For people who play to win.",
+    "specs": [
+      [
+        "Compatibility",
+        "PC, console, mobile"
+      ],
+      [
+        "Battery",
+        "40 hours"
+      ],
+      [
+        "Extras",
+        "4 back paddles, 3 profiles"
+      ],
+      [
+        "Finish",
+        "Wrap-around rubber grip"
+      ]
+    ]
+  },
+  {
+    "id": "retro-handhelds",
+    "cat": "gaming",
+    "name": "Retro Handheld Collection",
+    "img": "assets/gaming-retro.jpeg",
+    "blurb": "A look at classic handheld game systems and retro design.",
+    "specs": [
+      [
+        "Category",
+        "Handheld gaming"
+      ],
+      [
+        "Format",
+        "Portable systems"
+      ],
+      [
+        "Style",
+        "Retro-inspired design"
+      ]
+    ]
+  },
+  {
+    "id": "canon-r6ii",
+    "cat": "cameras",
+    "name": "Canon EOS R6 Mark II",
+    "img": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&q=80&auto=format",
+    "blurb": "Fast, confident and beautiful in low light. A wedding and wildlife favourite.",
+    "specs": [
+      [
+        "Sensor",
+        "24.2MP full-frame"
+      ],
+      [
+        "Burst",
+        "40 fps electronic"
+      ],
+      [
+        "Video",
+        "4K 60p oversampled"
+      ],
+      [
+        "Mount",
+        "Canon RF"
+      ]
+    ]
+  },
+  {
+    "id": "gopro-hero13",
+    "cat": "cameras",
+    "name": "GoPro HERO13 Black",
+    "img": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1200&q=80&auto=format",
+    "blurb": "Waterproof, indestructible, ridiculously stable. Point it at anything fast.",
+    "specs": [
+      [
+        "Video",
+        "5.3K 60p"
+      ],
+      [
+        "Stabilisation",
+        "HyperSmooth 6.0"
+      ],
+      [
+        "Rating",
+        "Waterproof to 10m"
+      ],
+      [
+        "Extras",
+        "Magnetic latch mounting"
+      ]
+    ]
+  },
+  {
+    "id": "aramid-fibre-case",
+    "cat": "accessories",
+    "name": "PITAKA Aramid Fibre Case",
+    "img": "assets/acc-aramid-cases.jpeg",
+    "gallery": [
+      "assets/acc-aramid-cases.jpeg",
+      "assets/acc-aramid-blue.jpeg"
+    ],
+    "blurb": "600D aramid fibre — thinner than a sticker, tougher than plastic, MagSafe built in.",
+    "specs": [
+      [
+        "Material",
+        "600D aramid fibre"
+      ],
+      [
+        "Thickness",
+        "1.05mm"
+      ],
+      [
+        "MagSafe",
+        "Yes, full-strength"
+      ],
+      [
+        "Fits",
+        "iPhone + Galaxy S"
+      ]
+    ]
+  },
+  {
+    "id": "magsafe-powerbank",
+    "cat": "accessories",
+    "name": "MagSafe Power Bank 10K",
+    "img": "assets/acc-powerbank.jpeg",
+    "blurb": "Snap-on 10,000mAh that charges while it rides on the back of your phone.",
+    "specs": [
+      [
+        "Capacity",
+        "10,000mAh"
+      ],
+      [
+        "Output",
+        "15W MagSafe + 20W USB-C"
+      ],
+      [
+        "Extras",
+        "Fold-out kickstand"
+      ],
+      [
+        "Weight",
+        "215g"
+      ]
+    ]
+  },
+  {
+    "id": "clear-armor-case",
+    "cat": "accessories",
+    "name": "UniCraft Clear Armor Case",
+    "img": "assets/acc-armor-case.jpeg",
+    "blurb": "Industrial-clear shell with LensGuard and a fold-out FlipStand. Shows the phone, saves the phone.",
+    "specs": [
+      [
+        "Drop rating",
+        "3m military-grade"
+      ],
+      [
+        "Extras",
+        "LensGuard + FlipStand"
+      ],
+      [
+        "MagSafe",
+        "Yes"
+      ],
+      [
+        "Finish",
+        "Crystal clear"
+      ]
+    ]
+  },
+  {
+    "id": "slim-case-trio",
+    "cat": "accessories",
+    "name": "Peel Slim Case — 3 Pack",
+    "img": "assets/acc-thin-cases.jpeg",
+    "blurb": "The barely-there case, in navy, white and black. 0.35mm of pure minimalism.",
+    "specs": [
+      [
+        "Thickness",
+        "0.35mm"
+      ],
+      [
+        "Finish",
+        "Soft-touch matte"
+      ],
+      [
+        "Includes",
+        "Navy + White + Black"
+      ],
+      [
+        "MagSafe",
+        "Compatible"
+      ]
+    ]
+  },
+  {
+    "id": "hp-omnibook-x-flip-14-fm0013dx",
+    "cat": "laptops",
+    "name": "HP OmniBook X Flip 14-fm0013dx",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-hp-omnibook-x-flip-14.png",
+    "blurb": "A 14-inch convertible laptop with a multitouch display and flexible 2-in-1 hinge.",
+    "specs": [
+      [
+        "Processor",
+        "Intel Core Ultra 5 226V"
+      ],
+      [
+        "Display",
+        "14″ multitouch"
+      ],
+      [
+        "Memory",
+        "16GB onboard LPDDR5X"
+      ],
+      [
+        "Storage",
+        "512GB solid-state drive"
+      ]
+    ]
+  },
+  {
+    "id": "macbook-air-13-m5",
+    "cat": "laptops",
+    "name": "MacBook Air 13-inch — M5",
+    "tag": "Featured",
+    "img": "assets/official-apple-macbook-air-m5-sky-blue.jpg",
+    "gallery": [
+      "assets/official-apple-macbook-air-m5-sky-blue.jpg",
+      "assets/official-apple-macbook-air-m5-hero.png"
+    ],
+    "blurb": "Apple’s current 13-inch MacBook Air with M5, built for a light carry and everyday creative work.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5"
+      ],
+      [
+        "Display",
+        "13.6″ Liquid Retina"
+      ],
+      [
+        "Memory",
+        "16GB unified memory"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB"
+      ]
+    ]
+  },
+  {
+    "id": "macbook-air-15-m5",
+    "cat": "laptops",
+    "name": "MacBook Air 15-inch — M5",
+    "tag": "Featured",
+    "img": "assets/official-apple-macbook-air-m5-midnight.jpg",
+    "gallery": [
+      "assets/official-apple-macbook-air-m5-midnight.jpg",
+      "assets/official-apple-macbook-air-m5-hero.png"
+    ],
+    "blurb": "The spacious 15-inch MacBook Air with M5 for customers who want a larger display without leaving the Air line.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5"
+      ],
+      [
+        "Display",
+        "15.3″ Liquid Retina"
+      ],
+      [
+        "Memory",
+        "16GB unified memory"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB"
+      ]
+    ]
+  },
+  {
+    "id": "macbook-pro-14-m5",
+    "cat": "laptops",
+    "name": "MacBook Pro 14-inch — M5",
+    "tag": "Featured",
+    "img": "assets/official-apple-macbook-pro-m5-space-black.jpg",
+    "gallery": [
+      "assets/official-apple-macbook-pro-m5-space-black.jpg",
+      "assets/official-apple-macbook-pro-m5-silver.jpg"
+    ],
+    "blurb": "The 14-inch MacBook Pro with Apple M5 and a professional Liquid Retina XDR display.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5"
+      ],
+      [
+        "Display",
+        "14.2″ Liquid Retina XDR"
+      ],
+      [
+        "Memory",
+        "16GB unified memory"
+      ],
+      [
+        "Storage",
+        "512GB / 1TB / 2TB"
+      ]
+    ]
+  },
+  {
+    "id": "macbook-pro-14-m5-pro",
+    "cat": "laptops",
+    "name": "MacBook Pro 14-inch — M5 Pro",
+    "tag": "Featured",
+    "img": "assets/official-apple-macbook-pro-m5-space-black.jpg",
+    "gallery": [
+      "assets/official-apple-macbook-pro-m5-space-black.jpg",
+      "assets/official-apple-macbook-pro-m5-silver.jpg"
+    ],
+    "blurb": "A 14-inch MacBook Pro configured around Apple’s M5 Pro chip for demanding creative and professional workflows.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5 Pro"
+      ],
+      [
+        "Display",
+        "14.2″ Liquid Retina XDR"
+      ],
+      [
+        "Memory",
+        "Unified memory — ask for configuration"
+      ],
+      [
+        "Storage",
+        "512GB / 1TB / 2TB"
+      ]
+    ]
+  },
+  {
+    "id": "macbook-pro-16-m5-max",
+    "cat": "laptops",
+    "name": "MacBook Pro 16-inch — M5 Max",
+    "tag": "Featured",
+    "img": "assets/official-apple-macbook-pro-m5-silver.jpg",
+    "gallery": [
+      "assets/official-apple-macbook-pro-m5-silver.jpg",
+      "assets/official-apple-macbook-pro-m5-space-black.jpg"
+    ],
+    "blurb": "The largest MacBook Pro, configured with Apple M5 Max for high-end editing, 3D and engineering workflows.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5 Max"
+      ],
+      [
+        "Display",
+        "16.2″ Liquid Retina XDR"
+      ],
+      [
+        "Memory",
+        "Unified memory — ask for configuration"
+      ],
+      [
+        "Storage",
+        "512GB / 1TB / 2TB"
+      ]
+    ]
+  },
+  {
+    "id": "ipad-pro-11-m5",
+    "cat": "tablets",
+    "name": "iPad Pro 11-inch — M5",
+    "tag": "Featured",
+    "img": "assets/official-apple-ipad-pro-m5-hero.jpg",
+    "gallery": [
+      "assets/official-apple-ipad-pro-m5-hero.jpg",
+      "assets/official-apple-ipad-pro-m5-design.png"
+    ],
+    "blurb": "Apple’s current 11-inch iPad Pro with M5, an Ultra Retina XDR display and a remarkably thin design.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5"
+      ],
+      [
+        "Display",
+        "11″ Ultra Retina XDR"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB / 2TB"
+      ],
+      [
+        "Connectivity",
+        "Wi‑Fi or Wi‑Fi + Cellular"
+      ]
+    ]
+  },
+  {
+    "id": "ipad-pro-13-m5",
+    "cat": "tablets",
+    "name": "iPad Pro 13-inch — M5",
+    "tag": "Featured",
+    "img": "assets/official-apple-ipad-pro-m5-design.png",
+    "gallery": [
+      "assets/official-apple-ipad-pro-m5-design.png",
+      "assets/official-apple-ipad-pro-m5-hero.jpg"
+    ],
+    "blurb": "The large iPad Pro with M5, giving creative work, video and multitasking more room to breathe.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M5"
+      ],
+      [
+        "Display",
+        "13″ Ultra Retina XDR"
+      ],
+      [
+        "Storage",
+        "256GB / 512GB / 1TB / 2TB"
+      ],
+      [
+        "Connectivity",
+        "Wi‑Fi or Wi‑Fi + Cellular"
+      ]
+    ]
+  },
+  {
+    "id": "ipad-air-11-m4",
+    "cat": "tablets",
+    "name": "iPad Air 11-inch — M4",
+    "tag": "Featured",
+    "img": "assets/official-apple-ipad-air-m4-hero.png",
+    "gallery": [
+      "assets/official-apple-ipad-air-m4-hero.png",
+      "assets/official-apple-ipad-air-m4-og.png"
+    ],
+    "blurb": "The compact iPad Air with M4 and a vivid Liquid Retina display for work, notes and entertainment.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M4"
+      ],
+      [
+        "Display",
+        "11″ Liquid Retina"
+      ],
+      [
+        "Storage",
+        "128GB / 256GB / 512GB / 1TB"
+      ],
+      [
+        "Connectivity",
+        "Wi‑Fi or Wi‑Fi + Cellular"
+      ]
+    ]
+  },
+  {
+    "id": "ipad-air-13-m4",
+    "cat": "tablets",
+    "name": "iPad Air 13-inch — M4",
+    "tag": "Featured",
+    "img": "assets/official-apple-ipad-air-m4-og.png",
+    "gallery": [
+      "assets/official-apple-ipad-air-m4-og.png",
+      "assets/official-apple-ipad-air-m4-hero.png"
+    ],
+    "blurb": "The larger iPad Air with M4 for customers who want more canvas for productivity and creativity.",
+    "specs": [
+      [
+        "Chip",
+        "Apple M4"
+      ],
+      [
+        "Display",
+        "13″ Liquid Retina"
+      ],
+      [
+        "Storage",
+        "128GB / 256GB / 512GB / 1TB"
+      ],
+      [
+        "Connectivity",
+        "Wi‑Fi or Wi‑Fi + Cellular"
+      ]
+    ]
+  },
+  {
+    "id": "ipad-mini-a17-pro",
+    "cat": "tablets",
+    "name": "iPad mini — A17 Pro",
+    "tag": "Featured",
+    "img": "assets/official-apple-ipad-mini-a17-pro.png",
+    "blurb": "The compact iPad mini with A17 Pro, an 8.3-inch Liquid Retina display and Apple Pencil Pro support.",
+    "specs": [
+      [
+        "Chip",
+        "A17 Pro"
+      ],
+      [
+        "Display",
+        "8.3″ Liquid Retina"
+      ],
+      [
+        "Storage",
+        "128GB / 256GB / 512GB"
+      ],
+      [
+        "Connectivity",
+        "Wi‑Fi or Wi‑Fi + Cellular"
+      ]
+    ]
+  },
+  {
+    "id": "ipad-11-a16",
+    "cat": "tablets",
+    "name": "iPad 11-inch — A16",
+    "tag": "Featured",
+    "img": "assets/official-apple-ipad-a16-hero.jpg",
+    "blurb": "The 11-inch iPad with A16 and a large Liquid Retina display: a straightforward everyday iPad choice.",
+    "specs": [
+      [
+        "Chip",
+        "A16"
+      ],
+      [
+        "Display",
+        "11″ Liquid Retina"
+      ],
+      [
+        "Storage",
+        "128GB / 256GB / 512GB"
+      ],
+      [
+        "Connectivity",
+        "Wi‑Fi or Wi‑Fi + Cellular"
+      ]
+    ]
+  },
+  {
+    "id": "creed-viking-cologne",
+    "cat": "lifestyle",
+    "name": "Creed Viking Cologne",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-creed-viking-cologne.jpg",
+    "blurb": "A fresh, aromatic Creed fragrance presented with the official bottle image.",
+    "specs": [
+      [
+        "Brand",
+        "Creed"
+      ],
+      [
+        "Fragrance",
+        "Viking Cologne"
+      ],
+      [
+        "Category",
+        "Men’s fragrance"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "creed-aventus-cologne",
+    "cat": "lifestyle",
+    "name": "Creed Aventus Cologne",
+    "tag": "Featured",
+    "img": "assets/official-creed-aventus-cologne.jpg",
+    "blurb": "A modern Creed cologne from the Aventus family, presented with the official bottle image.",
+    "specs": [
+      [
+        "Brand",
+        "Creed"
+      ],
+      [
+        "Fragrance",
+        "Aventus Cologne"
+      ],
+      [
+        "Category",
+        "Men’s fragrance"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "creed-bois-du-portugal",
+    "cat": "lifestyle",
+    "name": "Creed Bois du Portugal",
+    "tag": "Featured",
+    "img": "assets/official-creed-bois-du-portugal.jpg",
+    "blurb": "A classic woody Creed fragrance presented with the official bottle image.",
+    "specs": [
+      [
+        "Brand",
+        "Creed"
+      ],
+      [
+        "Fragrance",
+        "Bois du Portugal"
+      ],
+      [
+        "Category",
+        "Men’s fragrance"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "creed-original-vetiver",
+    "cat": "lifestyle",
+    "name": "Creed Original Vetiver",
+    "tag": "Featured",
+    "img": "assets/official-creed-original-vetiver.jpg",
+    "blurb": "A clean, green Creed fragrance presented with the official bottle image.",
+    "specs": [
+      [
+        "Brand",
+        "Creed"
+      ],
+      [
+        "Fragrance",
+        "Original Vetiver"
+      ],
+      [
+        "Category",
+        "Unisex fragrance"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "creed-himalaya",
+    "cat": "lifestyle",
+    "name": "Creed Himalaya",
+    "tag": "Featured",
+    "img": "assets/official-creed-himalaya.jpg",
+    "blurb": "A fresh woody Creed fragrance presented with the official silver bottle image.",
+    "specs": [
+      [
+        "Brand",
+        "Creed"
+      ],
+      [
+        "Fragrance",
+        "Himalaya"
+      ],
+      [
+        "Category",
+        "Men’s fragrance"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "creed-erolfa",
+    "cat": "lifestyle",
+    "name": "Creed Erolfa",
+    "tag": "Featured",
+    "img": "assets/official-creed-erolfa.jpg",
+    "blurb": "A marine-inspired Creed fragrance presented with the official bottle image.",
+    "specs": [
+      [
+        "Brand",
+        "Creed"
+      ],
+      [
+        "Fragrance",
+        "Erolfa"
+      ],
+      [
+        "Category",
+        "Men’s fragrance"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "bleu-de-chanel-edp",
+    "cat": "lifestyle",
+    "name": "Bleu de Chanel Eau de Parfum",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-bleu-de-chanel-edp.jpg",
+    "blurb": "An aromatic-woody Chanel fragrance with an ambery, musky trail, presented with official Chanel product imagery.",
+    "specs": [
+      [
+        "Brand",
+        "Chanel"
+      ],
+      [
+        "Concentration",
+        "Eau de Parfum"
+      ],
+      [
+        "Family",
+        "Aromatic woody"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "dior-sauvage-edp",
+    "cat": "lifestyle",
+    "name": "Dior Sauvage Eau de Parfum",
+    "tag": "Featured",
+    "img": "assets/official-dior-sauvage-edp.jpg",
+    "blurb": "The warm, spicy Eau de Parfum expression of Sauvage, presented with official Dior product imagery.",
+    "specs": [
+      [
+        "Brand",
+        "Dior"
+      ],
+      [
+        "Concentration",
+        "Eau de Parfum"
+      ],
+      [
+        "Profile",
+        "Fresh, spicy and woody"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "valentino-born-in-roma-donna",
+    "cat": "lifestyle",
+    "name": "Valentino Donna Born in Roma Eau de Parfum",
+    "tag": "Featured",
+    "img": "assets/official-valentino-born-in-roma-donna.jpg",
+    "blurb": "A modern amber-floral fragrance presented in Valentino’s signature Rockstud bottle.",
+    "specs": [
+      [
+        "Brand",
+        "Valentino"
+      ],
+      [
+        "Concentration",
+        "Eau de Parfum"
+      ],
+      [
+        "Notes",
+        "Sambac jasmine, cashmeran, vanilla"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "armani-prive-rouge-malachite",
+    "cat": "lifestyle",
+    "name": "Armani/Privé Rouge Malachite Eau de Parfum",
+    "tag": "Featured",
+    "img": "assets/official-armani-prive-rouge-malachite.jpg",
+    "blurb": "An opulent floral fragrance built around tuberose, pink pepper and a warm amber-woody trail.",
+    "specs": [
+      [
+        "Brand",
+        "Armani/Privé"
+      ],
+      [
+        "Concentration",
+        "Eau de Parfum"
+      ],
+      [
+        "Family",
+        "Floral"
+      ],
+      [
+        "Notes",
+        "Tuberose, pink pepper, AmberXtreme"
+      ]
+    ]
+  },
+  {
+    "id": "carolina-herrera-212-vip-men",
+    "cat": "lifestyle",
+    "name": "Carolina Herrera 212 VIP Men Eau de Toilette",
+    "tag": "Featured",
+    "img": "assets/official-carolina-herrera-212-vip-men.jpg",
+    "blurb": "The metallic 212 VIP Men fragrance inspired by the energy and nightlife of New York.",
+    "specs": [
+      [
+        "Brand",
+        "Carolina Herrera"
+      ],
+      [
+        "Concentration",
+        "Eau de Toilette"
+      ],
+      [
+        "Size shown",
+        "100ml"
+      ],
+      [
+        "Availability",
+        "Ask for current bottle size"
+      ]
+    ]
+  },
+  {
+    "id": "braun-series-5-51-b1000s",
+    "cat": "lifestyle",
+    "name": "Braun Series 5 51-B1000s EasyClean",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-braun-series5-51-b1000s.jpg",
+    "blurb": "The Series 5 electric shaver features three flexible blades and an EasyClean design.",
+    "specs": [
+      [
+        "Model",
+        "51-B1000s"
+      ],
+      [
+        "System",
+        "3 flexible blades"
+      ],
+      [
+        "Use",
+        "Wet & dry"
+      ],
+      [
+        "Included",
+        "Shaver, brush and charger"
+      ]
+    ]
+  },
+  {
+    "id": "philips-mg5921-15",
+    "cat": "lifestyle",
+    "name": "Philips All-in-One Trimmer 5000 MG5921/15",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-philips-mg5921-15.png",
+    "blurb": "The 10-in-1 Series 5000 grooming kit features BeardSense technology and a versatile attachment set.",
+    "specs": [
+      [
+        "Model",
+        "MG5921/15"
+      ],
+      [
+        "Kit",
+        "10-in-1"
+      ],
+      [
+        "Runtime",
+        "Up to 120 minutes"
+      ],
+      [
+        "Use",
+        "Wet & dry"
+      ]
+    ]
+  },
+  {
+    "id": "jbl-tune-770nc",
+    "cat": "audio",
+    "name": "JBL Tune 770NC Wireless Headphones",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-jbl-tune-770nc-black.jpg",
+    "gallery": [
+      "assets/official-jbl-tune-770nc-black.jpg",
+      "assets/official-jbl-tune-770nc-front-black.jpg",
+      "assets/official-jbl-tune-770nc-back-black.jpg",
+      "assets/official-jbl-tune-770nc-left-black.jpg",
+      "assets/official-jbl-tune-770nc-right-black.jpg",
+      "assets/official-jbl-tune-770nc-blue.jpg",
+      "assets/official-jbl-tune-770nc-white.jpg"
+    ],
+    "blurb": "Lightweight over-ear headphones with JBL Pure Bass, Adaptive Noise Cancelling and long battery life, shown in Black, Blue and White.",
+    "specs": [
+      [
+        "Drivers",
+        "40mm dynamic"
+      ],
+      [
+        "ANC",
+        "Adaptive Noise Cancelling"
+      ],
+      [
+        "Battery",
+        "Up to 70 hours, ANC off"
+      ],
+      [
+        "Bluetooth",
+        "Version 5.3"
+      ]
+    ]
+  },
+  {
+    "id": "bose-soundlink-max",
+    "cat": "audio",
+    "name": "Bose SoundLink Max Portable Speaker",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-bose-soundlink-max-1.png",
+    "gallery": [
+      "assets/official-bose-soundlink-max-1.png",
+      "assets/official-bose-soundlink-max-2.png",
+      "assets/official-bose-soundlink-max-3.png",
+      "assets/official-bose-soundlink-max-4.png",
+      "assets/official-bose-soundlink-max-5.png"
+    ],
+    "blurb": "Deep bass and spacious stereo sound in a rugged portable body with a removable rope handle.",
+    "specs": [
+      [
+        "Sound",
+        "Stereo, full-range"
+      ],
+      [
+        "Battery",
+        "Up to 20 hours"
+      ],
+      [
+        "Rating",
+        "IP67 water + dust resistant"
+      ],
+      [
+        "Charging",
+        "USB-C in/out"
+      ]
+    ]
+  },
+  {
+    "id": "ride-5-ps5",
+    "cat": "game-discs",
+    "name": "RIDE 5 — PlayStation 5",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-game-ride5-ps5.png",
+    "gallery": [
+      "assets/official-game-ride5-ps5.png",
+      "assets/official-game-ride5-track.jpg"
+    ],
+    "blurb": "The official PS5 motorcycle racing title from Milestone, with realistic bikes, circuits and endurance events.",
+    "specs": [
+      [
+        "Platform",
+        "PlayStation 5"
+      ],
+      [
+        "Genre",
+        "Motorcycle racing"
+      ],
+      [
+        "Publisher",
+        "Milestone"
+      ],
+      [
+        "Format",
+        "Physical game disc"
+      ]
+    ]
+  },
+  {
+    "id": "ea-sports-fc-26",
+    "cat": "game-discs",
+    "name": "EA SPORTS FC 26 — PlayStation",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-game-ea-fc26.jpg",
+    "pos": "left center",
+    "gallery": [
+      "assets/official-game-ea-fc26.jpg",
+      "assets/official-game-ea-fc26-world.jpg",
+      "assets/official-game-ea-fc26-zlatan.jpg",
+      "assets/official-game-ea-fc26-neuer.jpg",
+      "assets/official-game-ea-fc26-morgan.jpg"
+    ],
+    "blurb": "EA SPORTS FC 26 for PlayStation, with separate editions for PS4 and PS5.",
+    "specs": [
+      [
+        "Platform",
+        "PS4 / PS5 editions"
+      ],
+      [
+        "Genre",
+        "Football"
+      ],
+      [
+        "Publisher",
+        "Electronic Arts"
+      ],
+      [
+        "Format",
+        "Physical game disc"
+      ]
+    ]
+  },
+  {
+    "id": "super-mario-party-jamboree",
+    "cat": "game-discs",
+    "name": "Super Mario Party Jamboree — Nintendo Switch",
+    "tag": "Featured",
+    "img": "assets/official-game-mario-party-jamboree.jpg",
+    "gallery": [
+      "assets/official-game-mario-party-jamboree.jpg",
+      "assets/official-game-mario-party-jamboree-01.jpg",
+      "assets/official-game-mario-party-jamboree-02.jpg",
+      "assets/official-game-mario-party-jamboree-04.jpg",
+      "assets/official-game-mario-party-jamboree-05.jpg"
+    ],
+    "blurb": "A packed Nintendo party-game collection made for local multiplayer on Nintendo Switch.",
+    "specs": [
+      [
+        "Platform",
+        "Nintendo Switch"
+      ],
+      [
+        "Players",
+        "Local and online multiplayer"
+      ],
+      [
+        "Publisher",
+        "Nintendo"
+      ],
+      [
+        "Format",
+        "Physical game card"
+      ]
+    ]
+  },
+  {
+    "id": "witcher-3-switch",
+    "cat": "game-discs",
+    "name": "The Witcher 3: Wild Hunt — Nintendo Switch",
+    "img": "assets/official-game-witcher3-switch.jpg",
+    "gallery": [
+      "assets/official-game-witcher3-switch.jpg"
+    ],
+    "blurb": "The complete open-world role-playing adventure adapted for Nintendo Switch.",
+    "specs": [
+      [
+        "Platform",
+        "Nintendo Switch"
+      ],
+      [
+        "Genre",
+        "Open-world RPG"
+      ],
+      [
+        "Publisher",
+        "CD PROJEKT"
+      ],
+      [
+        "Format",
+        "Physical game card"
+      ]
+    ]
+  },
+  {
+    "id": "thinkpad-pro-topload-gen2",
+    "cat": "bags",
+    "name": "ThinkPad Professional 16″ Topload Gen 2",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-lenovo-thinkpad-pro-topload-1.png",
+    "gallery": [
+      "assets/official-lenovo-thinkpad-pro-topload-1.png",
+      "assets/official-lenovo-thinkpad-pro-topload-2.png",
+      "assets/official-lenovo-thinkpad-pro-topload-3.png",
+      "assets/official-lenovo-thinkpad-pro-topload-4.png",
+      "assets/official-lenovo-thinkpad-pro-topload-feature-a.png",
+      "assets/official-lenovo-thinkpad-pro-topload-feature-b.png",
+      "assets/official-lenovo-thinkpad-pro-topload-5.png"
+    ],
+    "blurb": "Lenovo’s structured professional top-load bag with smart storage and a clean office-ready profile.",
+    "specs": [
+      [
+        "Fits",
+        "Up to 16″ laptop"
+      ],
+      [
+        "Style",
+        "Top-load business bag"
+      ],
+      [
+        "Brand",
+        "Lenovo ThinkPad"
+      ],
+      [
+        "Model",
+        "4X41M69795"
+      ]
+    ]
+  },
+  {
+    "id": "lenovo-t210-black",
+    "cat": "bags",
+    "name": "Lenovo T210 Laptop Casual Toploader — Black",
+    "tag": "Featured",
+    "img": "assets/official-lenovo-t210-black.png",
+    "gallery": [
+      "assets/official-lenovo-t210-black.png"
+    ],
+    "blurb": "A slim, lightweight Lenovo everyday bag with a padded laptop compartment and shoulder strap.",
+    "specs": [
+      [
+        "Fits",
+        "Up to 15.6″ laptop"
+      ],
+      [
+        "Style",
+        "Slim top-loader"
+      ],
+      [
+        "Colour",
+        "Black"
+      ],
+      [
+        "Brand",
+        "Lenovo"
+      ]
+    ]
+  },
+  {
+    "id": "thinkpad-tl620-brown",
+    "cat": "bags",
+    "name": "ThinkPad TL620 Brown Business Tote",
+    "tag": "Featured",
+    "img": "assets/retailer-lenovo-thinkpad-tl620-brown.jpg",
+    "gallery": [
+      "assets/retailer-lenovo-thinkpad-tl620-brown.jpg"
+    ],
+    "blurb": "A structured dark-brown ThinkPad business tote with a polished office finish.",
+    "specs": [
+      [
+        "Fits",
+        "Up to 14″ laptop"
+      ],
+      [
+        "Style",
+        "Business tote / top-load"
+      ],
+      [
+        "Colour",
+        "Dark brown"
+      ],
+      [
+        "Model",
+        "ThinkPad TL620"
+      ]
+    ]
+  },
+  {
+    "id": "pierre-cardin-softshell-72",
+    "cat": "travel",
+    "name": "Pierre Cardin 72cm Soft-Shell Trolley Case",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-pierre-cardin-softshell-black-front.jpg",
+    "pos": "center top",
+    "gallery": [
+      "assets/official-pierre-cardin-softshell-black-front.jpg",
+      "assets/official-pierre-cardin-softshell-black-detail.jpg",
+      "assets/official-pierre-cardin-softshell-black-open.jpg"
+    ],
+    "blurb": "A large black Pierre Cardin soft-shell suitcase with spinner wheels and expandable organised storage.",
+    "specs": [
+      [
+        "Size",
+        "72cm large"
+      ],
+      [
+        "Type",
+        "Soft-shell spinner"
+      ],
+      [
+        "Colour",
+        "Black"
+      ],
+      [
+        "Brand",
+        "Pierre Cardin"
+      ]
+    ]
+  },
+  {
+    "id": "pierre-cardin-pc1844",
+    "cat": "travel",
+    "name": "Pierre Cardin PC1844 Mobile Office Cabin Case",
+    "tag": "Featured",
+    "img": "assets/official-pierre-cardin-mobile-office-front.jpg",
+    "pos": "center top",
+    "gallery": [
+      "assets/official-pierre-cardin-mobile-office-front.jpg",
+      "assets/official-pierre-cardin-mobile-office-open.jpg"
+    ],
+    "blurb": "A compact four-wheel cabin case designed as a mobile office, with organised laptop and document storage.",
+    "specs": [
+      [
+        "Type",
+        "Cabin / mobile office"
+      ],
+      [
+        "Wheels",
+        "4 spinner wheels"
+      ],
+      [
+        "Model",
+        "PC1844"
+      ],
+      [
+        "Brand",
+        "Pierre Cardin"
+      ]
+    ]
+  },
+  {
+    "id": "hp-smart-tank-580",
+    "cat": "accessories",
+    "name": "HP Smart Tank 580 Wireless All-in-One Printer",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-hp-smart-tank-580.png",
+    "gallery": [
+      "assets/official-hp-smart-tank-580.png",
+      "assets/official-hp-smart-tank-580-angle.png"
+    ],
+    "blurb": "A compact wireless ink-tank printer for everyday printing, copying and scanning.",
+    "specs": [
+      [
+        "Functions",
+        "Print, copy and scan"
+      ],
+      [
+        "Connectivity",
+        "Wi-Fi, Wi-Fi Direct and USB"
+      ],
+      [
+        "Print speed",
+        "Up to 12 ppm black"
+      ],
+      [
+        "Model",
+        "HP Smart Tank 580"
+      ]
+    ]
+  },
+  {
+    "id": "jbl-partybox-stage-320",
+    "cat": "audio",
+    "name": "JBL PartyBox Stage 320",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-jbl-partybox-stage-320-hero.png",
+    "gallery": [
+      "assets/official-jbl-partybox-stage-320-hero.png",
+      "assets/official-jbl-partybox-stage-320-front.png"
+    ],
+    "blurb": "A JBL PartyBox speaker with an adaptive lightshow, telescopic handle and wheels for easy transport.",
+    "specs": [
+      [
+        "Sound",
+        "JBL Pro Sound"
+      ],
+      [
+        "Lighting",
+        "Adaptive lightshow"
+      ],
+      [
+        "Mobility",
+        "Telescopic handle + wheels"
+      ],
+      [
+        "Model",
+        "PartyBox Stage 320"
+      ]
+    ]
+  },
+  {
+    "id": "powerology-rotating-stand-projector",
+    "cat": "accessories",
+    "name": "Powerology Rotating Stand Portable Projector",
+    "tag": "Featured",
+    "img": "assets/official-powerology-rotating-stand-projector.png",
+    "gallery": [
+      "assets/official-powerology-rotating-stand-projector.png"
+    ],
+    "blurb": "A Powerology Full HD portable projector with a rotating stand and built-in battery.",
+    "specs": [
+      [
+        "Resolution",
+        "Full HD"
+      ],
+      [
+        "Brightness",
+        "300 ANSI lumens"
+      ],
+      [
+        "Design",
+        "Rotating stand"
+      ],
+      [
+        "Model",
+        "PWHDPBNBK"
+      ]
+    ]
+  },
+  {
+    "id": "rayban-meta-smart-glasses",
+    "cat": "accessories",
+    "name": "Ray-Ban Meta Smart Glasses",
+    "tag": "Featured",
+    "img": "assets/official-rayban-meta-smart-glasses-wayfarer.png",
+    "gallery": [
+      "assets/official-rayban-meta-smart-glasses-wayfarer.png",
+      "assets/official-rayban-meta-smart-glasses-hero.jpg"
+    ],
+    "blurb": "Ray-Ban and Meta smart glasses with an integrated camera, open-ear audio and hands-free controls.",
+    "specs": [
+      [
+        "Type",
+        "Smart glasses"
+      ],
+      [
+        "Audio",
+        "Open-ear speakers"
+      ],
+      [
+        "Capture",
+        "Built-in camera"
+      ],
+      [
+        "Availability",
+        "Ask for frame and lens options"
+      ]
+    ]
+  },
+  {
+    "id": "huawei-watch-gt6-pro",
+    "cat": "watches",
+    "name": "HUAWEI WATCH GT 6 Pro",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-huawei-watch-gt6-pro-black.png",
+    "gallery": [
+      "assets/official-huawei-watch-gt6-pro-black.png",
+      "assets/official-huawei-watch-gt6-pro-share.jpg"
+    ],
+    "blurb": "Huawei’s outdoor-focused GT 6 Pro with a titanium-alloy case, sapphire glass and long battery life.",
+    "specs": [
+      [
+        "Display",
+        "1.47-inch AMOLED"
+      ],
+      [
+        "Battery",
+        "Up to 21 days light use"
+      ],
+      [
+        "Case",
+        "Titanium alloy"
+      ],
+      [
+        "Water resistance",
+        "5 ATM"
+      ]
+    ]
+  },
+  {
+    "id": "huawei-watch-ultimate-2",
+    "cat": "watches",
+    "name": "HUAWEI WATCH Ultimate 2",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-huawei-watch-ultimate-2-black.png",
+    "gallery": [
+      "assets/official-huawei-watch-ultimate-2-black.png",
+      "assets/official-huawei-watch-ultimate-2-share.jpg"
+    ],
+    "blurb": "Huawei’s premium adventure watch with a zirconium-based liquid-metal case and specialist outdoor modes.",
+    "specs": [
+      [
+        "Display",
+        "1.5-inch LTPO AMOLED"
+      ],
+      [
+        "Brightness",
+        "Up to 3500 nits"
+      ],
+      [
+        "Diving",
+        "Up to 150 metres"
+      ],
+      [
+        "Case",
+        "Zirconium-based liquid metal"
+      ]
+    ]
+  },
+  {
+    "id": "green-lion-strive-smart-watch",
+    "cat": "watches",
+    "name": "Green Lion Strive Smart Watch",
+    "tag": "Featured",
+    "img": "assets/official-green-lion-strive-smart-watch.png",
+    "gallery": [
+      "assets/official-green-lion-strive-smart-watch.png"
+    ],
+    "blurb": "A round Green Lion smartwatch with a 1.52-inch IPS display, Bluetooth calling and everyday health tools.",
+    "specs": [
+      [
+        "Display",
+        "1.52-inch IPS"
+      ],
+      [
+        "Bluetooth",
+        "Version 5.3"
+      ],
+      [
+        "Water resistance",
+        "IP65"
+      ],
+      [
+        "Battery",
+        "Up to 5 days"
+      ]
+    ]
+  },
+  {
+    "id": "porodo-sovo-10000mah",
+    "cat": "accessories",
+    "name": "Porodo Sovo 10000mAh MagSafe Power Bank",
+    "tag": "Featured",
+    "spotlight": true,
+    "img": "assets/official-porodo-sovo-10000mah.png",
+    "gallery": [
+      "assets/official-porodo-sovo-10000mah.png"
+    ],
+    "blurb": "A 10,000mAh magnetic power bank with a kickstand, LED light, 20W USB-C output and up to 15W wireless charging.",
+    "specs": [
+      [
+        "Capacity",
+        "10000mAh"
+      ],
+      [
+        "USB-C output",
+        "Up to 20W"
+      ],
+      [
+        "Wireless output",
+        "Up to 15W"
+      ],
+      [
+        "Extras",
+        "Kickstand + LED light"
+      ]
+    ]
+  }
+]
