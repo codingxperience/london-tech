@@ -1,4 +1,5 @@
 import { useStore, navigate } from "./store.jsx"
+import { AccountMenu } from "./components/AccountMenu"
 import { ProductMotionNote, TypewriterText } from "./components/MotionText"
 import { useState, useEffect, type ReactNode } from "react"
 import logoImg from "@/imports/london/london-tech-logo.png"
@@ -71,8 +72,8 @@ const SEARCH_WORDS = [
 ]
 const UTILITY_MESSAGES = [
   "Original technology. Local expertise.",
-  "Discover phones, audio & everyday essentials.",
-  "Talk to our team on WhatsApp: 0788341111 / 0709417273",
+  "Phones, audio & everyday essentials.",
+  "Talk tech: 0788341111 · 0709417273",
 ]
 
 function WhatsAppIcon({ size = 20 }: { size?: number }) {
@@ -233,7 +234,6 @@ const NAV_LINKS = [
   "Accessories",
   "Smart Watches",
   "Hot Deals",
-  "About Us",
 ]
 const TREND_CATS = [
   "All",
@@ -470,7 +470,7 @@ const HERO_SLIDES = [
 const COMMERCE_IDS: Record<number, string> = { 1:'iphone-18-pro-max',2:'iphone-18-pro-max-burgundy',3:'galaxy-s25-ultra',4:'galaxy-z-fold8',5:'honor-x9b',6:'infinix-smart-10-plus',7:'samsung-galaxy-tablet',8:'apple-ipad-pro',9:'soundcore-wireless-earbuds',10:'green-lion-usbc-cable',11:'dji-pocket-camera',12:'apple-watch-series',101:'iphone-18-pro-max',102:'galaxy-z-fold8',103:'apple-ipad-pro',104:'dji-pocket-camera',201:'galaxy-s25-ultra',202:'soundcore-wireless-earbuds' }
 const commerceId = (p: Product) => COMMERCE_IDS[p.id] || String(p.id)
 const categoryId = (name: string) => ({ All:'shop','All Categories':'shop',Smartphones:'mobiles','Smart Watches':'watches','Laptops & PC':'laptops',Laptops:'laptops',Tablets:'tablets',Earbuds:'audio',Speakers:'audio',Headphones:'audio',Audio:'audio','Audio & Earbuds':'audio',Cameras:'cameras',Gaming:'gaming',Accessories:'accessories' } as Record<string,string>)[name.split(' · ')[0]] || 'shop'
-const navigationPath = (label: string) => label === 'Home' ? '/' : label === 'About Us' ? '/about/' : '/collections/' + categoryId(label) + '/'
+const navigationPath = (label: string) => label === 'Home' ? '/' : '/collections/' + categoryId(label) + '/'
 function hydrateProduct(p: Product, catalogue: any[]): Product {
   const live = catalogue.find((product) => product.id === commerceId(p))
   return live ? { ...p, name:live.name, image:live.image, price:live.price ?? p.price, oldPrice:live.comparePrice ?? undefined, rating:0, badge:p.badge?.startsWith('-') ? 'PICK' : p.badge, sold:undefined, available:live.stock ?? undefined } : p
@@ -792,7 +792,7 @@ function SectionHeader({
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App({ children }: { children?: ReactNode }) {
-  const { products: catalogue, cart: cartItems, user, setCartOpen, settings } = useStore()
+  const { products: catalogue, cart: cartItems, setCartOpen, settings } = useStore()
   const cart = cartItems.reduce((sum: number, line: { quantity: number }) => sum + line.quantity, 0)
   const [slide, setSlide] = useState(0)
   const [latestOffset, setLatestOffset] = useState(0)
@@ -818,14 +818,15 @@ export default function App({ children }: { children?: ReactNode }) {
     return () => clearInterval(t)
   }, [heroHovered])
   useEffect(() => {
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return
-    const t = setInterval(() => {
-      setUtility((u) => (u + 1) % UTILITY_MESSAGES.length)
-    }, 3600)
-    return () => clearInterval(t)
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)")
+    let timer: ReturnType<typeof setInterval> | undefined
+    const update = () => {
+      if (timer) clearInterval(timer)
+      if (!preference.matches) timer = setInterval(() => setUtility((value) => (value + 1) % UTILITY_MESSAGES.length), 5800)
+    }
+    update()
+    preference.addEventListener("change", update)
+    return () => { if (timer) clearInterval(timer); preference.removeEventListener("change", update) }
   }, [])
 
   const hero = HERO_SLIDES[slide]
@@ -1017,32 +1018,7 @@ export default function App({ children }: { children?: ReactNode }) {
               marginLeft: "auto",
             }}
           >
-            {[
-              { icon: <User size={20} />, label: "Account" },
-              { icon: <Heart size={20} />, label: "Wishlist" },
-            ].map((u) => (
-              <button
-                key={u.label}
-                onClick={() => navigate(u.label === "Account" ? (user ? "/account/" : "/login/") : "/wishlist/")}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 2,
-                  fontSize: 10,
-                  color: "#555",
-                  padding: "4px 8px",
-                  fontFamily: "Nunito,sans-serif",
-                  fontWeight: 600,
-                }}
-              >
-                {u.icon}
-                {u.label}
-              </button>
-            ))}
+            <AccountMenu />
             <button
               onClick={() => setCartOpen(true)} aria-label="Open shopping cart"
               style={{

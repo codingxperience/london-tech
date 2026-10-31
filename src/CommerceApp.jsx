@@ -1,21 +1,17 @@
 import React, { useEffect } from "react"
 import ReferenceStorefront from "./App.tsx"
-import { StoreProvider, usePath, useStore } from "./store.jsx"
+import { StoreProvider, usePath, useStore, navigate } from "./store.jsx"
 import { SearchDialog, CartDrawer } from "./components/storefront.jsx"
-import {
-  Collection,
-  Product,
-  Wishlist,
-  Compare,
-  NotFound,
-} from "./pages/shop.jsx"
+import { Collection, Product, Compare, NotFound } from "./pages/shop.jsx"
 import { Cart, Checkout, PaymentResult } from "./pages/checkout.jsx"
 import { Auth, Account } from "./pages/account.jsx"
 import { Info } from "./pages/info.jsx"
-import { Button } from "./components/ui.jsx"
+import { Button, Modal } from "./components/ui.jsx"
+import { localReturnPath } from "./lib/navigation.js"
 import { GitCompareArrows } from "lucide-react"
 import "./commerce.css"
 import "./product-detail.css"
+import "./shopping-experience.css"
 const Admin = React.lazy(() => import("./pages/admin.jsx"))
 class ErrorBoundary extends React.Component {
   state = { failed: false }
@@ -48,8 +44,17 @@ class ErrorBoundary extends React.Component {
 function Router() {
   const path = usePath(),
     normalized = path.split("?")[0].replace(/\/+$/, "") || "/"
-  const { searchOpen, cartOpen, products, compare } = useStore()
+  const {
+    searchOpen,
+    cartOpen,
+    products,
+    compare,
+    authDialog,
+    setAuthDialog,
+    closeAuth,
+  } = useStore()
   const admin = normalized.startsWith("/admin")
+  useEffect(() => closeAuth(), [normalized, closeAuth])
   useEffect(() => {
     const product = normalized.startsWith("/products/")
       ? products.find(
@@ -76,6 +81,31 @@ function Router() {
         ? "London Tech | London Technology Store"
         : name + " | London Tech"
   }, [normalized, products])
+  const authModes = {
+    "/login": "login",
+    "/register": "register",
+    "/forgot-password": "forgot",
+    "/reset-password": "reset",
+  }
+  if (authModes[normalized])
+    return (
+      <div className="commerce-surface">
+        <main className="auth-route">
+          <Auth
+            key={normalized}
+            mode={authModes[normalized]}
+            onClose={() =>
+              navigate(
+                localReturnPath(
+                  new URLSearchParams(location.search).get("next"),
+                  "/",
+                ),
+              )
+            }
+          />
+        </main>
+      </div>
+    )
   if (admin) {
     const parts = normalized.split("/").filter(Boolean),
       preview = parts[1] === "preview",
@@ -110,15 +140,11 @@ function Router() {
       ) : (
         <Collection category={category} />
       )
-  } else if (normalized === "/wishlist") page = <Wishlist />
+  } else if (normalized === "/wishlist") page = <Account section="wishlist" />
   else if (normalized === "/compare") page = <Compare />
   else if (normalized === "/cart") page = <Cart />
   else if (normalized === "/checkout") page = <Checkout />
   else if (normalized === "/checkout/result") page = <PaymentResult />
-  else if (normalized === "/login") page = <Auth />
-  else if (normalized === "/register") page = <Auth mode="register" />
-  else if (normalized === "/forgot-password") page = <Auth mode="forgot" />
-  else if (normalized === "/reset-password") page = <Auth mode="reset" />
   else if (normalized.startsWith("/account")) {
     const parts = normalized.split("/")
     page = <Account section={parts[2] || "overview"} orderId={parts[3]} />
@@ -146,6 +172,26 @@ function Router() {
         )}
       </ReferenceStorefront>
       <div className="commerce-surface">
+        {authDialog && (
+          <Modal
+            title={
+              authDialog.mode === "register"
+                ? "Create your London Tech account"
+                : "Sign in to London Tech"
+            }
+            wide
+            className="auth-dialog"
+            onClose={closeAuth}
+          >
+            <Auth
+              mode={authDialog.mode}
+              next={authDialog.next}
+              dialog
+              onClose={closeAuth}
+              onModeChange={(mode) => setAuthDialog({ ...authDialog, mode })}
+            />
+          </Modal>
+        )}
         {searchOpen && <SearchDialog />}
         {cartOpen && <CartDrawer />}
         {compare.length > 0 && (

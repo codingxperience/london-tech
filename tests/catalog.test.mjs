@@ -44,6 +44,8 @@ test("production pages have white-logo metadata, canonical URLs and no guide-pri
     "products/iphone-17-pro-max/index.html",
     "collections/mobiles/index.html",
     "admin/index.html",
+    "account/wishlist/index.html",
+    "register/index.html",
   ]) {
     const html = await readFile("dist/" + path, "utf8")
 
@@ -59,6 +61,11 @@ test("production pages have white-logo metadata, canonical URLs and no guide-pri
     if (path.startsWith("products/"))
       assert.ok(!html.includes('"@type":"Offer"'))
 
-    if (path.startsWith("admin/")) assert.ok(html.includes("noindex,nofollow"))
+    if (
+      path.startsWith("admin/") ||
+      path.startsWith("account/") ||
+      path.startsWith("register/")
+    )
+      assert.ok(html.includes("noindex,nofollow"))
   }
 })

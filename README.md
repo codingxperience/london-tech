@@ -26,12 +26,14 @@ Vercel serves `dist/` and the Node API in `api/`. Hosted PostgreSQL and Flutterw
 ## Included
 
 - Existing storefront design and source imagery.
-- 12 categories, search, filters, sorting, pagination and product comparison.
+- 12 categories, image-led Recommended / Shop by brand navigation, collapsible filters, price ranges, sorting, pagination and product comparison. Collection filters are retained in the URL.
 - Vertical desktop thumbnails beside the main image, horizontal mobile thumbnails, hover/focus previews, pointer-following zoom and a keyboard-accessible image viewer.
 - Linked product sections for highlights, specifications, reviews with filtering/sorting, illustrated descriptions, official guides, delivery/returns, questions and store support.
 - Related and complementary products, configuration options, package/condition/warranty details and verified-purchase reviews.
 - Search hints that type and delete characters, rotating product-card copy, larger prices and reduced-motion support.
 - Persistent cart and wishlist, customer registration/sign-in, account details, saved addresses and order history.
+- A clear account dropdown groups orders, wishlist and account details. Sign-in and registration open in focused dialogs; direct authentication URLs show a standalone card without the store header or footer.
+- Guest favourites remain available at `/account/wishlist/` and merge into the account after sign-in. The legacy `/wishlist/` URL remains supported.
 - UGX checkout for MTN Mobile Money, Airtel Money and Visa / card through Flutterwave hosted payment.
 - Price confirmation requests, admin quotes, customer quote review, stock reservations and server-verified payment status.
 - Admin overview, products, stock, categories, orders, customers, exports, settings and activity log.

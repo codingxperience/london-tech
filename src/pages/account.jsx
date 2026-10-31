@@ -4,8 +4,6 @@ import {
   ArrowRight,
   ArrowLeft,
   CheckCircle2,
-  Eye,
-  EyeOff,
   Heart,
   Home,
   KeyRound,
@@ -17,7 +15,6 @@ import {
   ShieldCheck,
   Trash2,
   UserRound,
-  WalletCards,
   Printer,
   Clock3,
 } from "lucide-react"
@@ -43,221 +40,65 @@ import {
 
 import { ProductGrid } from "../components/storefront.jsx"
 
-function nextPath(role) {
-  const value = new URLSearchParams(location.search).get("next")
-  return value?.startsWith("/") && !value.startsWith("//")
-    ? value
-    : role === "admin"
-      ? "/admin/"
-      : "/account/"
-}
+export { Auth } from "./auth.jsx"
 
-export function Auth({ mode = "login" }) {
-  const { setUser, user, config } = useStore()
-  const [show, setShow] = useState(false),
-    [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
-    [success, setSuccess] = useState("")
-
-  const register = mode === "register",
-    forgot = mode === "forgot",
-    reset = mode === "reset"
-
-  const title = register
-    ? "A place for your next."
-    : forgot
-      ? "Let’s get you back in."
-      : reset
-        ? "A fresh start."
-        : "Good to see you again."
-
-  const next = new URLSearchParams(location.search).get("next") || ""
-
-  async function submit(e) {
-    e.preventDefault()
-    setBusy(true)
-    setError("")
-    const data = Object.fromEntries(new FormData(e.currentTarget))
-    try {
-      if (forgot) {
-        const result = await post("auth/forgot-password", { email: data.email })
-        setSuccess(result.message)
-      } else if (reset) {
-        await post("auth/reset-password", {
-          token: new URLSearchParams(location.search).get("token"),
-          password: data.password,
-        })
-        setSuccess("Your password has been updated. You can sign in now.")
-      } else {
-        const result = await post(
-          register ? "auth/register" : "auth/login",
-          data,
-        )
-        setUser(result.user)
-        navigate(nextPath(result.user.role))
-      }
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setBusy(false)
-    }
-  }
-
+function GuestWishlist() {
+  const { products, wishlist, openAuth } = useStore()
+  const saved = products.filter((product) => wishlist.includes(product.id))
   return (
-    <main className="container auth-page">
-      <div className="auth-story">
-        <p className="eyebrow">LONDON TECHNOLOGY STORE</p>
-        <h1>
-          Your everyday.
-          <br />A little <span>better.</span>
-        </h1>
-        <p>
-          Your wishlist, your orders and your next favourite. Together in one
-          place.
-        </p>
-        <div className="auth-story-art">
-          <img
-            src="/assets/london-tech-logo.png"
-            alt="London Tech logo"
-            width="256"
-            height="256"
-          />
-          <span>
-            THOUGHTFULLY SELECTED.
-            <br />
-            PERSONALLY YOURS.
-          </span>
-        </div>
-        <small>
-          <ShieldCheck size={14} />
-          Your account. Your information. Your control.
-        </small>
+    <main className="container standard-page account-wishlist-page">
+      <Breadcrumb
+        items={[
+          { label: "My account", href: "/account/" },
+          { label: "Wishlist" },
+        ]}
+      />
+      <PageHeading eyebrow="SAVED FOR LATER" title="Your wishlist.">
+        Keep the things you love close by.
+      </PageHeading>
+      <div className="wishlist-sign-in">
+        <Heart size={22} />
+        <span>
+          <strong>Your favourites, together.</strong>
+          <small>
+            Saved on this device. Sign in to keep them with your account.
+          </small>
+        </span>
+        <Button
+          variant="secondary"
+          onClick={() => openAuth("login", "/account/wishlist/")}
+        >
+          Sign in
+        </Button>
       </div>
-      <section className="auth-panel">
-        <a href="/" className="text-link">
-          <ArrowLeft size={14} />
-          Back to the store
-        </a>
-        <p className="eyebrow">
-          {register
-            ? "CREATE AN ACCOUNT"
-            : forgot || reset
-              ? "ACCOUNT RECOVERY"
-              : "WELCOME BACK"}
-        </p>
-        <h2>{title}</h2>
-        <p>
-          {register
-            ? "Save your favourites, track orders and make your next visit easier."
-            : forgot
-              ? "Enter your account email to request a password reset link."
-              : reset
-                ? "Choose a new password with at least 12 characters."
-                : "Sign in to pick up where you left off."}
-        </p>
-        {error && <Notice type="error">{error}</Notice>}
-        {success ? (
-          <>
-            <Notice type="success">{success}</Notice>
-            <ActionLink href="/login/">Back to sign in</ActionLink>
-          </>
-        ) : (
-          <form className="stack-form" onSubmit={submit}>
-            {register && (
-              <Field
-                label="Your name"
-                name="name"
-                autoComplete="name"
-                minLength={2}
-                maxLength={100}
-                required
-              />
-            )}
-            {!reset && (
-              <Field
-                label="Email address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                required
-              />
-            )}
-            {!forgot && (
-              <div className="password-field">
-                <Field
-                  label={reset ? "New password" : "Password"}
-                  name="password"
-                  type={show ? "text" : "password"}
-                  autoComplete={
-                    register || reset ? "new-password" : "current-password"
-                  }
-                  minLength={register || reset ? 12 : undefined}
-                  maxLength={128}
-                  hint={
-                    register || reset
-                      ? "Use at least 12 characters. A short phrase works well."
-                      : undefined
-                  }
-                  required
-                />
-                <IconButton
-                  label={show ? "Hide password" : "Show password"}
-                  type="button"
-                  onClick={() => setShow(!show)}
-                >
-                  {show ? <EyeOff size={17} /> : <Eye size={17} />}
-                </IconButton>
-              </div>
-            )}
-            {mode === "login" && (
-              <a className="forgot-link" href="/forgot-password/">
-                Forgot your password?
-              </a>
-            )}
-            {register && (
-              <label className="checkbox-label">
-                <input type="checkbox" required />
-                <span>
-                  I agree to the <a href="/terms/">terms</a> and{" "}
-                  <a href="/privacy/">privacy information</a>.
-                </span>
-              </label>
-            )}
-            <Button type="submit" busy={busy}>
-              {register
-                ? "Create your account"
-                : forgot
-                  ? "Send reset link"
-                  : reset
-                    ? "Update password"
-                    : "Sign in"}
-              <ArrowRight size={16} />
-            </Button>
-          </form>
-        )}
-        {!forgot && !reset && (
-          <p className="auth-switch">
-            {register ? "Already have an account?" : "New to London Tech?"}{" "}
-            <a
-              href={
-                (register ? "/login/" : "/register/") +
-                (next ? "?next=" + encodeURIComponent(next) : "")
-              }
-            >
-              {register ? "Sign in" : "Create an account"}
-              <ArrowRight size={13} />
-            </a>
-          </p>
-        )}
-      </section>
+      {saved.length ? (
+        <ProductGrid products={saved} />
+      ) : (
+        <Empty
+          icon={Heart}
+          title="Save something you love."
+          action={
+            <ActionLink href="/collections/shop/">Explore the store</ActionLink>
+          }
+        >
+          Tap the heart on a product and find it here.
+        </Empty>
+      )}
     </main>
   )
 }
 
 export function Account({ section = "overview", orderId }) {
-  const { user, setUser, authLoading, logout, products, wishlist, notify } =
-    useStore()
+  const {
+    user,
+    setUser,
+    authLoading,
+    logout,
+    products,
+    wishlist,
+    notify,
+    openAuth,
+  } = useStore()
   const [orders, setOrders] = useState([]),
     [loaded, setLoaded] = useState(false),
     [error, setError] = useState(""),
@@ -274,6 +115,8 @@ export function Account({ section = "overview", orderId }) {
     if (user) load()
   }, [user?.id])
 
+  if (!user && section === "wishlist") return <GuestWishlist />
+
   if (authLoading)
     return (
       <main className="container standard-page">
@@ -289,11 +132,9 @@ export function Account({ section = "overview", orderId }) {
           title="A place for your next."
           action={
             <>
-              <ActionLink
-                href={"/login/?next=" + encodeURIComponent(location.pathname)}
-              >
+              <Button onClick={() => openAuth("login", location.pathname)}>
                 Sign in
-              </ActionLink>
+              </Button>
               <a className="text-link" href="/register/">
                 Create an account
                 <ArrowRight size={15} />
@@ -401,7 +242,7 @@ export function Account({ section = "overview", orderId }) {
                     <ArrowRight size={14} />
                   </span>
                 </a>
-                <a href="/wishlist/">
+                <a href="/account/wishlist/">
                   <Heart size={22} />
                   <strong>{wishlist.length}</strong>
                   <span>

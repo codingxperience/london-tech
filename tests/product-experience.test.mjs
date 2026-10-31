@@ -14,6 +14,13 @@ import {
   productInformation,
   zoomOrigin,
 } from "../src/lib/product-experience.js"
+import { localReturnPath } from "../src/lib/navigation.js"
+import {
+  readCollectionFilters,
+  collectionQuery,
+  selectCollection,
+  scopeCollection,
+} from "../src/lib/collection-filters.js"
 
 let dom,
   server,
@@ -42,6 +49,7 @@ before(async () => {
     localStorage: dom.localStorage,
     HTMLElement: dom.HTMLElement,
     HTMLInputElement: dom.HTMLInputElement,
+    FormData: dom.FormData,
     IntersectionObserver: dom.IntersectionObserver,
     Node: dom.Node,
     Event: dom.Event,
@@ -52,9 +60,13 @@ before(async () => {
         ? { products, settings: storeDefaults }
         : String(url).includes("/reviews")
           ? { reviews: [] }
-          : String(url).includes("/api/auth/me")
-            ? { user: null }
-            : { accounts: false, payments: false, currency: "UGX" }
+          : String(url).includes("/wishlist")
+            ? { ids: [] }
+            : String(url).includes("/api/orders")
+              ? { orders: [] }
+              : String(url).includes("/api/auth/me")
+                ? { user: null }
+                : { accounts: false, payments: false, currency: "UGX" }
       return { ok: true, json: async () => data }
     },
   }
@@ -111,7 +123,9 @@ afterEach(async () => {
   clock = null
   container.remove()
   dom.document.body.style.overflow = ""
+  dom.document.documentElement.scrollTop = 0
   dom.localStorage.clear()
+  dom.history.replaceState({}, "", "http://localhost/")
 })
 
 after(async () => {
@@ -135,6 +149,23 @@ async function dispatch(element, event) {
 async function click(element) {
   assert.ok(element, "The requested interactive element exists")
   await act(async () => element.click())
+}
+
+async function fillInput(input, value) {
+  assert.ok(input, "The expected input exists")
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(
+      dom.HTMLInputElement.prototype,
+      "value",
+    ).set.call(input, value)
+    input.dispatchEvent(new dom.Event("input", { bubbles: true }))
+  })
+}
+
+async function openRoute(path) {
+  reducedMotion = true
+  dom.history.replaceState({}, "", path)
+  await render(React.createElement(CommerceApp))
 }
 
 function key(name) {
@@ -976,5 +1007,395 @@ test("a fresh complete CommerceApp mount opens a product route with its own prov
     root = null
     dom.history.replaceState({}, "", previousUrl)
     console.error = originalConsoleError
+  }
+})
+
+test("authentication return paths stay local and do not loop into authentication", () => {
+  for (const path of [
+    "https://outside.example/",
+    "//outside.example/",
+    "/\\outside.example/",
+    "/login/?next=/account/",
+    "/register/",
+    "/forgot-password/",
+  ])
+    assert.equal(localReturnPath(path), "/account/")
+  assert.equal(
+    localReturnPath("/account/wishlist/?from=shop"),
+    "/account/wishlist/?from=shop",
+  )
+  assert.equal(localReturnPath(null, "/"), "/")
+})
+
+test("collection filters round-trip and apply actual brand, price and stock values without changing catalogue order", () => {
+  const initial = readCollectionFilters(
+    "?q=phone&brand=Apple&brand=Apple&brand=Samsung&min=100&max=900&stock=1&sort=price-low&page=2",
+  )
+  assert.deepEqual(readCollectionFilters(collectionQuery(initial)), initial)
+  assert.deepEqual(initial.brands, ["Apple", "Samsung"])
+  const rows = [
+    {
+      id: "a",
+      name: "Phone A",
+      sku: "A",
+      brand: "Apple",
+      category: "mobiles",
+      price: 800,
+      stock: 2,
+    },
+    {
+      id: "b",
+      name: "Phone B",
+      sku: "B",
+      brand: "Samsung",
+      category: "mobiles",
+      price: 400,
+      stock: 0,
+    },
+    {
+      id: "c",
+      name: "Phone C",
+      sku: "C",
+      brand: "Apple",
+      category: "mobiles",
+      price: null,
+      stock: null,
+    },
+    {
+      id: "d",
+      name: "Notebook",
+      sku: "D",
+      brand: "Apple",
+      category: "laptops",
+      price: 300,
+      stock: 1,
+    },
+  ]
+  assert.deepEqual(
+    selectCollection(scopeCollection(rows, "mobiles"), initial).map(
+      (p) => p.id,
+    ),
+    ["a"],
+  )
+  const stockOff = { ...initial, inStock: false }
+  assert.deepEqual(
+    selectCollection(scopeCollection(rows, "mobiles"), stockOff).map(
+      (p) => p.id,
+    ),
+    ["b", "a"],
+  )
+  assert.deepEqual(
+    rows.map((p) => p.id),
+    ["a", "b", "c", "d"],
+  )
+  assert.equal(
+    readCollectionFilters("?min=-1&max=no&sort=unknown&page=-7").page,
+    1,
+  )
+  assert.equal(readCollectionFilters("?min=-1&max=no").min, "")
+})
+
+test("direct registration and sign-in are focused routes without the store header or footer", async () => {
+  await openRoute("/register/?next=%2Faccount%2Fwishlist%2F")
+  assert.equal(container.querySelector(".site-footer"), null)
+  assert.equal(container.querySelector(".header-search"), null)
+  assert.match(
+    container.querySelector(".auth-form-panel h1").textContent,
+    /Create your account/,
+  )
+  assert.equal(container.querySelector('input[name="password"]').minLength, 12)
+  assert.equal(container.querySelector('input[name="terms"]').required, true)
+  await click(
+    [...container.querySelectorAll(".auth-mode-switch button")].find(
+      (button) => button.textContent === "Sign in",
+    ),
+  )
+  assert.equal(dom.location.pathname, "/login/")
+  assert.match(container.querySelector("h1").textContent, /Welcome back/)
+  assert.equal(
+    new URLSearchParams(dom.location.search).get("next"),
+    "/account/wishlist/",
+  )
+  await click(container.querySelector(".auth-forgot"))
+  assert.equal(dom.location.pathname, "/forgot-password/")
+  assert.equal(container.querySelector('input[name="password"]'), null)
+})
+
+test("the account dropdown groups wishlist and opens a closable registration dialog over the current product", async () => {
+  await openRoute("/products/iphone-17-pro-max/")
+  const trigger = container.querySelector(".account-menu-trigger")
+  await click(trigger)
+  assert.equal(trigger.getAttribute("aria-expanded"), "true")
+  assert.ok(
+    [...container.querySelectorAll(".account-menu-panel nav button")].some(
+      (button) => /Wishlist/.test(button.textContent),
+    ),
+  )
+  await click(container.querySelector(".account-register"))
+  const dialog = container.querySelector('[role="dialog"]')
+  assert.ok(dialog.querySelector(".auth-card"))
+  assert.equal(dialog.querySelector(".site-footer"), null)
+  assert.equal(dialog.querySelector(".header-search"), null)
+  assert.ok(
+    container.querySelector(".product-main-image"),
+    "The underlying product stays in place",
+  )
+  assert.equal(dom.location.pathname, "/products/iphone-17-pro-max/")
+  assert.equal(dom.document.activeElement.name, "name")
+  await click(dialog.querySelector('[aria-label="Show password"]'))
+  assert.equal(dialog.querySelector('input[name="password"]').type, "text")
+  await click(
+    [...dialog.querySelectorAll(".auth-mode-switch button")].find(
+      (button) => button.textContent === "Sign in",
+    ),
+  )
+  assert.equal(container.querySelector('input[name="name"]'), null)
+  await dispatch(dom, key("Escape"))
+  assert.equal(container.querySelector('[role="dialog"]'), null)
+  assert.equal(dom.document.activeElement, trigger)
+})
+
+test("account navigation removes About from the menu while retaining the footer link", async () => {
+  await openRoute("/")
+  assert.ok(
+    ![...container.querySelectorAll(".nav-desktop a, .nav-drawer a")].some(
+      (link) => /about/i.test(link.textContent),
+    ),
+  )
+  assert.ok(container.querySelector('.site-footer a[href="/about/"]'))
+  assert.equal(
+    [...container.querySelectorAll(".header-actions>button")].some((button) =>
+      /Wishlist/.test(button.textContent),
+    ),
+    false,
+  )
+  const trigger = container.querySelector(".account-menu-trigger")
+  await dispatch(trigger, key("ArrowDown"))
+  assert.equal(
+    dom.document.activeElement,
+    container.querySelector(".account-sign-in"),
+  )
+  await dispatch(dom.document, key("Escape"))
+  assert.equal(trigger.getAttribute("aria-expanded"), "false")
+})
+
+test("guest wishlist is available under account and sign-in merges it into the authenticated wishlist", async () => {
+  const originalFetch = globalThis.fetch
+  const saved = products.find((product) => product.id === "iphone-17-pro-max")
+  const writes = []
+  const customer = {
+    id: "customer-ui-test",
+    role: "customer",
+    name: "Test Shopper",
+    email: "shopper@example.test",
+    phone: "",
+    addresses: [],
+  }
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url).endsWith("/auth/login"))
+      return { ok: true, json: async () => ({ user: customer }) }
+    if (String(url).endsWith("/wishlist") && options.method === "PUT") {
+      writes.push(JSON.parse(options.body).ids)
+      return { ok: true, json: async () => ({ ok: true }) }
+    }
+    return originalFetch(url, options)
+  }
+  try {
+    dom.localStorage.setItem("lt.wishlist.v2", JSON.stringify([saved.id]))
+    await openRoute("/account/wishlist/")
+    assert.match(
+      container.querySelector(".account-wishlist-page").textContent,
+      /Saved on this device/,
+    )
+    assert.match(
+      container.querySelector(".product-grid").textContent,
+      new RegExp(saved.name),
+    )
+    await click(container.querySelector(".wishlist-sign-in .button"))
+    const historyLength = dom.history.length
+    dom.document.documentElement.scrollTop = 600
+    const dialog = container.querySelector('[role="dialog"]')
+    await fillInput(dialog.querySelector('[name="email"]'), customer.email)
+    await fillInput(
+      dialog.querySelector('[name="password"]'),
+      "a-test-only-password",
+    )
+    await dispatch(
+      dialog.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    await act(async () => {
+      await Promise.resolve()
+      await Promise.resolve()
+    })
+    assert.equal(container.querySelector('[role="dialog"]'), null)
+    assert.equal(dom.location.pathname, "/account/wishlist/")
+    assert.equal(
+      dom.history.length,
+      historyLength,
+      "Signing in over the current view adds no extra history entry",
+    )
+    assert.equal(
+      dom.document.documentElement.scrollTop,
+      600,
+      "Signing in keeps the shopper's position",
+    )
+    assert.match(
+      container.querySelector(".account-content").textContent,
+      /Your saved favourites/,
+    )
+    assert.ok(
+      writes.some((ids) => ids.includes(saved.id)),
+      "Guest favourites sync to the signed-in account",
+    )
+    assert.ok(container.querySelector(".account-content .product-card"))
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("image-led discovery switches to actual brands and the clean filters preserve their URL", async () => {
+  await openRoute("/collections/mobiles/")
+  assert.ok(container.querySelectorAll(".discovery-rail img").length >= 8)
+  const brandTab = [...container.querySelectorAll('[role="tab"]')].find(
+    (button) => button.textContent === "Shop by brand",
+  )
+  await click(brandTab)
+  assert.equal(brandTab.getAttribute("aria-selected"), "true")
+  const apple = [...container.querySelectorAll(".discovery-rail button")].find(
+    (button) => button.textContent.trim() === "Apple",
+  )
+  assert.ok(apple.querySelector("img"))
+  await click(apple)
+  assert.equal(new URLSearchParams(dom.location.search).get("brand"), "Apple")
+  const names = () =>
+    [
+      ...container.querySelectorAll(".collection-results .product-card h3 a"),
+    ].map((link) => decodeURIComponent(link.getAttribute("href").split("/")[2]))
+  assert.ok(names().length)
+  assert.ok(
+    names().every((id) => products.find((p) => p.id === id).brand === "Apple"),
+  )
+  const priceForm = container.querySelector(
+    ".refined-sidebar .refined-price-form",
+  )
+  await fillInput(priceForm.querySelector('[placeholder="Min"]'), "1000000")
+  await fillInput(priceForm.querySelector('[placeholder="Max"]'), "6000000")
+  await dispatch(
+    priceForm,
+    new dom.Event("submit", { bubbles: true, cancelable: true }),
+  )
+  assert.equal(new URLSearchParams(dom.location.search).get("min"), "1000000")
+  assert.ok(
+    names().every((id) => {
+      const p = products.find((p) => p.id === id)
+      return p.price >= 1000000 && p.price <= 6000000
+    }),
+  )
+  await click(container.querySelector('[aria-label="Remove Apple filter"]'))
+  assert.equal(new URLSearchParams(dom.location.search).has("brand"), false)
+  assert.equal(new URLSearchParams(dom.location.search).get("min"), "1000000")
+  await click(container.querySelector(".refined-filter-chips .reset-all"))
+  assert.equal(dom.location.search, "")
+})
+
+test("invalid price ranges stay unapplied and the mobile drawer keeps the same filter state", async () => {
+  await openRoute("/collections/mobiles/")
+  const form = container.querySelector(".refined-sidebar .refined-price-form")
+  await fillInput(form.querySelector('[placeholder="Min"]'), "9000")
+  await fillInput(form.querySelector('[placeholder="Max"]'), "1000")
+  await dispatch(
+    form,
+    new dom.Event("submit", { bubbles: true, cancelable: true }),
+  )
+  assert.match(
+    form.querySelector('[role="alert"]').textContent,
+    /minimum below the maximum/,
+  )
+  assert.equal(new URLSearchParams(dom.location.search).has("min"), false)
+  await click(container.querySelector(".refined-toolbar .mobile-filter"))
+  const dialog = container.querySelector('[role="dialog"]')
+  const apple = [
+    ...dialog.querySelectorAll(".refined-brand-options label"),
+  ].find((label) => label.querySelector("span").textContent === "Apple")
+  await click(apple.querySelector("input"))
+  await click(
+    dialog.querySelector(".refined-mobile-filter-actions>.button:last-child"),
+  )
+  assert.equal(container.querySelector('[role="dialog"]'), null)
+  assert.equal(new URLSearchParams(dom.location.search).get("brand"), "Apple")
+  assert.ok(container.querySelector('[aria-label="Remove Apple filter"]'))
+})
+
+test("sign-in errors preserve the form and registration submits working credentials before returning to the chosen account page", async () => {
+  const originalFetch = globalThis.fetch
+  let registered
+  const customer = {
+    id: "registration-ui-test",
+    role: "customer",
+    name: "New Shopper",
+    email: "new@example.test",
+    phone: "",
+    addresses: [],
+  }
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url).endsWith("/auth/login"))
+      return {
+        ok: false,
+        status: 401,
+        json: async () => ({ error: "Email or password is incorrect." }),
+      }
+    if (String(url).endsWith("/auth/register")) {
+      registered = JSON.parse(options.body)
+      return { ok: true, json: async () => ({ user: customer }) }
+    }
+    return originalFetch(url, options)
+  }
+  try {
+    await openRoute("/login/?next=%2Faccount%2Fprofile%2F")
+    await fillInput(container.querySelector('[name="email"]'), customer.email)
+    await fillInput(
+      container.querySelector('[name="password"]'),
+      "incorrect-password",
+    )
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    assert.match(
+      container.querySelector('[role="alert"]').textContent,
+      /Email or password is incorrect/,
+    )
+    assert.equal(
+      container.querySelector('[name="email"]').value,
+      customer.email,
+    )
+    await click(
+      [...container.querySelectorAll(".auth-mode-switch button")].find(
+        (button) => button.textContent === "Register",
+      ),
+    )
+    assert.equal(container.querySelector('[role="alert"]'), null)
+    await fillInput(container.querySelector('[name="name"]'), customer.name)
+    await fillInput(container.querySelector('[name="email"]'), customer.email)
+    await fillInput(
+      container.querySelector('[name="password"]'),
+      "a-test-only-password",
+    )
+    await click(container.querySelector('[name="terms"]'))
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    assert.equal(registered.name, customer.name)
+    assert.equal(registered.email, customer.email)
+    assert.equal(registered.password, "a-test-only-password")
+    assert.equal(dom.location.pathname, "/account/profile/")
+    assert.match(
+      container.querySelector(".account-content").textContent,
+      /Account details/,
+    )
+  } finally {
+    globalThis.fetch = originalFetch
   }
 })

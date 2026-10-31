@@ -3,14 +3,9 @@ import React, { useEffect, useState } from "react"
 import {
   ArrowRight,
   ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
   Heart,
   GitCompareArrows,
   Search,
-  SlidersHorizontal,
-  LayoutGrid,
-  List,
   PackageCheck,
   ShieldCheck,
   Truck,
@@ -24,12 +19,7 @@ import { ProductGallery } from "../components/product-gallery.jsx"
 import { ProductSections } from "../components/product-sections.jsx"
 import { productInformation } from "../lib/product-experience.js"
 
-import {
-  categories,
-  categoryName,
-  money,
-  productPath,
-} from "../data/catalog.js"
+import { categoryName, money, productPath } from "../data/catalog.js"
 
 import { api, post } from "../lib/api.js"
 
@@ -49,301 +39,11 @@ import {
 
 import {
   PaymentMarks,
-  ProductCard,
   ProductGrid,
   SectionHeading,
 } from "../components/storefront.jsx"
 
-export function Collection({ category = "shop" }) {
-  const { products } = useStore()
-  const initial = new URLSearchParams(location.search)
-
-  const [query, setQuery] = useState(initial.get("q") || ""),
-    [brands, setBrands] = useState([]),
-    [inStock, setInStock] = useState(false),
-    [maxPrice, setMaxPrice] = useState(""),
-    [sort, setSort] = useState("featured"),
-    [view, setView] = useState("grid"),
-    [page, setPage] = useState(1),
-    [filterOpen, setFilterOpen] = useState(false)
-
-  const all =
-    category === "shop"
-      ? products
-      : category === "apple-products-london"
-        ? products.filter((p) => p.brand === "Apple")
-        : category === "iphones-london"
-          ? products.filter((p) => /iphone/i.test(p.name))
-          : category === "samsung-galaxy-ultra-london"
-            ? products.filter((p) => /Galaxy.*Ultra/i.test(p.name))
-            : products.filter((p) => p.category === category)
-
-  const availableBrands = [...new Set(all.map((p) => p.brand))].sort()
-
-  const filtered = all
-    .filter(
-      (p) =>
-        (!query ||
-          (p.name + " " + p.brand + " " + p.sku)
-            .toLowerCase()
-            .includes(query.toLowerCase())) &&
-        (!brands.length || brands.includes(p.brand)) &&
-        (!inStock || p.stock > 0) &&
-        (!maxPrice || (p.price != null && p.price <= Number(maxPrice))),
-    )
-    .sort((a, b) =>
-      sort === "name"
-        ? a.name.localeCompare(b.name)
-        : sort === "price-low"
-          ? (a.price ?? Infinity) - (b.price ?? Infinity)
-          : sort === "price-high"
-            ? (b.price ?? -Infinity) - (a.price ?? -Infinity)
-            : Number(b.featured) - Number(a.featured),
-    )
-
-  const pageSize = 12,
-    totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
-  const shown = filtered.slice((page - 1) * pageSize, page * pageSize)
-
-  useEffect(() => setPage(1), [query, brands, inStock, maxPrice, sort])
-
-  const clear = () => {
-    setBrands([])
-    setInStock(false)
-    setMaxPrice("")
-    setQuery("")
-  }
-
-  const title =
-    category === "shop"
-      ? "Everything in shop."
-      : category === "apple-products-london"
-        ? "The Apple collection."
-        : category === "iphones-london"
-          ? "Find your next iPhone."
-          : category === "samsung-galaxy-ultra-london"
-            ? "The Galaxy Ultra collection."
-            : categoryName(category) + "."
-
-  const filters = (
-    <div className="filter-content">
-      <div className="filter-section">
-        <h3>Categories</h3>
-        <a
-          className={category === "shop" ? "active" : ""}
-          href="/collections/shop/"
-        >
-          All products <span>{products.length}</span>
-        </a>
-        {categories.map((c) => (
-          <a
-            key={c.id}
-            href={"/collections/" + c.id + "/"}
-            className={category === c.id ? "active" : ""}
-          >
-            <span>{c.name}</span>
-            <span>{products.filter((p) => p.category === c.id).length}</span>
-          </a>
-        ))}
-      </div>
-      <div className="filter-section">
-        <h3>Brand</h3>
-        {availableBrands.map((b) => (
-          <label className="checkbox-label" key={b}>
-            <input
-              type="checkbox"
-              checked={brands.includes(b)}
-              onChange={() =>
-                setBrands(
-                  brands.includes(b)
-                    ? brands.filter((x) => x !== b)
-                    : [...brands, b],
-                )
-              }
-            />
-            <span>{b}</span>
-          </label>
-        ))}
-      </div>
-      <div className="filter-section">
-        <h3>Price & availability</h3>
-        <Field
-          label="Maximum price (UGX)"
-          type="number"
-          min="0"
-          placeholder="Any price"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-        />
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            checked={inStock}
-            onChange={(e) => setInStock(e.target.checked)}
-          />
-          Confirmed in stock
-        </label>
-        <small className="muted">
-          Unlisted prices can be requested from the store.
-        </small>
-      </div>
-      <button className="text-link" onClick={clear}>
-        Clear all filters
-        <X size={12} />
-      </button>
-    </div>
-  )
-
-  return (
-    <main className="container collection-page">
-      <Breadcrumb
-        items={[
-          {
-            label: "Shop",
-            href: category === "shop" ? undefined : "/collections/shop/",
-          },
-          ...(category !== "shop" ? [{ label: title.replace(/\.$/, "") }] : []),
-        ]}
-      />
-      <PageHeading eyebrow="THE COLLECTION" title={title}>
-        {categories.find((c) => c.id === category)?.description ||
-          "Find the technology that fits your life. Explore the details and compare your favourites."}
-      </PageHeading>
-      <div className="collection-layout">
-        <aside className="collection-sidebar">{filters}</aside>
-        <div>
-          <div className="collection-toolbar">
-            <div className="catalog-search">
-              <Search size={16} />
-              <input
-                placeholder="Search this collection"
-                aria-label="Search this collection"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            <span className="results-count">{filtered.length} products</span>
-            <select
-              aria-label="Sort products"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-            >
-              <option value="featured">Featured first</option>
-              <option value="name">Name: A–Z</option>
-              <option value="price-low">Price: low to high</option>
-              <option value="price-high">Price: high to low</option>
-            </select>
-            <div className="view-toggle">
-              <IconButton
-                label="Grid view"
-                aria-pressed={view === "grid"}
-                onClick={() => setView("grid")}
-              >
-                <LayoutGrid size={17} />
-              </IconButton>
-              <IconButton
-                label="List view"
-                aria-pressed={view === "list"}
-                onClick={() => setView("list")}
-              >
-                <List size={17} />
-              </IconButton>
-            </div>
-            <Button
-              variant="secondary mobile-filter"
-              onClick={() => setFilterOpen(true)}
-            >
-              <SlidersHorizontal size={15} />
-              Filter
-            </Button>
-          </div>
-          {(brands.length > 0 || inStock || maxPrice) && (
-            <div className="filter-chips">
-              {brands.map((b) => (
-                <button
-                  key={b}
-                  onClick={() => setBrands(brands.filter((x) => x !== b))}
-                >
-                  {b}
-                  <X size={11} />
-                </button>
-              ))}
-              {inStock && (
-                <button onClick={() => setInStock(false)}>
-                  In stock
-                  <X size={11} />
-                </button>
-              )}
-              {maxPrice && (
-                <button onClick={() => setMaxPrice("")}>
-                  Up to {money(Number(maxPrice))}
-                  <X size={11} />
-                </button>
-              )}
-            </div>
-          )}
-          {shown.length ? (
-            <div className={view === "list" ? "catalog-list" : ""}>
-              <ProductGrid products={shown} />
-            </div>
-          ) : (
-            <Empty
-              icon={Search}
-              title="Nothing matches just yet."
-              action={<Button onClick={clear}>Clear filters</Button>}
-            >
-              Try a different brand, category or price range.
-            </Empty>
-          )}
-          {totalPages > 1 && (
-            <nav className="pagination" aria-label="Product pages">
-              <IconButton
-                label="Previous page"
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-              >
-                <ChevronLeft size={17} />
-              </IconButton>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  className={page === i + 1 ? "active" : ""}
-                  onClick={() => {
-                    setPage(i + 1)
-                    window.scrollTo({ top: 250, behavior: "smooth" })
-                  }}
-                  aria-current={page === i + 1 ? "page" : undefined}
-                >
-                  {i + 1}
-                </button>
-              ))}
-              <IconButton
-                label="Next page"
-                disabled={page === totalPages}
-                onClick={() => setPage(page + 1)}
-              >
-                <ChevronRight size={17} />
-              </IconButton>
-            </nav>
-          )}
-        </div>
-      </div>
-      {filterOpen && (
-        <Modal
-          title="Refine your collection"
-          drawer
-          onClose={() => setFilterOpen(false)}
-        >
-          {filters}
-          <Button onClick={() => setFilterOpen(false)}>
-            Show {filtered.length} products
-            <ArrowRight size={16} />
-          </Button>
-        </Modal>
-      )}
-    </main>
-  )
-}
+export { Collection } from "./collection.jsx"
 
 export function Product({ id }) {
   const {
@@ -358,6 +58,7 @@ export function Product({ id }) {
     settings,
     user,
     notify,
+    openAuth,
   } = useStore()
   const p = products.find((p) => p.id === id)
 
@@ -616,7 +317,7 @@ export function Product({ id }) {
         reviewError={reviewError}
         onWriteReview={() => {
           if (!user) {
-            navigate("/login/?next=" + encodeURIComponent(productPath(p)))
+            openAuth("login", location.pathname + location.search)
             return
           }
           setReviewForm(true)

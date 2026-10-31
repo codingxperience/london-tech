@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from "react"
 
 import { products as seed, storeDefaults } from "./data/catalog.js"
@@ -110,9 +111,45 @@ export function StoreProvider({ children }) {
 
   const [toast, setToast] = useState(""),
     [searchOpen, setSearchOpen] = useState(false),
-    [cartOpen, setCartOpen] = useState(false)
+    [cartOpen, setCartOpen] = useState(false),
+    [authDialog, setAuthDialog] = useState(null)
+
+  const closeAuth = useCallback(() => setAuthDialog(null), [])
+  useEffect(() => {
+    window.addEventListener("popstate", closeAuth)
+    return () => window.removeEventListener("popstate", closeAuth)
+  }, [closeAuth])
+  const openAuth = useCallback(
+    (mode = "login", next = location.pathname + location.search) => {
+      setSearchOpen(false)
+      setCartOpen(false)
+      setAuthDialog({ mode, next })
+    },
+    [],
+  )
 
   const notify = useCallback((message) => setToast(message), [])
+  const currentWishlist = useRef(wishlist)
+  const wishlistEdits = useRef(null)
+  const wishlistWrites = useRef(Promise.resolve())
+  const wishlistOwner = useRef(user?.id)
+  currentWishlist.current = wishlist
+  wishlistOwner.current = user?.id
+  const syncWishlist = useCallback(
+    (ids, owner) => {
+      wishlistWrites.current = wishlistWrites.current
+        .catch(() => {})
+        .then(() => {
+          if (wishlistOwner.current === owner)
+            return api("wishlist", { method: "PUT", body: { ids } })
+        })
+        .catch(() =>
+          notify("Saved on this device. Account sync is unavailable."),
+        )
+      return wishlistWrites.current
+    },
+    [notify],
+  )
 
   const refresh = useCallback(async () => {
     const data = await api("catalog")
@@ -149,12 +186,33 @@ export function StoreProvider({ children }) {
 
   useEffect(() => {
     if (!user) return
+    let active = true
+    const edits = new Map()
+    wishlistEdits.current = edits
     api("wishlist")
-      .then(({ ids }) =>
-        setWishlist((local) => [...new Set([...local, ...ids])]),
-      )
+      .then(({ ids }) => {
+        if (!active) return
+        const merged = new Set([...validIds(ids), ...currentWishlist.current])
+        for (const [id, saved] of edits)
+          saved ? merged.add(id) : merged.delete(id)
+        const values = validIds([...merged])
+        currentWishlist.current = values
+        setWishlist(values)
+        if (
+          JSON.stringify([...validIds(ids)].sort()) !==
+          JSON.stringify([...values].sort())
+        )
+          syncWishlist(values, user.id)
+      })
       .catch(() => {})
-  }, [user?.id])
+      .finally(() => {
+        if (wishlistEdits.current === edits) wishlistEdits.current = null
+      })
+    return () => {
+      active = false
+      if (wishlistEdits.current === edits) wishlistEdits.current = null
+    }
+  }, [user?.id, syncWishlist])
 
   const addCart = (product, quantity = 1, option = "", color = "") => {
     if (product.stock === 0) {
@@ -207,17 +265,16 @@ export function StoreProvider({ children }) {
     setCart((old) => old.filter((p) => cartKey(p) !== key))
 
   const saveWishlist = (ids) => {
+    currentWishlist.current = ids
     setWishlist(ids)
-    if (user)
-      api("wishlist", { method: "PUT", body: { ids } }).catch(() =>
-        notify("Saved on this device. Account sync is unavailable."),
-      )
+    if (user) syncWishlist(ids, user.id)
   }
 
   const toggleWish = (id) => {
     const next = wishlist.includes(id)
       ? wishlist.filter((p) => p !== id)
       : [...wishlist, id]
+    wishlistEdits.current?.set(id, next.includes(id))
     saveWishlist(next)
     notify(
       next.includes(id) ? "Saved to your wishlist" : "Removed from wishlist",
@@ -287,6 +344,10 @@ export function StoreProvider({ children }) {
         setSearchOpen,
         cartOpen,
         setCartOpen,
+        authDialog,
+        setAuthDialog,
+        openAuth,
+        closeAuth,
         addCart,
         updateCart,
         removeCart,
