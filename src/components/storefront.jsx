@@ -31,6 +31,8 @@ import {
 } from "lucide-react"
 
 import { useStore, cartKey } from "../store.jsx"
+import { ProductMotionNote } from "./MotionText"
+import { galleryImages } from "../lib/product-experience.js"
 
 import {
   categories,
@@ -95,7 +97,12 @@ export function ProductCard({ product: p }) {
     <article className="product-card">
       <div className="product-card-media">
         <a href={productPath(p)} tabIndex={-1} aria-hidden="true">
-          <img src={p.image} alt="" loading="lazy" decoding="async" />
+          <img
+            src={galleryImages(p)[0]?.src || p.image}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         </a>
         <div className="product-flags">
           {p.stock === 0 ? (
@@ -136,6 +143,7 @@ export function ProductCard({ product: p }) {
         <h3>
           <a href={productPath(p)}>{p.name}</a>
         </h3>
+        <ProductMotionNote category={p.category} />
         <div className="product-card-bottom">
           <div>
             <strong className={p.price == null ? "request-price" : ""}>

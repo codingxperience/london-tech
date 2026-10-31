@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import {
   ArrowRight,
   ArrowUpRight,
-  Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Headphones,
   Heart,
   GitCompareArrows,
   Search,
@@ -17,31 +14,30 @@ import {
   PackageCheck,
   ShieldCheck,
   Truck,
-  ZoomIn,
   X,
   Star,
-  MapPin,
   Copy,
 } from "lucide-react"
 
 import { useStore, navigate } from "../store.jsx"
+import { ProductGallery } from "../components/product-gallery.jsx"
+import { ProductSections } from "../components/product-sections.jsx"
+import { productInformation } from "../lib/product-experience.js"
 
 import {
-  asset,
   categories,
   categoryName,
   money,
   productPath,
 } from "../data/catalog.js"
 
-import { api, post, dateLabel } from "../lib/api.js"
+import { api, post } from "../lib/api.js"
 
 import {
   ActionLink,
   Badge,
   Breadcrumb,
   Button,
-  CheckList,
   Empty,
   Field,
   IconButton,
@@ -52,7 +48,6 @@ import {
 } from "../components/ui.jsx"
 
 import {
-  CategoryIcon,
   PaymentMarks,
   ProductCard,
   ProductGrid,
@@ -366,22 +361,30 @@ export function Product({ id }) {
   } = useStore()
   const p = products.find((p) => p.id === id)
 
-  const [image, setImage] = useState(0),
-    [zoom, setZoom] = useState(false),
-    [quantity, setQuantity] = useState(1),
+  const [quantity, setQuantity] = useState(1),
     [option, setOption] = useState(""),
     [color, setColor] = useState(""),
-    [tab, setTab] = useState("details"),
+    [reviewError, setReviewError] = useState(false),
     [reviews, setReviews] = useState([]),
     [reviewForm, setReviewForm] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("")
 
   useEffect(() => {
+    let active = true
     if (p) viewProduct(p.id)
+    setReviews([])
+    setReviewError(false)
     api("products/" + id + "/reviews")
-      .then((r) => setReviews(r.reviews))
-      .catch(() => {})
+      .then((r) => {
+        if (active) setReviews(r.reviews)
+      })
+      .catch(() => {
+        if (active) setReviewError(true)
+      })
+    return () => {
+      active = false
+    }
   }, [id])
 
   if (!p) return <NotFound />
@@ -420,39 +423,7 @@ export function Product({ id }) {
         ]}
       />
       <div className="product-detail-grid">
-        <div className="product-gallery">
-          <button
-            className="product-main-image"
-            aria-label="Enlarge product image"
-            onClick={() => setZoom(true)}
-          >
-            <img
-              src={p.gallery[image]}
-              alt={p.name + " — image " + (image + 1)}
-              fetchPriority="high"
-            />
-            <span>
-              <ZoomIn size={17} />
-            </span>
-          </button>
-          <div className="product-thumbnails">
-            {p.gallery.map((src, i) => (
-              <button
-                key={src}
-                className={image === i ? "selected" : ""}
-                aria-label={"View image " + (i + 1)}
-                aria-pressed={image === i}
-                onClick={() => setImage(i)}
-              >
-                <img src={src} alt="" />
-              </button>
-            ))}
-          </div>
-          <span className="gallery-note">
-            Product images are for reference. Confirm the selected colour and
-            configuration.
-          </span>
-        </div>
+        <ProductGallery product={p} />
         <div className="product-purchase">
           <div className="product-overline">
             <a href={"/collections/" + p.category + "/"}>
@@ -466,15 +437,13 @@ export function Product({ id }) {
               <>
                 <Star size={14} fill="currentColor" />
                 <b>{rating}</b>
-                <button onClick={() => setTab("reviews")}>
+                <a href="#product-reviews">
                   {reviews.length} verified review
                   {reviews.length !== 1 ? "s" : ""}
-                </button>
+                </a>
               </>
             ) : (
-              <button onClick={() => setTab("reviews")}>
-                No customer reviews yet
-              </button>
+              <a href="#product-reviews">No customer reviews yet</a>
             )}
             <span
               className={"stock-status " + (p.stock > 0 ? "available" : "")}
@@ -482,7 +451,19 @@ export function Product({ id }) {
               {availability}
             </span>
           </div>
-          <p className="product-description">{p.description}</p>
+          <p className="product-description">
+            {productInformation(p).description}
+          </p>
+          <div className="detail-quick-specs">
+            {productInformation(p)
+              .specifications.slice(0, 3)
+              .map(([label, value]) => (
+                <span key={label}>
+                  <small>{label}</small>
+                  <strong>{value}</strong>
+                </span>
+              ))}
+          </div>
           <div className="product-price">
             <strong>{money(p.price)}</strong>
             {p.price != null && !p.priceConfirmed && (
@@ -627,174 +608,20 @@ export function Product({ id }) {
           <PaymentMarks />
         </div>
       </div>
-      <section className="product-information">
-        <div
-          className="product-tabs"
-          role="tablist"
-          aria-label="Product information"
-        >
-          {[
-            ["details", "Product details"],
-            ["specs", "Specifications"],
-            ["delivery", "Delivery & returns"],
-            ["reviews", "Reviews (" + reviews.length + ")"],
-          ].map(([id, label]) => (
-            <button
-              key={id}
-              role="tab"
-              aria-selected={tab === id}
-              id={"tab-" + id}
-              aria-controls={"panel-" + id}
-              onClick={() => setTab(id)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <div
-          className="product-tab-panel"
-          role="tabpanel"
-          id={"panel-" + tab}
-          aria-labelledby={"tab-" + tab}
-        >
-          {tab === "details" ? (
-            <div className="detail-copy-columns">
-              <div>
-                <p className="eyebrow">A CLOSER LOOK</p>
-                <h2>{p.name}</h2>
-                <p>{p.description}</p>
-                <h3>Designed around your everyday.</h3>
-                <p>
-                  Take a moment to compare the features with what you need.
-                  Check the selected model, storage, colour and compatibility
-                  before completing your order.
-                </p>
-              </div>
-              <div className="detail-card">
-                <h3>Before you choose</h3>
-                <CheckList
-                  items={[
-                    "Review the listed specifications and available options.",
-                    "Confirm the product condition and included accessories.",
-                    "Check delivery, collection and warranty information.",
-                  ]}
-                />
-                <h4>What’s in the box</h4>
-                <p>
-                  {p.inTheBox ||
-                    "Package contents depend on the selected configuration. Ask the store to confirm the included accessories before purchase."}
-                </p>
-              </div>
-            </div>
-          ) : tab === "specs" ? (
-            <div>
-              <h2>The details that matter.</h2>
-              <div className="spec-table">
-                {[
-                  ["Brand", p.brand],
-                  ["Product", p.name],
-                  ["SKU", p.sku],
-                  ["Category", categoryName(p.category)],
-                  ...p.specifications,
-                  ["Condition", p.condition],
-                  ...(p.warranty ? [["Warranty", p.warranty]] : []),
-                ].map(([k, v], i) => (
-                  <div key={i}>
-                    <span>{k}</span>
-                    <strong>{v}</strong>
-                  </div>
-                ))}
-              </div>
-              <p className="muted small">
-                Specifications describe the listed model. Regional versions,
-                software features and available configurations may vary.
-              </p>
-            </div>
-          ) : tab === "delivery" ? (
-            <div className="detail-copy-columns">
-              <div>
-                <Truck size={25} />
-                <h2>From our store to your day.</h2>
-                <p>{p.delivery || settings.delivery}</p>
-                <a href="/delivery/" className="text-link">
-                  Delivery information
-                  <ArrowRight size={15} />
-                </a>
-              </div>
-              <div>
-                <PackageCheck size={25} />
-                <h2>A little peace of mind.</h2>
-                <p>{p.warranty || settings.returns}</p>
-                <a href="/returns/" className="text-link">
-                  Returns & warranty
-                  <ArrowRight size={15} />
-                </a>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="section-heading">
-                <div>
-                  <h2>What customers are saying.</h2>
-                  <p className="muted">
-                    Reviews come from customers with a verified purchase.
-                  </p>
-                </div>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    if (!user) {
-                      navigate(
-                        "/login/?next=" + encodeURIComponent(productPath(p)),
-                      )
-                      return
-                    }
-                    setReviewForm(true)
-                  }}
-                >
-                  Write a review
-                </Button>
-              </div>
-              {reviews.length ? (
-                <div className="review-list">
-                  {reviews.map((r) => (
-                    <article key={r.id}>
-                      <div>
-                        <span className="review-stars">
-                          {"★".repeat(r.rating)}
-                          {"☆".repeat(5 - r.rating)}
-                        </span>
-                        <Badge type="success">Verified purchase</Badge>
-                        <small>{dateLabel(r.created_at)}</small>
-                      </div>
-                      <h3>{r.title}</h3>
-                      <p>{r.body}</p>
-                      <strong>{r.name}</strong>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <Empty icon={Star} title="Your experience belongs here.">
-                  There are no reviews yet. Customers can share a review after
-                  purchasing this product.
-                </Empty>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
-      <section className="section">
-        <SectionHeading
-          eyebrow="GOOD TOGETHER"
-          title="You might also like."
-          href={"/collections/" + p.category + "/"}
-        />
-        <ProductGrid
-          products={products
-            .filter((x) => x.category === p.category && x.id !== id)
-            .slice(0, 4)}
-        />
-      </section>
+      <ProductSections
+        product={p}
+        products={products}
+        settings={settings}
+        reviews={reviews}
+        reviewError={reviewError}
+        onWriteReview={() => {
+          if (!user) {
+            navigate("/login/?next=" + encodeURIComponent(productPath(p)))
+            return
+          }
+          setReviewForm(true)
+        }}
+      />
       {recent.filter((x) => x !== id).length > 0 && (
         <section className="section bottom-section">
           <SectionHeading title="Worth another look." />
@@ -806,35 +633,6 @@ export function Product({ id }) {
               .slice(0, 4)}
           />
         </section>
-      )}
-      {zoom && (
-        <Modal
-          title={p.name}
-          wide
-          className="image-modal"
-          onClose={() => setZoom(false)}
-        >
-          <img src={p.gallery[image]} alt={p.name} />
-          <div className="image-controls">
-            <IconButton
-              label="Previous image"
-              disabled={image === 0}
-              onClick={() => setImage(image - 1)}
-            >
-              <ChevronLeft />
-            </IconButton>
-            <span>
-              {image + 1} / {p.gallery.length}
-            </span>
-            <IconButton
-              label="Next image"
-              disabled={image === p.gallery.length - 1}
-              onClick={() => setImage(image + 1)}
-            >
-              <ChevronRight />
-            </IconButton>
-          </div>
-        </Modal>
       )}
       {reviewForm && (
         <Modal

@@ -1,0 +1,212 @@
+{
+  "iphone-13-pro-max": {
+    "highlights": [
+      {"title": "A larger ProMotion display", "body": "A 6.7-inch OLED screen with adaptive refresh up to 120Hz gives photos, video and everyday scrolling more room."},
+      {"title": "Three camera perspectives", "body": "Wide, Ultra Wide and Telephoto cameras offer macro photography, Night mode and 3x optical zoom in."},
+      {"title": "A15 Bionic inside", "body": "Apple’s six-core CPU and five-core GPU power the Pro Max experience. Check the storage and condition of the particular unit."}
+    ],
+    "specifications": [["Display", "6.7-inch Super Retina XDR OLED"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A15 Bionic"], ["Rear cameras", "12MP Wide, 12MP Ultra Wide and 12MP Telephoto"], ["Front camera", "12MP TrueDepth"], ["Charging connector", "Lightning"], ["Model storage options", "128GB, 256GB, 512GB or 1TB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone 13 Pro Max specifications", "url": "https://support.apple.com/en-us/111870"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-14-pro-used": {
+    "highlights": [
+      {"title": "Information at a glance", "body": "Dynamic Island and the Always-On display keep supported activities and essential information within view."},
+      {"title": "48MP main camera", "body": "The Pro camera system combines a 48MP Main camera with Ultra Wide and dedicated Telephoto lenses."},
+      {"title": "Smooth ProMotion", "body": "The 6.1-inch OLED panel adapts its refresh rate up to 120Hz. For a used unit, ask the store to confirm battery health and repairs."}
+    ],
+    "specifications": [["Display", "6.1-inch Super Retina XDR OLED"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A16 Bionic"], ["Rear cameras", "48MP Main, 12MP Ultra Wide and 12MP 3x Telephoto"], ["Front camera", "12MP TrueDepth"], ["Charging connector", "Lightning"], ["Model storage options", "128GB, 256GB, 512GB or 1TB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone 14 Pro specifications", "url": "https://support.apple.com/en-us/111849"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-15-pro-used": {
+    "highlights": [
+      {"title": "Titanium design", "body": "A titanium exterior and a 6.1-inch ProMotion OLED display bring the Pro features into a compact format."},
+      {"title": "A17 Pro performance", "body": "The A17 Pro chip includes a six-core CPU, six-core GPU and hardware-accelerated ray tracing."},
+      {"title": "USB-C connectivity", "body": "USB-C supports charging and USB 3 data transfer with a compatible cable. Confirm battery health and the condition of the actual used unit."}
+    ],
+    "specifications": [["Display", "6.1-inch Super Retina XDR OLED"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A17 Pro"], ["Rear cameras", "48MP Main, 12MP Ultra Wide and 12MP 3x Telephoto"], ["Front camera", "12MP TrueDepth"], ["Connector", "USB-C; USB 3 up to 10Gb/s with compatible cable"], ["Model storage options", "128GB, 256GB, 512GB or 1TB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone 15 Pro specifications", "url": "https://support.apple.com/en-ie/111829"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-16-plus": {
+    "highlights": [
+      {"title": "More room for every day", "body": "The 6.7-inch Super Retina XDR OLED display gives your photos, messages and video a larger canvas."},
+      {"title": "A closer connection to the camera", "body": "Camera Control provides a dedicated way to access camera tools, while the 48MP Fusion camera captures detailed images."},
+      {"title": "A18 and USB-C", "body": "The A18 chip handles daily apps and supported games. USB-C makes charging convenient alongside compatible devices."}
+    ],
+    "specifications": [["Display", "6.7-inch Super Retina XDR OLED"], ["Resolution", "2796 × 1290 pixels"], ["Processor", "A18"], ["Rear cameras", "48MP Fusion Main and 12MP Ultra Wide"], ["Front camera", "12MP TrueDepth"], ["Connector", "USB-C"], ["Model storage options", "128GB, 256GB or 512GB; confirm listed unit"], ["Controls", "Action button and Camera Control"]],
+    "sources": [{"label": "Apple — iPhone 16 Plus specifications", "url": "https://support.apple.com/en-ie/121030"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-17": {
+    "highlights": [
+      {"title": "ProMotion comes to the everyday iPhone", "body": "A 6.3-inch OLED screen combines an Always-On display with an adaptive refresh rate up to 120Hz."},
+      {"title": "Two 48MP rear cameras", "body": "Fusion Main and Fusion Ultra Wide cameras support detailed photographs and close-up macro shooting."},
+      {"title": "A19 performance", "body": "The A19 chip brings a six-core CPU and five-core GPU to the iPhone 17."}
+    ],
+    "specifications": [["Display", "6.3-inch Super Retina XDR OLED"], ["Resolution", "2622 × 1206 pixels"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A19"], ["Rear cameras", "48MP Fusion Main and 48MP Fusion Ultra Wide"], ["Connector", "USB-C"], ["Model storage options", "256GB or 512GB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone 17 specifications", "url": "https://www.apple.com/iphone-17/specs/"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-17-pro": {
+    "highlights": [
+      {"title": "Pro cameras, three ways", "body": "The 48MP Pro Fusion system includes Main, Ultra Wide and Telephoto cameras for different perspectives."},
+      {"title": "A19 Pro at the centre", "body": "A six-core CPU and six-core GPU support demanding apps, games and creative work."},
+      {"title": "A compact Pro display", "body": "The 6.3-inch Super Retina XDR screen includes ProMotion up to 120Hz and Always-On functionality."}
+    ],
+    "specifications": [["Display", "6.3-inch Super Retina XDR OLED"], ["Resolution", "2622 × 1206 pixels"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A19 Pro"], ["Rear cameras", "48MP Fusion Main, Ultra Wide and Telephoto"], ["Telephoto", "4x optical; 8x optical-quality option"], ["Connector", "USB-C"], ["Model storage options", "256GB, 512GB or 1TB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone 17 Pro specifications", "url": "https://support.apple.com/en-us/125090"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-17-pro-max": {
+    "highlights": [
+      {"title": "The larger Pro canvas", "body": "The 6.9-inch OLED screen gives editing, reading and entertainment more space, with ProMotion up to 120Hz."},
+      {"title": "Three 48MP cameras", "body": "Main, Ultra Wide and Telephoto cameras let you move from broad scenes to distant details."},
+      {"title": "A19 Pro power", "body": "A19 Pro combines a six-core CPU with a six-core GPU for demanding everyday and creative tasks."}
+    ],
+    "specifications": [["Display", "6.9-inch Super Retina XDR OLED"], ["Resolution", "2868 × 1320 pixels"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A19 Pro"], ["Rear cameras", "48MP Fusion Main, Ultra Wide and Telephoto"], ["Telephoto", "4x optical; 8x optical-quality option"], ["Connector", "USB-C"], ["Model storage options", "256GB, 512GB, 1TB or 2TB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone 17 Pro Max specifications", "url": "https://support.apple.com/en-us/125091"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "iphone-air": {
+    "highlights": [
+      {"title": "A slim titanium profile", "body": "The iPhone Air measures 5.64mm deep and weighs 165g, with a titanium design."},
+      {"title": "A large, fluid display", "body": "The 6.5-inch OLED display supports ProMotion up to 120Hz and Always-On information."},
+      {"title": "A19 Pro inside", "body": "A19 Pro powers this model alongside a 48MP Fusion Main camera. Confirm eSIM support with your network before choosing a regional model."}
+    ],
+    "specifications": [["Display", "6.5-inch Super Retina XDR OLED"], ["Refresh rate", "ProMotion, adaptive up to 120Hz"], ["Processor", "A19 Pro; six-core CPU and five-core GPU"], ["Rear camera", "48MP Fusion Main"], ["Depth", "5.64mm"], ["Weight", "165g"], ["Model storage options", "256GB, 512GB or 1TB; confirm listed unit"]],
+    "sources": [{"label": "Apple — iPhone Air specifications", "url": "https://www.apple.com/iphone-air/specs/"}],
+    "guides": [{"label": "Apple iPhone user guide", "url": "https://support.apple.com/guide/iphone/welcome/ios"}]
+  },
+  "galaxy-s25": {
+    "highlights": [
+      {"title": "Compact Galaxy flagship", "body": "A 6.2-inch Dynamic AMOLED 2X display offers adaptive refresh from 1Hz to 120Hz."},
+      {"title": "Three useful perspectives", "body": "The 50MP wide camera is joined by Ultra Wide and 3x optical Telephoto cameras."},
+      {"title": "Built for daily performance", "body": "Snapdragon 8 Elite for Galaxy powers the S25. Capacity and regional features vary; confirm the particular configuration."}
+    ],
+    "specifications": [["Display", "6.2-inch FHD+ Dynamic AMOLED 2X"], ["Refresh rate", "Adaptive 1–120Hz"], ["Processor", "Snapdragon 8 Elite for Galaxy"], ["Rear cameras", "50MP Wide, 12MP Ultra Wide and 10MP 3x Telephoto"], ["Front camera", "12MP"], ["Battery capacity", "4000mAh typical"], ["Connectivity", "5G, Wi-Fi 7 and Bluetooth 5.4; network support varies"]],
+    "sources": [{"label": "Samsung — Galaxy S25 series launch specifications", "url": "https://news.samsung.com/sg/samsung-galaxy-s25-series-sets-the-standard-of-ai-phone-as-a-true-ai-companion"}],
+    "guides": [{"label": "Samsung manuals and product support — search your model", "url": "https://www.samsung.com/africa_en/support/"}]
+  },
+  "galaxy-s25-ultra": {
+    "highlights": [
+      {"title": "A larger view", "body": "The 6.9-inch QHD+ Dynamic AMOLED 2X screen offers adaptive refresh up to 120Hz."},
+      {"title": "Room to get closer", "body": "A 200MP wide camera is joined by a 50MP Ultra Wide and separate 3x and 5x optical Telephoto cameras."},
+      {"title": "Write, sketch and create", "body": "Integrated S Pen support adds precise input. Snapdragon 8 Elite for Galaxy powers the Ultra experience."}
+    ],
+    "specifications": [["Display", "6.9-inch QHD+ Dynamic AMOLED 2X"], ["Refresh rate", "Adaptive 1–120Hz"], ["Processor", "Snapdragon 8 Elite for Galaxy"], ["Rear cameras", "200MP Wide, 50MP Ultra Wide, 50MP 5x Telephoto and 10MP 3x Telephoto"], ["Front camera", "12MP"], ["Battery capacity", "5000mAh typical"], ["Pen support", "Integrated S Pen"]],
+    "sources": [{"label": "Samsung — Galaxy S25 series launch specifications", "url": "https://news.samsung.com/sg/samsung-galaxy-s25-series-sets-the-standard-of-ai-phone-as-a-true-ai-companion"}],
+    "guides": [{"label": "Samsung manuals and product support — search your model", "url": "https://www.samsung.com/africa_en/support/"}]
+  },
+  "galaxy-a16": {
+    "highlights": [
+      {"title": "An expansive AMOLED screen", "body": "The 6.7-inch FHD+ Super AMOLED display supports refresh rates up to 90Hz."},
+      {"title": "Capture the everyday", "body": "A 50MP main camera works alongside 5MP and 2MP rear cameras, with a 13MP camera on the front."},
+      {"title": "5G, where supported", "body": "Galaxy A16 5G connects to compatible 5G networks. Check the regional model, network bands and memory configuration with the store."}
+    ],
+    "specifications": [["Model family", "Galaxy A16 5G (SM-A166 family)"], ["Display", "6.7-inch Super AMOLED"], ["Resolution", "1080 × 2340 pixels"], ["Refresh rate", "Up to 90Hz"], ["Rear cameras", "50MP + 5MP + 2MP"], ["Front camera", "13MP"], ["Battery capacity", "5000mAh typical"], ["Charging support", "Up to 25W with compatible equipment; confirm accessories"]],
+    "sources": [{"label": "Samsung — Galaxy A16 5G specifications", "url": "https://www.samsung.com/uk/smartphones/galaxy-a/galaxy-a16-5g-blue-black-128gb-sm-a166bzkdeub/"}, {"label": "Samsung — Galaxy A16 5G battery and charging specifications", "url": "https://shop.samsung.com/br/galaxy-a16-5g/p?idsku=8074"}],
+    "guides": [{"label": "Samsung manuals and product support — search your model", "url": "https://www.samsung.com/africa_en/support/"}]
+  },
+  "honor-x6b": {
+    "highlights": [
+      {"title": "Power for the everyday", "body": "A 5200mAh typical battery supports wired charging up to 35W with the appropriate HONOR charger and cable."},
+      {"title": "A smoother view", "body": "The 6.56-inch display supports refresh rates up to 90Hz for compatible content."},
+      {"title": "50MP main camera", "body": "The main rear camera provides a high-resolution shooting option. Available RAM and storage differ by region."}
+    ],
+    "specifications": [["Display", "6.56-inch TFT LCD"], ["Resolution", "720 × 1612 pixels"], ["Refresh rate", "Up to 90Hz"], ["Processor", "MediaTek Helio G85"], ["Rear cameras", "50MP Main + 2MP Depth"], ["Battery capacity", "5200mAh typical; 5100mAh rated"], ["Charging support", "Up to 35W with compatible original charger and cable"], ["Memory note", "HONOR RAM Turbo uses storage; it is not additional physical RAM"]],
+    "sources": [{"label": "HONOR — X6b product features", "url": "https://www.honor.com/global/phones/honor-x6b/"}, {"label": "HONOR — X6b specifications", "url": "https://www.honor.com/my/phones/honor-x6b/spec/"}],
+    "guides": [{"label": "HONOR official support — select your model and region", "url": "https://www.honor.com/global/support/"}]
+  },
+  "honor-x9b": {
+    "highlights": [
+      {"title": "A curved AMOLED view", "body": "The 6.78-inch AMOLED display gives the X9b its distinctive viewing surface."},
+      {"title": "108MP main camera", "body": "A high-resolution main camera is joined by Ultra Wide/Depth and Macro cameras for different subjects."},
+      {"title": "A substantial battery", "body": "HONOR specifies a 5800mAh typical battery and the Snapdragon 6 Gen 1 processor. Confirm the regional memory configuration."}
+    ],
+    "specifications": [["Display", "6.78-inch AMOLED"], ["Processor", "Qualcomm Snapdragon 6 Gen 1"], ["Rear cameras", "108MP Main + 5MP Ultra Wide/Depth + 2MP Macro"], ["Front camera", "16MP"], ["Battery capacity", "5800mAh typical"], ["Launch software", "MagicOS 7.2 based on Android 13; installed version may differ"]],
+    "sources": [{"label": "HONOR — official device specification comparison", "url": "https://www.honor.com/za/support/content/en-us15875891/"}, {"label": "HONOR — X9b model specifications", "url": "https://www.honor.com/global/phones/honor-x9b/spec/"}],
+    "guides": [{"label": "HONOR official support — select your model and region", "url": "https://www.honor.com/global/support/"}]
+  },
+  "redmi-13c": {
+    "highlights": [
+      {"title": "More space to scroll", "body": "The 6.74-inch display supports refresh rates up to 90Hz in supported apps."},
+      {"title": "50MP photography", "body": "The main rear camera supports a 50MP shooting mode, with Macro and auxiliary lenses alongside it."},
+      {"title": "Useful everyday connections", "body": "USB-C charging, a 3.5mm headphone jack and separate microSD support offer practical flexibility."}
+    ],
+    "specifications": [["Model", "Redmi 13C (4G model; not Redmi 13C 5G)"], ["Display", "6.74-inch, 1600 × 720 pixels"], ["Refresh rate", "Up to 90Hz in supported apps"], ["Processor", "MediaTek Helio G85"], ["Main rear camera", "50MP"], ["Front camera", "8MP"], ["Battery capacity", "5000mAh typical"], ["Charging support", "18W USB-C PD; suitable adapter may be sold separately"], ["Audio", "3.5mm headphone jack"]],
+    "sources": [{"label": "Xiaomi — Redmi 13C specifications", "url": "https://www.mi.com/in/product/redmi-13c/specs/"}],
+    "guides": [{"label": "Xiaomi — official Redmi 13C product information", "url": "https://www.mi.com/global/product/redmi-13c/"}]
+  },
+  "infinix-smart-9": {
+    "highlights": [
+      {"title": "Stereo listening", "body": "Dual speakers provide stereo playback for supported media."},
+      {"title": "Octa-core platform", "body": "Infinix lists the Helio G81 processor for SMART 9. Confirm the available memory and regional configuration."},
+      {"title": "A camera for daily moments", "body": "A 13MP camera covers everyday photographs. Review the actual unit and included accessories with the store."}
+    ],
+    "specifications": [["Processor", "MediaTek Helio G81"], ["Main camera", "13MP"], ["Speakers", "Stereo dual speakers"], ["Configuration", "Memory, storage and regional features must be confirmed"]],
+    "sources": [{"label": "Infinix — SMART 9 official product page", "url": "https://np.infinixmobility.com/SMART-9"}],
+    "guides": [{"label": "Infinix — SMART 9 features and model information", "url": "https://np.infinixmobility.com/SMART-9"}]
+  },
+  "canon-r6ii": {
+    "highlights": [
+      {"title": "Full-frame detail", "body": "A 24.2MP full-frame CMOS sensor and DIGIC X processor form the core of this mirrorless camera."},
+      {"title": "Follow the subject", "body": "Dual Pixel CMOS AF II supports subject tracking for people, selected animals and vehicles."},
+      {"title": "Build around the RF mount", "body": "Canon RF lenses fit directly. Compatible EF and EF-S lenses require a suitable adapter; confirm whether the listing is body-only or a lens kit."}
+    ],
+    "specifications": [["Sensor", "24.2MP full-frame CMOS; 35.9 × 23.9mm"], ["Image processor", "DIGIC X"], ["Autofocus", "Dual Pixel CMOS AF II"], ["Lens mount", "Canon RF"], ["Lens adaptation", "EF/EF-S via compatible EF-EOS R adapter; EF-M incompatible"], ["Stabilisation", "In-body sensor-shift; effectiveness depends on lens and conditions"], ["Body weight", "Approximately 588g, body only"], ["Kit contents", "Confirm body-only or lens bundle before ordering"]],
+    "sources": [{"label": "Canon — EOS R6 Mark II specifications", "url": "https://www.canon-europe.com/cameras/eos-r6-mark-ii/specifications/"}],
+    "guides": [{"label": "Canon EOS R6 Mark II advanced user guide", "url": "https://cam.start.canon/en/C012/manual/html/index.html"}]
+  },
+  "gopro-hero13": {
+    "highlights": [
+      {"title": "Action in 5.3K", "body": "Record up to 5.3K at 60fps or 4K at 120fps, depending on the selected recording mode."},
+      {"title": "Steadier footage", "body": "HyperSmooth 6.0 provides in-camera video stabilisation for compatible modes."},
+      {"title": "Built to go outside", "body": "The camera is rated waterproof to 10m without an additional housing. Follow GoPro’s door, seal and maintenance instructions."}
+    ],
+    "specifications": [["Video", "Up to 5.3K60 or 4K120; mode restrictions apply"], ["Stabilisation", "HyperSmooth 6.0"], ["HDR video", "HLG HDR supported"], ["Waterproof depth", "Up to 10m with camera doors correctly secured"], ["Mounting", "Built-in fingers, 1/4-20 thread; magnetic latch accessories available separately"], ["Wireless transfer", "Wi-Fi 6"], ["Battery", "HERO13 Black-specific Enduro battery; confirm bundle contents"]],
+    "sources": [{"label": "GoPro — HERO13 Black product features", "url": "https://gopro.com/en/mp/shop/cameras/learn/hero13black/CHDHX-131-master.html"}, {"label": "GoPro — official HERO13 Black launch information", "url": "https://gopro.com/en/us/news/gopro-announces-hero13-black-and-tiny-hero-camera"}],
+    "guides": [{"label": "GoPro camera manuals — select HERO13 Black", "url": "https://gopro.com/help/productmanuals"}]
+  },
+  "ps5-pro": {
+    "highlights": [
+      {"title": "Enhanced games, clearer detail", "body": "Supported PS5 Pro Enhanced titles can use PlayStation Spectral Super Resolution and advanced ray tracing. Results vary by game and display."},
+      {"title": "2TB internal SSD", "body": "Built-in SSD storage gives downloaded games a home; system software uses part of the stated capacity."},
+      {"title": "Know your disc setup", "body": "The standard PS5 Pro is an all-digital console. A compatible disc drive and vertical stand are sold separately."}
+    ],
+    "specifications": [["Storage", "2TB built-in SSD; usable space is lower"], ["Base console format", "All-digital; disc drive sold separately"], ["Upscaling", "PlayStation Spectral Super Resolution in supported games"], ["Graphics", "Advanced ray tracing and enhanced performance in supported games"], ["Display support", "4K output; frame rate depends on game and display"], ["Account and network", "Internet and a PlayStation account required for digital setup and downloads"], ["Accessories", "Confirm controller, cables, drive and stand included in the store bundle"]],
+    "sources": [{"label": "PlayStation — PS5 Pro features and base bundle", "url": "https://direct.playstation.com/en-us/buy-consoles/playstation5-pro-console"}],
+    "guides": [{"label": "PlayStation 5 setup, features and manuals", "url": "https://www.playstation.com/en-us/support/hardware/ps5/"}]
+  },
+  "jbl-tune-770nc": {
+    "highlights": [
+      {"title": "Choose how much you hear", "body": "Adaptive Noise Cancelling helps reduce distractions; Ambient Aware and TalkThru let surrounding sound in."},
+      {"title": "Move between two devices", "body": "Bluetooth multipoint lets you switch from media on one connected device to a call on another."},
+      {"title": "Longer listening sessions", "body": "JBL rates playback up to 70 hours with ANC off, or 44 hours with ANC on. Actual endurance varies with use."}
+    ],
+    "specifications": [["Design", "Wireless over-ear; flat-folding"], ["Drivers", "40mm dynamic"], ["Bluetooth", "5.3"], ["Noise control", "Adaptive ANC, Ambient Aware and TalkThru"], ["Battery rating", "Up to 70h ANC off / 44h ANC on; manufacturer test conditions"], ["Charge time", "Approximately 2 hours from empty"], ["Weight", "232g"], ["App", "JBL Headphones app"]],
+    "sources": [{"label": "JBL — Tune 770NC specifications", "url": "https://www.jbl.com/TUNE770NC.html"}],
+    "guides": [{"label": "JBL Tune 770NC official specification sheet (PDF)", "url": "https://www.jbl.com/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw1393ad15/pdfs/JBL%20Tune%20770NC_Specsheet_EN.pdf"}]
+  },
+  "bose-soundlink-max": {
+    "highlights": [
+      {"title": "Stereo sound to carry", "body": "A portable stereo speaker with a removable rope handle makes moving between spaces straightforward."},
+      {"title": "Ready for the outdoors", "body": "An IP67 rating covers dust and water resistance under the manufacturer’s test conditions; read the care instructions before exposure."},
+      {"title": "Play and connect", "body": "Bluetooth playback and a 3.5mm auxiliary input offer two listening routes. USB-C supports charging and power output."}
+    ],
+    "specifications": [["Sound", "Stereo portable speaker"], ["Battery rating", "Up to 20 hours; volume and use affect playback time"], ["Resistance rating", "IP67; follow manufacturer care instructions"], ["Inputs", "Bluetooth and 3.5mm AUX"], ["Charging", "USB-C input/output"], ["Microphone", "No built-in microphone"], ["App", "Bose app"]],
+    "sources": [{"label": "Bose — SoundLink Max features and specifications", "url": "https://www.bose.com/p/speakers/bose-soundlink-max-portable-speaker/SLMAX-SPEAKERWIRELESS.html"}],
+    "guides": [{"label": "Bose SoundLink Max owner’s guide (PDF)", "url": "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/speakers/SLMAX-SPEAKERWIRELESS/pdf/888545_OG_SLMAX-SPEAKERWIRELESS_ml.pdf"}]
+  },
+  "bose-qc-ultra": {
+    "highlights": [
+      {"title": "Listening that adapts", "body": "CustomTune calibrates audio to the listener, while adjustable noise control helps manage the surrounding sound."},
+      {"title": "An immersive soundstage", "body": "Bose Immersive Audio offers Still and Motion listening settings for a more spacious presentation."},
+      {"title": "Check the generation", "body": "QuietComfort Ultra Headphones exist in multiple generations. Battery endurance, wired USB audio and other features differ; confirm the supplied version."}
+    ],
+    "specifications": [["Design", "Wireless over-ear headphones"], ["Noise control", "Active noise cancellation and Aware mode"], ["Personalisation", "CustomTune audio calibration"], ["Spatial listening", "Bose Immersive Audio"], ["Companion app", "Bose app"], ["Generation", "Confirm first generation or second generation before ordering"], ["Battery and USB audio", "Generation-dependent; confirm the actual model"]],
+    "sources": [{"label": "Bose — original QuietComfort Ultra Headphones features", "url": "https://www.bose.com/pressroom/bose-announces-new-quietcomfort-ultra-headphones-and-earbuds"}, {"label": "Bose — first and second generation differences", "url": "https://support.bose.com/article/quietcomfort-ultra-headphones-2nd-gen-whats-new-in-the-latest-generation?language=en_US"}],
+    "guides": [{"label": "Bose original QuietComfort Ultra Headphones owner’s guide (PDF)", "url": "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/QCUH-HEADPHONEARN/pdf/884885_OG_QCUH-HEADPHONEARN_en.pdf"}]
+  }
+}

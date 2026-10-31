@@ -9,6 +9,12 @@ import React, {
 import { products as seed, storeDefaults } from "./data/catalog.js"
 
 import { api, readStorage, writeStorage, post } from "./lib/api.js"
+import { galleryImages } from "./lib/product-experience.js"
+
+const presentProduct = (product) => ({
+  ...product,
+  image: galleryImages(product)[0]?.src || product.image,
+})
 
 const Context = createContext(/** @type {any} */ (null))
 
@@ -79,7 +85,7 @@ const validIds = (value) =>
 export const cartKey = (line) => [line.id, line.option, line.color].join("|")
 
 export function StoreProvider({ children }) {
-  const [products, setProducts] = useState(seed),
+  const [products, setProducts] = useState(() => seed.map(presentProduct)),
     [settings, setSettings] = useState(storeDefaults),
     [user, setUser] = useState(null),
     [authLoading, setAuthLoading] = useState(true),
@@ -110,7 +116,7 @@ export function StoreProvider({ children }) {
 
   const refresh = useCallback(async () => {
     const data = await api("catalog")
-    setProducts(data.products)
+    setProducts(data.products.map(presentProduct))
     setSettings(data.settings)
   }, [])
 

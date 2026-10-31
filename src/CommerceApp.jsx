@@ -15,6 +15,7 @@ import { Info } from "./pages/info.jsx"
 import { Button } from "./components/ui.jsx"
 import { GitCompareArrows } from "lucide-react"
 import "./commerce.css"
+import "./product-detail.css"
 const Admin = React.lazy(() => import("./pages/admin.jsx"))
 class ErrorBoundary extends React.Component {
   state = { failed: false }

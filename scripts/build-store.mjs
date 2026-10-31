@@ -5,6 +5,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 import { products, categories, storeDefaults } from "../src/data/catalog.js"
+import {
+  galleryImages,
+  productInformation,
+} from "../src/lib/product-experience.js"
 
 import { siteUrl } from "./site-config.mjs"
 
@@ -81,15 +85,15 @@ const pages = [
     .map((p) => ({
       path: "/products/" + p.id + "/",
       title: p.name + " | London Tech Uganda",
-      description: p.description,
+      description: productInformation(p).description,
       schema: {
         "@context": "https://schema.org",
         "@type": "Product",
         name: p.name,
         sku: p.sku,
-        description: p.description,
+        description: productInformation(p).description,
         brand: { "@type": "Brand", name: p.brand },
-        image: p.gallery.map((url) =>
+        image: galleryImages(p).map(({ src: url }) =>
           url.startsWith("/") ? siteUrl + url : url,
         ),
         ...(p.priceConfirmed && p.price && p.stock != null

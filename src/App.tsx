@@ -1,4 +1,5 @@
 import { useStore, navigate } from "./store.jsx"
+import { ProductMotionNote, TypewriterText } from "./components/MotionText"
 import { useState, useEffect, type ReactNode } from "react"
 import logoImg from "@/imports/london/london-tech-logo.png"
 import iphone18 from "@/imports/london/iphone-18-pro.png"
@@ -108,7 +109,7 @@ interface CDTime {
 const ugx = (n: number) => "UGX " + n.toLocaleString("en-UG")
 const ugxArabic = (n: number) => n.toLocaleString("ar-UG") + " شلن أوغندي"
 const whatsapp = (p: Product) =>
-  `https://wa.me/256788341111?text=${encodeURIComponent(`Hello London Tech, I am interested in $<a href={"/products/" + commerceId(p) + "/"}>{p.name}</a> (${ugx(p.price)}).`)}`
+  `https://wa.me/256788341111?text=${encodeURIComponent(`Hello London Tech, I am interested in ${p.name} (guide price ${ugx(p.price)}). Please confirm the configuration and availability.`)}`
 
 function Stars({ r }: { r: number }) {
   return (
@@ -524,8 +525,8 @@ function ProductCard({ p }: { p: Product }) {
               left: 8,
               background: p.badgeColor || B_BLUE,
               color: "#fff",
-              fontSize: 10,
-              fontWeight: 700,
+              fontSize: 12,
+              fontWeight: 800,
               padding: "2px 7px",
               borderRadius: 3,
               fontFamily: "Nunito,sans-serif",
@@ -586,8 +587,8 @@ function ProductCard({ p }: { p: Product }) {
       <div style={{ padding: "10px 12px" }}>
         <div
           style={{
-            fontSize: 10.5,
-            color: "#aaa",
+            fontSize: 12,
+            color: "#64748b",
             marginBottom: 2,
             fontFamily: "Nunito Sans,sans-serif",
           }}
@@ -596,8 +597,8 @@ function ProductCard({ p }: { p: Product }) {
         </div>
         <div
           style={{
-            fontSize: 13,
-            fontWeight: 600,
+            fontSize: 15,
+            fontWeight: 700,
             color: "#333",
             marginBottom: 4,
             lineHeight: 1.3,
@@ -606,13 +607,14 @@ function ProductCard({ p }: { p: Product }) {
         >
           <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
         </div>
+        <ProductMotionNote category={p.category} />
         {p.arabicName && (
           <div
             dir="rtl"
             lang="ar"
             style={{
-              fontSize: 10.5,
-              color: "#777",
+              fontSize: 12,
+              color: "#64748b",
               marginBottom: 4,
               textAlign: "left",
             }}
@@ -621,7 +623,7 @@ function ProductCard({ p }: { p: Product }) {
           </div>
         )}
         <Stars r={0} />
-        <span style={{ display: "block", fontSize: 9, color: "#8c98a8", marginTop: 5 }}>Guide price · confirm with store</span>
+        <span style={{ display: "block", fontSize: 11.5, color: "#64748b", marginTop: 5 }}>Guide price · confirm with store</span>
         <div
           style={{
             display: "flex",
@@ -633,8 +635,8 @@ function ProductCard({ p }: { p: Product }) {
         >
           <span
             style={{
-              fontWeight: 800,
-              fontSize: 12,
+              fontWeight: 900,
+              fontSize: 18,
               color: B_BLUE,
               fontFamily: "Nunito,sans-serif",
             }}
@@ -671,8 +673,8 @@ function ProductCard({ p }: { p: Product }) {
           dir="rtl"
           lang="ar"
           style={{
-            fontSize: 9.5,
-            color: "#888",
+            fontSize: 11.5,
+            color: "#64748b",
             textAlign: "left",
             marginTop: 2,
           }}
@@ -697,8 +699,8 @@ function ProductCard({ p }: { p: Product }) {
               color: "#fff",
               borderRadius: 3,
               padding: "6px 4px",
-              fontSize: 10,
-              fontWeight: 700,
+              fontSize: 12,
+              fontWeight: 800,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -716,8 +718,8 @@ function ProductCard({ p }: { p: Product }) {
               border: 0,
               borderRadius: 3,
               padding: "6px 4px",
-              fontSize: 10,
-              fontWeight: 700,
+              fontSize: 12,
+              fontWeight: 800,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -799,7 +801,7 @@ export default function App({ children }: { children?: ReactNode }) {
   const [q, setQ] = useState("")
   const [navOpen, setNavOpen] = useState(false)
   const [utility, setUtility] = useState(0)
-  const [word, setWord] = useState(0)
+  const [searchFocused, setSearchFocused] = useState(false)
   const [searchCategory, setSearchCategory] = useState("All Categories")
   const [heroHovered, setHeroHovered] = useState(false)
 
@@ -821,7 +823,6 @@ export default function App({ children }: { children?: ReactNode }) {
     )
       return
     const t = setInterval(() => {
-      setWord((w) => (w + 1) % SEARCH_WORDS.length)
       setUtility((u) => (u + 1) % UTILITY_MESSAGES.length)
     }, 3600)
     return () => clearInterval(t)
@@ -977,12 +978,13 @@ export default function App({ children }: { children?: ReactNode }) {
             <div className="search-field">
               {!q && (
                 <div className="search-suggestion" aria-hidden="true">
-                  Search <strong key={word}>{SEARCH_WORDS[word]}</strong>
-                  <span className="search-caret" />
+                  Search <TypewriterText words={SEARCH_WORDS} active={!searchFocused} />
                 </div>
               )}
               <input
                 aria-label="Search products"
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={(e) => {
@@ -1469,7 +1471,7 @@ export default function App({ children }: { children?: ReactNode }) {
                     <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
                   </div>
                   <Stars r={0} />
-        <span style={{ display: "block", fontSize: 9, color: "#8c98a8", marginTop: 5 }}>Guide price · confirm with store</span>
+        <span style={{ display: "block", fontSize: 11, color: "#64748b", marginTop: 5 }}>Guide price · confirm with store</span>
                   <div
                     style={{
                       marginTop: 3,
@@ -1481,8 +1483,8 @@ export default function App({ children }: { children?: ReactNode }) {
                   >
                     <span
                       style={{
-                        fontWeight: 700,
-                        fontSize: 11,
+                        fontWeight: 900,
+                        fontSize: 14,
                         color: B_BLUE,
                         fontFamily: "Nunito,sans-serif",
                       }}
@@ -1887,6 +1889,7 @@ export default function App({ children }: { children?: ReactNode }) {
                     >
                       <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
                     </div>
+                    <ProductMotionNote category={p.category} />
                     {p.arabicName && (
                       <div
                         dir="rtl"
@@ -1914,7 +1917,7 @@ export default function App({ children }: { children?: ReactNode }) {
                         style={{
                           fontFamily: "Nunito,sans-serif",
                           fontWeight: 900,
-                          fontSize: 15,
+                          fontSize: 21,
                           color: B_BLUE,
                         }}
                       >
@@ -2053,19 +2056,6 @@ export default function App({ children }: { children?: ReactNode }) {
       {/* ── Footer ───────────────────────────────────────────────────── */}
       <footer className="site-footer">
         <div className="store-container footer-shell">
-          <div className="footer-invitation">
-            <div>
-              <span className="footer-eyebrow">GREAT TECH. A PERSONAL TOUCH.</span>
-              <h2>Your next upgrade.<br /><span>Let’s make it yours.</span></h2>
-            </div>
-            <div className="footer-conversation">
-              <p>A little advice makes all the difference.<br />Talk tech with our team.</p>
-              <a className="footer-whatsapp whatsapp-cta" href="https://wa.me/256788341111" target="_blank" rel="noreferrer">
-                <WhatsAppIcon size={20} /> Let’s talk on WhatsApp <ArrowUpRight size={17} />
-              </a>
-            </div>
-          </div>
-
           <div className="footer-grid">
             <div className="footer-brand">
               <a href="/" aria-label="London Tech home" className="footer-logo"><img src={logoImg} alt="London Tech" /></a>
@@ -2088,26 +2078,24 @@ export default function App({ children }: { children?: ReactNode }) {
             <div className="footer-column">
               <h3>Here to help</h3>
               <ul>
-                <li><a href="tel:+256788341111">0788341111</a></li>
-                <li><a href="tel:+256709417273">0709417273</a></li>
                 <li><a href="/about/">About us</a></li>
                 <li><a href="/account/orders/">My orders</a></li>
                 <li><a href="/delivery/">Delivery & collection</a></li>
                 <li><a href="/returns/">Returns & warranty</a></li>
-                <li><a href="/admin/">Store admin</a></li>
-                <li><a href="https://wa.me/256788341111?text=Hello%20London%20Tech%2C%20I%20have%20a%20question%20about%20an%20order." target="_blank" rel="noreferrer">Order enquiries <ArrowUpRight size={13} /></a></li>
+                <li><a href="/contact/">Contact & support</a></li>
               </ul>
             </div>
             <div className="footer-column footer-visit">
               <h3>Find us</h3>
               <p>{settings.address}</p>
+              <p className="footer-phones"><a href="tel:+256788341111">0788341111</a><span> / </span><a href="tel:+256709417273">0709417273</a></p>
               <p>{settings.hours || "Call to confirm opening hours."}</p>
-              <span className="footer-local"><MapPin size={13} /> Your local tech people.</span>
+              <a className="footer-local" href="https://wa.me/256788341111" target="_blank" rel="noreferrer"><WhatsAppIcon size={14} /> Chat with our team <ArrowUpRight size={13} /></a>
             </div>
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getFullYear()} London Tech. All rights reserved.</span>
-            <span>Kampala, Uganda <span className="footer-bottom-dot" /> Built around you.</span>
+            <span>Kampala, Uganda <span className="footer-bottom-dot" /> <a href="/admin/">Store admin</a></span>
           </div>
         </div>
       </footer>
