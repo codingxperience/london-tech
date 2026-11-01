@@ -3,12 +3,13 @@
   "buildCommand": "pnpm run build",
   "installCommand": "pnpm install --frozen-lockfile",
   "outputDirectory": "dist",
-  "functions": { "api/[...route].js": { "maxDuration": 30 } },
+  "functions": { "api/router.js": { "maxDuration": 30 } },
   "trailingSlash": true,
   "redirects": [
     { "source": "/admin.html", "destination": "/admin/", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/router?__lt_route=:path*" },
     { "source": "/((?!api/|assets/|promotions/|favicon.ico|site.webmanifest|robots.txt|sitemap.xml|catalog.json|llms.txt|llms-full.txt).*)", "destination": "/index.html" }
   ],
   "headers": [

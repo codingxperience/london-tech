@@ -1,6 +1,6 @@
 # London Tech
 
-London Tech — London Technology Store, Uganda. The current repository storefront design is preserved: its light canvas, white product cards, navy navigation, bilingual category sidebar, promotional hero, green chat buttons and existing footer. New commerce pages extend that design.
+London Tech — London Technology Store, Uganda. The storefront uses a light canvas, white product cards, navy and red branding, bilingual prices, image-led navigation, a promotional hero and green chat actions. Commerce pages extend that visual direction.
 
 ## Development
 
@@ -11,7 +11,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Local accounts and orders use a PostgreSQL-compatible PGlite database in the ignored `.data/postgres` directory. Copy `.env.example` to `.env` and set your own administrator email and password before running `pnpm db:setup`.
+Local accounts and orders use a PostgreSQL-compatible PGlite database in the ignored `.data/postgres` directory. Copy `.env.example` to `.env` and set your own administrator email and password before running `pnpm db:setup`. For local requests, set `PUBLIC_SITE_URL` to Vite's printed origin, usually `http://127.0.0.1:5173`; use the verified public origin in Vercel.
 
 ## Checks and production
 
@@ -22,6 +22,8 @@ pnpm test
 ```
 
 Vercel serves `dist/` and the Node API in `api/`. Hosted PostgreSQL and Flutterwave credentials are required for live account, order and payment services. See [commerce setup](docs/COMMERCE_SETUP.md) for the exact environment variables, webhook URL and activation steps. No administrator password or payment secret is embedded in the application.
+
+Vercel API requests use an explicit wildcard rewrite to `api/router.js`; the same commerce handler also powers Vite's local API. Review sample discounts, crossed prices, Arabic prices and stock labels at `/collections/shop/?preview=offers`. These are clearly labelled display-only figures; see [offer review](docs/OFFER_REVIEW.md). The [89-listing image audit](docs/CATALOGUE_AUDIT.md) records corrected photos and remaining model-reference uncertainties.
 
 ## Included
 

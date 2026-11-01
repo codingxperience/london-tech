@@ -6,17 +6,17 @@ The storefront keeps the design from repository commit `ec27da6`: Nunito typogra
 
 Use Node.js 24 and pnpm. Install with `pnpm install --frozen-lockfile`, then run `pnpm dev`. Open the URL printed by Vite. Local account and order records use PostgreSQL-compatible PGlite files in the ignored `.data/postgres` directory.
 
-To create your first local administrator, copy `.env.example` to `.env`, enter `ADMIN_EMAIL` and an `ADMIN_PASSWORD` of at least 12 characters, and run `pnpm db:setup`. There is no shared or hardcoded administrator password. Restart the development server after changing environment variables.
+To create your first local administrator, copy `.env.example` to `.env`, set `PUBLIC_SITE_URL` to Vite's printed origin (usually `http://127.0.0.1:5173`), enter `ADMIN_EMAIL` and an `ADMIN_PASSWORD` of at least 12 characters, and run `pnpm db:setup`. There is no shared or hardcoded administrator password. Restart the development server after changing environment variables.
 
 ## Production environment in Vercel
 
-Keep the existing London Tech Vercel project and GitHub integration. The build command is `pnpm run build`; output is `dist`. The Node function at `api/[...route].js` supplies account, catalogue, order and payment endpoints.
+Keep the existing London Tech Vercel project and GitHub integration. The build command is `pnpm run build`; output is `dist`. The Node function at `api/router.js` supplies account, catalogue, order and payment endpoints. `vercel.json` explicitly rewrites `/api/:path*` to that function and forwards the captured route; this Vite deployment does not use Next.js catch-all filename routing. The adapter retains request bodies, cookies, origin headers and business query parameters before calling the shared commerce handler.
 
 Set the following in Vercel → Project → Settings → Environment Variables. Keep secret values out of source files, browser code and chat.
 
 | Variable | Purpose |
 | --- | --- |
-| `PUBLIC_SITE_URL` | `https://london-tech.vercel.app`, or the verified production origin. No path or trailing slash. |
+| `PUBLIC_SITE_URL` | The verified production origin, currently `https://london-tech-codingxperiences-projects.vercel.app`. No path or trailing slash. |
 | `DATABASE_URL` | Hosted PostgreSQL connection string. A pooled connection is recommended for serverless hosting. Preserve the provider’s required TLS settings. |
 | `ADMIN_EMAIL` | Email for the initial administrator. Set it before opening registration. |
 | `ADMIN_PASSWORD` | Initial administrator password, at least 12 characters. |
@@ -32,7 +32,7 @@ Without a production database, browsing, product information and a device-local 
 ## Flutterwave
 
 1. Enable Uganda mobile money and card payments on your Flutterwave merchant account. Currency is UGX.
-2. Configure the webhook URL as `https://london-tech.vercel.app/api/payments/webhook/`. Keep the final slash to match Vercel’s URL policy.
+2. Configure the webhook URL as `https://london-tech-codingxperiences-projects.vercel.app/api/payments/webhook/` (or your verified production origin). Keep the final slash to match Vercel’s URL policy.
 3. Set the webhook secret hash to the same value as `FLW_SECRET_HASH` and enable webhook retries.
 4. If using per-payment method selection, follow Flutterwave’s dashboard guidance for `payment_options`.
 5. Validate a test card and each available Uganda mobile money network in the merchant sandbox. Then use the approved live merchant secret and redeploy.
