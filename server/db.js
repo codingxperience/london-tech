@@ -112,6 +112,12 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS catalogue_migrations (version TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
 
     `CREATE TABLE IF NOT EXISTS settings (id TEXT PRIMARY KEY, data JSONB NOT NULL)`,
+    `CREATE TABLE IF NOT EXISTS vendors (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `ALTER TABLE products ADD COLUMN IF NOT EXISTS vendor_id TEXT REFERENCES vendors(id) ON DELETE RESTRICT`,
+    `CREATE TABLE IF NOT EXISTS content_pages (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `CREATE UNIQUE INDEX IF NOT EXISTS content_pages_slug_idx ON content_pages((data->>'slug'))`,
+    `CREATE TABLE IF NOT EXISTS message_threads (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, subject TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open','resolved')), messages JSONB NOT NULL DEFAULT '[]', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `CREATE INDEX IF NOT EXISTS message_threads_user_idx ON message_threads(user_id,updated_at DESC)`,
 
     `CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), idempotency_key TEXT NOT NULL, status TEXT NOT NULL, payment_status TEXT NOT NULL DEFAULT 'unpaid', amount BIGINT, currency TEXT NOT NULL DEFAULT 'UGX', details JSONB NOT NULL, transaction_id TEXT UNIQUE, expires_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), UNIQUE(user_id,idempotency_key))`,
 

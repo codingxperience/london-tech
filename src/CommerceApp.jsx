@@ -1,3 +1,4 @@
+import { ManagedPage } from "./components/ManagedPage.jsx"
 import React, { useEffect } from "react"
 import ReferenceStorefront from "./App.tsx"
 import { StoreProvider, usePath, useStore, navigate } from "./store.jsx"
@@ -127,6 +128,7 @@ function Router() {
           <Admin
             key={preview ? "preview" : "live"}
             section={section}
+            search={path.split("?")[1] || ""}
             preview={preview}
           />
         </React.Suspense>
@@ -137,6 +139,8 @@ function Router() {
   if (normalized === "/") page = undefined
   else if (normalized.startsWith("/products/"))
     page = <Product id={decodeURIComponent(normalized.split("/")[2])} />
+  else if (normalized.startsWith("/pages/"))
+    page = <ManagedPage slug={normalized.split("/")[2]} />
   else if (normalized.startsWith("/collections/")) {
     const category = normalized.split("/")[2]
     page =

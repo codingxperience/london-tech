@@ -64,8 +64,8 @@ test("storefront and product screens render without runtime exceptions", () => {
     [info.Info, { page: "contact" }, "0788341111"],
     [info.Info, { page: "about" }, "NYUMBA KUBUA"],
 
-    [Admin, { preview: true, section: "dashboard" }, "Your store, at a glance"],
-    [Admin, { preview: true, section: "products" }, "Your product collection"],
+    [Admin, { preview: true, section: "dashboard" }, "Total sales"],
+    [Admin, { preview: true, section: "products" }, "Add product"],
     [Admin, { preview: true, section: "settings" }, "Store connections"],
     [
       ProductEditor,

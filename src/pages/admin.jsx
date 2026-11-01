@@ -1,11 +1,18 @@
+import { BrandWordmark } from "../components/BrandWordmark.jsx"
+import { Overview } from "../admin/Overview.jsx"
+import { WorkspaceSection } from "../admin/Sections.jsx"
+import {
+  previewData,
+  previewKey,
+  preferenceDefaults,
+} from "../admin/preview.js"
+import "../admin-workspace.css"
 import { PaymentMarks } from "../components/PaymentMarks.jsx"
-import { PaymentLogo, PaymentMethod } from "../components/PaymentLogo.jsx"
-import React, { useEffect, useMemo, useState } from "react"
+import { PaymentMethod } from "../components/PaymentLogo.jsx"
+import React, { useEffect, useState, useRef } from "react"
 
 import {
   Activity,
-  ArrowDown,
-  ArrowDownToLine,
   ArrowRight,
   ArrowUpRight,
   Bell,
@@ -15,33 +22,32 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Columns3,
   Download,
   Edit3,
   ExternalLink,
   Eye,
   Grid2X2,
-  Headphones,
   LayoutDashboard,
   List,
   LockKeyhole,
   LogOut,
   Menu,
-  MoreHorizontal,
   Package,
   Plus,
   Search,
   Settings,
   ShieldCheck,
   ShoppingBag,
-  SlidersHorizontal,
-  Tag,
-  Trash2,
-  TrendingUp,
-  Truck,
   Users,
-  WalletCards,
-  X,
+  Heart,
+  FileText,
+  Globe,
+  Languages,
+  MessageSquare,
+  Moon,
+  Sun,
+  Maximize,
+  RotateCcw,
 } from "lucide-react"
 
 import { useStore, navigate } from "../store.jsx"
@@ -50,12 +56,18 @@ import {
   categories,
   money,
   products as seed,
-  productPath,
-  storeDefaults,
   categoryName,
 } from "../data/catalog.js"
 
-import { api, post, dateLabel, downloadCsv, statusLabel } from "../lib/api.js"
+import {
+  api,
+  post,
+  dateLabel,
+  downloadCsv,
+  statusLabel,
+  readStorage,
+  writeStorage,
+} from "../lib/api.js"
 
 import {
   Badge,
@@ -69,42 +81,32 @@ import {
 
 import { CategoryIcon } from "../components/storefront.jsx"
 
-const previewOrders = seed.slice(0, 8).map((p, i) => ({
-  id: "DEMO-" + (1028 - i),
-  status: [
-    "confirmed",
-    "processing",
-    "ready",
-    "shipped",
-    "completed",
-    "quote_requested",
-    "pending_payment",
-    "completed",
-  ][i],
-  paymentStatus: i < 5 || i === 7 ? "paid" : "unpaid",
-  amount: p.price,
-  currency: "UGX",
-  items: [{ ...p, quantity: 1, unitPrice: p.price }],
-  customer: {
-    name: "Sample customer " + (i + 1),
-    email: "customer" + (i + 1) + "@example.com",
-    phone: "Not a real customer",
-  },
-  fulfillment: i % 2 ? "delivery" : "collection",
-  paymentMethod: ["mtn", "visa", "airtel"][i % 3],
-  createdAt: new Date(Date.now() - i * 86400000 * 2).toISOString(),
-  timeline: [],
-}))
-
 const tabs = [
-  ["dashboard", "Overview", LayoutDashboard],
-  ["products", "Products", Package],
-  ["categories", "Categories", Grid2X2],
-  ["orders", "Orders", ShoppingBag],
+  ["dashboard", "Dashboard", LayoutDashboard],
+  ["vendors", "Vendors", Users],
   ["customers", "Customers", Users],
+  ["products", "Products", Package],
+  ["wishlist", "Wishlist", Heart],
+  ["orders", "Orders", ShoppingBag],
+  ["invoices", "Invoices", FileText],
+  ["history", "History", Activity],
   ["inventory", "Inventory", Box],
-  ["activity", "Activity", Activity],
+  ["categories", "Categories", Grid2X2],
   ["settings", "Settings", Settings],
+  ["messages", "Messages", MessageSquare],
+  ["pages", "Pages", Globe],
+  ["language", "Language & region", Languages],
+  ["security", "Login & security", LockKeyhole],
+]
+const extraSections = [
+  "vendors",
+  "wishlist",
+  "invoices",
+  "history",
+  "messages",
+  "pages",
+  "language",
+  "security",
 ]
 
 function csvProducts(products) {
@@ -130,189 +132,27 @@ function csvProducts(products) {
   ])
 }
 
-const chartColors = ["#d92f40", "#163659", "#c2ccd8"]
-
-function LineChart({ orders, preview = false }) {
-  const today = new Date(),
-    points = Array.from({ length: 12 }, (_, i) => {
-      const d = new Date(today.getFullYear(), today.getMonth() - 11 + i, 1)
-      const total = orders
-        .filter(
-          (o) =>
-            o.paymentStatus === "paid" &&
-            new Date(o.createdAt).getMonth() === d.getMonth() &&
-            new Date(o.createdAt).getFullYear() === d.getFullYear(),
-        )
-        .reduce((s, o) => s + o.amount, 0)
-      return {
-        month: d.toLocaleString("en", { month: "short" }),
-        total: preview
-          ? [1.8, 1.5, 2.7, 3.1, 3.8, 3.2, 4.7, 3.8, 4.8, 5.4, 4.1, 5.8][i] *
-            1000000
-          : total,
-      }
-    })
-
-  const max = Math.max(...points.map((p) => p.total), 1000000),
-    coords = points.map((p, i) => [32 + i * 43, 162 - (p.total / max) * 125])
-  const line = coords
-      .map(([x, y], i) => (i ? "L" : "M") + x + "," + y)
-      .join(" "),
-    area = line + " L505,170 L32,170 Z"
-
-  return (
-    <div className="chart-wrap">
-      <svg
-        viewBox="0 0 540 205"
-        role="img"
-        aria-label={
-          preview
-            ? "Illustrative sales chart"
-            : "Monthly paid sales over the last twelve months"
-        }
-      >
-        <defs>
-          <linearGradient id="sales-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#d92f40" stopOpacity=".16" />
-            <stop offset="100%" stopColor="#d92f40" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        {[40, 80, 120, 160].map((y) => (
-          <g key={y}>
-            <line
-              x1="30"
-              y1={y}
-              x2="520"
-              y2={y}
-              stroke="#e9edf2"
-              strokeDasharray="4 4"
-            />
-            <text x="0" y={y + 4} fontSize="9" fill="#98a2b3">
-              {Math.round((((170 - y) / 125) * max) / 1000000)}m
-            </text>
-          </g>
-        ))}
-        <path d={area} fill="url(#sales-fill)" />
-        <path
-          d={line}
-          fill="none"
-          stroke="#d92f40"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {points.map((p, i) => (
-          <text
-            key={i}
-            x={32 + i * 43}
-            y="195"
-            textAnchor="middle"
-            fontSize="10"
-            fill="#929ca8"
-          >
-            {p.month}
-          </text>
-        ))}
-      </svg>
-      {!preview && !orders.some((o) => o.paymentStatus === "paid") && (
-        <span className="chart-empty">
-          Your first confirmed sales will appear here.
-        </span>
-      )}
-    </div>
-  )
-}
-
-function BarChart({ orders, preview }) {
-  const values = [
-    "confirmed",
-    "processing",
-    "ready",
-    "shipped",
-    "completed",
-    "quote_requested",
-  ]
-  const maximum = Math.max(
-    ...values.map((s) => orders.filter((o) => o.status === s).length),
-    3,
-  )
-  return (
-    <div className="chart-wrap bar-chart">
-      <svg
-        viewBox="0 0 340 205"
-        role="img"
-        aria-label="Orders by fulfillment status"
-      >
-        {[40, 80, 120, 160].map((y) => (
-          <line
-            key={y}
-            x1="25"
-            y1={y}
-            x2="330"
-            y2={y}
-            stroke="#e9edf2"
-            strokeDasharray="4 4"
-          />
-        ))}
-        {values.map((status, i) => {
-          const count = orders.filter((o) => o.status === status).length,
-            h = (count / maximum) * 120
-          return (
-            <g key={status}>
-              <rect
-                x={37 + i * 49}
-                y={165 - h}
-                width="22"
-                height={h || 2}
-                rx="4"
-                fill={chartColors[i % 3]}
-              />
-              <text
-                x={48 + i * 49}
-                y={155 - h}
-                textAnchor="middle"
-                fontSize="11"
-                fill="#526075"
-              >
-                {count}
-              </text>
-              <text
-                transform={"translate(" + (48 + i * 49) + ",183) rotate(-18)"}
-                textAnchor="middle"
-                fontSize="9"
-                fill="#929ca8"
-              >
-                {
-                  [
-                    "New",
-                    "Processing",
-                    "Ready",
-                    "Shipped",
-                    "Complete",
-                    "Quote",
-                  ][i]
-                }
-              </text>
-            </g>
-          )
-        })}
-      </svg>
-    </div>
-  )
-}
-
-export default function Admin({ section = "dashboard", preview = false }) {
+export default function Admin({
+  section = "dashboard",
+  preview = false,
+  search = "",
+}) {
   const { user, authLoading, logout, refresh } = useStore()
-  const [data, setData] = useState(
+  const [preferences, updatePreferences] = useState(() => ({
+    ...preferenceDefaults,
+    ...readStorage("lt.admin.preferences.v1", {}),
+  }))
+  const setPreferences = (value) => {
+    updatePreferences(value)
+    writeStorage("lt.admin.preferences.v1", value)
+  }
+  const [notifications, setNotifications] = useState(false)
+  const sidebar = useRef(null)
+  const [data, setData] = useState(() =>
       preview
-        ? {
-            products: seed,
-            orders: previewOrders,
-            customers: [],
-            events: [],
-            settings: storeDefaults,
-            connection: { database: false, payments: false, email: false },
-          }
+        ? readStorage(previewKey, null)?.version === 4
+          ? readStorage(previewKey, null)
+          : previewData()
         : null,
     ),
     [error, setError] = useState(""),
@@ -328,6 +168,88 @@ export default function Admin({ section = "dashboard", preview = false }) {
     [customer, setCustomer] = useState(null)
 
   const base = preview ? "/admin/preview/" : "/admin/"
+  useEffect(() => {
+    if (preview && data) writeStorage(previewKey, data)
+  }, [preview, data])
+  useEffect(() => {
+    if (!menu) return
+    const old = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    const previous = document.activeElement
+    sidebar.current?.querySelector("a")?.focus()
+    const key = (event) => {
+      if (event.key === "Escape") setMenu(false)
+      if (event.key === "Tab") {
+        const links = [...sidebar.current.querySelectorAll("a,button")]
+        const first = links[0],
+          last = links.at(-1)
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last?.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first?.focus()
+        }
+      }
+    }
+    document.addEventListener("keydown", key)
+    return () => {
+      document.body.style.overflow = old
+      document.removeEventListener("keydown", key)
+      previous?.focus()
+    }
+  }, [menu])
+  function previewChange(action, details, change) {
+    setData((current) => ({
+      ...change(current),
+      events: [
+        {
+          id: crypto.randomUUID(),
+          action,
+          details,
+          created_at: new Date().toISOString(),
+        },
+        ...current.events,
+      ].slice(0, 500),
+    }))
+  }
+  async function perform(kind, record, method) {
+    if (preview) {
+      if (
+        kind === "vendors" &&
+        method === "DELETE" &&
+        data.products.some((p) => p.vendorId === record.id)
+      )
+        throw new Error(
+          "This vendor has linked products. Archive it or reassign the products first.",
+        )
+      const next = {
+        ...record,
+        id: record.id || crypto.randomUUID(),
+        updatedAt: new Date().toISOString(),
+      }
+      previewChange(
+        kind + "." + method.toLowerCase(),
+        { id: next.id },
+        (current) => ({
+          ...current,
+          [kind]:
+            method === "DELETE"
+              ? current[kind].filter((r) => r.id !== record.id)
+              : record.id
+                ? current[kind].map((r) => (r.id === record.id ? next : r))
+                : [...current[kind], next],
+        }),
+      )
+      return
+    }
+    await api(`admin/${kind}${record.id ? "/" + record.id : ""}`, {
+      method,
+      body: method === "DELETE" ? undefined : record,
+    })
+    await load()
+    if (kind === "pages") await refresh()
+  }
 
   async function load() {
     try {
@@ -343,11 +265,12 @@ export default function Admin({ section = "dashboard", preview = false }) {
   }, [preview, user?.id])
   useEffect(() => {
     setPage(1)
-    setQuery("")
-    setStatus("all")
+    setQuery(new URLSearchParams(search).get("q") || "")
+    setNotifications(false)
+    setStatus(new URLSearchParams(search).get("status") || "all")
     setCategory("all")
-  }, [section])
-  useEffect(() => setPage(1), [query, status, category])
+  }, [section, search])
+  useEffect(() => setPage(1), [query, status, category, preferences.pageSize])
 
   if (authLoading && !preview)
     return (
@@ -370,7 +293,7 @@ export default function Admin({ section = "dashboard", preview = false }) {
         <span className="admin-gate-lock">
           <LockKeyhole size={25} />
         </span>
-        <p className="eyebrow">LONDON TECH / STORE CONSOLE</p>
+        <p className="eyebrow">STORE CONSOLE</p>
         <h1>
           A clearer view
           <br />
@@ -441,26 +364,19 @@ export default function Admin({ section = "dashboard", preview = false }) {
     (c.name + " " + c.email).toLowerCase().includes(query.toLowerCase()),
   )
 
-  const adminTitle = tabs.find(([id]) => id === section)?.[1] || "Overview"
+  const adminTitle = tabs.find(([id]) => id === section)?.[1] || "Dashboard"
 
   const storeLink = () => window.open("/", "_blank", "noopener,noreferrer")
 
   return (
-    <div className="admin-shell">
-      <aside className={"admin-sidebar " + (menu ? "open" : "")}>
+    <div className="admin-shell" data-theme={preferences.theme}>
+      <aside
+        ref={sidebar}
+        className={"admin-sidebar " + (menu ? "open" : "")}
+        aria-label="Administration navigation"
+      >
         <a className="admin-brand" href={base}>
-          <img
-            src="/assets/london-tech-mark.png"
-            alt=""
-            width="38"
-            height="38"
-          />
-          <span>
-            <b>
-              LONDON <em>TECH</em>
-            </b>
-            <small>STORE CONSOLE</small>
-          </span>
+          <BrandWordmark width={174} inverse={preferences.theme === "dark"} />
         </a>
         <p className="admin-nav-label">WORKSPACE</p>
         <nav>
@@ -469,6 +385,7 @@ export default function Admin({ section = "dashboard", preview = false }) {
               href={base + (id === "dashboard" ? "" : id + "/")}
               key={id}
               className={section === id ? "active" : ""}
+              aria-current={section === id ? "page" : undefined}
               onClick={() => setMenu(false)}
             >
               <Icon size={19} />
@@ -487,11 +404,6 @@ export default function Admin({ section = "dashboard", preview = false }) {
           ))}
         </nav>
         <div className="admin-sidebar-bottom">
-          <div>
-            <ShieldCheck size={22} />
-            <strong>One store. One clear view.</strong>
-            <p>The little details keep everything moving.</p>
-          </div>
           <button onClick={storeLink}>
             <ExternalLink size={16} />
             View storefront
@@ -521,8 +433,20 @@ export default function Admin({ section = "dashboard", preview = false }) {
           >
             <Menu size={20} />
           </IconButton>
-          <div className="admin-search">
-            <Search size={18} />
+          <form
+            className="admin-search"
+            onSubmit={(e) => {
+              e.preventDefault()
+              navigate(
+                base +
+                  (section === "dashboard" ? "products/" : section + "/") +
+                  (query.trim()
+                    ? "?q=" + encodeURIComponent(query.trim())
+                    : ""),
+              )
+            }}
+          >
+            <Search size={19} />
             <input
               placeholder={
                 "Search " +
@@ -533,43 +457,131 @@ export default function Admin({ section = "dashboard", preview = false }) {
               }
               aria-label="Search admin records"
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value)
-                if (section === "dashboard") navigate(base + "products/")
-              }}
+              onChange={(e) => setQuery(e.target.value)}
             />
-            <kbd>⌕</kbd>
-          </div>
+            <button type="submit" aria-label="Run admin search">
+              <ArrowRight size={16} />
+            </button>
+          </form>
           <div className="admin-top-actions">
+            {!preview && (
+              <IconButton label="Refresh workspace" onClick={load}>
+                <RotateCcw size={19} />
+              </IconButton>
+            )}
+
             <span className="admin-date">
               <CalendarDays size={15} />
-              {dateLabel(new Date())}
+              {new Intl.DateTimeFormat(preferences.locale, {
+                dateStyle: "medium",
+                timeZone: preferences.timeZone,
+              }).format(new Date())}
             </span>
-            <a
-              href={base + "activity/"}
-              className="icon-button"
-              aria-label="View store activity"
+            <IconButton
+              label={
+                preferences.theme === "dark"
+                  ? "Use light appearance"
+                  : "Use dark appearance"
+              }
+              onClick={() =>
+                setPreferences({
+                  ...preferences,
+                  theme: preferences.theme === "dark" ? "light" : "dark",
+                })
+              }
             >
-              <Bell size={19} />
-              <i />
+              {preferences.theme === "dark" ? (
+                <Sun size={19} />
+              ) : (
+                <Moon size={19} />
+              )}
+            </IconButton>
+            <IconButton
+              label="Toggle full screen"
+              onClick={async () => {
+                try {
+                  if (document.fullscreenElement)
+                    await document.exitFullscreen()
+                  else await document.documentElement.requestFullscreen()
+                } catch {
+                  setError("Full screen is unavailable in this browser window.")
+                }
+              }}
+            >
+              <Maximize size={19} />
+            </IconButton>
+            <a
+              href={base + "messages/"}
+              className="icon-button"
+              aria-label="Open customer messages"
+            >
+              <MessageSquare size={19} />
+              {data.messages?.some((t) => t.status === "open") && <i />}
             </a>
+            <div className="admin-notification-wrap">
+              <IconButton
+                label="Store notifications"
+                aria-expanded={notifications}
+                onClick={() => setNotifications(!notifications)}
+              >
+                <Bell size={19} />
+              </IconButton>
+              {notifications && (
+                <div className="admin-notification-popover">
+                  <strong>Needs attention</strong>
+                  <a href={base + "orders/"}>
+                    {
+                      orders.filter((o) => o.status === "quote_requested")
+                        .length
+                    }{" "}
+                    confirmation requests
+                  </a>
+                  <a href={base + "inventory/?status=low"}>
+                    {
+                      catalog.filter((p) => p.stock !== null && p.stock < 5)
+                        .length
+                    }{" "}
+                    low-stock products
+                  </a>
+                  <a href={base + "messages/"}>
+                    {data.messages?.filter((t) => t.status === "open").length ||
+                      0}{" "}
+                    open conversations
+                  </a>
+                </div>
+              )}
+            </div>
             <span className="admin-separator" />
-            <a href={base + "settings/"} className="admin-user">
-              <span>
-                {preview
-                  ? "LT"
-                  : user.name
-                      .split(" ")
-                      .map((p) => p[0])
-                      .slice(0, 2)
-                      .join("")}
-              </span>
-              <div>
-                <strong>{preview ? "Store administrator" : user.name}</strong>
-                <small>{preview ? "Read-only preview" : "Administrator"}</small>
+            <details className="admin-profile-menu">
+              <summary className="admin-user">
+                <span>
+                  {preview
+                    ? "LT"
+                    : user.name
+                        .split(" ")
+                        .map((p) => p[0])
+                        .slice(0, 2)
+                        .join("")}
+                </span>
+                <div>
+                  <strong>{preview ? "Store administrator" : user.name}</strong>
+                  <small>{preview ? "Local preview" : "Administrator"}</small>
+                </div>
+                <ChevronDown size={14} />
+              </summary>
+              <div className="admin-profile-popover">
+                <a href={base + "settings/"}>Store settings</a>
+                <a href={base + "language/"}>Preferences</a>
+                <a href={base + "security/"}>Login & security</a>
+                {!preview && (
+                  <button
+                    onClick={() => logout().catch((e) => setError(e.message))}
+                  >
+                    Sign out
+                  </button>
+                )}
               </div>
-              <ChevronDown size={14} />
-            </a>
+            </details>
           </div>
         </header>
         <main className="admin-main">
@@ -577,9 +589,9 @@ export default function Admin({ section = "dashboard", preview = false }) {
             <div className="admin-preview-banner">
               <Eye size={17} />
               <span>
-                <strong>Design preview.</strong> Illustrative orders and charts.
-                Product guide prices are drafts. Sign in to manage real store
-                data.
+                <strong>Preview workspace.</strong> Illustrative customer and
+                order records. Changes stay in this browser. No payments, email
+                or messages leave this preview.
               </span>
               <a href="/login/?next=/admin/">
                 Sign in
@@ -594,23 +606,7 @@ export default function Admin({ section = "dashboard", preview = false }) {
                 Workspace <ChevronRight size={11} />
                 {adminTitle}
               </div>
-              <h1>
-                {section === "dashboard"
-                  ? "Your store, at a glance."
-                  : section === "products"
-                    ? "Your product collection."
-                    : section === "orders"
-                      ? "Every order. Every detail."
-                      : section === "customers"
-                        ? "The people behind the orders."
-                        : section === "inventory"
-                          ? "Keep the essentials in stock."
-                          : section === "categories"
-                            ? "A place for every product."
-                            : section === "settings"
-                              ? "Make the store yours."
-                              : "A clear record of changes."}
-              </h1>
+              <h1>{adminTitle}</h1>
               <p>
                 {section === "dashboard"
                   ? "Good to see you. Here is what is happening at London Tech."
@@ -622,6 +618,18 @@ export default function Admin({ section = "dashboard", preview = false }) {
               </p>
             </div>
             <div className="admin-heading-actions">
+              {preview && (
+                <IconButton
+                  label="Reset preview workspace"
+                  onClick={() => {
+                    if (window.confirm("Reset this browser’s preview records?"))
+                      setData(previewData())
+                  }}
+                >
+                  <RotateCcw size={17} />
+                </IconButton>
+              )}
+
               {["products", "inventory"].includes(section) ? (
                 <>
                   <Button
@@ -675,11 +683,33 @@ export default function Admin({ section = "dashboard", preview = false }) {
             </div>
           </div>
           {section === "dashboard" ? (
-            <Dashboard
+            <Overview
               data={data}
-              preview={preview}
               base={base}
               onOrder={setOrderEditor}
+              OrdersTable={OrdersTable}
+              locale={preferences.locale}
+            />
+          ) : extraSections.includes(section) ? (
+            <WorkspaceSection
+              section={section}
+              data={data}
+              query={query}
+              perform={perform}
+              preview={preview}
+              user={user}
+              preferences={preferences}
+              setPreferences={setPreferences}
+              changedMessages={
+                preview
+                  ? (messages) =>
+                      previewChange(
+                        "messages.updated",
+                        { conversations: messages.length },
+                        (current) => ({ ...current, messages }),
+                      )
+                  : load
+              }
             />
           ) : section === "products" || section === "inventory" ? (
             <>
@@ -762,7 +792,10 @@ export default function Admin({ section = "dashboard", preview = false }) {
                       </thead>
                       <tbody>
                         {filteredProducts
-                          .slice((page - 1) * 12, page * 12)
+                          .slice(
+                            (page - 1) * preferences.pageSize,
+                            page * preferences.pageSize,
+                          )
                           .map((p) => (
                             <tr key={p.id}>
                               <td>
@@ -821,7 +854,10 @@ export default function Admin({ section = "dashboard", preview = false }) {
                 ) : (
                   <div className="admin-products-grid">
                     {filteredProducts
-                      .slice((page - 1) * 12, page * 12)
+                      .slice(
+                        (page - 1) * preferences.pageSize,
+                        page * preferences.pageSize,
+                      )
                       .map((p) => (
                         <article key={p.id}>
                           <div>
@@ -870,6 +906,7 @@ export default function Admin({ section = "dashboard", preview = false }) {
                   total={filteredProducts.length}
                   page={page}
                   setPage={setPage}
+                  perPage={preferences.pageSize}
                 />
               </div>
             </>
@@ -901,13 +938,17 @@ export default function Admin({ section = "dashboard", preview = false }) {
                 ))}
               </div>
               <OrdersTable
-                orders={filteredOrders.slice((page - 1) * 12, page * 12)}
+                orders={filteredOrders.slice(
+                  (page - 1) * preferences.pageSize,
+                  page * preferences.pageSize,
+                )}
                 onOrder={setOrderEditor}
               />
               <AdminPagination
                 total={filteredOrders.length}
                 page={page}
                 setPage={setPage}
+                perPage={preferences.pageSize}
               />
             </div>
           ) : section === "categories" ? (
@@ -1053,14 +1094,24 @@ export default function Admin({ section = "dashboard", preview = false }) {
               connection={data.connection}
               preview={preview}
               saved={(settings) => {
-                setData({ ...data, settings })
-                refresh().catch(() => {})
+                if (preview)
+                  previewChange("settings.updated", {}, (current) => ({
+                    ...current,
+                    settings,
+                  }))
+                else {
+                  setData({ ...data, settings })
+                  refresh().catch(() => {})
+                }
               }}
             />
           )}
         </main>
         <footer className="admin-footer">
-          <span>London Tech · Store Console</span>
+          <span className="admin-footer-brand">
+            <BrandWordmark inverse={preferences.theme === "dark"} width={110} />
+            <span>Store Console</span>
+          </span>
           <span>
             UGX <i /> Uganda
           </span>
@@ -1069,17 +1120,32 @@ export default function Admin({ section = "dashboard", preview = false }) {
       {editor && (
         <ProductEditor
           product={editor}
+          vendors={data.vendors || []}
           preview={preview}
           existing={catalog.some((p) => p.id === editor.id)}
           onClose={() => setEditor(null)}
           onSave={async (p) => {
+            const editingExisting = catalog.some((v) => v.id === editor.id)
+            if (!editingExisting && catalog.some((v) => v.id === p.id))
+              throw new Error(
+                "This product URL identifier is already in use. Choose a different one.",
+              )
+            if (preview) {
+              previewChange("product.saved", { id: p.id }, (current) => ({
+                ...current,
+                products: current.products.some((v) => v.id === p.id)
+                  ? current.products.map((v) => (v.id === p.id ? p : v))
+                  : [...current.products, p],
+              }))
+              setEditor(null)
+              return
+            }
             setSaving(true)
             try {
               await api(
-                "admin/products" +
-                  (catalog.some((v) => v.id === p.id) ? "/" + p.id : ""),
+                "admin/products" + (editingExisting ? "/" + p.id : ""),
                 {
-                  method: catalog.some((v) => v.id === p.id) ? "PUT" : "POST",
+                  method: editingExisting ? "PUT" : "POST",
                   body: p,
                 },
               )
@@ -1098,12 +1164,56 @@ export default function Admin({ section = "dashboard", preview = false }) {
           order={orderEditor}
           preview={preview}
           onQuote={async (body) => {
+            if (preview) {
+              setData((current) => ({
+                ...current,
+                orders: current.orders.map((o) =>
+                  o.id === orderEditor.id
+                    ? {
+                        ...o,
+                        status: "quoted",
+                        quote: body,
+                        amount:
+                          body.prices.reduce(
+                            (n, p, i) => n + p * o.items[i].quantity,
+                            0,
+                          ) + (body.deliveryFee || 0),
+                      }
+                    : o,
+                ),
+              }))
+              setOrderEditor(null)
+              return
+            }
             await post("admin/orders/" + orderEditor.id + "/quote", body)
             await load()
             setOrderEditor(null)
           }}
           onClose={() => setOrderEditor(null)}
           onSave={async (status, note) => {
+            if (preview) {
+              if (
+                orderEditor.paymentStatus !== "paid" &&
+                [
+                  "confirmed",
+                  "processing",
+                  "ready",
+                  "shipped",
+                  "completed",
+                ].includes(status)
+              )
+                throw new Error("Payment must be verified before fulfillment.")
+              setData((current) => ({
+                ...current,
+                orders: current.orders.map((o) =>
+                  o.id === orderEditor.id
+                    ? { ...o, status, notes: note || o.notes }
+                    : o,
+                ),
+              }))
+              setOrderEditor(null)
+              return
+            }
             await api("admin/orders/" + orderEditor.id, {
               method: "PATCH",
               body: { status, note },
@@ -1133,221 +1243,6 @@ export default function Admin({ section = "dashboard", preview = false }) {
         </Modal>
       )}
     </div>
-  )
-}
-
-function Dashboard({ data, preview, base, onOrder }) {
-  const paid = data.orders.filter((o) => o.paymentStatus === "paid"),
-    sales = paid.reduce((s, o) => s + o.amount, 0),
-    low = data.products.filter((p) => p.stock != null && p.stock < 5).length
-
-  return (
-    <>
-      <div className="admin-metrics">
-        {[
-          [
-            "Total sales",
-            money(sales),
-            WalletCards,
-            "Paid & verified orders",
-            "red",
-          ],
-          [
-            "Total orders",
-            data.orders.length,
-            ShoppingBag,
-            "Including confirmation requests",
-            "navy",
-          ],
-          [
-            "Customers",
-            data.customers.length,
-            Users,
-            "Registered customer accounts",
-            "teal",
-          ],
-          ["Low stock", low, Box, "Products below 5 units", "amber"],
-        ].map(([label, value, Icon, note, tone]) => (
-          <article className="admin-panel metric-card" key={label}>
-            <div>
-              <span>{label}</span>
-              <i className={tone}>
-                <Icon size={20} />
-              </i>
-            </div>
-            <strong>{value}</strong>
-            <small>{note}</small>
-          </article>
-        ))}
-      </div>
-      <div className="admin-charts-row">
-        <section className="admin-panel sales-chart">
-          <div className="admin-panel-heading">
-            <div>
-              <h2>Sales overview</h2>
-              <p>
-                {preview
-                  ? "Illustrative data for layout preview"
-                  : "Paid orders over the last twelve months"}
-              </p>
-            </div>
-            <span className="admin-chart-period">
-              12 months
-              <ChevronDown size={12} />
-            </span>
-          </div>
-          <LineChart orders={data.orders} preview={preview} />
-          <div className="chart-footer">
-            <span>
-              <i />
-              Verified sales
-            </span>
-            <span>Currency: UGX</span>
-          </div>
-        </section>
-        <section className="admin-panel">
-          <div className="admin-panel-heading">
-            <div>
-              <h2>Order performance</h2>
-              <p>From request to fulfillment</p>
-            </div>
-            <IconButton
-              label="View orders"
-              onClick={() => navigate(base + "orders/")}
-            >
-              <ArrowUpRight size={17} />
-            </IconButton>
-          </div>
-          <BarChart orders={data.orders} preview={preview} />
-          <div className="chart-footer">
-            <span>All order statuses</span>
-            <span>{data.orders.length} total orders</span>
-          </div>
-        </section>
-      </div>
-      <div className="admin-panel recent-orders-panel">
-        <div className="admin-panel-heading">
-          <div>
-            <h2>Recent orders</h2>
-            <p>A closer look at what needs your attention.</p>
-          </div>
-          <a href={base + "orders/"} className="admin-text-link">
-            View all orders
-            <ArrowRight size={14} />
-          </a>
-        </div>
-        <OrdersTable orders={data.orders.slice(0, 6)} onOrder={onOrder} />
-      </div>
-      <div className="admin-lower-row">
-        <section className="admin-panel">
-          <div className="admin-panel-heading">
-            <div>
-              <h2>Payment methods</h2>
-              <p>How customers choose to pay</p>
-            </div>
-            <WalletCards size={19} />
-          </div>
-          <div className="admin-payment-summary">
-            {[
-              ["mtn", "MTN Mobile Money"],
-              ["airtel", "Airtel Money"],
-              ["visa", "Visa / card"],
-            ].map(([id, label]) => {
-              const count = paid.filter((o) => o.paymentMethod === id).length
-              return (
-                <div key={id}>
-                  <PaymentLogo method={id} decorative />
-                  <div>
-                    <strong>{label}</strong>
-                    <span>
-                      <i
-                        style={{
-                          width:
-                            Math.max(
-                              2,
-                              (count / Math.max(1, paid.length)) * 100,
-                            ) + "%",
-                        }}
-                      />
-                    </span>
-                  </div>
-                  <b>{count}</b>
-                </div>
-              )
-            })}
-          </div>
-        </section>
-        <section className="admin-panel admin-ready-panel">
-          <div className="admin-panel-heading">
-            <h2>Ready for your next sale?</h2>
-            <ShieldCheck size={20} />
-          </div>
-          <div>
-            {[
-              [
-                "Product prices confirmed",
-                data.products.filter((p) => p.priceConfirmed).length +
-                  " / " +
-                  data.products.length,
-              ],
-              [
-                "Stock quantities entered",
-                data.products.filter((p) => p.stock != null).length +
-                  " / " +
-                  data.products.length,
-              ],
-              [
-                "Flutterwave",
-                data.connection.payments ? "Connected" : "Setup needed",
-              ],
-              [
-                "Reset email",
-                data.connection.email ? "Connected" : "Optional setup",
-              ],
-            ].map(([label, value]) => (
-              <p key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
-              </p>
-            ))}
-          </div>
-          <a href={base + "settings/"} className="admin-text-link">
-            Review store settings
-            <ArrowRight size={14} />
-          </a>
-        </section>
-      </div>
-      <section className="admin-panel admin-top-products">
-        <div className="admin-panel-heading">
-          <h2>Products in the spotlight</h2>
-          <a href={base + "products/"} className="admin-text-link">
-            Manage products
-            <ArrowRight size={14} />
-          </a>
-        </div>
-        <div>
-          {data.products
-            .filter((p) => p.featured)
-            .slice(0, 5)
-            .map((p) => (
-              <a
-                key={p.id}
-                href={productPath(p)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={p.image} alt="" />
-                <span>{p.brand}</span>
-                <h3>{p.name}</h3>
-                <b>{money(p.price)}</b>
-                <small>
-                  {p.priceConfirmed ? "Confirmed price" : "Guide price"}
-                </small>
-              </a>
-            ))}
-        </div>
-      </section>
-    </>
   )
 }
 
@@ -1436,8 +1331,8 @@ function OrdersTable({ orders, onOrder }) {
   )
 }
 
-function AdminPagination({ total, page, setPage }) {
-  const pages = Math.max(1, Math.ceil(total / 12))
+function AdminPagination({ total, page, setPage, perPage = 12 }) {
+  const pages = Math.max(1, Math.ceil(total / perPage))
   return (
     <div className="admin-pagination">
       <span>
@@ -1496,6 +1391,7 @@ function newProduct() {
 }
 
 export function ProductEditor({
+  vendors = [],
   product,
   preview,
   existing,
@@ -1519,12 +1415,6 @@ export function ProductEditor({
   const submit = async (e) => {
     e.preventDefault()
     setError("")
-    if (preview) {
-      setError(
-        "This is a read-only preview. Sign in as an administrator to save changes.",
-      )
-      return
-    }
     const images = gallery
       .split("\n")
       .map((v) => v.trim())
@@ -1568,7 +1458,7 @@ export function ProductEditor({
       <form onSubmit={submit}>
         {preview && (
           <Notice>
-            Read-only design preview. Sign in to save product changes.
+            Preview product changes are saved only in this browser.
           </Notice>
         )}
         {error && <Notice type="error">{error}</Notice>}
@@ -1610,6 +1500,24 @@ export function ProductEditor({
                   required
                   maxLength={180}
                 />
+                <Field label="Vendor / supplier">
+                  <select
+                    value={p.vendorId || ""}
+                    onChange={(e) => field("vendorId", e.target.value)}
+                  >
+                    <option value="">No vendor assigned</option>
+                    {vendors
+                      .filter(
+                        (v) => v.status === "active" || v.id === p.vendorId,
+                      )
+                      .map((v) => (
+                        <option key={v.id} value={v.id}>
+                          {v.name}
+                          {v.status === "archived" ? " · Archived" : ""}
+                        </option>
+                      ))}
+                  </select>
+                </Field>
                 <Field
                   label="Brand"
                   value={p.brand}
@@ -1840,7 +1748,7 @@ export function ProductEditor({
             Cancel
           </Button>
           <Button type="submit" busy={saving}>
-            {preview ? "Sign in to save" : "Save product"}
+            {preview ? "Save preview product" : "Save product"}
             <Check size={16} />
           </Button>
         </div>
@@ -1932,10 +1840,6 @@ export function AdminOrderModal({
         className="stack-form"
         onSubmit={async (e) => {
           e.preventDefault()
-          if (preview) {
-            setError("Sign in to update real orders.")
-            return
-          }
           setBusy(true)
           try {
             await onSave(status, note)
@@ -2000,7 +1904,8 @@ function SettingsPanel({ settings, connection, preview, saved }) {
           setError("")
           setSuccess("")
           if (preview) {
-            setError("Sign in as an administrator to save settings.")
+            saved(s)
+            setSuccess("Preview settings saved in this browser.")
             return
           }
           setBusy(true)
@@ -2169,10 +2074,6 @@ function QuoteForm({ order, preview, onSave }) {
       onSubmit={async (e) => {
         e.preventDefault()
         setError("")
-        if (preview) {
-          setError("Sign in to confirm a real customer quote.")
-          return
-        }
         setBusy(true)
         try {
           await onSave({

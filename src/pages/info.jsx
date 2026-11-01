@@ -1,20 +1,26 @@
+import { ManagedPage } from "../components/ManagedPage.jsx"
+import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import { ContactPage } from "../components/ContactPage.jsx"
 import React from "react"
 
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Phone,
-  ShieldCheck,
-  Truck,
-  PackageCheck,
-} from "lucide-react"
+import { Phone } from "lucide-react"
 
 import { useStore } from "../store.jsx"
 
 import { ActionLink, Breadcrumb, PageHeading } from "../components/ui.jsx"
 
 export function Info({ page }) {
+  const { pages = [] } = useStore()
+  return pages.some((p) => p.slug === page) &&
+    ["about", "delivery", "returns", "help", "privacy", "terms"].includes(
+      page,
+    ) ? (
+    <ManagedPage slug={page} fallback={<DefaultInfo page={page} />} />
+  ) : (
+    <DefaultInfo page={page} />
+  )
+}
+function DefaultInfo({ page }) {
   const { settings } = useStore()
 
   if (page === "contact" || page === "visit") return <ContactPage />
@@ -25,7 +31,9 @@ export function Info({ page }) {
         <Breadcrumb items={[{ label: "About us" }]} />
         <section className="about-hero">
           <div>
-            <p className="eyebrow">ABOUT LONDON TECH</p>
+            <p className="eyebrow">
+              ABOUT <BrandWordmark width={142} />
+            </p>
             <h1>
               For your everyday.
               <br />

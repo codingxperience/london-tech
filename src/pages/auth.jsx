@@ -1,3 +1,4 @@
+import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import React, { useEffect, useState } from "react"
 import {
   ArrowLeft,
@@ -109,7 +110,7 @@ export function Auth({
         <h2>
           Welcome to
           <br />
-          <span>London Tech.</span>
+          <BrandWordmark width="min(100%, 275px)" />
         </h2>
         <p>Your favourites, your orders and a more personal way to shop.</p>
         <div className="auth-product-composition" aria-hidden="true">

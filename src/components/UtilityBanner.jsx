@@ -1,3 +1,4 @@
+import { BrandWordmark } from "./BrandWordmark.jsx"
 import React, { useEffect, useState } from "react"
 import { useReducedMotion } from "./MotionText"
 import { useStore } from "../store.jsx"
@@ -28,7 +29,7 @@ export function UtilityBanner() {
     },
     { text: "AUDIO & GAMING", motion: "rise" },
     { text: "VISIT ARUA PARK", motion: "drop" },
-    { text: "SHOP LONDON TECH", motion: "zoom" },
+    { text: "SHOP NOW", motion: "zoom" },
   ]
   const reduced = useReducedMotion()
   const [frame, setFrame] = useState(0)
@@ -103,9 +104,7 @@ export function UtilityBanner() {
               round % 2 ? "utility-brand-return" : "utility-brand-arrive",
           }}
         >
-          <span>
-            LONDON <em>TECH</em>
-          </span>
+          <BrandWordmark inverse />
           <small>TECHNOLOGY STORE</small>
         </div>
       </div>

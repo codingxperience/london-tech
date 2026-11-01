@@ -1,4 +1,5 @@
 import { PaymentLogo } from "../components/PaymentLogo.jsx"
+import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import React, { useEffect, useState } from "react"
 
 import {
@@ -691,7 +692,7 @@ export function PaymentResult() {
             <Clock3 size={38} />
           )}
         </span>
-        <p className="eyebrow">{id || "LONDON TECH"}</p>
+        <p className="eyebrow">{id || <BrandWordmark width={142} />}</p>
         <h1>
           {busy
             ? "Checking your payment…"

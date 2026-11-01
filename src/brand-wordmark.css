@@ -1,0 +1,3 @@
+.brand-wordmark{display:inline-block;inline-size:var(--brand-wordmark-width,200px);max-inline-size:100%;vertical-align:middle;line-height:0;flex-shrink:0}
+.brand-wordmark>img{display:block!important;width:100%!important;height:auto!important;max-width:100%;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;object-fit:contain}
+.brand-wordmark.is-stacked{inline-size:var(--brand-wordmark-width,120px)}

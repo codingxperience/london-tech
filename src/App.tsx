@@ -1,3 +1,4 @@
+import { BrandWordmark } from "./components/BrandWordmark.jsx"
 import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
 import { StoreFooter } from "./components/StoreFooter.jsx"
@@ -1274,7 +1275,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 <div className="hero-copy" key={slide}>
                   <div className="hero-eyebrow">
                     <span />
-                    {hero.tag}
+                    <BrandWordmark width={130} />
                   </div>
                   <h1>
                     {hero.headline}
@@ -1291,7 +1292,10 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 <div className="hero-art">
                   <img key={hero.bg} src={hero.bg} alt={hero.alt} />
                 </div>
-                <span className="hero-brand">LONDON TECH / THE EDIT</span>
+                <span className="hero-brand">
+                  <BrandWordmark width={112} />
+                  <span> / THE EDIT</span>
+                </span>
                 <div className="hero-controls">
                   <span className="hero-count">
                     0{slide + 1}
@@ -1362,7 +1366,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                         alt={feature.product.name}
                       />
                       <div>
-                        <small>THE LONDON TECH EDIT</small>
+                        <small>THE TECH EDIT</small>
                         <strong>
                           {feature.label}
                           <ArrowUpRight size={16} />
@@ -1400,7 +1404,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   flexShrink: 0,
                 }}
               >
-                London Tech Special
+                Store specials
               </strong>
               <span
                 style={{
@@ -1561,7 +1565,9 @@ export default function App({ children, quiet = false }: StorefrontProps) {
 
             <section className="company-promo">
               <div className="promo-copy">
-                <span className="promo-kicker">LONDON TECH</span>
+                <span className="promo-kicker">
+                  <BrandWordmark width={130} />
+                </span>
                 <h2>Everyday essentials.</h2>
                 <button
                   className="hero-shop"

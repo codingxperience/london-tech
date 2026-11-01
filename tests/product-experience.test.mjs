@@ -35,6 +35,7 @@ let dom,
   ImageSearchDialog,
   UtilityBanner,
   StoreFooter,
+  Admin,
   root,
   container,
   clock
@@ -126,6 +127,7 @@ before(async () => {
   ;({ StoreFooter } = await server.ssrLoadModule(
     "/src/components/StoreFooter.jsx",
   ))
+  ;({ default: Admin } = await server.ssrLoadModule("/src/pages/admin.jsx"))
   ;({
     default: CommerceApp,
   } = await server.ssrLoadModule("/src/CommerceApp.jsx"))
@@ -954,14 +956,16 @@ test("the contact page provides clear directions and calls without promotional r
     'a[href^="https://www.google.com/maps/search/"]',
   )
   assert.match(decodeURIComponent(maps.href), /NYUMBA KUBUA/)
-  assert.equal(
-    container.querySelector(".contact-city img").getAttribute("src"),
-    "/assets/store/kampala.jpg",
+  const frame = container.querySelector(".contact-map iframe")
+  assert.ok(frame)
+  assert.match(
+    frame.getAttribute("src"),
+    /^https:\/\/www.openstreetmap.org\/export\/embed.html\?bbox=/,
   )
-  assert.ok(
-    container.querySelector(
-      '.contact-city a[href="https://creativecommons.org/licenses/by/4.0/"]',
-    ),
+  assert.match(frame.title, /Arua Park area/)
+  assert.match(
+    container.querySelector(".contact-map").textContent,
+    /Second floor · Shop FN:19/,
   )
   for (const mark of container.querySelectorAll(".payment-marks"))
     assert.equal(
@@ -1784,4 +1788,231 @@ test("sign-in errors preserve the form and registration submits working credenti
   } finally {
     globalThis.fetch = originalFetch
   }
+})
+
+const adminInput = (label) =>
+  [...container.querySelectorAll("label.field")]
+    .find((field) => field.querySelector("span")?.textContent === label)
+    ?.querySelector("input,textarea,select")
+async function editAdminField(label, value) {
+  const input = adminInput(label)
+  assert.ok(input, "Admin field exists: " + label)
+  const proto =
+    input.tagName === "TEXTAREA"
+      ? dom.HTMLTextAreaElement.prototype
+      : input.tagName === "SELECT"
+        ? dom.HTMLSelectElement.prototype
+        : dom.HTMLInputElement.prototype
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(proto, "value").set.call(input, value)
+    input.dispatchEvent(
+      new dom.Event(input.tagName === "SELECT" ? "change" : "input", {
+        bubbles: true,
+      }),
+    )
+  })
+}
+const adminButton = (text) =>
+  [...container.querySelectorAll("button")].find((button) =>
+    button.textContent.trim().includes(text),
+  )
+
+test("the complete admin preview routes every navigation item to its own screen with readable controls", async () => {
+  await openRoute("/admin/preview/")
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 80))
+  })
+  assert.ok(container.querySelector(".admin-shell"))
+  assert.equal(container.querySelectorAll(".workspace-metric").length, 4)
+  assert.equal(container.querySelectorAll(".workspace-mini").length, 2)
+  assert.ok(container.querySelector('img[src="/assets/admin/world.svg"]'))
+  assert.ok(
+    container.querySelector(
+      '.admin-brand img[src="/assets/london-tech-wordmark.svg"]',
+    ),
+  )
+  await click(adminButton("Monthly"))
+  assert.equal(adminButton("Monthly").getAttribute("aria-pressed"), "true")
+  await click(adminButton("View chart data"))
+  assert.match(
+    container.querySelector("table caption").textContent,
+    /Sales data/,
+  )
+  for (const section of [
+    "vendors",
+    "customers",
+    "products",
+    "wishlist",
+    "orders",
+    "invoices",
+    "history",
+    "inventory",
+    "categories",
+    "settings",
+    "messages",
+    "pages",
+    "language",
+    "security",
+  ]) {
+    await click(
+      container.querySelector(
+        `.admin-sidebar a[href="/admin/preview/${section}/"]`,
+      ),
+    )
+    assert.ok(
+      container.querySelector(
+        `.admin-sidebar a[href="/admin/preview/${section}/"][aria-current="page"]`,
+      ),
+    )
+    assert.ok(container.querySelector(".admin-main h1").textContent.length)
+  }
+  await click(container.querySelector('[aria-label="Toggle navigation"]'))
+  assert.ok(container.querySelector(".admin-sidebar.open"))
+  await dispatch(
+    dom.document,
+    new dom.KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+  )
+  assert.equal(container.querySelector(".admin-sidebar.open"), null)
+})
+
+test("admin preview vendor and page workflows save locally, preserve drafts and produce an audit record", async () => {
+  await openRoute("/admin/preview/vendors/")
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50))
+  })
+  const originalFetch = globalThis.fetch,
+    writes = []
+  globalThis.fetch = async (url, options) => {
+    if (options?.method && options.method !== "GET") writes.push(String(url))
+    return originalFetch(url, options)
+  }
+  try {
+    await click(adminButton("Add vendor"))
+    await editAdminField("Business name", "Local preview vendor")
+    await editAdminField("Email", "preview-vendor@example.com")
+    await click(adminButton("Save vendor"))
+    assert.match(
+      container.querySelector(".admin-main").textContent,
+      /Local preview vendor/,
+    )
+    const stored = JSON.parse(dom.localStorage.getItem("lt.admin.preview.v4"))
+    assert.ok(stored.vendors.some((v) => v.name === "Local preview vendor"))
+    assert.ok(stored.events.some((e) => e.action === "vendors.post"))
+    await click(
+      container.querySelector('.admin-sidebar a[href="/admin/preview/pages/"]'),
+    )
+    await click(adminButton("Add page"))
+    await editAdminField("Page title", "Preview buying guide")
+    await editAdminField("URL slug", "preview-buying-guide")
+    await editAdminField(
+      "Page content",
+      "Useful first paragraph.\n\nUseful second paragraph.",
+    )
+    await click(adminButton("Save page"))
+    assert.match(
+      container.querySelector(".admin-main").textContent,
+      /Preview buying guide/,
+    )
+    await click(container.querySelector('[aria-label="Preview page"]'))
+    assert.match(
+      container.querySelector('[role="dialog"]').textContent,
+      /Useful second paragraph/,
+    )
+    await click(container.querySelector('[aria-label="Close"]'))
+    assert.equal(
+      writes.length,
+      0,
+      "Preview changes never call live write endpoints",
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("admin preview messages, invoices and appearance controls complete their workflows", async () => {
+  await openRoute("/admin/preview/messages/")
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50))
+  })
+  await click(adminButton("New message"))
+  const customer = adminInput("Customer").options[1].value
+  await editAdminField("Customer", customer)
+  await editAdminField("Subject", "Preview availability question")
+  await editAdminField("Message", "A private preview conversation.")
+  await click(adminButton("Send message"))
+  assert.match(
+    container.querySelector(".message-conversation").textContent,
+    /A private preview conversation/,
+  )
+  await editAdminField("Your reply", "A second preview message.")
+  await click(adminButton("Send reply"))
+  assert.equal(container.querySelectorAll(".message-bubbles article").length, 2)
+  await click(
+    container.querySelector(
+      '.admin-sidebar a[href="/admin/preview/invoices/"]',
+    ),
+  )
+  await click(adminButton("View invoice"))
+  assert.ok(container.querySelector(".invoice-document table"))
+  assert.match(
+    container.querySelector(".invoice-document").textContent,
+    /Payment verified/,
+  )
+  await click(container.querySelector('[aria-label="Close"]'))
+  await click(container.querySelector('[aria-label="Use dark appearance"]'))
+  assert.equal(
+    container.querySelector(".admin-shell").getAttribute("data-theme"),
+    "dark",
+  )
+  await click(
+    container.querySelector(
+      '.admin-sidebar a[href="/admin/preview/language/"]',
+    ),
+  )
+  await editAdminField("Product / order rows per page", "24")
+  await click(adminButton("Save preferences"))
+  assert.equal(
+    JSON.parse(dom.localStorage.getItem("lt.admin.preferences.v1")).pageSize,
+    24,
+  )
+})
+
+test("a new product can be created in the preview without overwriting the live catalogue", async () => {
+  await openRoute("/admin/preview/products/")
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50))
+  })
+  await click(adminButton("Add product"))
+  await editAdminField("Product name", "Preview new phone")
+  await editAdminField("Brand", "Preview brand")
+  await editAdminField(
+    "Description",
+    "A product created to verify the complete preview form.",
+  )
+  assert.equal(adminInput("Product URL identifier").value, "preview-new-phone")
+  await click(adminButton("Price & stock"))
+  await editAdminField("Selling price (UGX)", "100000")
+  await editAdminField("Stock quantity", "3")
+  await click(adminButton("Save preview product"))
+  assert.equal(container.querySelector('[role="dialog"]'), null)
+  const saved = JSON.parse(dom.localStorage.getItem("lt.admin.preview.v4"))
+  const product = saved.products.find((p) => p.id === "preview-new-phone")
+  assert.ok(product)
+  assert.equal(product.name, "Preview new phone")
+  assert.equal(product.price, 100000)
+  assert.equal(product.stock, 3)
+  assert.equal(
+    product.active,
+    false,
+    "New products begin hidden until explicitly published",
+  )
+  assert.equal(
+    products.some((p) => p.id === product.id),
+    false,
+  )
+  assert.ok(
+    saved.events.some(
+      (e) => e.action === "product.saved" && e.details.id === product.id,
+    ),
+  )
 })

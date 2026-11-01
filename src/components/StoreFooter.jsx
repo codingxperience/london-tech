@@ -1,3 +1,4 @@
+import { BrandWordmark } from "./BrandWordmark.jsx"
 import React, { useEffect, useId, useState } from "react"
 import {
   ArrowUpRight,
@@ -63,9 +64,15 @@ function FooterGroup({ section, compact }) {
             aria-expanded={open}
             onClick={() => setOpen(!open)}
           >
-            {section.title}
+            {section.title === "London Tech" ? (
+              <BrandWordmark inverse width={110} />
+            ) : (
+              section.title
+            )}
             <ChevronDown size={15} className={open ? "is-open" : ""} />
           </button>
+        ) : section.title === "London Tech" ? (
+          <BrandWordmark inverse width={110} />
         ) : (
           section.title
         )}
@@ -82,7 +89,7 @@ function FooterGroup({ section, compact }) {
 }
 
 export function StoreFooter({ logo, quiet = false }) {
-  const { settings } = useStore()
+  const { settings, pages = [] } = useStore()
   const [compact, setCompact] = useState(false)
   useEffect(() => {
     const media = window.matchMedia("(max-width: 700px)")
@@ -100,9 +107,7 @@ export function StoreFooter({ logo, quiet = false }) {
           <a href="/" aria-label="London Tech home" className="footer-wordmark">
             <img src={logo} alt="London Tech" />
             <span>
-              <strong>
-                LONDON <em>TECH</em>
-              </strong>
+              <BrandWordmark inverse width={185} />
               <small>LONDON TECHNOLOGY STORE</small>
             </span>
           </a>
@@ -126,7 +131,30 @@ export function StoreFooter({ logo, quiet = false }) {
         {sections.map((section) => (
           <FooterGroup
             key={section.title}
-            section={section}
+            section={
+              section.title === "London Tech"
+                ? {
+                    ...section,
+                    links: [
+                      ...section.links,
+                      ...pages
+                        .filter(
+                          (p) =>
+                            p.footer &&
+                            ![
+                              "about",
+                              "delivery",
+                              "returns",
+                              "help",
+                              "privacy",
+                              "terms",
+                            ].includes(p.slug),
+                        )
+                        .map((p) => [p.title, "/pages/" + p.slug + "/"]),
+                    ],
+                  }
+                : section
+            }
             compact={compact}
           />
         ))}

@@ -92,6 +92,7 @@ export const cartKey = (line) => [line.id, line.option, line.color].join("|")
 export function StoreProvider({ children }) {
   const [products, setProducts] = useState(() => seed.map(presentProduct)),
     [settings, setSettings] = useState(storeDefaults),
+    [pages, setPages] = useState([]),
     [user, setUser] = useState(null),
     [authLoading, setAuthLoading] = useState(true),
     [config, setConfig] = useState({
@@ -167,6 +168,7 @@ export function StoreProvider({ children }) {
     const data = await api("catalog")
     setProducts(data.products.map(presentProduct))
     setSettings(data.settings)
+    setPages(data.pages || [])
   }, [])
 
   useEffect(() => {
@@ -334,6 +336,7 @@ export function StoreProvider({ children }) {
         products,
         setProducts,
         settings,
+        pages,
         setSettings,
         user,
         setUser,

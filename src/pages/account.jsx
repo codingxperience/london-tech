@@ -1,3 +1,5 @@
+import { MessageCentre } from "../components/MessageCentre.jsx"
+import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
 import React, { useEffect, useState } from "react"
 
@@ -11,6 +13,7 @@ import {
   LogOut,
   MapPin,
   Package,
+  MessageSquare,
   Plus,
   Settings,
   ShieldCheck,
@@ -151,6 +154,7 @@ export function Account({ section = "overview", orderId }) {
   const nav = [
     ["overview", "Overview", Home],
     ["orders", "My orders", Package],
+    ["messages", "Messages", MessageSquare],
     ["wishlist", "Wishlist", Heart],
     ["addresses", "Addresses", MapPin],
     ["profile", "Account details", UserRound],
@@ -187,7 +191,7 @@ export function Account({ section = "overview", orderId }) {
         ]}
       />
       <PageHeading
-        eyebrow="YOUR LONDON TECH"
+        eyebrow={<BrandWordmark width={142} />}
         title={"Hello, " + user.name.split(" ")[0] + "."}
       >
         Your orders, your favourites and all the little details.
@@ -232,7 +236,9 @@ export function Account({ section = "overview", orderId }) {
         </aside>
         <div className="account-content">
           {error && <Notice type="error">{error}</Notice>}
-          {section === "overview" ? (
+          {section === "messages" ? (
+            <MessageCentre />
+          ) : section === "overview" ? (
             <>
               <div className="account-stat-grid">
                 <a href="/account/orders/">

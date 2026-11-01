@@ -601,3 +601,273 @@ test("a confirmed quote can be paid and payment settlement is idempotent", async
     globalThis.fetch = realFetch
   }
 })
+
+test("vendors persist, enforce administrator permissions and protect product assignments", async () => {
+  const body = {
+    name: "Test supply partner",
+    contact: "Test contact",
+    email: "vendor@example.com",
+    phone: "0788000011",
+    address: "Supplier address",
+    notes: "Internal test record",
+    status: "active",
+  }
+  assert.equal(
+    (
+      await request("admin/vendors", {
+        method: "POST",
+        cookie: customerCookie,
+        body,
+      })
+    ).status,
+    403,
+  )
+  const created = await request("admin/vendors", {
+    method: "POST",
+    cookie: adminCookie,
+    body,
+  })
+  assert.equal(created.status, 201)
+  const vendor = created.data.record
+  const product = {
+    ...fixture,
+    id: "vendor-assignment-test",
+    sku: "LT-VENDOR-TEST",
+    vendorId: vendor.id,
+    stock: 3,
+    price: 90000,
+    comparePrice: 100000,
+    priceConfirmed: true,
+  }
+  assert.equal(
+    (
+      await request("admin/products", {
+        method: "POST",
+        cookie: adminCookie,
+        body: product,
+      })
+    ).status,
+    201,
+  )
+  const overview = await request("admin/overview", { cookie: adminCookie })
+  assert.ok(overview.data.vendors.some((v) => v.id === vendor.id))
+  assert.equal(
+    overview.data.products.find((p) => p.id === product.id).vendorId,
+    vendor.id,
+  )
+  assert.equal(
+    (
+      await request("admin/vendors/" + vendor.id, {
+        method: "DELETE",
+        cookie: adminCookie,
+      })
+    ).status,
+    409,
+  )
+  assert.equal(
+    (
+      await request("admin/vendors/" + vendor.id, {
+        method: "PUT",
+        cookie: adminCookie,
+        body: { ...vendor, status: "archived" },
+      })
+    ).status,
+    200,
+  )
+  assert.equal(
+    (
+      await request("admin/products/" + product.id, {
+        method: "PUT",
+        cookie: adminCookie,
+        body: { ...product, vendorId: "missing-vendor" },
+      })
+    ).status,
+    400,
+  )
+  assert.equal(
+    (
+      await request("admin/products/" + product.id, {
+        method: "PUT",
+        cookie: adminCookie,
+        body: { ...product, vendorId: "" },
+      })
+    ).status,
+    200,
+  )
+  assert.equal(
+    (
+      await request("admin/vendors/" + vendor.id, {
+        method: "DELETE",
+        cookie: adminCookie,
+      })
+    ).status,
+    200,
+  )
+})
+
+test("content pages keep drafts private and expose only published metadata and content", async () => {
+  const body = {
+    title: "Test buying guide",
+    slug: "test-buying-guide",
+    summary: "A useful guide",
+    body: "First useful paragraph.\n\nSecond useful paragraph.",
+    status: "draft",
+    footer: true,
+  }
+  assert.equal(
+    (
+      await request("admin/pages", {
+        method: "POST",
+        cookie: customerCookie,
+        body,
+      })
+    ).status,
+    403,
+  )
+  const created = await request("admin/pages", {
+    method: "POST",
+    cookie: adminCookie,
+    body,
+  })
+  assert.equal(created.status, 201)
+  const page = created.data.record
+  assert.equal((await request("pages/" + page.slug)).status, 404)
+  assert.ok(
+    !(await request("catalog")).data.pages.some((p) => p.slug === page.slug),
+  )
+  assert.equal(
+    (
+      await request("admin/pages/" + page.id, {
+        method: "PUT",
+        cookie: adminCookie,
+        body: { ...page, status: "published" },
+      })
+    ).status,
+    200,
+  )
+  const publicPage = await request("pages/" + page.slug)
+  assert.equal(publicPage.status, 200)
+  assert.equal(publicPage.data.page.body, body.body)
+  assert.deepEqual(
+    (await request("catalog")).data.pages.find((p) => p.slug === page.slug),
+    { title: body.title, slug: body.slug, footer: true },
+  )
+  assert.equal(
+    (
+      await request("admin/pages", {
+        method: "POST",
+        cookie: adminCookie,
+        body,
+      })
+    ).status,
+    409,
+  )
+  assert.equal(
+    (
+      await request("admin/pages/" + page.id, {
+        method: "DELETE",
+        cookie: adminCookie,
+      })
+    ).status,
+    200,
+  )
+  assert.equal((await request("pages/" + page.slug)).status, 404)
+})
+
+test("customer conversations preserve ownership, accept store replies and record resolution without sending email", async () => {
+  const input = {
+    subject: "Help choosing a phone",
+    body: "Please help me compare storage options.",
+  }
+  assert.equal(
+    (await request("messages", { method: "POST", body: input })).status,
+    401,
+  )
+  const created = await request("messages", {
+    method: "POST",
+    cookie: customerCookie,
+    body: { ...input, role: "admin", user_id: "attacker" },
+  })
+  assert.equal(created.status, 201)
+  const thread = created.data.thread
+  assert.equal(thread.user_id, customerId)
+  assert.equal(thread.messages[0].role, "customer")
+  const second = await request("auth/register", {
+    method: "POST",
+    body: {
+      name: "Other message customer",
+      email: "other-message@example.com",
+      password: "Another-test-password-77!",
+    },
+  })
+  assert.equal(second.status, 201)
+  assert.ok(
+    !(await request("messages", { cookie: second.cookie })).data.threads.some(
+      (t) => t.id === thread.id,
+    ),
+  )
+  assert.equal(
+    (
+      await request("messages/" + thread.id + "/replies", {
+        method: "POST",
+        cookie: second.cookie,
+        body: { body: "Not my thread" },
+      })
+    ).status,
+    404,
+  )
+  const replied = await request("messages/" + thread.id + "/replies", {
+    method: "POST",
+    cookie: adminCookie,
+    body: { body: "We can compare those configurations.", role: "customer" },
+  })
+  assert.equal(replied.status, 200)
+  assert.equal(replied.data.thread.messages.at(-1).role, "admin")
+  assert.equal(
+    (
+      await request("admin/messages/" + thread.id, {
+        method: "PATCH",
+        cookie: customerCookie,
+        body: { status: "resolved" },
+      })
+    ).status,
+    403,
+  )
+  assert.equal(
+    (
+      await request("admin/messages/" + thread.id, {
+        method: "PATCH",
+        cookie: adminCookie,
+        body: { status: "resolved" },
+      })
+    ).status,
+    200,
+  )
+  assert.equal(
+    (
+      await request("messages/" + thread.id + "/replies", {
+        method: "POST",
+        cookie: customerCookie,
+        body: { body: "One more question, please." },
+      })
+    ).data.thread.status,
+    "open",
+  )
+  const overview = (await request("admin/overview", { cookie: adminCookie }))
+    .data
+  assert.ok(
+    overview.messages.some(
+      (t) => t.id === thread.id && t.customer_email === "customer@example.com",
+    ),
+  )
+  assert.ok(
+    overview.events.some(
+      (e) => e.action === "message.replied" && e.details.id === thread.id,
+    ),
+  )
+  assert.ok(
+    !overview.events.some((e) =>
+      JSON.stringify(e.details).includes("One more question"),
+    ),
+  )
+})

@@ -1,3 +1,4 @@
+import { BrandWordmark } from "./BrandWordmark.jsx"
 import React, { useState } from "react"
 import {
   ArrowRight,
@@ -502,7 +503,9 @@ export function ProductSections({
             aria-labelledby="store-heading"
           >
             <div>
-              <h2 id="store-heading">Sold by London Tech</h2>
+              <h2 id="store-heading" aria-label="Sold by London Tech">
+                <span>Sold by</span> <BrandWordmark width={138} />
+              </h2>
               <p>{settings.address}</p>
             </div>
             <a href="/contact/" className="text-link">

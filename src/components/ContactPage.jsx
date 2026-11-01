@@ -1,5 +1,12 @@
+import { BrandWordmark } from "./BrandWordmark.jsx"
 import React from "react"
-import { ArrowUpRight, Clock3, MessageCircle, Phone } from "lucide-react"
+import {
+  ArrowUpRight,
+  Clock3,
+  MapPin,
+  MessageCircle,
+  Phone,
+} from "lucide-react"
 import { useStore } from "../store.jsx"
 import { Breadcrumb } from "./ui.jsx"
 import "../contact-page.css"
@@ -18,7 +25,10 @@ export function ContactPage() {
     <main className="container contact-page">
       <Breadcrumb items={[{ label: "Store information" }]} />
       <header className="contact-heading">
-        <p className="eyebrow">LONDON TECH · KAMPALA</p>
+        <p className="eyebrow">
+          <BrandWordmark width={142} />
+          <span>KAMPALA</span>
+        </p>
         <h1>Find us in Arua Park.</h1>
         <p>Visit the shop, take a closer look, or speak with our team.</p>
       </header>
@@ -28,7 +38,7 @@ export function ContactPage() {
           aria-label="Store address and contact details"
         >
           <div className="contact-location">
-            <h2>Visit London Tech</h2>
+            <h2>Visit the shop</h2>
             <p className="contact-address">{settings.address}</p>
             <a className="button" href={maps} target="_blank" rel="noreferrer">
               Get directions <ArrowUpRight size={16} />
@@ -73,35 +83,34 @@ export function ContactPage() {
             <ArrowUpRight size={15} />
           </a>
         </section>
-        <figure className="contact-city">
-          <img
-            src="/assets/store/kampala.jpg"
-            width="1280"
-            height="682"
-            alt="A view across Kampala’s city centre and skyline"
+        <section className="contact-map" aria-label="Map and store directions">
+          <header>
+            <MapPin size={19} />
+            <div>
+              <strong>Arua Park, Kampala</strong>
+              <span>Find the area, then visit us on the second floor.</span>
+            </div>
+          </header>
+          <iframe
+            title="Interactive map of the Arua Park area in Kampala"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=32.5718%2C0.3135%2C32.5784%2C0.3190&layer=mapnik"
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
           />
-          <figcaption>
-            <span>Kampala, Uganda</span>
-            <small>
-              Photo:{" "}
-              <a
-                href="https://commons.wikimedia.org/wiki/File:View_of_Kampala_city_1.jpg"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Dr. S-mon
-              </a>{" "}
-              ·{" "}
-              <a
-                href="https://creativecommons.org/licenses/by/4.0/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                CC BY 4.0
-              </a>
-            </small>
-          </figcaption>
-        </figure>
+          <footer>
+            <div>
+              <strong>NYUMBA KUBUA building</strong>
+              <span>Second floor · Shop FN:19</span>
+            </div>
+            <a
+              href="https://www.openstreetmap.org/#map=17/0.31625/32.57506"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Larger map <ArrowUpRight size={15} />
+            </a>
+          </footer>
+        </section>
       </div>
     </main>
   )

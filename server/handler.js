@@ -26,6 +26,11 @@ import {
 } from "./security.js"
 
 import { createPaymentLink, verifyPayment } from "./payments.js"
+import {
+  workspaceRoute,
+  workspaceSummary,
+  publishedPages,
+} from "./workspace.js"
 
 const text = (max = 200) => z.string().trim().max(max)
 
@@ -68,37 +73,43 @@ const orderSchema = z.object({
   enquiry: z.boolean().default(false),
 })
 
-const productSchema = z.object({
-  id: text(100).regex(/^[a-z0-9-]+$/),
-  name: text(180).min(2),
-  category: text(60).min(1),
-  brand: text(80),
-  sku: text(80).min(1),
+const productSchema = z
+  .object({
+    id: text(100).regex(/^[a-z0-9-]+$/),
+    name: text(180).min(2),
+    category: text(60).min(1),
+    brand: text(80),
+    vendorId: text(100).default(""),
+    sku: text(80).min(1),
 
-  description: text(5000).min(10),
-  image: text(1000),
-  gallery: z.array(text(1000)).min(1).max(10),
-  mediaNote: text(500).default(""),
+    description: text(5000).min(10),
+    image: text(1000),
+    gallery: z.array(text(1000)).min(1).max(10),
+    mediaNote: text(500).default(""),
 
-  specifications: z.array(z.tuple([text(100), text(500)])).max(40),
+    specifications: z.array(z.tuple([text(100), text(500)])).max(40),
 
-  price: z.number().int().min(100).max(2000000000).nullable(),
-  priceConfirmed: z.boolean().default(false),
-  comparePrice: z.number().int().min(100).max(2000000000).nullable(),
+    price: z.number().int().min(100).max(2000000000).nullable(),
+    priceConfirmed: z.boolean().default(false),
+    comparePrice: z.number().int().min(100).max(2000000000).nullable(),
 
-  stock: z.number().int().min(0).max(100000).nullable(),
-  active: z.boolean(),
-  featured: z.boolean(),
-  condition: text(100),
+    stock: z.number().int().min(0).max(100000).nullable(),
+    active: z.boolean(),
+    featured: z.boolean(),
+    condition: text(100),
 
-  warranty: text(1000),
-  inTheBox: text(2000),
-  delivery: text(1000),
-  options: z.array(text(100)).max(20),
-  colors: z.array(text(100)).max(20),
-  tags: z.array(text(50)).max(8),
-  createdAt: text(100),
-})
+    warranty: text(1000),
+    inTheBox: text(2000),
+    delivery: text(1000),
+    options: z.array(text(100)).max(20),
+    colors: z.array(text(100)).max(20),
+    tags: z.array(text(50)).max(8),
+    createdAt: text(100),
+  })
+  .refine((p) => !p.priceConfirmed || p.price !== null, {
+    message: "Enter a selling price before confirming it.",
+    path: ["price"],
+  })
 
 const settingsSchema = z.object({
   name: text(100),
@@ -369,6 +380,7 @@ export default async function handler(req, res) {
         return send(res, {
           products: products.filter((p) => p.active),
           settings: storeDefaults,
+          pages: [],
         })
 
       const db = await getDatabase()
@@ -387,6 +399,7 @@ export default async function handler(req, res) {
           rating: r.review_count > 0 ? Number(r.average_rating) : null,
         })),
         settings: await storeSettings(db),
+        pages: await publishedPages(db),
       })
     }
 
@@ -898,6 +911,9 @@ export default async function handler(req, res) {
       return send(res, { received: true })
     }
 
+    const workspace = await workspaceRoute({ route, method, body, db, user })
+    if (workspace) return send(res, workspace.body, workspace.status || 200)
+
     if (route.startsWith("admin/")) {
       requireAdmin(user)
 
@@ -911,7 +927,7 @@ export default async function handler(req, res) {
 
           db.query("SELECT data FROM products ORDER BY updated_at DESC"),
           db.query(
-            "SELECT action,details,created_at FROM audit_events ORDER BY created_at DESC LIMIT 50",
+            "SELECT id,action,details,created_at FROM audit_events ORDER BY created_at DESC LIMIT 500",
           ),
         ])
 
@@ -921,6 +937,7 @@ export default async function handler(req, res) {
           products: catalog.rows.map((r) => r.data),
           events: events.rows,
           settings: await storeSettings(db),
+          ...(await workspaceSummary(db)),
           connection: {
             database: true,
             payments: !!process.env.FLW_SECRET_KEY,
@@ -940,12 +957,20 @@ export default async function handler(req, res) {
           p.price != null &&
           p.comparePrice <= p.price
         )
-          fail(400, "The previous price must be higher than the selling price.")
+          fail(400, "The regular price must be higher than the selling price.")
 
-        await db.query("INSERT INTO products(id,data) VALUES($1,$2::jsonb)", [
-          p.id,
-          JSON.stringify(p),
-        ])
+        if (
+          p.vendorId &&
+          !(await db.query("SELECT id FROM vendors WHERE id=$1", [p.vendorId]))
+            .rows.length
+        )
+          fail(400, "Choose an existing vendor.")
+        const inserted = await db.query(
+          "INSERT INTO products(id,data,vendor_id) VALUES($1,$2::jsonb,$3) ON CONFLICT(id) DO NOTHING RETURNING id",
+          [p.id, JSON.stringify(p), p.vendorId || null],
+        )
+        if (!inserted.rows.length)
+          fail(409, "A product already uses this URL identifier.")
         await audit(db, user.id, "product.created", { id: p.id })
         return send(res, { product: p }, 201)
       }
@@ -962,11 +987,17 @@ export default async function handler(req, res) {
           p.price != null &&
           p.comparePrice <= p.price
         )
-          fail(400, "The previous price must be higher than the selling price.")
+          fail(400, "The regular price must be higher than the selling price.")
 
+        if (
+          p.vendorId &&
+          !(await db.query("SELECT id FROM vendors WHERE id=$1", [p.vendorId]))
+            .rows.length
+        )
+          fail(400, "Choose an existing vendor.")
         const result = await db.query(
-          "UPDATE products SET data=$2::jsonb,updated_at=NOW() WHERE id=$1 RETURNING id",
-          [p.id, JSON.stringify(p)],
+          "UPDATE products SET data=$2::jsonb,vendor_id=$3,updated_at=NOW() WHERE id=$1 RETURNING id",
+          [p.id, JSON.stringify(p), p.vendorId || null],
         )
         if (!result.rows.length) fail(404, "Product was not found.")
         await audit(db, user.id, "product.updated", { id: p.id })
