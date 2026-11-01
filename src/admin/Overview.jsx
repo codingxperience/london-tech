@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState, useId } from "react"
 import {
   ArrowDownToLine,
   ArrowRight,
-  Box,
+  Activity,
   ChevronLeft,
   ChevronRight,
   ShoppingBag,
@@ -17,6 +17,7 @@ import {
   salesSeries,
 } from "../lib/admin-insights.js"
 import { IconButton } from "../components/ui.jsx"
+import { VisitorPanel } from "./VisitorPanel.jsx"
 
 const tones = ["#7773df", "#18a58e", "#efbe22"]
 const compact = (value) =>
@@ -203,9 +204,6 @@ export function Overview({
     )
   const paid = data.orders.filter((o) => o.paymentStatus === "paid"),
     sales = paid.reduce((n, o) => n + (o.amount || 0), 0)
-  const low = data.products.filter(
-    (p) => p.stock !== null && p.stock < 5,
-  ).length
   const stocked = data.products.filter((p) => p.active && p.stock > 0).length,
     completed = paid.filter((o) => o.status === "completed").length
   const top = bestSellers(data.products, data.orders),
@@ -250,11 +248,13 @@ export function Overview({
             "violet",
           ],
           [
-            "Low-stock products",
-            low,
-            Box,
-            "Review inventory",
-            base + "inventory/?status=low",
+            "Daily visitors",
+            data.analytics?.available ? data.analytics.today : "—",
+            Activity,
+            data.analytics?.preview
+              ? "Preview · distinct browsers today"
+              : "Distinct browsers · Kampala time",
+            "#visitor-analytics",
             "amber",
           ],
         ].map(([title, value, Icon, note, href, tone]) => (
@@ -389,6 +389,7 @@ export function Overview({
           </table>
         </section>
       )}
+      <VisitorPanel analytics={data.analytics} locale={locale} />
       <section className="admin-panel recent-orders-panel">
         <div className="admin-panel-heading">
           <h2>Recent orders</h2>

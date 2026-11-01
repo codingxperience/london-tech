@@ -1,12 +1,9 @@
 import { BrandWordmark } from "./BrandWordmark.jsx"
+import { NewsletterSignup } from "./NewsletterSignup.jsx"
+import { SocialLinks } from "./SocialLinks.jsx"
+import { BackToTop } from "./BackToTop.jsx"
 import React, { useEffect, useId, useState } from "react"
-import {
-  ArrowUpRight,
-  ChevronDown,
-  MapPin,
-  Phone,
-  MessageCircle,
-} from "lucide-react"
+import { ArrowUpRight, ChevronDown, MapPin, Phone } from "lucide-react"
 import { useStore } from "../store.jsx"
 import { PaymentMarks } from "./storefront.jsx"
 import "../store-footer.css"
@@ -102,8 +99,8 @@ export function StoreFooter({ logo, quiet = false }) {
     "tel:" + (phone.startsWith("0") ? "+256" + phone.slice(1) : phone)
   return (
     <footer className={"site-footer shop-footer" + (quiet ? " is-quiet" : "")}>
-      <div className="footer-support-band">
-        <div className="store-container footer-support-inner">
+      <div className="footer-newsletter-band">
+        <div className="store-container footer-newsletter-inner">
           <a href="/" aria-label="London Tech home" className="footer-wordmark">
             <img src={logo} alt="London Tech" />
             <span>
@@ -111,20 +108,7 @@ export function StoreFooter({ logo, quiet = false }) {
               <small>LONDON TECHNOLOGY STORE</small>
             </span>
           </a>
-          <div className="footer-support-copy">
-            <strong>A little help. The right tech.</strong>
-            <span>Talk to our team, or visit us in Arua Park.</span>
-          </div>
-          <a
-            className="footer-chat"
-            href="https://wa.me/256788341111"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <MessageCircle size={17} />
-            Chat with us
-            <ArrowUpRight size={14} />
-          </a>
+          <NewsletterSignup />
         </div>
       </div>
       <div className="store-container footer-directory">
@@ -180,18 +164,14 @@ export function StoreFooter({ logo, quiet = false }) {
           </a>
         </section>
       </div>
-      <div className="store-container footer-trust-row">
-        <span className="footer-original">
-          Original technology. Local expertise.
-          <span lang="ar" dir="rtl">
-            لندن تكنولوجي ستور
-          </span>
-        </span>
+      <div className="store-container footer-community-row">
+        <SocialLinks profiles={settings.socials} />
         <div className="footer-payments">
-          <span>Payment options</span>
+          <h3>Payment options</h3>
           <PaymentMarks />
         </div>
       </div>
+      <BackToTop />
       <div className="store-container footer-legal-row">
         <span>
           © {new Date().getFullYear()} London Tech. All rights reserved.

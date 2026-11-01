@@ -118,6 +118,11 @@ async function initialize() {
     `CREATE UNIQUE INDEX IF NOT EXISTS content_pages_slug_idx ON content_pages((data->>'slug'))`,
     `CREATE TABLE IF NOT EXISTS message_threads (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, subject TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open','resolved')), messages JSONB NOT NULL DEFAULT '[]', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
     `CREATE INDEX IF NOT EXISTS message_threads_user_idx ON message_threads(user_id,updated_at DESC)`,
+    `CREATE TABLE IF NOT EXISTS audience_meta (id TEXT PRIMARY KEY, started_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `INSERT INTO audience_meta(id) VALUES('traffic') ON CONFLICT(id) DO NOTHING`,
+    `CREATE TABLE IF NOT EXISTS audience_daily (day DATE PRIMARY KEY, visitors INTEGER NOT NULL DEFAULT 0 CHECK(visitors>=0))`,
+    `CREATE TABLE IF NOT EXISTS audience_visitors (day DATE NOT NULL, visitor_hash TEXT NOT NULL, PRIMARY KEY(day,visitor_hash))`,
+    `CREATE TABLE IF NOT EXISTS newsletter_subscribers (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, token_hash TEXT NOT NULL UNIQUE, status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','unsubscribed')), consent_version TEXT NOT NULL, consented_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), unsubscribed_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
 
     `CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), idempotency_key TEXT NOT NULL, status TEXT NOT NULL, payment_status TEXT NOT NULL DEFAULT 'unpaid', amount BIGINT, currency TEXT NOT NULL DEFAULT 'UGX', details JSONB NOT NULL, transaction_id TEXT UNIQUE, expires_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), UNIQUE(user_id,idempotency_key))`,
 

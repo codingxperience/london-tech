@@ -44,6 +44,7 @@ import {
   Globe,
   Languages,
   MessageSquare,
+  Mail,
   Moon,
   Sun,
   Maximize,
@@ -94,6 +95,7 @@ const tabs = [
   ["categories", "Categories", Grid2X2],
   ["settings", "Settings", Settings],
   ["messages", "Messages", MessageSquare],
+  ["subscribers", "Subscribers", Mail],
   ["pages", "Pages", Globe],
   ["language", "Language & region", Languages],
   ["security", "Login & security", LockKeyhole],
@@ -104,6 +106,7 @@ const extraSections = [
   "invoices",
   "history",
   "messages",
+  "subscribers",
   "pages",
   "language",
   "security",
@@ -151,7 +154,12 @@ export default function Admin({
   const [data, setData] = useState(() =>
       preview
         ? readStorage(previewKey, null)?.version === 4
-          ? readStorage(previewKey, null)
+          ? {
+              ...readStorage(previewKey, null),
+              analytics:
+                readStorage(previewKey, null).analytics ||
+                previewData().analytics,
+            }
           : previewData()
         : null,
     ),
@@ -1500,7 +1508,10 @@ export function ProductEditor({
                   required
                   maxLength={180}
                 />
-                <Field label="Vendor / supplier">
+                <Field
+                  label="Vendor / supplier"
+                  hint="Optional: link this product to the business you source it from."
+                >
                   <select
                     value={p.vendorId || ""}
                     onChange={(e) => field("vendorId", e.target.value)}
@@ -1890,7 +1901,17 @@ export function AdminOrderModal({
 }
 
 function SettingsPanel({ settings, connection, preview, saved }) {
-  const [s, setS] = useState(settings),
+  const [s, setS] = useState(() => ({
+      ...settings,
+      socials: {
+        facebook: "",
+        x: "",
+        tiktok: "",
+        instagram: "",
+        snapchat: "",
+        ...settings.socials,
+      },
+    })),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [success, setSuccess] = useState("")
@@ -1986,6 +2007,34 @@ function SettingsPanel({ settings, connection, preview, saved }) {
               />
             </Field>
           ))}
+          <section className="settings-socials">
+            <h3>Social profiles</h3>
+            <p className="admin-muted">
+              Add the official profile URL for each channel. Leave it blank
+              until the account is ready.
+            </p>
+            <div className="form-grid">
+              {[
+                ["facebook", "Facebook"],
+                ["x", "X"],
+                ["tiktok", "TikTok"],
+                ["instagram", "Instagram"],
+                ["snapchat", "Snapchat"],
+              ].map(([key, label]) => (
+                <Field
+                  key={key}
+                  label={label + " profile URL"}
+                  type="url"
+                  maxLength={500}
+                  placeholder="https://"
+                  value={s.socials[key] || ""}
+                  onChange={(e) =>
+                    change("socials", { ...s.socials, [key]: e.target.value })
+                  }
+                />
+              ))}
+            </div>
+          </section>
           <Button type="submit" busy={busy}>
             Save store settings
             <Check size={16} />

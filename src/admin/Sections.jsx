@@ -25,6 +25,7 @@ import { MessageCentre } from "../components/MessageCentre.jsx"
 import { api, dateLabel, downloadCsv, statusLabel } from "../lib/api.js"
 import { money, productPath } from "../data/catalog.js"
 import { BrandWordmark } from "../components/BrandWordmark.jsx"
+import { SubscriberList } from "./SubscriberList.jsx"
 
 const corePages = new Set([
   "about",
@@ -250,7 +251,7 @@ function Records({ kind, data, query, perform, preview = false }) {
             </h2>
             <p>
               {isVendor
-                ? "Supplier records and the products linked to them."
+                ? "Manage the businesses you source from. Supplier assignment is optional; this store sells directly to customers."
                 : "Draft, publish and maintain your store’s information pages."}
             </p>
           </div>
@@ -1145,5 +1146,7 @@ export function WorkspaceSection({
       <Regional preferences={preferences} setPreferences={setPreferences} />
     )
   if (section === "security") return <Security user={user} preview={preview} />
+  if (section === "subscribers")
+    return <SubscriberList preview={preview} query={query} />
   return null
 }

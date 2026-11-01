@@ -440,10 +440,17 @@ export const storeDefaults = {
   address: "Arua Park, NYUMBA KUBUA building, second floor, shop FN:19",
   hours: "",
   whatsapp: "",
+  socials: {
+    facebook: "",
+    x: "",
+    tiktok: "https://www.tiktok.com/@londontech.ug",
+    instagram: "",
+    snapchat: "",
+  },
   deliveryFee: null,
 
   about:
-    "Technology belongs in everyday life. London Tech brings phones, computers, audio, gaming and the little essentials together in one thoughtful collection. We make it easier to explore your options, understand the details and choose what works for you.",
+    "From our shop in Arua Park, Kampala, we bring together phones, audio, watches and everyday technology. Take a closer look online, speak with our team and visit the store to find what works for you. Quality and trust guide the way we serve our customers.",
 
   returns:
     "Return eligibility, timelines and any applicable warranty are confirmed for each product before purchase. Contact the store with your order reference for help.",

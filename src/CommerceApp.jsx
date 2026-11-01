@@ -1,4 +1,6 @@
 import { ManagedPage } from "./components/ManagedPage.jsx"
+import { Unsubscribe } from "./pages/unsubscribe.jsx"
+import { recordStoreVisit } from "./lib/visit-tracking.js"
 import React, { useEffect } from "react"
 import ReferenceStorefront from "./App.tsx"
 import { StoreProvider, usePath, useStore, navigate } from "./store.jsx"
@@ -57,8 +59,12 @@ function Router() {
     authDialog,
     setAuthDialog,
     closeAuth,
+    config,
   } = useStore()
   const admin = normalized.startsWith("/admin")
+  useEffect(() => {
+    recordStoreVisit({ path: normalized, enabled: config.analytics === true })
+  }, [normalized, config.analytics])
   useEffect(() => closeAuth(), [normalized, closeAuth])
   useEffect(() => setImageSearchOpen(false), [normalized, setImageSearchOpen])
   useEffect(() => {
@@ -154,6 +160,12 @@ function Router() {
   else if (normalized === "/cart") page = <Cart />
   else if (normalized === "/checkout") page = <Checkout />
   else if (normalized === "/checkout/result") page = <PaymentResult />
+  else if (normalized === "/unsubscribe")
+    page = (
+      <Unsubscribe
+        token={new URLSearchParams(path.split("?")[1] || "").get("token")}
+      />
+    )
   else if (normalized.startsWith("/account")) {
     const parts = normalized.split("/")
     page = <Account section={parts[2] || "overview"} orderId={parts[3]} />

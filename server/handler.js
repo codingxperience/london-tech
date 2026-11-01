@@ -26,6 +26,7 @@ import {
 } from "./security.js"
 
 import { createPaymentLink, verifyPayment } from "./payments.js"
+import { audienceRoute, audienceSummary } from "./audience.js"
 import {
   workspaceRoute,
   workspaceSummary,
@@ -111,6 +112,29 @@ const productSchema = z
     path: ["price"],
   })
 
+const socialUrl = (domains) =>
+  z.string()
+    .trim()
+    .max(1000)
+    .refine((value) => {
+      if (!value) return true
+      try {
+        const url = new URL(value)
+        return (
+          url.protocol === "https:" &&
+          !url.username &&
+          !url.password &&
+          (!url.port || url.port === "443") &&
+          domains.some(
+            (domain) =>
+              url.hostname === domain || url.hostname.endsWith("." + domain),
+          )
+        )
+      } catch {
+        return false
+      }
+    }, "Enter an HTTPS profile link on the selected social platform.")
+    .default("")
 const settingsSchema = z.object({
   name: text(100),
   tagline: text(150),
@@ -124,6 +148,15 @@ const settingsSchema = z.object({
   returns: text(5000),
   delivery: text(5000),
   deliveryFee: z.number().int().min(0).max(10000000).nullable(),
+  socials: z
+    .object({
+      facebook: socialUrl(["facebook.com", "fb.com"]),
+      x: socialUrl(["x.com", "twitter.com"]),
+      tiktok: socialUrl(["tiktok.com"]),
+      instagram: socialUrl(["instagram.com"]),
+      snapchat: socialUrl(["snapchat.com"]),
+    })
+    .optional(),
 })
 
 const publicUser = (user) =>
@@ -155,10 +188,14 @@ const send = (res, data, status = 200) => {
 }
 
 async function storeSettings(db) {
-  return (
+  const stored =
     (await db.query(`SELECT data FROM settings WHERE id='store'`)).rows[0]
-      ?.data || storeDefaults
-  )
+      ?.data || {}
+  return {
+    ...storeDefaults,
+    ...stored,
+    socials: { ...storeDefaults.socials, ...stored.socials },
+  }
 }
 
 async function userOrder(db, id, user) {
@@ -368,6 +405,8 @@ export default async function handler(req, res) {
       return send(res, {
         accounts: databaseConfigured(),
         payments: databaseConfigured() && !!process.env.FLW_SECRET_KEY,
+        analytics: databaseConfigured(),
+        newsletter: databaseConfigured(),
         currency: "UGX",
         country: "Uganda",
         paymentMode: process.env.FLW_SECRET_KEY?.includes("TEST")
@@ -403,6 +442,19 @@ export default async function handler(req, res) {
       })
     }
 
+    if (
+      !databaseConfigured() &&
+      route === "analytics/visit" &&
+      method === "POST"
+    )
+      return send(res, { available: false, recorded: false }, 202)
+    if (
+      !databaseConfigured() &&
+      route.startsWith("newsletter/") &&
+      method === "POST"
+    )
+      fail(503, "Subscriptions are being connected. Please try again later.")
+
     const db = await getDatabase()
 
     const user = await getUser(db, req)
@@ -414,6 +466,17 @@ export default async function handler(req, res) {
     const body = ["POST", "PUT", "PATCH"].includes(method)
       ? await readBody(req)
       : {}
+
+    const audience = await audienceRoute({
+      route,
+      method,
+      body,
+      db,
+      user,
+      ip,
+      userAgent: String(req.headers["user-agent"] || ""),
+    })
+    if (audience) return send(res, audience.body, audience.status || 200)
 
     if (route === "auth/me" && method === "GET")
       return send(res, { user: publicUser(user) })
@@ -938,6 +1001,7 @@ export default async function handler(req, res) {
           events: events.rows,
           settings: await storeSettings(db),
           ...(await workspaceSummary(db)),
+          ...(await audienceSummary(db)),
           connection: {
             database: true,
             payments: !!process.env.FLW_SECRET_KEY,
@@ -1159,6 +1223,7 @@ export default async function handler(req, res) {
         const settings = {
           ...storeDefaults,
           ...input,
+          socials: { ...(await storeSettings(db)).socials, ...input.socials },
           country: "Uganda",
           currency: "UGX",
         }

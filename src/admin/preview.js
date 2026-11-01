@@ -48,6 +48,20 @@ export function previewData(now = new Date()) {
   })
   return {
     version: 4,
+    analytics: {
+      available: true,
+      preview: true,
+      today: 147,
+      yesterday: 132,
+      startedAt: new Date(now.getTime() - 29 * 86400000).toISOString(),
+      timeZone: "Africa/Kampala",
+      daily: Array.from({ length: 30 }, (_, i) => ({
+        date: new Date(now.getTime() + 3 * 3600000 - (29 - i) * 86400000)
+          .toISOString()
+          .slice(0, 10),
+        visitors: i === 29 ? 147 : i === 28 ? 132 : 75 + ((i * 17) % 90),
+      })),
+    },
     products: products.map((p, i) => ({
       ...p,
       vendorId: i < 8 ? vendorId : "",

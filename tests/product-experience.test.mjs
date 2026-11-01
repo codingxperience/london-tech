@@ -36,6 +36,7 @@ let dom,
   UtilityBanner,
   StoreFooter,
   Admin,
+  SubscriberList,
   root,
   container,
   clock
@@ -128,6 +129,9 @@ before(async () => {
     "/src/components/StoreFooter.jsx",
   ))
   ;({ default: Admin } = await server.ssrLoadModule("/src/pages/admin.jsx"))
+  ;({ SubscriberList } = await server.ssrLoadModule(
+    "/src/admin/SubscriberList.jsx",
+  ))
   ;({
     default: CommerceApp,
   } = await server.ssrLoadModule("/src/CommerceApp.jsx"))
@@ -1850,6 +1854,7 @@ test("the complete admin preview routes every navigation item to its own screen 
     "categories",
     "settings",
     "messages",
+    "subscribers",
     "pages",
     "language",
     "security",
@@ -2015,4 +2020,173 @@ test("a new product can be created in the preview without overwriting the live c
       (e) => e.action === "product.saved" && e.details.id === product.id,
     ),
   )
+})
+
+test("About Us uses the supplied shop and community footage with a four-film player and contained navigation", async () => {
+  await openRoute("/about/")
+  assert.match(
+    container.querySelector(".about-page h1").textContent,
+    /local technology store/,
+  )
+  assert.ok(
+    container.querySelector('img[src="/assets/about/store-interior.webp"]'),
+  )
+  assert.ok(
+    container.querySelector('img[src="/assets/about/community-team.webp"]'),
+  )
+  assert.match(
+    container.querySelector(".about-visit").textContent,
+    /NYUMBA KUBUA/,
+  )
+  assert.equal(container.querySelectorAll(".about-section-nav a").length, 4)
+  assert.equal(
+    container
+      .querySelector(".about-section-nav a[aria-current]")
+      .getAttribute("href"),
+    "#our-vision",
+  )
+  const choices = [...container.querySelectorAll(".about-film-list button")]
+  assert.equal(choices.length, 4)
+  for (const [index, id] of [
+    "store-tour",
+    "product-recap",
+    "community-moments",
+    "match-day",
+  ].entries()) {
+    await click(choices[index])
+    const video = container.querySelector(".about-film-player video")
+    assert.ok(video.hasAttribute("controls"))
+    assert.equal(video.getAttribute("preload"), "none")
+    assert.equal(video.hasAttribute("autoplay"), false)
+    assert.equal(
+      video.querySelector("source").getAttribute("src"),
+      `/assets/about/${id}.mp4`,
+    )
+    assert.equal(choices[index].getAttribute("aria-pressed"), "true")
+    assert.ok(existsSync(resolve("public/assets/about", id + ".mp4")))
+  }
+  assert.equal(
+    container
+      .querySelector('.footer-social-link[href*="tiktok"]')
+      .getAttribute("href"),
+    "https://www.tiktok.com/@londontech.ug",
+  )
+  assert.equal(
+    container.querySelectorAll(".footer-social-link.is-pending").length,
+    4,
+  )
+  assert.ok(container.querySelector(".footer-newsletter form"))
+})
+
+test("unsubscribe requires an explicit action and shows a persisted server result", async () => {
+  const originalFetch = globalThis.fetch,
+    requests = []
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url).includes("newsletter/unsubscribe")) {
+      requests.push(JSON.parse(options.body))
+      return { ok: true, json: async () => ({ unsubscribed: true }) }
+    }
+    return originalFetch(url, options)
+  }
+  try {
+    const token = "a".repeat(64)
+    await openRoute("/unsubscribe/?token=" + token)
+    assert.equal(requests.length, 0)
+    assert.match(
+      container.querySelector(".subscription-page h1").textContent,
+      /Your inbox/,
+    )
+    await click(
+      [...container.querySelectorAll(".subscription-page button")].find(
+        (b) => b.textContent === "Unsubscribe",
+      ),
+    )
+    assert.deepEqual(requests, [{ token }])
+    assert.match(
+      container.querySelector(".subscription-page h1").textContent,
+      /unsubscribed/,
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("daily visitor reporting is available in overview and social profile edits persist in the local admin preview", async () => {
+  await openRoute("/admin/preview/")
+  assert.match(
+    container.querySelector(".admin-metrics").textContent,
+    /Daily visitors/,
+  )
+  assert.ok(container.querySelector("#visitor-analytics"))
+  assert.match(
+    container.querySelector("#visitor-analytics").textContent,
+    /Illustrative visitor records/,
+  )
+  const days = [
+    ...container.querySelectorAll("#visitor-analytics button"),
+  ].find((b) => b.textContent === "30 days")
+  await click(days)
+  assert.equal(days.getAttribute("aria-pressed"), "true")
+  assert.equal(container.querySelectorAll(".visitor-bars>div").length, 30)
+  await click(container.querySelector('a[href="/admin/preview/settings/"]'))
+  await editAdminField(
+    "Instagram profile URL",
+    "https://www.instagram.com/london-tech-review/",
+  )
+  await click(adminButton("Save store settings"))
+  const saved = JSON.parse(dom.localStorage.getItem("lt.admin.preview.v4"))
+  assert.equal(
+    saved.settings.socials.instagram,
+    "https://www.instagram.com/london-tech-review/",
+  )
+  assert.equal(
+    saved.settings.socials.tiktok,
+    "https://www.tiktok.com/@londontech.ug",
+  )
+  await click(container.querySelector('a[href="/admin/preview/subscribers/"]'))
+  assert.match(
+    container.querySelector(".admin-main").textContent,
+    /Newsletter subscribers/,
+  )
+  assert.match(
+    container.querySelector(".admin-main").textContent,
+    /no customer email addresses/,
+  )
+})
+
+test("subscriber refresh returns to a valid page when the active list shrinks", async () => {
+  const originalFetch = globalThis.fetch
+  let records = Array.from({ length: 25 }, (_, i) => ({
+    id: "subscriber-" + i,
+    email: `person${i}@example.com`,
+    status: "active",
+    subscribedAt: "2026-11-01T12:00:00Z",
+    unsubscribedAt: null,
+    consentVersion: "newsletter-v1",
+  }))
+  globalThis.fetch = async (url, options) =>
+    String(url).includes("admin/subscribers")
+      ? {
+          ok: true,
+          json: async () => ({ subscribers: records, total: records.length }),
+        }
+      : originalFetch(url, options)
+  try {
+    await render(React.createElement(SubscriberList))
+    assert.equal(
+      container.querySelector(".workspace-toolbar select").value,
+      "active",
+    )
+    await click(adminButton("Next"))
+    assert.equal(container.querySelectorAll(".admin-table tbody tr").length, 1)
+    records = records.slice(0, 24)
+    await click(adminButton("Refresh"))
+    assert.equal(container.querySelectorAll(".admin-table tbody tr").length, 24)
+    assert.match(
+      container.querySelector(".workspace-pagination").textContent,
+      /1 \/ 1/,
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
 })

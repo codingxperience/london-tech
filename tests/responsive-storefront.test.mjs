@@ -107,3 +107,51 @@ test("admin typography stays readable on small, medium and large screens", async
     }
   }
 })
+
+test("About Us and the newsletter keep single-column mobile layouts and usable social controls", async () => {
+  const directory = "dist/assets/"
+  const filename = (await readdir(directory)).find((n) =>
+    /^index-.*\.css$/.test(n),
+  )
+  const css = (await readFile(directory + filename, "utf8")).replace(
+    /@import[^;]+;/g,
+    "",
+  )
+  for (const width of [320, 768, 1440]) {
+    const win = new Window({
+      width,
+      height: 900,
+      settings: {
+        disableCSSFileLoading: true,
+        disableJavaScriptFileLoading: true,
+      },
+    })
+    try {
+      win.document.body.innerHTML = `<style>${css}</style><main class="about-page"><nav class="about-section-nav"><a>Our vision</a></nav><section class="about-vision"><div></div><figure></figure></section><div class="about-films"></div><section class="about-community"></section><section class="about-visit"></section></main><footer class="shop-footer"><div class="footer-newsletter-inner"><section class="footer-newsletter"><form class="footer-newsletter-form"><label class="footer-email-field"><input/></label></form></section></div><span class="footer-social-link"><svg></svg></span><button class="back-to-top"></button></footer>`
+      const computed = (s) =>
+        win.getComputedStyle(win.document.querySelector(s))
+      if (width === 320) {
+        for (const s of [
+          ".about-vision",
+          ".about-films",
+          ".about-community",
+          ".about-visit",
+          ".footer-newsletter-inner",
+          ".footer-newsletter",
+        ])
+          assert.match(
+            computed(s).gridTemplateColumns,
+            /^minmax\(0(?:px)?,\s*1fr\)$/,
+            s,
+          )
+        assert.equal(computed(".about-section-nav").display, "grid")
+      } else assert.equal(computed(".about-section-nav").display, "flex")
+      assert.equal(parseFloat(computed(".footer-newsletter-form").minWidth), 0)
+      assert.ok(parseFloat(computed(".footer-social-link").width) >= 44)
+      assert.equal(computed(".back-to-top").position, "fixed")
+      assert.ok(parseFloat(computed(".back-to-top").bottom) >= 79)
+    } finally {
+      await win.happyDOM.close()
+    }
+  }
+})

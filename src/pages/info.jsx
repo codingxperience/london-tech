@@ -1,5 +1,5 @@
 import { ManagedPage } from "../components/ManagedPage.jsx"
-import { BrandWordmark } from "../components/BrandWordmark.jsx"
+import { AboutPage } from "../components/AboutPage.jsx"
 import { ContactPage } from "../components/ContactPage.jsx"
 import React from "react"
 
@@ -25,70 +25,7 @@ function DefaultInfo({ page }) {
 
   if (page === "contact" || page === "visit") return <ContactPage />
 
-  if (page === "about")
-    return (
-      <main className="container standard-page">
-        <Breadcrumb items={[{ label: "About us" }]} />
-        <section className="about-hero">
-          <div>
-            <p className="eyebrow">
-              ABOUT <BrandWordmark width={142} />
-            </p>
-            <h1>
-              For your everyday.
-              <br />
-              For what’s <span>next.</span>
-            </h1>
-            <p>{settings.about}</p>
-            <ActionLink href="/collections/shop/">Find your next</ActionLink>
-          </div>
-          <div className="about-logo">
-            <img
-              src="/assets/london-tech-logo.png"
-              width="360"
-              height="360"
-              alt="London Tech — London Technology Store"
-            />
-          </div>
-        </section>
-        <div className="about-values">
-          <article>
-            <span>01</span>
-            <h2>A thoughtful collection.</h2>
-            <p>
-              From your first everyday smartphone to the tools for your next big
-              idea, explore technology across work, entertainment and everyday
-              essentials.
-            </p>
-          </article>
-          <article>
-            <span>02</span>
-            <h2>The details matter.</h2>
-            <p>
-              Clear product information, useful comparisons and a place to save
-              your favourites help you take a closer look before you choose.
-            </p>
-          </article>
-          <article>
-            <span>03</span>
-            <h2>A store you can reach.</h2>
-            <p>
-              Visit us at {settings.address}, or call us with your questions.
-              We’re here to help you confirm the details.
-            </p>
-          </article>
-        </div>
-        <div className="collection-band">
-          <div>
-            <p className="eyebrow">LET’S MAKE IT PERSONAL</p>
-            <h2>Your next, right here.</h2>
-          </div>
-          <ActionLink href="/contact/" className="light">
-            Find the store
-          </ActionLink>
-        </div>
-      </main>
-    )
+  if (page === "about") return <AboutPage />
 
   const content = {
     delivery: {
@@ -147,7 +84,11 @@ function DefaultInfo({ page }) {
         ],
         [
           "On this device",
-          "Your cart, wishlist, comparison list and recently viewed products are stored in your browser. A secure session cookie keeps you signed in. You can clear browser storage or sign out using your account menu.",
+          "Your cart, wishlist, comparison list and recently viewed products are stored in your browser. A secure session cookie keeps you signed in. A random daily browser identifier helps count storefront visits once per day, without storing the pages you view. Browser Do Not Track and Global Privacy Control preferences are respected. You can clear browser storage or sign out using your account menu.",
+        ],
+        [
+          "News and offers",
+          "Newsletter signup is optional. We save the email address and consent you provide, along with your subscription status. Use the manage-subscription link shown after signup to unsubscribe, or contact the store. Newsletter subscriptions are separate from account and order messages.",
         ],
         [
           "Your choices",

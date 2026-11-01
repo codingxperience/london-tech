@@ -27,7 +27,7 @@ Set the following in Vercel → Project → Settings → Environment Variables. 
 
 Redeploy after adding or changing environment variables. On the first database-backed request, the application initializes its tables, adds missing catalogue entries and creates the initial administrator. Existing administrator passwords are not overwritten by later environment changes; use the account password screen to change a password.
 
-Without a production database, browsing, product information and a device-local cart remain available. The server explicitly refuses registration, login and orders until persistent storage is configured. It never silently stores real customer records in a browser-only demo. `/admin/preview/` is an interactive, clearly labelled local preview. Its changes remain in that browser and never modify the live store. See [the administration guide](ADMIN_WORKSPACE.md).
+Without a production database, browsing, product information and a device-local cart remain available. Daily visitor measurement and newsletter storage also require that database; they never fabricate totals or successful subscriptions. The server explicitly refuses registration, login and orders until persistent storage is configured. It never silently stores real customer records in a browser-only demo. `/admin/preview/` is an interactive, clearly labelled local preview. Its changes remain in that browser and never modify the live store. See [the administration guide](ADMIN_WORKSPACE.md).
 
 ## Flutterwave
 

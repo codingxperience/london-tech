@@ -184,7 +184,16 @@ test("product information navigation marks one current section and follows readi
   }
 })
 
-test("clicking selects immediately while keeping the current link visible within its own narrow rail", async () => {
+test("clicking selects immediately while keeping the current link visible within its own narrow rail", async (t) => {
+  // A slow concurrent build must not consume the simulated smooth-scroll
+  // grace period. Frames are controlled above; keep this timer controlled too.
+  const timers = new Map()
+  let timerId = 0
+  t.mock.method(dom, "setTimeout", (callback, delay) => {
+    timers.set(++timerId, { callback, delay })
+    return timerId
+  })
+  t.mock.method(dom, "clearTimeout", (id) => timers.delete(id))
   await render()
   await flushFrame()
   const rail = fixture.querySelector(".detail-section-rail")
