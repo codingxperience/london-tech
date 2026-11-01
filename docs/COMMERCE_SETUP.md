@@ -10,7 +10,7 @@ To create your first local administrator, copy `.env.example` to `.env`, set `PU
 
 ## Production environment in Vercel
 
-Keep the existing London Tech Vercel project and GitHub integration. The build command is `pnpm run build`; output is `dist`. The Node function at `api/router.js` supplies account, catalogue, order and payment endpoints. `vercel.json` explicitly rewrites `/api/:path*` to that function and forwards the captured route; this Vite deployment does not use Next.js catch-all filename routing. The adapter retains request bodies, cookies, origin headers and business query parameters before calling the shared commerce handler.
+Keep the existing London Tech Vercel project and GitHub integration. The build command is `pnpm run build`; output is `dist`. The Node function at `api/router.js` supplies account, catalogue, order and payment endpoints. `vercel.json` explicitly captures `/api/:__lt_route(.*)` and forwards it to that function. The capture includes canonical trailing slashes because Vercel compiles route patterns with strict matching. This Vite deployment does not use Next.js catch-all filename routing. The adapter retains request bodies, cookies, origin headers and business query parameters before calling the shared commerce handler.
 
 Set the following in Vercel → Project → Settings → Environment Variables. Keep secret values out of source files, browser code and chat.
 

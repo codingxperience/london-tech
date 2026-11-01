@@ -57,6 +57,9 @@ importers:
       oxfmt:
         specifier: ^0.2.0
         version: 0.2.0
+      path-to-regexp:
+        specifier: 6.3.0
+        version: 6.3.0
       sharp:
         specifier: 0.35.5
         version: 0.35.5(@types/node@22.19.17)
@@ -788,6 +791,9 @@ packages:
     engines: {node: '>=8.*'}
     hasBin: true
 
+  path-to-regexp@6.3.0:
+    resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
+
   pg-cloudflare@1.4.1:
     resolution: {integrity: sha512-6PQbsFWZcp9EmJEwy5cGQ2La+AMWpP46lgbb8X+U/XsHIUweYDNCpeuKck5RxL2MdVFi7krbbEi5nX4Zh7JhrQ==}
 
@@ -1487,6 +1493,8 @@ snapshots:
       '@oxfmt/linux-x64-musl': 0.2.0
       '@oxfmt/win32-arm64': 0.2.0
       '@oxfmt/win32-x64': 0.2.0
+
+  path-to-regexp@6.3.0: {}
 
   pg-cloudflare@1.4.1:
     optional: true

@@ -1,6 +1,8 @@
 import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { createServer } from "node:http"
+import { readFileSync } from "node:fs"
+import { pathToRegexp } from "path-to-regexp"
 import {
   apiRequestUrl,
   createApiRouter,
@@ -14,6 +16,50 @@ delete process.env.DATABASE_URL
 delete process.env.POSTGRES_URL
 
 let server, origin
+
+test("the deployed rewrite matches canonical trailing-slash API paths with Vercel's strict parser", () => {
+  const config = JSON.parse(
+    readFileSync(new URL("../vercel.json", import.meta.url), "utf8"),
+  )
+  const rewrite = config.rewrites.find((route) =>
+    route.destination.startsWith("/api/router?"),
+  )
+  const keys = []
+  // Vercel routing-utils uses path-to-regexp with strict matching enabled.
+  const matcher = pathToRegexp(rewrite.source, keys, {
+    strict: true,
+    sensitive: true,
+    delimiter: "/",
+  })
+  for (const path of [
+    "/api/config",
+    "/api/config/",
+    "/api/catalog/",
+    "/api/auth/me/",
+    "/api/products/iphone-13-pro-max/reviews/",
+    "/api/orders/order-123/pay/",
+  ]) {
+    const match = matcher.exec(path)
+    assert.ok(match, `The production rewrite must match ${path}`)
+    let destination = rewrite.destination
+    keys.forEach((key, index) => {
+      destination = destination.replace(
+        `:${key.name}`,
+        encodeURIComponent(match[index + 1] || ""),
+      )
+    })
+    assert.equal(
+      apiRequestUrl({ url: destination + "&sort=newest" }),
+      path.replace(/\/$/, "") + "?sort=newest",
+    )
+  }
+  for (const path of [
+    "/collections/shop/",
+    "/assets/product.jpg",
+    "/products/phone/",
+  ])
+    assert.equal(matcher.exec(path), null)
+})
 before(async () => {
   server = createServer(router)
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve))

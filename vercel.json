@@ -9,7 +9,7 @@
     { "source": "/admin.html", "destination": "/admin/", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/router?__lt_route=:path*" },
+    { "source": "/api/:__lt_route(.*)", "destination": "/api/router?__lt_route=:__lt_route" },
     { "source": "/((?!api/|assets/|promotions/|favicon.ico|site.webmanifest|robots.txt|sitemap.xml|catalog.json|llms.txt|llms-full.txt).*)", "destination": "/index.html" }
   ],
   "headers": [
