@@ -21,6 +21,7 @@ let server,
 const originalGlobals = new Map()
 before(async () => {
   server = await createServer({
+    cacheDir: ".cache/vite-tests/offer-details",
     server: {
       middlewareMode: true,
       hmr: false,

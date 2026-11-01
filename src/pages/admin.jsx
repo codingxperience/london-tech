@@ -1,3 +1,5 @@
+import { PaymentMarks } from "../components/PaymentMarks.jsx"
+import { PaymentLogo, PaymentMethod } from "../components/PaymentLogo.jsx"
 import React, { useEffect, useMemo, useState } from "react"
 
 import {
@@ -1247,14 +1249,14 @@ function Dashboard({ data, preview, base, onOrder }) {
           </div>
           <div className="admin-payment-summary">
             {[
-              ["mtn", "MTN Mobile Money", "MTN"],
-              ["airtel", "Airtel Money", "airtel"],
-              ["visa", "Visa / card", "VISA"],
-            ].map(([id, label, mark]) => {
+              ["mtn", "MTN Mobile Money"],
+              ["airtel", "Airtel Money"],
+              ["visa", "Visa / card"],
+            ].map(([id, label]) => {
               const count = paid.filter((o) => o.paymentMethod === id).length
               return (
                 <div key={id}>
-                  <span className={"payment-option-logo " + id}>{mark}</span>
+                  <PaymentLogo method={id} decorative />
                   <div>
                     <strong>{label}</strong>
                     <span>
@@ -1904,12 +1906,7 @@ export function AdminOrderModal({
           <p>
             Placed {dateLabel(o.createdAt)}
             <br />
-            Payment:{" "}
-            {o.paymentMethod === "visa"
-              ? "Visa / card"
-              : o.paymentMethod === "mtn"
-                ? "MTN Mobile Money"
-                : "Airtel Money"}
+            Payment: <PaymentMethod method={o.paymentMethod} />
           </p>
           {o.notes && <p>Note: {o.notes}</p>}
         </div>
@@ -2128,7 +2125,7 @@ function SettingsPanel({ settings, connection, preview, saved }) {
           </div>
           <div>
             <span>Payment methods</span>
-            <strong>MTN · Airtel · Visa</strong>
+            <PaymentMarks />
           </div>
           <p>
             Payment methods must also be enabled on the Flutterwave merchant

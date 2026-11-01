@@ -98,6 +98,7 @@ before(async () => {
   dom.HTMLElement.prototype.scrollIntoView = function () {}
   ;({ createRoot } = await import("react-dom/client"))
   server = await createServer({
+    cacheDir: ".cache/vite-tests/product-experience",
     server: { middlewareMode: true, hmr: false, ws: false },
     appType: "custom",
     optimizeDeps: { noDiscovery: true },
@@ -893,19 +894,15 @@ test("reduced motion presents a complete static hint with no typing timer", asyn
   assert.equal(container.querySelector("strong").textContent, "phones")
 })
 
-test("utility sides settle once while the centre rises, drops and zooms, with pause and reduced motion", async () => {
+test("utility loops replay the side slides and centre sequence without a pause control", async () => {
   const timer = installClock()
   await render(React.createElement(UtilityBanner))
   const brand = container.querySelector(".utility-brand-lockup")
   const call = container.querySelector(".utility-call")
   const word = () => container.querySelector(".utility-centre-word")
   assert.equal(call.getAttribute("href"), "tel:+256788341111")
-  assert.equal(
-    container.querySelector(".utility-banner-stage").firstElementChild,
-    call,
-  )
   assert.match(word().textContent, /UPGRADE FOR LESS/)
-  assert.ok(word().classList.contains("motion-rise"))
+  assert.equal(container.querySelector("button"), null)
   await timer.tick(3650)
   assert.match(word().textContent, /PHONES & LAPTOPS/)
   assert.ok(word().classList.contains("motion-drop"))
@@ -913,25 +910,79 @@ test("utility sides settle once while the centre rises, drops and zooms, with pa
   assert.match(word().textContent, /SAVE UP TO \d+%/)
   assert.ok(word().classList.contains("motion-zoom"))
   assert.equal(container.querySelector(".utility-brand-lockup"), brand)
-  assert.equal(container.querySelector(".utility-call"), call)
-  await click(
-    container.querySelector('[aria-label="Pause announcement motion"]'),
+  for (let i = 0; i < 4; i++) await timer.tick(2800)
+  assert.match(word().textContent, /UPGRADE FOR LESS/)
+  assert.equal(
+    container.querySelector(".utility-brand-lockup"),
+    brand,
+    "The brand stays mounted while its animation restarts",
   )
-  const paused = word().textContent
-  await timer.tick(18000)
-  assert.equal(word().textContent, paused)
-  await click(
-    container.querySelector('[aria-label="Play announcement motion"]'),
+  assert.equal(brand.style.animationName, "utility-brand-return")
+  assert.equal(
+    container.querySelector(".utility-call"),
+    call,
+    "Replaying never removes a focused phone link",
   )
-  await timer.tick(2800)
-  assert.notEqual(word().textContent, paused)
+  assert.equal(call.style.animationName, "utility-call-return")
+  assert.equal(word().style.animationDelay, "850ms")
+  await timer.tick(3650)
+  assert.match(word().textContent, /PHONES & LAPTOPS/)
   reducedMotion = true
   await act(async () => {
     for (const listener of mediaListeners) listener()
   })
   assert.ok(container.querySelector(".utility-banner.reduced-motion"))
-  assert.equal(container.querySelector(".utility-motion-toggle"), null)
   assert.equal(timer.pending, 0)
+})
+
+test("the contact page provides clear directions and calls without promotional repetition", async () => {
+  await openRoute("/contact/")
+  assert.match(
+    container.querySelector("h1").textContent,
+    /Find us in Arua Park/,
+  )
+  assert.equal(container.querySelector(".utility-banner"), null)
+  assert.equal(container.querySelector(".floating-whatsapp"), null)
+  assert.ok(container.querySelector(".shop-footer.is-quiet"))
+  assert.ok(
+    container.querySelector('.contact-details a[href="tel:+256788341111"]'),
+  )
+  assert.ok(
+    container.querySelector('.contact-details a[href="tel:+256709417273"]'),
+  )
+  const maps = container.querySelector(
+    'a[href^="https://www.google.com/maps/search/"]',
+  )
+  assert.match(decodeURIComponent(maps.href), /NYUMBA KUBUA/)
+  assert.equal(
+    container.querySelector(".contact-city img").getAttribute("src"),
+    "/assets/store/kampala.jpg",
+  )
+  assert.ok(
+    container.querySelector(
+      '.contact-city a[href="https://creativecommons.org/licenses/by/4.0/"]',
+    ),
+  )
+  for (const mark of container.querySelectorAll(".payment-marks"))
+    assert.equal(
+      mark.querySelectorAll('img[src^="/assets/payments/"]').length,
+      3,
+    )
+})
+
+test("product information keeps rich details with one compact seller summary and recommendation group", async () => {
+  await openRoute("/products/iphone-18-pro-max/")
+  assert.equal(container.querySelector(".detail-help-card"), null)
+  assert.equal(container.querySelector(".detail-store-card"), null)
+  assert.equal(container.querySelectorAll(".detail-store-summary").length, 1)
+  assert.equal(
+    container.querySelectorAll(".detail-more .product-card").length,
+    4,
+  )
+  assert.equal(container.querySelector(".detail-related"), null)
+  assert.ok(container.querySelector("#product-specifications"))
+  assert.ok(container.querySelector("#product-guides"))
+  assert.ok(container.querySelector("#product-delivery"))
 })
 
 test("footer groups collapse on small screens and retain support, store contacts and payment methods", async () => {
@@ -1054,7 +1105,11 @@ test("long-form product sections expand real specifications and filter, sort and
     ),
   )
   assert.ok(wroteReview)
-  assert.ok(container.querySelector('#product-store a[href="tel:0788341111"]'))
+  assert.ok(container.querySelector('#product-store a[href="/contact/"]'))
+  assert.match(
+    container.querySelector("#product-store").textContent,
+    /NYUMBA KUBUA/,
+  )
   assert.ok(container.querySelector('#product-delivery a[href="/returns/"]'))
   assert.ok(container.querySelector('#product-delivery a[href="/delivery/"]'))
   assert.ok(

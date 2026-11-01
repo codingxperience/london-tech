@@ -1,0 +1,11 @@
+.payment-brand{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:86px;height:38px;padding:7px 10px;background:#fff;border:1px solid #e2e8f0;border-radius:4px;overflow:hidden;vertical-align:middle}
+.payment-brand img{display:block;width:100%;height:100%;object-fit:contain}
+.payment-brand-mtn img{max-width:49px}
+.payment-brand-visa img{flex:none;width:64px;height:64px;max-width:none}
+.payment-method-name{display:inline-flex;align-items:center;flex-wrap:wrap;gap:10px;vertical-align:middle}
+.payment-method-name .payment-brand{width:69px;height:33px;padding:6px 8px}
+.payment-method-name .payment-brand-visa img{width:56px;height:56px}
+.payment-options .payment-brand,.admin-payment-summary .payment-brand{width:76px;height:38px}
+.shop-footer .payment-marks{gap:8px}
+.shop-footer .payment-marks>.payment-brand,.commerce-surface .product-page .payment-marks>.payment-brand{padding:7px 10px;min-height:38px;border:1px solid #e2e8f0;border-radius:4px}
+@media(max-width:500px){.payment-brand{width:76px;height:35px;padding:6px 8px}.payment-options .payment-brand{width:65px;height:34px}.payment-method-name{gap:8px}.shop-footer .payment-marks>.payment-brand,.commerce-surface .product-page .payment-marks>.payment-brand{min-height:35px}}

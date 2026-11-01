@@ -566,7 +566,11 @@ function SectionHeader({
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
-export default function App({ children }: { children?: ReactNode }) {
+interface StorefrontProps {
+  children?: ReactNode
+  quiet?: boolean
+}
+export default function App({ children, quiet = false }: StorefrontProps) {
   const {
     products: catalogue,
     cart: cartItems,
@@ -678,7 +682,7 @@ export default function App({ children }: { children?: ReactNode }) {
       `}</style>
 
       {/* ── Announcement bar ──────────────────────────────────────────── */}
-      <UtilityBanner />
+      {!quiet && <UtilityBanner />}
 
       {/* ── Header ────────────────────────────────────────────────────── */}
       <header
@@ -1633,17 +1637,19 @@ export default function App({ children }: { children?: ReactNode }) {
       )}
 
       {/* ── Footer ───────────────────────────────────────────────────── */}
-      <StoreFooter logo={logoImg} />
-      <a
-        className="floating-whatsapp whatsapp-cta"
-        href="https://wa.me/256788341111"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Chat with London Tech on WhatsApp"
-      >
-        <WhatsAppIcon size={23} />
-        <span>Chat on WhatsApp</span>
-      </a>
+      <StoreFooter logo={logoImg} quiet={quiet} />
+      {!quiet && (
+        <a
+          className="floating-whatsapp whatsapp-cta"
+          href="https://wa.me/256788341111"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Chat with London Tech on WhatsApp"
+        >
+          <WhatsAppIcon size={23} />
+          <span>Chat on WhatsApp</span>
+        </a>
+      )}
     </div>
   )
 }

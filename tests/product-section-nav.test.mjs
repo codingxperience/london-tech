@@ -48,6 +48,7 @@ before(async () => {
   dom.document.addEventListener("click", (event) => event.preventDefault())
   ;({ createRoot } = await import("react-dom/client"))
   server = await createServer({
+    cacheDir: ".cache/vite-tests/product-section-nav",
     server: { middlewareMode: true, hmr: false, ws: false },
     appType: "custom",
     optimizeDeps: { noDiscovery: true },
@@ -315,4 +316,28 @@ test("deep links, product changes and cleanup keep navigation state consistent",
   root = null
   await act(async () => dom.dispatchEvent(new dom.Event("scroll")))
   assert.equal(frames.size, 0)
+})
+
+test("the compact picker reaches every section and stays in sync while reading", async () => {
+  await render()
+  await flushFrame()
+  const select = fixture.querySelector(".detail-mobile-nav select")
+  assert.equal(select.options.length, 8)
+  assert.equal(select.value, "overview")
+  assert.ok(fixture.querySelector(`label[for="${select.id}"]`))
+  await act(async () => {
+    select.value = "delivery"
+    select.dispatchEvent(new dom.Event("change", { bubbles: true }))
+  })
+  assert.equal(active(), "#product-delivery")
+  assert.equal(dom.location.hash, "#product-delivery")
+  assert.deepEqual(scrolls.at(-1), {
+    element: "product-delivery",
+    block: "start",
+    behavior: "instant",
+  })
+  await scrollToSection("delivery")
+  await scrollToSection("questions")
+  assert.equal(select.value, "questions")
+  assert.equal(active(), "#product-questions")
 })

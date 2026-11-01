@@ -1,3 +1,4 @@
+import { PaymentLogo } from "../components/PaymentLogo.jsx"
 import React, { useEffect, useState } from "react"
 
 import {
@@ -502,9 +503,7 @@ export function Checkout() {
                     checked={method === id}
                     onChange={() => setMethod(id)}
                   />
-                  <span className={"payment-option-logo " + id}>
-                    {id === "mtn" ? "MTN" : id === "airtel" ? "airtel" : "VISA"}
-                  </span>
+                  <PaymentLogo method={id} decorative />
                   <span>
                     <strong>{title}</strong>
                     <small>{desc}</small>

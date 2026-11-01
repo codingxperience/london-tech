@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useId, useRef, useState } from "react"
 
 const sections = [
   ["overview", "Overview"],
@@ -17,6 +17,7 @@ const hashSection = () => {
 
 export function ProductSectionNav({ productId, reviewCount = 0 }) {
   const [active, setActive] = useState("overview")
+  const selectId = useId()
   const nav = useRef(null)
   const rail = useRef(null)
   const pending = useRef(null)
@@ -173,6 +174,33 @@ export function ProductSectionNav({ productId, reviewCount = 0 }) {
       ref={nav}
       aria-label="Explore product information"
     >
+      <div className="detail-mobile-nav">
+        <label htmlFor={selectId}>Product details</label>
+        <select
+          id={selectId}
+          value={active}
+          onChange={(event) => {
+            const id = event.target.value
+            setActive(id)
+            pending.current = id
+            window.clearTimeout(timer.current)
+            timer.current = window.setTimeout(() => {
+              pending.current = null
+              update.current()
+            }, 1200)
+            window.history.pushState(window.history.state, "", `#product-${id}`)
+            document
+              .getElementById(`product-${id}`)
+              ?.scrollIntoView({ block: "start", behavior: "instant" })
+          }}
+        >
+          {sections.map(([id, label]) => (
+            <option key={id} value={id}>
+              {id === "reviews" ? `${label} (${reviewCount})` : label}
+            </option>
+          ))}
+        </select>
+      </div>
       <div
         className="detail-section-rail"
         ref={rail}

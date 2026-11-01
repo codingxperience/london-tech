@@ -22,6 +22,7 @@ let server,
 
 before(async () => {
   server = await createServer({
+    cacheDir: ".cache/vite-tests/render",
     server: { middlewareMode: true, hmr: false, ws: false },
     appType: "custom",
     optimizeDeps: { noDiscovery: true },
@@ -32,7 +33,6 @@ before(async () => {
   checkout = await server.ssrLoadModule("/src/pages/checkout.jsx")
   account = await server.ssrLoadModule("/src/pages/account.jsx")
   info = await server.ssrLoadModule("/src/pages/info.jsx")
-
   ;({
     default: Admin,
     ProductEditor,

@@ -160,7 +160,7 @@ export function ProductMotionNote({
     if (reduced || !visible || paused) return
     const timer = window.setInterval(() => {
       if (!document.hidden) setIndex((i) => (i + 1) % phrases.length)
-    }, 4400)
+    }, 7200)
     return () => window.clearInterval(timer)
   }, [reduced, visible, paused, phrases])
   return (

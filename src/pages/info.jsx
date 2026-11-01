@@ -1,13 +1,10 @@
+import { ContactPage } from "../components/ContactPage.jsx"
 import React from "react"
 
 import {
   ArrowRight,
   ArrowUpRight,
-  Clock3,
-  Headphones,
-  MapPin,
   Phone,
-  Mail,
   ShieldCheck,
   Truck,
   PackageCheck,
@@ -19,92 +16,8 @@ import { ActionLink, Breadcrumb, PageHeading } from "../components/ui.jsx"
 
 export function Info({ page }) {
   const { settings } = useStore()
-  const phoneLink = (p) => "tel:+256" + p.replace(/^0/, "").replace(/\D/g, "")
 
-  if (page === "contact" || page === "visit")
-    return (
-      <main className="container standard-page">
-        <Breadcrumb items={[{ label: "Store information" }]} />
-        <PageHeading eyebrow="COME SAY HELLO" title="Your next starts here.">
-          Find London Tech, ask a product question or arrange your visit.
-        </PageHeading>
-        <div className="contact-grid">
-          <section className="contact-card">
-            <span className="eyebrow">LONDON TECHNOLOGY STORE</span>
-            <h2>Let’s make it clearer.</h2>
-            <div>
-              <MapPin size={21} />
-              <span>
-                <strong>Visit the store</strong>
-                <p>{settings.address}</p>
-              </span>
-            </div>
-            <div>
-              <Phone size={21} />
-              <span>
-                <strong>Call us</strong>
-                <a href={phoneLink(settings.phone)}>{settings.phone}</a>
-                {settings.phoneAlt && (
-                  <a href={phoneLink(settings.phoneAlt)}>{settings.phoneAlt}</a>
-                )}
-              </span>
-            </div>
-            <div>
-              <Clock3 size={21} />
-              <span>
-                <strong>Plan your visit</strong>
-                <p>
-                  {settings.hours ||
-                    "Call the store to confirm opening hours before you travel."}
-                </p>
-              </span>
-            </div>
-            {settings.email && (
-              <div>
-                <Mail size={21} />
-                <span>
-                  <strong>Email</strong>
-                  <a href={"mailto:" + settings.email}>{settings.email}</a>
-                </span>
-              </div>
-            )}
-            <ActionLink
-              href={
-                "https://www.google.com/maps/search/?api=1&query=" +
-                encodeURIComponent(settings.address + ", Uganda")
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open in Maps
-            </ActionLink>
-          </section>
-          <section className="contact-brand-panel">
-            <img
-              src="/assets/london-tech-logo.png"
-              width="300"
-              height="300"
-              alt="London Tech — London Technology Store"
-            />
-            <span>ARUA PARK · UGANDA</span>
-            <p>
-              Phones. Audio. Work. Play.
-              <br />A little more possibility.
-            </p>
-          </section>
-        </div>
-        <div className="contact-bottom">
-          <h2>Have a product in mind?</h2>
-          <p>
-            Keep the product name or order reference nearby when you call. It
-            helps us get you the right information.
-          </p>
-          <ActionLink href="/collections/shop/" className="secondary">
-            Explore the collection
-          </ActionLink>
-        </div>
-      </main>
-    )
+  if (page === "contact" || page === "visit") return <ContactPage />
 
   if (page === "about")
     return (

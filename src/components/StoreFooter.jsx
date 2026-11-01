@@ -81,7 +81,7 @@ function FooterGroup({ section, compact }) {
   )
 }
 
-export function StoreFooter({ logo }) {
+export function StoreFooter({ logo, quiet = false }) {
   const { settings } = useStore()
   const [compact, setCompact] = useState(false)
   useEffect(() => {
@@ -94,7 +94,7 @@ export function StoreFooter({ logo }) {
   const phoneLink = (phone) =>
     "tel:" + (phone.startsWith("0") ? "+256" + phone.slice(1) : phone)
   return (
-    <footer className="site-footer shop-footer">
+    <footer className={"site-footer shop-footer" + (quiet ? " is-quiet" : "")}>
       <div className="footer-support-band">
         <div className="store-container footer-support-inner">
           <a href="/" aria-label="London Tech home" className="footer-wordmark">

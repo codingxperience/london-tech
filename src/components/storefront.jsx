@@ -74,22 +74,7 @@ export function CategoryIcon({ category, size = 22 }) {
   return <Icon size={size} strokeWidth={1.5} />
 }
 
-export function PaymentMarks() {
-  return (
-    <div
-      className="payment-marks"
-      aria-label="Payment methods: MTN Mobile Money, Airtel Money and Visa"
-    >
-      <span className="mtn-mark">
-        MTN <b>MoMo</b>
-      </span>
-      <span className="airtel-mark">
-        airtel <b>money</b>
-      </span>
-      <span className="visa-mark">VISA</span>
-    </div>
-  )
-}
+export { PaymentMarks } from "./PaymentMarks.jsx"
 
 export function ProductCard({ product: p, detailed = false }) {
   const { wishlist, toggleWish, addCart, compare, toggleCompare } = useStore()

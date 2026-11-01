@@ -3,19 +3,14 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
-  Check,
   ChevronDown,
   CircleHelp,
-  MapPin,
   MessageCircle,
-  PackageCheck,
-  Phone,
   ShieldCheck,
   Star,
-  Store,
   Truck,
 } from "lucide-react"
-import { Badge, Button, CheckList } from "./ui.jsx"
+import { Badge, Button } from "./ui.jsx"
 import { PaymentMarks, ProductGrid, SectionHeading } from "./storefront.jsx"
 import { categoryName } from "../data/catalog.js"
 import {
@@ -90,17 +85,6 @@ export function ProductSections({
 
   return (
     <>
-      {related.length > 0 && (
-        <section className="section detail-related">
-          <SectionHeading
-            eyebrow="KEEP EXPLORING"
-            title="Compare a few favourites."
-            href={`/collections/${p.category}/`}
-            link={`All ${categoryName(p.category).toLowerCase()}`}
-          />
-          <ProductGrid products={related} />
-        </section>
-      )}
       <ProductSectionNav productId={p.id} reviewCount={reviews.length} />
       <div className="detail-longform">
         <div className="detail-main-content">
@@ -109,27 +93,14 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="overview-heading"
           >
-            <p className="eyebrow">AT A GLANCE</p>
-            <h2 id="overview-heading">A little closer to the details.</h2>
-            <p className="detail-lead">{information.description}</p>
+            <h2 id="overview-heading">Highlights</h2>
             <div className="detail-highlight-grid">
               {highlights.slice(0, 6).map(({ title, body }) => (
                 <article key={title}>
-                  <span className="detail-feature-icon">
-                    <Check size={17} />
-                  </span>
                   <h3>{title}</h3>
                   <p>{body}</p>
                 </article>
               ))}
-            </div>
-            <div className="detail-inline-note">
-              <ShieldCheck size={20} />
-              <p>
-                Choose with confidence. We’ll confirm the exact model,
-                condition, configuration and any applicable warranty before you
-                pay.
-              </p>
             </div>
           </section>
 
@@ -140,7 +111,6 @@ export function ProductSections({
           >
             <div className="detail-heading-row">
               <div>
-                <p className="eyebrow">THE SPECIFICS</p>
                 <h2 id="specifications-heading">Specifications</h2>
               </div>
               <span className="detail-count">{specs.length} details</span>
@@ -203,7 +173,6 @@ export function ProductSections({
           >
             <div className="detail-heading-row">
               <div>
-                <p className="eyebrow">CUSTOMER EXPERIENCES</p>
                 <h2 id="reviews-heading">
                   Reviews{" "}
                   <span className="detail-title-count">({reviews.length})</span>
@@ -392,8 +361,7 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="description-heading"
           >
-            <p className="eyebrow">MEET YOUR NEXT EVERYDAY ESSENTIAL</p>
-            <h2 id="description-heading">More about {p.name}.</h2>
+            <h2 id="description-heading">Product description</h2>
             <p className="detail-lead">{information.description}</p>
             {images.length > 1 && (
               <div className="detail-story-gallery">
@@ -410,34 +378,12 @@ export function ProductSections({
                 ))}
               </div>
             )}
-            <div className="detail-package-grid">
-              <article>
-                <PackageCheck size={26} />
-                <h3>What’s in the box</h3>
-                <p>
-                  {p.inTheBox ||
-                    "The package depends on the selected model and bundle. Our team will confirm the device and included accessories before you place your order."}
-                </p>
-                <a
-                  href={askLink}
-                  className="text-link"
-                  target={contactNumber ? "_blank" : undefined}
-                  rel="noreferrer"
-                >
-                  Ask about the package
-                  <ArrowUpRight size={15} />
-                </a>
-              </article>
-              <article>
-                <CheckList
-                  items={[
-                    "Check the model and configuration against your needs.",
-                    "Confirm compatibility with your devices and network.",
-                    "Choose your preferred colour and available options.",
-                    "Review condition, warranty and the final order total.",
-                  ]}
-                />
-              </article>
+            <div className="detail-package-note">
+              <h3>What’s in the box</h3>
+              <p>
+                {p.inTheBox ||
+                  "Included accessories vary by configuration. Ask us about the exact bundle before ordering."}
+              </p>
             </div>
           </section>
 
@@ -446,7 +392,6 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="guides-heading"
           >
-            <p className="eyebrow">A LITTLE EXTRA HELP</p>
             <h2 id="guides-heading">Guides & product support</h2>
             <div className="detail-guide-list">
               {information.guides.map(({ label, url }) => (
@@ -468,10 +413,9 @@ export function ProductSections({
               >
                 <CircleHelp size={22} />
                 <span>
-                  <strong>Need help with this exact model?</strong>
+                  <strong>Setup & compatibility</strong>
                   <small>
-                    Ask London Tech about setup, compatibility or the right
-                    guide.
+                    Get help choosing the right guide for this model.
                   </small>
                 </span>
                 <ArrowUpRight size={18} />
@@ -484,7 +428,6 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="delivery-heading"
           >
-            <p className="eyebrow">FROM OUR STORE TO YOU</p>
             <h2 id="delivery-heading">Delivery, collection & returns</h2>
             <div className="detail-service-grid">
               <article>
@@ -510,7 +453,7 @@ export function ProductSections({
               <span>
                 <ShieldCheck size={21} />
                 <span>
-                  <strong>Your payment, your way.</strong>
+                  <strong>Payment options</strong>
                   <small>
                     MTN Mobile Money, Airtel Money or Visa through Flutterwave.
                   </small>
@@ -527,7 +470,6 @@ export function ProductSections({
           >
             <div className="detail-heading-row">
               <div>
-                <p className="eyebrow">BEFORE YOU BUY</p>
                 <h2 id="questions-heading">Questions & answers</h2>
               </div>
               <a
@@ -540,10 +482,6 @@ export function ProductSections({
                 <MessageCircle size={16} />
               </a>
             </div>
-            <p className="detail-subtitle">
-              Helpful answers from London Tech about choosing and ordering this
-              item.
-            </p>
             <div className="detail-questions">
               {buyingQuestions(p, settings).map(([question, answer]) => (
                 <details key={question}>
@@ -560,94 +498,29 @@ export function ProductSections({
 
           <section
             id="product-store"
-            className="detail-store-card"
+            className="detail-store-summary"
             aria-labelledby="store-heading"
           >
-            <div className="detail-store-brand">
-              <img
-                src="/assets/london-tech-logo.png"
-                alt="London Tech"
-                loading="lazy"
-              />
-              <div>
-                <p className="eyebrow">YOUR LOCAL TECHNOLOGY STORE</p>
-                <h2 id="store-heading">London Tech</h2>
-                <p>Let’s help you find what works for you.</p>
-              </div>
+            <div>
+              <h2 id="store-heading">Sold by London Tech</h2>
+              <p>{settings.address}</p>
             </div>
-            <div className="detail-store-contact">
-              <p>
-                <MapPin size={19} />
-                {settings.address}
-              </p>
-              <p>
-                <Phone size={17} />
-                <a href={`tel:${settings.phone}`}>{settings.phone}</a>
-                {settings.phoneAlt && (
-                  <>
-                    {" "}
-                    /{" "}
-                    <a href={`tel:${settings.phoneAlt}`}>{settings.phoneAlt}</a>
-                  </>
-                )}
-              </p>
-            </div>
-            <div className="detail-store-actions">
-              <a
-                className="button"
-                href={askLink}
-                target={contactNumber ? "_blank" : undefined}
-                rel="noreferrer"
-              >
-                <MessageCircle size={17} />
-                Talk to the team
-              </a>
-              <a href="/contact/" className="button secondary">
-                <Store size={17} />
-                Store information
-              </a>
-            </div>
+            <a href="/contact/" className="text-link">
+              Store information <ArrowUpRight size={15} />
+            </a>
           </section>
         </div>
-        <aside className="detail-help-card">
-          <span className="detail-help-icon">
-            <MessageCircle size={26} />
-          </span>
-          <p className="eyebrow">A HUMAN TOUCH</p>
-          <h2>A good choice starts with a conversation.</h2>
-          <p>
-            Not sure about the model, features or fit? Send us the product name
-            and we’ll help with the details.
-          </p>
-          <a
-            href={askLink}
-            className="button"
-            target={contactNumber ? "_blank" : undefined}
-            rel="noreferrer"
-          >
-            Ask London Tech
-            <ArrowUpRight size={16} />
-          </a>
-          <span className="detail-help-footnote">Product code: {p.sku}</span>
-          <hr />
-          <CheckList
-            items={[
-              "Confirm the exact product & condition",
-              "Review your configuration & price",
-              "Arrange collection or delivery",
-            ]}
-          />
-        </aside>
       </div>
       {more.length > 0 && (
         <section className="section detail-more">
           <SectionHeading
-            eyebrow="MAKE IT YOURS"
-            title="More to explore."
-            href="/collections/shop/"
+            title="You may also like"
+            href={`/collections/${p.category}/`}
             link="Explore the store"
           />
-          <ProductGrid products={more} />
+          <ProductGrid
+            products={[...related.slice(0, 2), ...more.slice(0, 2)]}
+          />
         </section>
       )}
     </>

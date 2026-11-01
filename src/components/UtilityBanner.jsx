@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { Pause, Play } from "lucide-react"
 import { useReducedMotion } from "./MotionText"
 import { useStore } from "../store.jsx"
 import { products as catalogue, storeDefaults } from "../data/catalog.js"
@@ -32,9 +31,9 @@ export function UtilityBanner() {
     { text: "SHOP LONDON TECH", motion: "zoom" },
   ]
   const reduced = useReducedMotion()
-  const [index, setIndex] = useState(0)
-  const [started, setStarted] = useState(false)
-  const [paused, setPaused] = useState(false)
+  const [frame, setFrame] = useState(0)
+  const index = frame % messages.length
+  const round = Math.floor(frame / messages.length)
   const [hidden, setHidden] = useState(false)
   useEffect(() => {
     const update = () => setHidden(document.hidden)
@@ -42,19 +41,18 @@ export function UtilityBanner() {
     document.addEventListener("visibilitychange", update)
     return () => document.removeEventListener("visibilitychange", update)
   }, [])
-  const stopped = reduced || paused || hidden
+  const stopped = reduced || hidden
   useEffect(() => {
     if (stopped) return
-    // The side elements settle first. Subsequent cycles animate only the centre.
+    // Every loop opens with the side slides, followed by the centre sequence.
     const timer = window.setTimeout(
       () => {
-        setStarted(true)
-        setIndex((current) => (current + 1) % messages.length)
+        setFrame((current) => current + 1)
       },
-      cycle + (started ? 0 : opening),
+      cycle + (index === 0 ? opening : 0),
     )
     return () => window.clearTimeout(timer)
-  }, [index, started, stopped])
+  }, [frame, stopped])
   const message = messages[reduced ? 0 : index]
   const telephone = phone.replace(/[^\d+]/g, "").replace(/^0/, "+256")
   return (
@@ -62,12 +60,19 @@ export function UtilityBanner() {
       className={
         "utility-bar utility-banner" +
         (reduced ? " reduced-motion" : "") +
-        (stopped ? " is-paused" : "")
+        (hidden ? " is-suspended" : "")
       }
       aria-label="London Tech announcements"
     >
       <div className="utility-banner-stage store-container">
-        <a className="utility-call" href={`tel:${telephone}`}>
+        <a
+          className="utility-call"
+          href={`tel:${telephone}`}
+          style={{
+            animationName:
+              round % 2 ? "utility-call-return" : "utility-call-arrive",
+          }}
+        >
           <span>Call to order</span>
           <strong>{phone}</strong>
         </a>
@@ -84,35 +89,25 @@ export function UtilityBanner() {
               message.pill ? " is-pill" : ""
             }`}
             aria-hidden="true"
-            key={reduced ? "static" : index}
-            style={{ animationDelay: started ? "0ms" : `${opening}ms` }}
+            key={reduced ? "static" : frame}
+            style={{ animationDelay: index === 0 ? `${opening}ms` : "0ms" }}
           >
             {message.text}
           </span>
         </a>
-        <div className="utility-brand-lockup" aria-label="London Tech">
+        <div
+          className="utility-brand-lockup"
+          aria-label="London Tech"
+          style={{
+            animationName:
+              round % 2 ? "utility-brand-return" : "utility-brand-arrive",
+          }}
+        >
           <span>
             LONDON <em>TECH</em>
           </span>
           <small>TECHNOLOGY STORE</small>
         </div>
-        {!reduced && (
-          <button
-            className="utility-motion-toggle"
-            type="button"
-            aria-label={
-              paused ? "Play announcement motion" : "Pause announcement motion"
-            }
-            aria-pressed={paused}
-            onClick={() => setPaused(!paused)}
-          >
-            {paused ? (
-              <Play size={11} fill="currentColor" />
-            ) : (
-              <Pause size={11} fill="currentColor" />
-            )}
-          </button>
-        )}
       </div>
     </div>
   )

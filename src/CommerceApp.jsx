@@ -169,7 +169,11 @@ function Router() {
   else page = <NotFound />
   return (
     <>
-      <ReferenceStorefront>
+      <ReferenceStorefront
+        quiet={["/contact", "/visit", "/collections/visit"].includes(
+          normalized,
+        )}
+      >
         {page && (
           <ErrorBoundary key={normalized}>
             <React.Fragment key={path}>{page}</React.Fragment>

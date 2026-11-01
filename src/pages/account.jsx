@@ -1,3 +1,4 @@
+import { PaymentMethod } from "../components/PaymentLogo.jsx"
 import React, { useEffect, useState } from "react"
 
 import {
@@ -721,11 +722,7 @@ function OrderDetail({ order: o, loaded, reload }) {
         <section className="form-card">
           <h3>Payment information</h3>
           <p>
-            {o.paymentMethod === "visa"
-              ? "Visa / card"
-              : o.paymentMethod === "mtn"
-                ? "MTN Mobile Money"
-                : "Airtel Money"}
+            <PaymentMethod method={o.paymentMethod} />
           </p>
           <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
             {statusLabel(o.paymentStatus)}
