@@ -112,9 +112,16 @@ export function StoreProvider({ children }) {
   const [toast, setToast] = useState(""),
     [searchOpen, setSearchOpen] = useState(false),
     [cartOpen, setCartOpen] = useState(false),
+    [imageSearchOpen, setImageSearchOpen] = useState(false),
     [authDialog, setAuthDialog] = useState(null)
 
   const closeAuth = useCallback(() => setAuthDialog(null), [])
+  const openImageSearch = useCallback(() => {
+    setSearchOpen(false)
+    setCartOpen(false)
+    setAuthDialog(null)
+    setImageSearchOpen(true)
+  }, [])
   useEffect(() => {
     window.addEventListener("popstate", closeAuth)
     return () => window.removeEventListener("popstate", closeAuth)
@@ -123,6 +130,7 @@ export function StoreProvider({ children }) {
     (mode = "login", next = location.pathname + location.search) => {
       setSearchOpen(false)
       setCartOpen(false)
+      setImageSearchOpen(false)
       setAuthDialog({ mode, next })
     },
     [],
@@ -344,6 +352,9 @@ export function StoreProvider({ children }) {
         setSearchOpen,
         cartOpen,
         setCartOpen,
+        imageSearchOpen,
+        setImageSearchOpen,
+        openImageSearch,
         authDialog,
         setAuthDialog,
         openAuth,

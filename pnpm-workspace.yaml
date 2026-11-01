@@ -1,0 +1,4 @@
+allowBuilds:
+  protobufjs: false
+overrides:
+  "onnx-proto>protobufjs": 7.6.6

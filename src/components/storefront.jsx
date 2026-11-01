@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import {
   Search,
@@ -28,11 +28,12 @@ import {
   MapPin,
   Plus,
   Trash2,
+  Star,
 } from "lucide-react"
 
 import { useStore, cartKey } from "../store.jsx"
 import { ProductMotionNote } from "./MotionText"
-import { galleryImages } from "../lib/product-experience.js"
+import { galleryImages, productInformation } from "../lib/product-experience.js"
 
 import {
   categories,
@@ -88,17 +89,22 @@ export function PaymentMarks() {
   )
 }
 
-export function ProductCard({ product: p }) {
+export function ProductCard({ product: p, detailed = false }) {
   const { wishlist, toggleWish, addCart, compare, toggleCompare } = useStore()
-
+  const images = galleryImages(p)
+  const [photo, setPhoto] = useState(0)
+  useEffect(() => setPhoto(0), [p.id, images.length])
+  const facts = productInformation(p).specifications.slice(0, 2)
   const saved = wishlist.includes(p.id)
 
   return (
-    <article className="product-card">
+    <article
+      className={"product-card" + (detailed ? " detailed-product-card" : "")}
+    >
       <div className="product-card-media">
         <a href={productPath(p)} tabIndex={-1} aria-hidden="true">
           <img
-            src={galleryImages(p)[0]?.src || p.image}
+            src={images[photo]?.src || p.image}
             alt=""
             loading="lazy"
             decoding="async"
@@ -107,7 +113,7 @@ export function ProductCard({ product: p }) {
         <div className="product-flags">
           {p.stock === 0 ? (
             <Badge type="muted">Out of stock</Badge>
-          ) : p.comparePrice && p.price ? (
+          ) : p.priceConfirmed && p.comparePrice > p.price && p.price ? (
             <Badge>
               Save {Math.round((1 - p.price / p.comparePrice) * 100)}%
             </Badge>
@@ -115,6 +121,38 @@ export function ProductCard({ product: p }) {
             <Badge>Spotlight</Badge>
           ) : null}
         </div>
+        {detailed && images.length > 1 && (
+          <div
+            className="card-photo-options"
+            role="group"
+            aria-label={p.name + " photos"}
+          >
+            {images.slice(0, 4).map((image, index) => (
+              <button
+                type="button"
+                key={image.src}
+                className={photo === index ? "selected" : ""}
+                aria-label={`Preview ${p.name}, photo ${index + 1}`}
+                aria-pressed={photo === index}
+                onPointerEnter={(event) => {
+                  if (event.pointerType !== "touch") setPhoto(index)
+                }}
+                onFocus={() => setPhoto(index)}
+                onClick={() => setPhoto(index)}
+              >
+                <span />
+              </button>
+            ))}
+            {images.length > 4 && (
+              <a
+                href={productPath(p)}
+                aria-label={`See all ${images.length} photos of ${p.name}`}
+              >
+                +{images.length - 4}
+              </a>
+            )}
+          </div>
+        )}
         <div className="product-tools">
           <IconButton
             label={saved ? "Remove from wishlist" : "Add to wishlist"}
@@ -144,6 +182,16 @@ export function ProductCard({ product: p }) {
           <a href={productPath(p)}>{p.name}</a>
         </h3>
         <ProductMotionNote category={p.category} />
+        {detailed && facts.length > 0 && (
+          <dl className="card-product-facts">
+            {facts.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd title={value}>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
         <div className="product-card-bottom">
           <div>
             <strong className={p.price == null ? "request-price" : ""}>
@@ -165,15 +213,48 @@ export function ProductCard({ product: p }) {
           </IconButton>
         </div>
       </div>
+      {detailed && (
+        <div className="card-product-meta">
+          {p.reviewCount > 0 && Number.isFinite(p.rating) && (
+            <a
+              className="card-real-rating"
+              href={productPath(p) + "#product-reviews"}
+              aria-label={`${p.rating.toFixed(1)} out of 5 from ${p.reviewCount} verified reviews`}
+            >
+              <Star size={13} fill="currentColor" />
+              <strong>{p.rating.toFixed(1)}</strong>
+              <span>({p.reviewCount})</span>
+            </a>
+          )}
+          <span
+            className={
+              p.stock > 0 ? "card-availability confirmed" : "card-availability"
+            }
+          >
+            {p.stock === 0
+              ? "Out of stock"
+              : p.stock > 0
+                ? "In stock"
+                : "Check availability"}
+          </span>
+          {p.condition && !/^confirm with store\.?$/i.test(p.condition) && (
+            <small>{p.condition}</small>
+          )}
+          <a className="card-detail-link" href={productPath(p)}>
+            View details
+            <ArrowRight size={13} />
+          </a>
+        </div>
+      )}
     </article>
   )
 }
 
-export function ProductGrid({ products }) {
+export function ProductGrid({ products, detailed = false }) {
   return (
     <div className="product-grid">
       {products.map((p) => (
-        <ProductCard key={p.id} product={p} />
+        <ProductCard key={p.id} product={p} detailed={detailed} />
       ))}
     </div>
   )

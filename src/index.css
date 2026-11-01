@@ -78,10 +78,12 @@ button { cursor: pointer; }
 .utility-message { color: #cedceb; width: min(680px, 58vw); height: 24px; min-width: 0; font-size: 14px; position: relative; text-align: center; }
 .utility-feature { font-weight: 900; letter-spacing: .12em; font-size: 10px; }
 .utility-bar { overflow: hidden; }
-.utility-landing { display: block; line-height: 24px; transform-origin: center; animation: utility-land 1.4s cubic-bezier(.16,1,.3,1) both; }
+.utility-landing { display: block; line-height: 24px; transform-origin: center; animation: utility-land 1.8s cubic-bezier(.16,1,.3,1) both; }
 @keyframes utility-land {
-  0% { opacity: 0; transform: translateY(-10px) scale(2.6); filter: blur(5px); }
-  65% { opacity: 1; transform: translateY(1px) scale(.97); filter: blur(0); }
+  0% { opacity: 0; transform: scale(28); }
+  12% { opacity: 1; transform: scale(19); }
+  46% { opacity: 1; transform: scale(4.5); }
+  82% { opacity: 1; transform: scale(1.06); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 .store-container { width: 100%; max-width: 1600px; padding-inline: clamp(16px, 3vw, 48px) !important; }
@@ -101,6 +103,8 @@ button { cursor: pointer; }
 .product-actions svg { flex-shrink: 0; }
 .pcard:focus-within .pover { opacity: 1 !important; }
 .search-field { position: relative; flex: 1; min-width: 80px; background: white; }
+.image-search-trigger { display:grid;place-items:center;align-self:stretch;flex-shrink:0;min-width:44px;padding:8px;border:0;background:white;color:var(--ink); }
+.image-search-trigger:hover { background:#eef3f8;color:#e32738; }
 .search-field input { width: 100%; min-width: 0; padding: 12px; position: relative; background: transparent; border: 0; font-size: 15px; color: var(--ink); }
 .search-suggestion { position: absolute; inset: 0; display: flex; align-items: center; gap: 5px; padding: 0 12px; pointer-events: none; font-size: 14px; color: var(--muted); white-space: nowrap; overflow: hidden; }
 .search-suggestion strong { color: var(--ink); font-weight: 800; display: inline-block; }

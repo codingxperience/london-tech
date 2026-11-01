@@ -18,6 +18,7 @@ import appleWatch from "@/imports/london/apple-watch.jpeg"
 import accessoryKit from "@/imports/london/accessory-kit.jpeg"
 import {
   Search,
+  ScanSearch,
   ShoppingCart,
   Heart,
   User,
@@ -792,7 +793,7 @@ function SectionHeader({
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App({ children }: { children?: ReactNode }) {
-  const { products: catalogue, cart: cartItems, setCartOpen, settings } = useStore()
+  const { products: catalogue, cart: cartItems, setCartOpen, settings, openImageSearch } = useStore()
   const cart = cartItems.reduce((sum: number, line: { quantity: number }) => sum + line.quantity, 0)
   const [slide, setSlide] = useState(0)
   const [latestOffset, setLatestOffset] = useState(0)
@@ -870,7 +871,6 @@ export default function App({ children }: { children?: ReactNode }) {
         .deals-grid   { display:grid; grid-template-columns:1fr 1fr; }
         .products-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; padding:20px; }
         .search-cat   { display:block; }
-        .header-hotline { display:block; }
 
         @media (max-width:1024px) {
           .sidebar-col  { display:none; }
@@ -882,7 +882,6 @@ export default function App({ children }: { children?: ReactNode }) {
           .deals-grid   { grid-template-columns:1fr !important; }
           .products-grid{ grid-template-columns:repeat(2,1fr) !important; }
           .search-cat   { display:none !important; }
-          .header-hotline { display:none !important; }
           .nav-desktop  { display:none !important; }
           .nav-toggle   { display:flex !important; }
         }
@@ -993,6 +992,7 @@ export default function App({ children }: { children?: ReactNode }) {
                 }}
               />
             </div>
+            <button type="button" className="image-search-trigger" aria-label="Search by image" title="Search by image" onClick={openImageSearch}><ScanSearch size={20} strokeWidth={1.7} /></button>
             <button
               onClick={() => shopCategory("All")}
               style={{
@@ -1063,38 +1063,7 @@ export default function App({ children }: { children?: ReactNode }) {
               </div>
               My Cart
             </button>
-            <div
-              className="header-hotline"
-              style={{
-                paddingLeft: 10,
-                borderLeft: "1px solid #e0e8f5",
-                marginLeft: 4,
-                lineHeight: 1.5,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 10,
-                  color: "#999",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 3,
-                }}
-              >
-                <Phone size={10} /> Hotline
-              </div>
-              <div
-                style={{
-                  fontFamily: "Nunito,sans-serif",
-                  fontWeight: 800,
-                  fontSize: 13,
-                  color: "#333",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                0788341111 / 0709417273
-              </div>
-            </div>
+
           </div>
         </div>
       </header>

@@ -125,6 +125,7 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS audit_events (id TEXT PRIMARY KEY, actor_id TEXT REFERENCES users(id), action TEXT NOT NULL, details JSONB NOT NULL DEFAULT '{}', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
 
     `CREATE INDEX IF NOT EXISTS orders_user_idx ON orders(user_id, created_at DESC)`,
+    `CREATE INDEX IF NOT EXISTS reviews_product_idx ON reviews(product_id)`,
 
     `CREATE INDEX IF NOT EXISTS reservations_expiry_idx ON stock_reservations(expires_at)`,
   ]

@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from "react"
+import React, { useEffect, useId, useState } from "react"
 import {
   ArrowRight,
   Check,
@@ -11,6 +11,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react"
+import { DiscoveryRail } from "../components/DiscoveryRail.jsx"
 import { useStore } from "../store.jsx"
 import { categories, categoryName, money } from "../data/catalog.js"
 import {
@@ -42,8 +43,7 @@ export function Collection({ category = "shop" }) {
   const [brandSearch, setBrandSearch] = useState("")
   const [showBrands, setShowBrands] = useState(false)
   const [discovery, setDiscovery] = useState("recommended")
-  const discoveryId = useId(),
-    rail = useRef(null)
+  const discoveryId = useId()
   const all = scopeCollection(products, category)
   const brands = [...new Set(all.map((p) => p.brand).filter(Boolean))].sort()
   const filtered = selectCollection(all, filters)
@@ -294,31 +294,11 @@ export function Collection({ category = "shop" }) {
               </button>
             ))}
           </div>
-          <div className="discovery-scroll">
-            <IconButton
-              label="Previous categories or brands"
-              onClick={() =>
-                rail.current?.scrollBy({ left: -360, behavior: "auto" })
-              }
-            >
-              <ChevronLeft size={16} />
-            </IconButton>
-            <IconButton
-              label="Next categories or brands"
-              onClick={() =>
-                rail.current?.scrollBy({ left: 360, behavior: "auto" })
-              }
-            >
-              <ChevronRight size={16} />
-            </IconButton>
-          </div>
         </div>
-        <div
-          className="discovery-rail"
-          ref={rail}
-          role="tabpanel"
+        <DiscoveryRail
           id={discoveryId + "-panel"}
-          aria-labelledby={discoveryId + "-" + discovery}
+          labelledBy={discoveryId + "-" + discovery}
+          resetKey={discovery}
         >
           {discovery === "recommended"
             ? recommended.map((item) => (
@@ -368,7 +348,7 @@ export function Collection({ category = "shop" }) {
                   </button>
                 )
               })}
-        </div>
+        </DiscoveryRail>
       </section>
       <div className="collection-layout">
         <aside
@@ -479,7 +459,7 @@ export function Collection({ category = "shop" }) {
           )}
           {shown.length ? (
             <div className={filters.view === "list" ? "catalog-list" : ""}>
-              <ProductGrid products={shown} />
+              <ProductGrid products={shown} detailed />
             </div>
           ) : (
             <Empty

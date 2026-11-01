@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import ReferenceStorefront from "./App.tsx"
 import { StoreProvider, usePath, useStore, navigate } from "./store.jsx"
 import { SearchDialog, CartDrawer } from "./components/storefront.jsx"
+import { ImageSearchDialog } from "./components/ImageSearchDialog.jsx"
 import { Collection, Product, Compare, NotFound } from "./pages/shop.jsx"
 import { Cart, Checkout, PaymentResult } from "./pages/checkout.jsx"
 import { Auth, Account } from "./pages/account.jsx"
@@ -47,6 +48,8 @@ function Router() {
   const {
     searchOpen,
     cartOpen,
+    imageSearchOpen,
+    setImageSearchOpen,
     products,
     compare,
     authDialog,
@@ -55,6 +58,7 @@ function Router() {
   } = useStore()
   const admin = normalized.startsWith("/admin")
   useEffect(() => closeAuth(), [normalized, closeAuth])
+  useEffect(() => setImageSearchOpen(false), [normalized, setImageSearchOpen])
   useEffect(() => {
     const product = normalized.startsWith("/products/")
       ? products.find(
@@ -193,6 +197,7 @@ function Router() {
           </Modal>
         )}
         {searchOpen && <SearchDialog />}
+        {imageSearchOpen && <ImageSearchDialog />}
         {cartOpen && <CartDrawer />}
         {compare.length > 0 && (
           <a className="compare-float" href="/compare/">

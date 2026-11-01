@@ -158,7 +158,7 @@ export function Modal({
 
     const first =
       el.current.querySelector(
-        "input:not([type=checkbox]):not([type=radio]),textarea,select",
+        "[data-modal-autofocus],input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=hidden]):not([hidden]),textarea,select",
       ) || el.current.querySelector("button,a[href]")
     first?.focus()
 

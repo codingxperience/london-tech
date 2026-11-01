@@ -558,6 +558,11 @@ test("a confirmed quote can be paid and payment settlement is idempotent", async
       ).status,
       201,
     )
+    const reviewedProduct = (await request("catalog")).data.products.find(
+      (product) => product.id === fixture.id,
+    )
+    assert.equal(reviewedProduct.reviewCount, 1)
+    assert.equal(reviewedProduct.rating, 5)
   } finally {
     globalThis.fetch = realFetch
   }

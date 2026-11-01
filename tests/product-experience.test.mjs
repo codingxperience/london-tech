@@ -31,6 +31,8 @@ let dom,
   StoreProvider,
   App,
   CommerceApp,
+  ProductCard,
+  ImageSearchDialog,
   root,
   container,
   clock
@@ -105,6 +107,12 @@ before(async () => {
   ))
   ;({ StoreProvider } = await server.ssrLoadModule("/src/store.jsx"))
   ;({ default: App } = await server.ssrLoadModule("/src/App.tsx"))
+  ;({ ProductCard } = await server.ssrLoadModule(
+    "/src/components/storefront.jsx",
+  ))
+  ;({ ImageSearchDialog } = await server.ssrLoadModule(
+    "/src/components/ImageSearchDialog.jsx",
+  ))
   ;({
     default: CommerceApp,
   } = await server.ssrLoadModule("/src/CommerceApp.jsx"))
@@ -1297,6 +1305,207 @@ test("image-led discovery switches to actual brands and the clean filters preser
   assert.equal(new URLSearchParams(dom.location.search).get("min"), "1000000")
   await click(container.querySelector(".refined-filter-chips .reset-all"))
   assert.equal(dom.location.search, "")
+})
+
+test("header removes the phone numbers beside the cart and keeps the saved cart quantity", async () => {
+  dom.localStorage.setItem(
+    "lt.cart.v2",
+    JSON.stringify([{ id: products[0].id, quantity: 3 }]),
+  )
+  await openRoute("/collections/mobiles/")
+  const actions = container.querySelector(".header-actions")
+  assert.doesNotMatch(actions.textContent, /0788|0709|Hotline|Call us/i)
+  assert.equal(container.querySelector(".header-hotline"), null)
+  const cart = actions.querySelector('[aria-label="Open shopping cart"]')
+  assert.match(cart.textContent, /3/)
+  assert.ok(
+    container.querySelector('.site-footer a[href="tel:+256788341111"]'),
+    "Contact details remain in the footer",
+  )
+  await click(container.querySelector('[aria-label="Search by image"]'))
+  assert.ok(container.querySelector(".image-search-dialog"))
+  await dispatch(dom, key("Escape"))
+  assert.equal(container.querySelector(".image-search-dialog"), null)
+})
+
+test("discovery has one next arrow and scrolls only its contained rail, then disables at the end", async () => {
+  await openRoute("/collections/mobiles/")
+  const rail = container.querySelector(".discovery-rail")
+  const next = container.querySelector(".discovery-next")
+  assert.equal(container.querySelectorAll(".discovery-next").length, 1)
+  assert.equal(container.querySelector(".discovery-scroll"), null)
+  assert.equal(next.disabled, true, "No arrow when the row fits")
+  Object.defineProperties(rail, {
+    scrollWidth: { value: 1500, configurable: true },
+    clientWidth: { value: 600, configurable: true },
+  })
+  const moves = []
+  rail.scrollBy = (options) => moves.push(options)
+  await dispatch(dom, new dom.Event("resize"))
+  assert.equal(next.disabled, false)
+  await click(next)
+  assert.deepEqual(moves.at(-1), { left: 480, behavior: "auto" })
+  await dispatch(rail, key("ArrowLeft"))
+  assert.equal(moves.at(-1).left, -480)
+  assert.equal(dom.document.documentElement.scrollTop, 0)
+  rail.scrollLeft = 900
+  await dispatch(rail, new dom.Event("scroll"))
+  assert.equal(next.disabled, true)
+  await click(
+    [...container.querySelectorAll('[role="tab"]')].find(
+      (tab) => tab.textContent === "Shop by brand",
+    ),
+  )
+  assert.equal(
+    rail.scrollLeft,
+    0,
+    "Switching tabs resets the row without scrolling the page",
+  )
+})
+
+test("detailed collection cards show model facts, real reviews, stock and distinct preview photos", async () => {
+  reducedMotion = true
+  const product = {
+    ...products.find((product) => product.id === "iphone-13-pro-max"),
+    stock: 0,
+    reviewCount: 2,
+    rating: 4.5,
+  }
+  await render(
+    React.createElement(
+      StoreProvider,
+      null,
+      React.createElement(ProductCard, { product, detailed: true }),
+    ),
+  )
+  assert.match(
+    container.querySelector(".card-product-facts").textContent,
+    /Display|Chip/,
+  )
+  assert.match(
+    container.querySelector(".card-product-bottom, .product-card-bottom")
+      .textContent,
+    /UGX/,
+  )
+  assert.match(container.querySelector(".card-real-rating").textContent, /4.5/)
+  assert.match(
+    container.querySelector(".card-availability").textContent,
+    /Out of stock/,
+  )
+  assert.equal(
+    container.querySelector('[aria-label^="Add iPhone"]').disabled,
+    true,
+  )
+  const photos = [...container.querySelectorAll(".card-photo-options button")]
+  assert.ok(photos.length > 1)
+  const image = container.querySelector(".product-card-media img")
+  const first = image.getAttribute("src")
+  await dispatch(photos[1], pointer("pointerover"))
+  assert.notEqual(image.getAttribute("src"), first)
+  assert.equal(photos[1].getAttribute("aria-pressed"), "true")
+  await render(
+    React.createElement(
+      StoreProvider,
+      null,
+      React.createElement(ProductCard, {
+        product: { ...product, stock: null, reviewCount: 0, rating: null },
+        detailed: true,
+      }),
+    ),
+  )
+  assert.equal(container.querySelector(".card-real-rating"), null)
+  assert.match(
+    container.querySelector(".card-availability").textContent,
+    /Check availability/,
+  )
+})
+
+test("image search handles invalid files, dropped photos, stale results and matching links without uploading", async () => {
+  const originalCreate = URL.createObjectURL,
+    originalRevoke = URL.revokeObjectURL
+  const revoked = [],
+    searches = []
+  URL.createObjectURL = (file) => "blob:test/" + file.name
+  URL.revokeObjectURL = (url) => revoked.push(url)
+  let cancellations = 0
+  const createClient = () => ({
+    cancel() {
+      cancellations++
+    },
+    search(file, catalogue, progress) {
+      progress("Comparing photos…")
+      return new Promise((resolve, reject) =>
+        searches.push({ file, catalogue, resolve, reject }),
+      )
+    },
+  })
+  try {
+    await render(
+      React.createElement(
+        StoreProvider,
+        null,
+        React.createElement(ImageSearchDialog, { createClient }),
+      ),
+    )
+    const drop = async (file) => {
+      const event = new dom.Event("drop", { bubbles: true, cancelable: true })
+      Object.defineProperty(event, "dataTransfer", { value: { files: [file] } })
+      await dispatch(container.querySelector(".image-search-drop"), event)
+    }
+    await drop(
+      new dom.File(["<svg/>"], "unsafe.svg", { type: "image/svg+xml" }),
+    )
+    assert.match(
+      container.querySelector('[role="alert"]').textContent,
+      /JPG, PNG or WebP/,
+    )
+    assert.equal(searches.length, 0)
+    await drop(new dom.File(["image-one"], "first.jpg", { type: "image/jpeg" }))
+    assert.match(
+      container.querySelector('[role="status"]').textContent,
+      /Finding similar items/,
+    )
+    assert.equal(searches[0].catalogue.length, products.length)
+    await drop(new dom.File(["image-two"], "second.png", { type: "image/png" }))
+    await act(async () =>
+      searches[0].resolve([{ product: products[0], score: 0.99 }]),
+    )
+    assert.equal(
+      container.querySelector(".visual-match"),
+      null,
+      "An older request cannot overwrite the current photo",
+    )
+    await act(async () =>
+      searches[1].resolve([{ product: products[1], score: 0.86 }]),
+    )
+    assert.equal(
+      container.querySelector(".visual-match").getAttribute("href"),
+      "/products/" + products[1].id + "/",
+    )
+    assert.match(container.textContent, /Matched by appearance/)
+    assert.ok(revoked.includes("blob:test/first.jpg"))
+    const paste = new dom.Event("paste", { bubbles: true, cancelable: true })
+    Object.defineProperty(paste, "clipboardData", {
+      value: {
+        files: [new dom.File(["third"], "third.webp", { type: "image/webp" })],
+      },
+    })
+    await dispatch(dom, paste)
+    await act(async () =>
+      searches[2].reject(new Error("Please try another photo.")),
+    )
+    assert.match(
+      container.querySelector('[role="alert"]').textContent,
+      /Please try another photo/,
+    )
+    await act(async () => root.unmount())
+    root = null
+    assert.ok(revoked.includes("blob:test/third.webp"))
+    assert.ok(cancellations >= 4)
+  } finally {
+    URL.createObjectURL = originalCreate
+    URL.revokeObjectURL = originalRevoke
+  }
 })
 
 test("invalid price ranges stay unapplied and the mobile drawer keeps the same filter state", async () => {

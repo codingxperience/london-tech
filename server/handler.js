@@ -373,11 +373,18 @@ export default async function handler(req, res) {
       const db = await getDatabase()
 
       const rows = await db.query(
-        `SELECT data FROM products WHERE data->>'active'='true' ORDER BY data->>'name'`,
+        `SELECT p.data, COALESCE(r.review_count,0)::int AS review_count, r.average_rating
+         FROM products p LEFT JOIN
+         (SELECT product_id, COUNT(*) AS review_count, AVG(rating) AS average_rating FROM reviews GROUP BY product_id) r
+         ON r.product_id=p.id WHERE p.data->>'active'='true' ORDER BY p.data->>'name'`,
       )
 
       return send(res, {
-        products: rows.rows.map((r) => r.data),
+        products: rows.rows.map((r) => ({
+          ...r.data,
+          reviewCount: Number(r.review_count),
+          rating: r.review_count > 0 ? Number(r.average_rating) : null,
+        })),
         settings: await storeSettings(db),
       })
     }

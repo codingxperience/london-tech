@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "model": "/assets/vision/tinyclip-image-q8-6599d459de82.onnx",
+  "index": "/assets/vision/catalogue-23a1366b2cc9.json",
+  "runtime": {
+    "mjs": "/assets/vision/ort-1.31.1.mjs",
+    "wasm": "/assets/vision/ort-1.31.1.wasm"
+  },
+  "source": {
+    "repo": "onnx-community/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M-ONNX",
+    "revision": "9463a9c508a344c837ffefe9d724f3827bf2dc79",
+    "license": "MIT",
+    "sha256": "10921310ddef06557ec1598d1260470a0a4db53f70ffe0deb60b946dcad6d27a"
+  },
+  "modelSha256": "6599d459de82b0dbc364698105280197c90efd20acd9df1dc1144c511e4d077c",
+  "indexedProducts": 89,
+  "indexedViews": 218
+}
