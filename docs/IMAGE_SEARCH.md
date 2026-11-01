@@ -8,7 +8,7 @@ Photos and embeddings are never uploaded. Requests download static matching file
 
 ## Assets and maintenance
 
-`src/data/vision-manifest.json` pins the current encoder, catalogue index and ONNX Runtime files. This version indexes 89 products across 218 views. Image encoder size is 8.9 MB, the CPU WASM runtime is 14.8 MB and the index is about 1.3 MB before HTTP compression. Static asset caching makes subsequent downloads cheaper. These are served under `/assets/vision/`, outside the application's HTML rewrite.
+`src/data/vision-manifest.json` pins the current encoder, catalogue index and ONNX Runtime files. This version indexes 89 products across 187 corrected views. Image encoder size is 8.9 MB, the CPU WASM runtime is 14.8 MB and the index is about 1.1 MB before HTTP compression. Static asset caching makes subsequent downloads cheaper. These are served under `/assets/vision/`, outside the application's HTML rewrite.
 
 After changing catalogue photos, adding products or changing model names, run:
 

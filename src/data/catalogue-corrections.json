@@ -1,0 +1,89 @@
+{
+  "samsung-galaxy-tablet": {
+    "mediaNote": "Galaxy tablet family reference, showing the Tab S11 series. Confirm the exact model and size with the store.",
+    "description": "Explore Samsung Galaxy tablets. These manufacturer reference photos show the Tab S11 family; confirm the actual generation, size, capacity and connectivity before ordering."
+  },
+  "apple-ipad-pro": {
+    "mediaNote": "iPad Pro family reference, showing the M5 design. Confirm generation, size and capacity with the store.",
+    "description": "Explore Apple iPad Pro options. The manufacturer photos show the M5 family as a design reference; confirm the listed unit’s generation, size, capacity and connectivity before ordering."
+  },
+  "apple-watch-series": {
+    "mediaNote": "Apple Watch Series family reference, showing Series 11. Confirm generation, case size and strap with the store.",
+    "description": "Explore Apple Watch Series options. The manufacturer photos show Series 11 as a design reference. Confirm the exact generation, case size, cellular support and included strap before ordering."
+  },
+  "soundcore-wireless-earbuds": {
+    "name": "Soundcore portable party speaker",
+    "description": "A portable Soundcore party speaker. The reference photos show the Rave Mini design; confirm the model, condition and included power adapter with London Tech before ordering.",
+    "mediaNote": "Speaker reference photos, showing Soundcore Rave Mini. Confirm the exact unit and model with the store.",
+    "specifications": [["Type", "Portable party speaker"], ["Model", "Confirm with store; Rave Mini reference"]]
+  },
+  "soundcore-party-speaker": {
+    "name": "Soundcore party speaker",
+    "brand": "Soundcore",
+    "description": "Soundcore party-speaker options for music at home or on the go. Reference photos show the Rave Mini design; confirm the model, condition and package with the store.",
+    "mediaNote": "Speaker reference photos, showing Soundcore Rave Mini. Confirm the exact unit and model with the store.",
+    "specifications": [["Type", "Portable party speaker"], ["Model", "Confirm with store; Rave Mini reference"]]
+  },
+  "elite-controller": {
+    "name": "Wireless gaming controller",
+    "brand": "Unspecified",
+    "description": "A gaming-controller enquiry listing. Confirm the manufacturer, exact model, supported platform, connection method and included accessories before ordering. The reference image does not identify an Xbox Elite model.",
+    "mediaNote": "Controller reference image. Manufacturer, model and platform compatibility are to be confirmed.",
+    "specifications": [["Type", "Gaming controller"], ["Platform", "Confirm exact compatibility"], ["Model", "Confirm with store"]]
+  },
+  "retro-handhelds": {
+    "brand": "Unspecified",
+    "description": "Explore retro handheld gaming options. This collection photo is a category reference, not a promise that every pictured system or game is included. Confirm the actual device, condition and package with the store.",
+    "mediaNote": "Collection reference image. Confirm the individual handheld system and included games.",
+    "specifications": [["Type", "Handheld gaming"], ["Model", "Confirm individual system"], ["Included games", "Confirm with store"]]
+  },
+  "aramid-fibre-case": {
+    "brand": "PITAKA",
+    "description": "Explore PITAKA aramid-fibre phone cases. This manufacturer reference shows the woven finish and case design. Confirm the exact phone fit, case style, finish and available colour before ordering.",
+    "mediaNote": "PITAKA manufacturer reference. Confirm the exact phone fit and case variant.",
+    "specifications": [["Brand", "PITAKA"], ["Material", "Aramid fibre; confirm variant"], ["Compatibility", "Confirm exact phone model"]]
+  },
+  "magsafe-powerbank": {
+    "name": "Magnetic power bank",
+    "brand": "Unspecified",
+    "description": "A magnetic power-bank enquiry listing. Confirm the manufacturer, battery capacity, charging standard, output and included cable for your phone before ordering.",
+    "mediaNote": "Power-bank reference image. Brand, capacity and charging compatibility are to be confirmed.",
+    "specifications": [["Type", "Magnetic power bank"], ["Capacity", "Confirm exact model"], ["Charging output", "Confirm with store"]]
+  },
+  "clear-armor-case": {
+    "name": "Clear magnetic phone case",
+    "brand": "Unspecified",
+    "description": "A clear phone-case enquiry listing. Confirm the exact phone model, camera opening, material, magnetic-charging compatibility and available finish before ordering.",
+    "mediaNote": "Clear-case reference image. Confirm the exact phone fit and manufacturer.",
+    "specifications": [["Style", "Clear phone case"], ["Phone fit", "Confirm exact device"], ["Magnetic charging", "Confirm compatibility"]]
+  },
+  "slim-case-trio": {
+    "name": "Slim phone case",
+    "brand": "Unspecified",
+    "description": "Explore slim phone-case options. The image shows several colour references; it does not establish a three-case bundle. Confirm the manufacturer, exact phone fit, finish and number of cases before ordering.",
+    "mediaNote": "Case colour references. Confirm the phone fit, manufacturer and quantity included.",
+    "specifications": [["Style", "Slim phone case"], ["Phone fit", "Confirm exact device"], ["Pack quantity", "Confirm with store"]]
+  },
+  "pierre-cardin-softshell-72": {
+    "name": "Pierre Cardin 72cm soft trolley case",
+    "brand": "Pierre Cardin",
+    "description": "A Pierre Cardin soft trolley-case enquiry. The manufacturer reference photos show the 72cm PC 3766 in Green; confirm the exact code, dimensions, colour and included accessories with the store.",
+    "mediaNote": "Manufacturer reference: Pierre Cardin PC 3766, 72cm, Green. Confirm the actual stocked variant.",
+    "specifications": [["Type", "Soft trolley case"], ["Size", "72cm family; confirm variant"], ["Reference model", "PC 3766, Green"]]
+  },
+  "dji-pocket-camera": {
+    "mediaNote": "DJI Pocket camera reference. Confirm the exact generation and bundle before ordering.",
+    "specifications": [["Type", "Pocket gimbal camera"], ["Generation", "Confirm exact model"], ["Bundle", "Confirm with store"]]
+  },
+  "bleu-de-chanel-edp": { "brand": "Chanel" },
+  "carolina-herrera-212-vip-men": { "brand": "Carolina Herrera" },
+  "pierre-cardin-pc1844": { "brand": "Pierre Cardin" },
+  "thinkpad-pro-topload-gen2": { "brand": "Lenovo" },
+  "thinkpad-tl620-brown": { "brand": "Lenovo" },
+  "green-lion-strive-smart-watch": { "brand": "Green Lion" },
+  "green-lion-usbc-cable": { "brand": "Green Lion" },
+  "ride-5-ps5": { "brand": "Milestone" },
+  "ea-sports-fc-26": { "brand": "EA SPORTS" },
+  "super-mario-party-jamboree": { "brand": "Nintendo" },
+  "witcher-3-switch": { "brand": "CD PROJEKT RED" }
+}

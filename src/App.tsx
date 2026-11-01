@@ -1,21 +1,13 @@
 import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
+import { StoreFooter } from "./components/StoreFooter.jsx"
+import { OfferPreviewBanner } from "./components/OfferPreviewBanner.jsx"
+import { ProductOffer } from "./components/ProductOffer.jsx"
+import { productOffer } from "./lib/offer-details.js"
+import { UtilityBanner } from "./components/UtilityBanner.jsx"
 import { ProductMotionNote, TypewriterText } from "./components/MotionText"
 import { useState, useEffect, type ReactNode } from "react"
 import logoImg from "@/imports/london/london-tech-logo.png"
-import iphone18 from "@/imports/london/iphone-18-pro.png"
-import iphoneBurgundy from "@/imports/london/iphone-18-burgundy.jpg"
-import galaxyS25 from "@/imports/london/galaxy-s25-ultra.jpg"
-import galaxyFold from "@/imports/london/galaxy-z-fold-8.png"
-import honorX9b from "@/imports/london/honor-x9b.png"
-import infinixSmart from "@/imports/london/infinix-smart-10.jpg"
-import galaxyTablets from "@/imports/london/galaxy-tablets.jpg"
-import ipadPro from "@/imports/london/ipad-pro.png"
-import soundcore from "@/imports/london/soundcore-earbuds.jpeg"
-import greenLionCable from "@/imports/london/green-lion-cable.jpeg"
-import djiOsmo from "@/imports/london/dji-osmo-pocket.jpeg"
-import appleWatch from "@/imports/london/apple-watch.jpeg"
-import accessoryKit from "@/imports/london/accessory-kit.jpeg"
 import {
   Search,
   ScanSearch,
@@ -30,7 +22,6 @@ import {
   Truck,
   ShieldCheck,
   Gift,
-  Star,
   MapPin,
   Flame,
   Sparkles,
@@ -71,26 +62,40 @@ const SEARCH_WORDS = [
   "smart watches",
   "premium accessories",
 ]
-const UTILITY_MESSAGES = [
-  "Original technology. Local expertise.",
-  "Phones, audio & everyday essentials.",
-  "Talk tech: 0788341111 · 0709417273",
-]
 
 function WhatsAppIcon({ size = 20 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
       <path d="M20.52 3.48A11.86 11.86 0 0 0 12.05 0C5.47 0 .12 5.35.12 11.93c0 2.1.55 4.16 1.6 5.97L.02 24l6.25-1.64a11.9 11.9 0 0 0 5.78 1.48h.01C18.64 23.84 24 18.49 24 11.91c0-3.19-1.24-6.18-3.48-8.43ZM12.06 21.83a9.87 9.87 0 0 1-5.04-1.38l-.36-.21-3.71.97.99-3.62-.24-.37a9.87 9.87 0 0 1-1.51-5.29c0-5.47 4.45-9.92 9.92-9.92a9.85 9.85 0 0 1 7.02 2.91 9.86 9.86 0 0 1 2.9 7.02c0 5.47-4.45 9.92-9.97 9.92Zm5.44-7.43c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.21 3.09c.15.2 2.1 3.21 5.09 4.5.71.3 1.26.48 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35Z" />
     </svg>
   )
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
+interface ProductReference {
+  id: number
+  badge?: string
+  badgeColor?: string
+}
+interface CategoryEntry {
+  name: string
+  icon: ReactNode
+}
+interface CatalogueProductIdentity {
+  id: string
+  active: boolean
+}
 interface Product {
   id: number
   name: string
   arabicName?: string
-  price: number
+  price: number | null
   oldPrice?: number
   image: string
   rating: number
@@ -100,86 +105,12 @@ interface Product {
   sold?: number
   available?: number
 }
-interface CDTime {
-  days: number
-  hours: number
-  mins: number
-  secs: number
-}
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
-const ugx = (n: number) => "UGX " + n.toLocaleString("en-UG")
-const ugxArabic = (n: number) => n.toLocaleString("ar-UG") + " شلن أوغندي"
+const ugx = (n: number | null) =>
+  n == null ? "Price on request" : "UGX " + n.toLocaleString("en-UG")
 const whatsapp = (p: Product) =>
   `https://wa.me/256788341111?text=${encodeURIComponent(`Hello London Tech, I am interested in ${p.name} (guide price ${ugx(p.price)}). Please confirm the configuration and availability.`)}`
 
-function Stars({ r }: { r: number }) {
-  return (
-    <div style={{ display: "flex", gap: 2 }}>
-      {[1, 2, 3, 4, 5].map((s) => (
-        <Star key={s} size={10} fill={s <= r ? B_GOLD : "#ddd"} stroke="none" />
-      ))}
-    </div>
-  )
-}
-
-function useCountdown(init: number) {
-  const [t, setT] = useState<CDTime>({ days: 0, hours: 0, mins: 0, secs: init })
-  useEffect(() => {
-    let total = init
-    const id = setInterval(() => {
-      total = Math.max(0, total - 1)
-      setT({
-        days: Math.floor(total / 86400),
-        hours: Math.floor((total % 86400) / 3600),
-        mins: Math.floor((total % 3600) / 60),
-        secs: total % 60,
-      })
-    }, 1000)
-    return () => clearInterval(id)
-  }, [init])
-  return t
-}
-
-function CDBox({ label, value }: { label: string; value: number }) {
-  return (
-    <div
-      style={{
-        background: "#fff",
-        border: `1px solid ${B_BLUE_LIGHT}`,
-        borderRadius: 4,
-        minWidth: 44,
-        textAlign: "center",
-        padding: "4px 6px",
-      }}
-    >
-      <div
-        style={{
-          fontFamily: "Nunito,sans-serif",
-          fontWeight: 800,
-          fontSize: 18,
-          color: B_BLUE,
-          lineHeight: 1,
-        }}
-      >
-        {String(value).padStart(2, "0")}
-      </div>
-      <div
-        style={{
-          fontSize: 9,
-          color: "#999",
-          textTransform: "uppercase",
-          letterSpacing: 1,
-          marginTop: 2,
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  )
-}
-
-// ── Btn helper ────────────────────────────────────────────────────────────────
 function Btn({
   children,
   small,
@@ -214,7 +145,7 @@ function Btn({
 }
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATS: { name: string; icon: ReactNode }[] = [
+const CATS: CategoryEntry[] = [
   { name: "Smartphones · الهواتف", icon: <Smartphone size={14} /> },
   { name: "Smart Watches · الساعات", icon: <Watch size={14} /> },
   { name: "Laptops & PC · الحواسيب", icon: <Laptop size={14} /> },
@@ -245,203 +176,14 @@ const TREND_CATS = [
   "Cameras",
 ]
 
-const PRODUCTS: Product[] = [
-  {
-    id: 1,
-    name: "iPhone 18 Pro Max 256GB",
-    arabicName: "آيفون 18 برو ماكس 256 جيجا",
-    price: 5_650_000,
-    oldPrice: 6_100_000,
-    image: iphone18,
-    rating: 5,
-    badge: "HOT",
-    badgeColor: B_GOLD,
-    category: "Smartphones",
-  },
-  {
-    id: 2,
-    name: "iPhone 18 Pro Max Burgundy",
-    arabicName: "آيفون 18 برو ماكس عنابي",
-    price: 6_580_000,
-    image: iphoneBurgundy,
-    rating: 5,
-    badge: "NEW",
-    badgeColor: B_GOLD,
-    category: "Smartphones",
-  },
-  {
-    id: 3,
-    name: "Samsung Galaxy S25 Ultra",
-    arabicName: "سامسونج جالكسي إس 25 ألترا",
-    price: 4_850_000,
-    oldPrice: 5_200_000,
-    image: galaxyS25,
-    rating: 5,
-    badge: "-7%",
-    badgeColor: B_BLUE,
-    category: "Smartphones",
-  },
-  {
-    id: 4,
-    name: "Samsung Galaxy Z Fold 8",
-    arabicName: "سامسونج جالكسي زد فولد 8",
-    price: 7_240_000,
-    image: galaxyFold,
-    rating: 5,
-    badge: "NEW",
-    badgeColor: B_GOLD,
-    category: "Smartphones",
-  },
-  {
-    id: 5,
-    name: "Honor X9b 5G",
-    arabicName: "هونر إكس 9 بي فايف جي",
-    price: 1_320_000,
-    oldPrice: 1_480_000,
-    image: honorX9b,
-    rating: 4,
-    badge: "DEAL",
-    badgeColor: B_GOLD,
-    category: "Smartphones",
-  },
-  {
-    id: 6,
-    name: "Infinix Smart 10 Plus",
-    arabicName: "إنفينيكس سمارت 10 بلس",
-    price: 590_000,
-    image: infinixSmart,
-    rating: 4,
-    category: "Smartphones",
-  },
-  {
-    id: 7,
-    name: "Samsung Galaxy Tablet",
-    arabicName: "تابلت سامسونج جالكسي",
-    price: 2_450_000,
-    image: galaxyTablets,
-    rating: 4,
-    badge: "HOT",
-    badgeColor: B_GOLD,
-    category: "Tablets",
-  },
-  {
-    id: 8,
-    name: "Apple iPad Pro",
-    arabicName: "آبل آيباد برو",
-    price: 4_200_000,
-    oldPrice: 4_550_000,
-    image: ipadPro,
-    rating: 5,
-    category: "Tablets",
-  },
-  {
-    id: 9,
-    name: "Soundcore Wireless Earbuds",
-    arabicName: "سماعات ساوندكور لاسلكية",
-    price: 265_000,
-    image: soundcore,
-    rating: 4,
-    badge: "HOT",
-    badgeColor: B_GOLD,
-    category: "Audio",
-  },
-  {
-    id: 10,
-    name: "Green Lion USB-C Cable",
-    arabicName: "كيبل جرين ليون يو إس بي سي",
-    price: 85_000,
-    image: greenLionCable,
-    rating: 4,
-    category: "Accessories",
-  },
-  {
-    id: 11,
-    name: "DJI Osmo Pocket Camera",
-    arabicName: "كاميرا دي جي آي أوسمو بوكيت",
-    price: 2_780_000,
-    image: djiOsmo,
-    rating: 5,
-    badge: "NEW",
-    badgeColor: B_GOLD,
-    category: "Cameras",
-  },
-  {
-    id: 12,
-    name: "Apple Watch Series",
-    arabicName: "ساعة آبل الذكية",
-    price: 1_190_000,
-    oldPrice: 1_350_000,
-    image: appleWatch,
-    rating: 4,
-    category: "Accessories",
-  },
-]
-
-const LATEST: Product[] = [
-  {
-    id: 101,
-    name: "iPhone 18 Pro Max",
-    price: 5_650_000,
-    image: iphone18,
-    rating: 5,
-    category: "Smartphones",
-  },
-  {
-    id: 102,
-    name: "Galaxy Z Fold 8",
-    price: 7_240_000,
-    image: galaxyFold,
-    rating: 5,
-    category: "Smartphones",
-  },
-  {
-    id: 103,
-    name: "Apple iPad Pro",
-    price: 4_200_000,
-    image: ipadPro,
-    rating: 5,
-    category: "Tablets",
-  },
-  {
-    id: 104,
-    name: "DJI Osmo Pocket",
-    price: 2_780_000,
-    image: djiOsmo,
-    rating: 4,
-    category: "Cameras",
-  },
-]
-
-const DEALS: Product[] = [
-  {
-    id: 201,
-    name: "Samsung Galaxy S25 Ultra",
-    arabicName: "سامسونج جالكسي إس 25 ألترا",
-    price: 4_850_000,
-    oldPrice: 5_200_000,
-    image: galaxyS25,
-    rating: 5,
-    badge: "-7%",
-    badgeColor: B_GOLD,
-    category: "Smartphones",
-    available: 60,
-    sold: 32,
-  },
-  {
-    id: 202,
-    name: "Soundcore Wireless Earbuds",
-    arabicName: "سماعات ساوندكور لاسلكية",
-    price: 265_000,
-    oldPrice: 320_000,
-    image: soundcore,
-    rating: 4,
-    badge: "-17%",
-    badgeColor: B_GOLD,
-    category: "Audio",
-    available: 100,
-    sold: 61,
-  },
-]
+// Product order and merchandising only. Names, photos, prices and stock come
+// from the single store catalogue, including merchant changes.
+const PRODUCTS: ProductReference[] = Array.from({ length: 12 }, (_, index) => ({
+  id: index + 1,
+  ...(index < 4 ? { badge: "Spotlight" } : {}),
+}))
+const LATEST: ProductReference[] = [101, 102, 103, 104].map((id) => ({ id }))
+const DEALS: ProductReference[] = [201, 202].map((id) => ({ id }))
 
 const HERO_SLIDES = [
   {
@@ -455,39 +197,124 @@ const HERO_SLIDES = [
     tag: "LONDON TECH",
     headline: "Think bigger.",
     hl: "Create more.",
-    bg: ipadPro,
+    bg: "/promotions/gadget-collection.webp",
     category: "Tablets",
   },
   {
     tag: "LONDON TECH",
     headline: "Tune in.",
     hl: "Go wireless.",
-    bg: soundcore,
+    bg: "/promotions/gadget-collection.webp",
     category: "Audio",
   },
 ]
 
-
-const COMMERCE_IDS: Record<number, string> = { 1:'iphone-18-pro-max',2:'iphone-18-pro-max-burgundy',3:'galaxy-s25-ultra',4:'galaxy-z-fold8',5:'honor-x9b',6:'infinix-smart-10-plus',7:'samsung-galaxy-tablet',8:'apple-ipad-pro',9:'soundcore-wireless-earbuds',10:'green-lion-usbc-cable',11:'dji-pocket-camera',12:'apple-watch-series',101:'iphone-18-pro-max',102:'galaxy-z-fold8',103:'apple-ipad-pro',104:'dji-pocket-camera',201:'galaxy-s25-ultra',202:'soundcore-wireless-earbuds' }
+const COMMERCE_IDS: Record<number, string> = {
+  1: "iphone-18-pro-max",
+  2: "iphone-18-pro-max-burgundy",
+  3: "galaxy-s25-ultra",
+  4: "galaxy-z-fold8",
+  5: "honor-x9b",
+  6: "infinix-smart-10-plus",
+  7: "samsung-galaxy-tablet",
+  8: "apple-ipad-pro",
+  9: "soundcore-wireless-earbuds",
+  10: "green-lion-usbc-cable",
+  11: "dji-pocket-camera",
+  12: "apple-watch-series",
+  101: "iphone-18-pro-max",
+  102: "galaxy-z-fold8",
+  103: "apple-ipad-pro",
+  104: "dji-pocket-camera",
+  201: "galaxy-s25-ultra",
+  202: "soundcore-wireless-earbuds",
+}
 const commerceId = (p: Product) => COMMERCE_IDS[p.id] || String(p.id)
-const categoryId = (name: string) => ({ All:'shop','All Categories':'shop',Smartphones:'mobiles','Smart Watches':'watches','Laptops & PC':'laptops',Laptops:'laptops',Tablets:'tablets',Earbuds:'audio',Speakers:'audio',Headphones:'audio',Audio:'audio','Audio & Earbuds':'audio',Cameras:'cameras',Gaming:'gaming',Accessories:'accessories' } as Record<string,string>)[name.split(' · ')[0]] || 'shop'
-const navigationPath = (label: string) => label === 'Home' ? '/' : '/collections/' + categoryId(label) + '/'
-function hydrateProduct(p: Product, catalogue: any[]): Product {
-  const live = catalogue.find((product) => product.id === commerceId(p))
-  return live ? { ...p, name:live.name, image:live.image, price:live.price ?? p.price, oldPrice:live.comparePrice ?? undefined, rating:0, badge:p.badge?.startsWith('-') ? 'PICK' : p.badge, sold:undefined, available:live.stock ?? undefined } : p
+const categoryId = (name: string) =>
+  (({
+    All: "shop",
+    "All Categories": "shop",
+    Smartphones: "mobiles",
+    "Smart Watches": "watches",
+    "Laptops & PC": "laptops",
+    Laptops: "laptops",
+    Tablets: "tablets",
+    Earbuds: "audio",
+    Speakers: "audio",
+    Headphones: "audio",
+    Audio: "audio",
+    "Audio & Earbuds": "audio",
+    Cameras: "cameras",
+    Gaming: "gaming",
+    Accessories: "accessories",
+  }) as Record<string, string>)[name.split(" · ")[0]] || "shop"
+const navigationPath = (label: string) =>
+  label === "Home" ? "/" : "/collections/" + categoryId(label) + "/"
+function hydrateProduct(p: ProductReference, catalogue: any[]): Product | null {
+  const live = catalogue.find(
+    (product) =>
+      product.id === (COMMERCE_IDS[p.id] || String(p.id)) &&
+      product.active !== false,
+  )
+  if (!live) return null
+  const category =
+    ({
+      mobiles: "Smartphones",
+      laptops: "Laptops",
+      tablets: "Tablets",
+      audio: "Audio",
+      watches: "Smart Watches",
+      gaming: "Gaming",
+      cameras: "Cameras",
+      accessories: "Accessories",
+    } as Record<string, string>)[live.category] || "Accessories"
+  return {
+    ...p,
+    name: live.name,
+    arabicName: live.arabicName,
+    category,
+    image: live.image,
+    price: live.price,
+    oldPrice: live.priceConfirmed
+      ? (live.comparePrice ?? undefined)
+      : undefined,
+    rating: live.reviewCount > 0 ? live.rating : 0,
+    available: live.stock ?? undefined,
+  }
+}
+function catalogueProducts(
+  items: ProductReference[],
+  catalogue: any[],
+): Product[] {
+  return items.flatMap((item) => {
+    const product = hydrateProduct(item, catalogue)
+    return product ? [product] : []
+  })
+}
+function cardBadge(p: Product, catalogue: any[], demo: boolean) {
+  const product = catalogue.find((item) => item.id === commerceId(p))
+  const offer = product && productOffer(product, { demo })
+  return offer?.discounted ? "−" + offer.discountPercent + "%" : p.badge
 }
 
 // ── Product Card ──────────────────────────────────────────────────────────────
 function ProductCard({ p }: { p: Product }) {
-  const { products, wishlist, toggleWish, addCart, cart } = useStore()
-  const item = products.find((item: { id: string }) => item.id === commerceId(p))
+  const { products, wishlist, toggleWish, addCart, cart, offerPreview } =
+    useStore()
+  const item = products.find(
+    (item: { id: string }) => item.id === commerceId(p),
+  )
   const wished = wishlist.includes(commerceId(p))
   const added = cart.some((line: { id: string }) => line.id === commerceId(p))
-  const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0
+  const badge = cardBadge(p, products, !!offerPreview)
+  if (!item) return null
   return (
     <div
       className="pcard"
-      onClick={(e) => { if (!(e.target as HTMLElement).closest("button,a")) navigate("/products/" + commerceId(p) + "/") }}
+      onClick={(e) => {
+        if (!(e.target as HTMLElement).closest("button,a"))
+          navigate("/products/" + commerceId(p) + "/")
+      }}
       style={{
         background: "#fff",
         border: "1px solid #eee",
@@ -507,7 +334,8 @@ function ProductCard({ p }: { p: Product }) {
       >
         <img
           src={p.image}
-          loading="lazy" decoding="async"
+          loading="lazy"
+          decoding="async"
           alt={p.name}
           className="pimg"
           style={{
@@ -518,7 +346,7 @@ function ProductCard({ p }: { p: Product }) {
             transition: "transform .3s",
           }}
         />
-        {p.badge && (
+        {badge && (
           <span
             style={{
               position: "absolute",
@@ -533,7 +361,7 @@ function ProductCard({ p }: { p: Product }) {
               fontFamily: "Nunito,sans-serif",
             }}
           >
-            {p.badge}
+            {badge}
           </span>
         )}
         <div
@@ -553,7 +381,8 @@ function ProductCard({ p }: { p: Product }) {
           }}
         >
           <button
-            onClick={() => item && addCart(item)}
+            disabled={item.stock === 0}
+            onClick={() => addCart(item)}
             style={{
               fontSize: 11,
               fontWeight: 700,
@@ -569,7 +398,8 @@ function ProductCard({ p }: { p: Product }) {
             {added ? "✓ Added" : "+ Add to Cart"}
           </button>
           <button
-            onClick={() => toggleWish(commerceId(p))} aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
+            onClick={() => toggleWish(commerceId(p))}
+            aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
             style={{
               background: "none",
               border: "none",
@@ -623,65 +453,11 @@ function ProductCard({ p }: { p: Product }) {
             {p.arabicName}
           </div>
         )}
-        <Stars r={0} />
-        <span style={{ display: "block", fontSize: 11.5, color: "#64748b", marginTop: 5 }}>Guide price · confirm with store</span>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginTop: 5,
-            flexWrap: "wrap",
-          }}
-        >
-          <span
-            style={{
-              fontWeight: 900,
-              fontSize: 18,
-              color: B_BLUE,
-              fontFamily: "Nunito,sans-serif",
-            }}
-          >
-            {ugx(p.price)}
-          </span>
-          {p.oldPrice && (
-            <span
-              style={{
-                fontSize: 11,
-                color: "#bbb",
-                textDecoration: "line-through",
-              }}
-            >
-              {ugx(p.oldPrice)}
-            </span>
-          )}
-          {disc > 0 && (
-            <span
-              style={{
-                fontSize: 10,
-                background: B_GOLD,
-                color: "#fff",
-                padding: "1px 5px",
-                borderRadius: 2,
-                fontFamily: "Nunito,sans-serif",
-              }}
-            >
-              -{disc}%
-            </span>
-          )}
-        </div>
-        <div
-          dir="rtl"
-          lang="ar"
-          style={{
-            fontSize: 11.5,
-            color: "#64748b",
-            textAlign: "left",
-            marginTop: 2,
-          }}
-        >
-          {ugxArabic(p.price)}
-        </div>
+        <ProductOffer
+          product={item}
+          demo={!!offerPreview}
+          showDiscountBadge={false}
+        />
         <div
           className="product-actions"
           style={{
@@ -712,7 +488,8 @@ function ProductCard({ p }: { p: Product }) {
             <WhatsAppIcon size={15} /> Chat
           </a>
           <button
-            onClick={() => item && addCart(item)}
+            disabled={item.stock === 0}
+            onClick={() => addCart(item)}
             style={{
               background: added ? B_GOLD : B_BLUE,
               color: "#fff",
@@ -793,15 +570,23 @@ function SectionHeader({
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App({ children }: { children?: ReactNode }) {
-  const { products: catalogue, cart: cartItems, setCartOpen, settings, openImageSearch } = useStore()
-  const cart = cartItems.reduce((sum: number, line: { quantity: number }) => sum + line.quantity, 0)
+  const {
+    products: catalogue,
+    cart: cartItems,
+    setCartOpen,
+    openImageSearch,
+    offerPreview,
+  } = useStore()
+  const cart = cartItems.reduce(
+    (sum: number, line: { quantity: number }) => sum + line.quantity,
+    0,
+  )
   const [slide, setSlide] = useState(0)
   const [latestOffset, setLatestOffset] = useState(0)
   const [dealOffset, setDealOffset] = useState(0)
   const [tcat, setTcat] = useState("All")
   const [q, setQ] = useState("")
   const [navOpen, setNavOpen] = useState(false)
-  const [utility, setUtility] = useState(0)
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchCategory, setSearchCategory] = useState("All Categories")
   const [heroHovered, setHeroHovered] = useState(false)
@@ -818,20 +603,27 @@ export default function App({ children }: { children?: ReactNode }) {
     )
     return () => clearInterval(t)
   }, [heroHovered])
-  useEffect(() => {
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)")
-    let timer: ReturnType<typeof setInterval> | undefined
-    const update = () => {
-      if (timer) clearInterval(timer)
-      if (!preference.matches) timer = setInterval(() => setUtility((value) => (value + 1) % UTILITY_MESSAGES.length), 5800)
-    }
-    update()
-    preference.addEventListener("change", update)
-    return () => { if (timer) clearInterval(timer); preference.removeEventListener("change", update) }
-  }, [])
 
-  const hero = HERO_SLIDES[slide]
-  const filtered = PRODUCTS.map((p) => hydrateProduct(p, catalogue)).filter(
+  const currentSlide = HERO_SLIDES[slide]
+  const heroId =
+    slide === 1 ? "apple-ipad-pro" : slide === 2 ? "bose-qc-ultra" : null
+  const heroItem = heroId
+    ? catalogue.find(
+        (product: CatalogueProductIdentity) =>
+          product.id === heroId && product.active !== false,
+      )
+    : null
+  const hero = {
+    ...currentSlide,
+    bg: heroItem?.image || HERO_SLIDES[0].bg,
+    alt:
+      heroItem?.name ||
+      "Collection of phones, headphones, watches, tablets and gaming accessories",
+  }
+  const featuredPhone = catalogue.find(
+    (product: { id: string }) => product.id === "iphone-18-pro-max",
+  )
+  const filtered = catalogueProducts(PRODUCTS, catalogue).filter(
     (p) =>
       (tcat === "All" || p.category === tcat) &&
       p.name.toLowerCase().includes(q.toLowerCase()) &&
@@ -840,9 +632,13 @@ export default function App({ children }: { children?: ReactNode }) {
         (searchCategory.startsWith("Earbuds") && p.category === "Audio")),
   )
   const shopCategory = (category: string) => {
-    navigate('/collections/' + categoryId(category) + '/' + (q.trim() ? '?q=' + encodeURIComponent(q.trim()) : ''))
+    navigate(
+      "/collections/" +
+        categoryId(category) +
+        "/" +
+        (q.trim() ? "?q=" + encodeURIComponent(q.trim()) : ""),
+    )
   }
-
 
   return (
     <div
@@ -901,13 +697,8 @@ export default function App({ children }: { children?: ReactNode }) {
       `}</style>
 
       {/* ── Announcement bar ──────────────────────────────────────────── */}
-      <div className="utility-bar">
-        <span className="utility-welcome">LONDON TECH</span>
-        <span className="utility-feature">ORIGINAL TECH</span>
-        <span className="utility-message">
-          <span className="utility-landing" key={utility}>{UTILITY_MESSAGES[utility]}</span>
-        </span>
-      </div>
+      <OfferPreviewBanner />
+      <UtilityBanner />
 
       {/* ── Header ────────────────────────────────────────────────────── */}
       <header
@@ -978,7 +769,11 @@ export default function App({ children }: { children?: ReactNode }) {
             <div className="search-field">
               {!q && (
                 <div className="search-suggestion" aria-hidden="true">
-                  Search <TypewriterText words={SEARCH_WORDS} active={!searchFocused} />
+                  Search{" "}
+                  <TypewriterText
+                    words={SEARCH_WORDS}
+                    active={!searchFocused}
+                  />
                 </div>
               )}
               <input
@@ -992,7 +787,15 @@ export default function App({ children }: { children?: ReactNode }) {
                 }}
               />
             </div>
-            <button type="button" className="image-search-trigger" aria-label="Search by image" title="Search by image" onClick={openImageSearch}><ScanSearch size={20} strokeWidth={1.7} /></button>
+            <button
+              type="button"
+              className="image-search-trigger"
+              aria-label="Search by image"
+              title="Search by image"
+              onClick={openImageSearch}
+            >
+              <ScanSearch size={20} strokeWidth={1.7} />
+            </button>
             <button
               onClick={() => shopCategory("All")}
               style={{
@@ -1020,7 +823,8 @@ export default function App({ children }: { children?: ReactNode }) {
           >
             <AccountMenu />
             <button
-              onClick={() => setCartOpen(true)} aria-label="Open shopping cart"
+              onClick={() => setCartOpen(true)}
+              aria-label="Open shopping cart"
               style={{
                 background: "none",
                 border: "none",
@@ -1063,7 +867,6 @@ export default function App({ children }: { children?: ReactNode }) {
               </div>
               My Cart
             </button>
-
           </div>
         </div>
       </header>
@@ -1105,7 +908,11 @@ export default function App({ children }: { children?: ReactNode }) {
           {/* Desktop links */}
           <div
             className="nav-desktop"
-            style={{ alignItems: "center", overflowX: "auto", overflowY: "hidden" }}
+            style={{
+              alignItems: "center",
+              overflowX: "auto",
+              overflowY: "hidden",
+            }}
           >
             {NAV_LINKS.map((lnk, i) => (
               <a
@@ -1189,861 +996,670 @@ export default function App({ children }: { children?: ReactNode }) {
       </nav>
 
       {/* The current repository storefront is the visual source of truth. */}
-      {children ? <div className="commerce-surface">{children}</div> : <div className="page-wrap">
-        {/* ── Sidebar ── */}
-        <aside className="sidebar-col">
-          {/* Category list */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #e0e8f5",
-              borderRadius: 4,
-              overflow: "hidden",
-              marginBottom: 14,
-            }}
-          >
-            {CATS.map((cat) => (
+      {children ? (
+        <div className="commerce-surface">{children}</div>
+      ) : (
+        <div className="page-wrap">
+          {/* ── Sidebar ── */}
+          <aside className="sidebar-col">
+            {/* Category list */}
+            <div
+              style={{
+                background: "#fff",
+                border: "1px solid #e0e8f5",
+                borderRadius: 4,
+                overflow: "hidden",
+                marginBottom: 14,
+              }}
+            >
+              {CATS.map((cat) => (
+                <div
+                  key={cat.name}
+                  role="link"
+                  tabIndex={0}
+                  onClick={() => shopCategory(cat.name)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") shopCategory(cat.name)
+                  }}
+                  style={{
+                    padding: "9px 12px",
+                    borderBottom: "1px solid #f5f5f5",
+                    fontSize: 12.5,
+                    color: "#555",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontFamily: "Nunito Sans,sans-serif",
+                    transition: "all .15s",
+                  }}
+                  onMouseEnter={(e) => {
+                    const d = e.currentTarget as HTMLDivElement
+                    d.style.background = B_BLUE_LIGHT
+                    d.style.color = B_BLUE
+                  }}
+                  onMouseLeave={(e) => {
+                    const d = e.currentTarget as HTMLDivElement
+                    d.style.background = ""
+                    d.style.color = "#555"
+                  }}
+                >
+                  <span
+                    style={{ color: B_BLUE, display: "flex", flexShrink: 0 }}
+                  >
+                    {cat.icon}
+                  </span>
+                  <span style={{ flex: 1, fontWeight: 500 }}>{cat.name}</span>
+                  <ChevronRight size={12} color="#ccc" />
+                </div>
+              ))}
               <div
-                key={cat.name}
-                role="link" tabIndex={0} onClick={() => shopCategory(cat.name)} onKeyDown={(e) => { if (e.key === "Enter") shopCategory(cat.name) }}
                 style={{
                   padding: "9px 12px",
-                  borderBottom: "1px solid #f5f5f5",
                   fontSize: 12.5,
-                  color: "#555",
+                  color: B_BLUE,
                   cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  fontFamily: "Nunito Sans,sans-serif",
-                  transition: "all .15s",
-                }}
-                onMouseEnter={(e) => {
-                  const d = e.currentTarget as HTMLDivElement
-                  d.style.background = B_BLUE_LIGHT
-                  d.style.color = B_BLUE
-                }}
-                onMouseLeave={(e) => {
-                  const d = e.currentTarget as HTMLDivElement
-                  d.style.background = ""
-                  d.style.color = "#555"
-                }}
-              >
-                <span style={{ color: B_BLUE, display: "flex", flexShrink: 0 }}>
-                  {cat.icon}
-                </span>
-                <span style={{ flex: 1, fontWeight: 500 }}>{cat.name}</span>
-                <ChevronRight size={12} color="#ccc" />
-              </div>
-            ))}
-            <div
-              style={{
-                padding: "9px 12px",
-                fontSize: 12.5,
-                color: B_BLUE,
-                cursor: "pointer",
-                fontWeight: 700,
-                fontFamily: "Nunito,sans-serif",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-              }}
-            >
-              <a href="/collections/shop/" style={{ display: "flex", alignItems: "center", gap: 6 }}><Sparkles size={13} /> More Categories</a>
-            </div>
-          </div>
-
-          {/* Featured banner */}
-          <div
-            style={{
-              borderRadius: 4,
-              overflow: "hidden",
-              position: "relative",
-              minHeight: 170,
-              marginBottom: 14,
-              cursor: "pointer",
-            }}
-          >
-            <img
-              src={iphone18}
-              alt="iPhone 18 Pro Max"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                padding: 10,
-                background: "#fff",
-                display: "block",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(0deg,rgba(0,0,0,.75) 55%,transparent)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-end",
-                padding: "12px 14px",
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "Nunito,sans-serif",
-                  fontWeight: 900,
-                  fontSize: 20,
-                  color: "#fff",
-                  lineHeight: 1,
-                }}
-              >
-                UGX 5,650,000
-              </div>
-              <div
-                style={{
-                  fontFamily: "Nunito,sans-serif",
                   fontWeight: 700,
-                  fontSize: 11,
-                  color: "#dde",
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                  margin: "4px 0 8px",
+                  fontFamily: "Nunito,sans-serif",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
                 }}
               >
-                iPhone 18 Pro Max
+                <a
+                  href="/collections/shop/"
+                  style={{ display: "flex", alignItems: "center", gap: 6 }}
+                >
+                  <Sparkles size={13} /> More Categories
+                </a>
               </div>
-              <Btn small>Shop now →</Btn>
             </div>
-          </div>
 
-          {/* Latest products */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #e0e8f5",
-              borderRadius: 4,
-              overflow: "hidden",
-              marginBottom: 14,
-            }}
-          >
+            {/* Featured product uses the same catalogue data as its detail page. */}
+            {featuredPhone && (
+              <a
+                className="sidebar-featured-product"
+                href={"/products/" + featuredPhone.id + "/"}
+              >
+                <img src={featuredPhone.image} alt={featuredPhone.name} />
+                <span>In focus</span>
+                <h3>{featuredPhone.name}</h3>
+                <ProductOffer
+                  product={featuredPhone}
+                  demo={!!offerPreview}
+                  compact
+                />
+              </a>
+            )}
+
+            {/* Latest products */}
             <div
               style={{
-                background: B_BLUE_DARK,
-                color: "#fff",
-                padding: "8px 12px",
-                fontFamily: "Nunito,sans-serif",
-                fontWeight: 800,
-                fontSize: 11.5,
-                letterSpacing: 0.5,
-                textTransform: "uppercase",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
+                background: "#fff",
+                border: "1px solid #e0e8f5",
+                borderRadius: 4,
+                overflow: "hidden",
+                marginBottom: 14,
               }}
             >
-              <Flame size={13} color={B_GOLD} /> Latest Products
-              <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-                <button onClick={() => setLatestOffset((i) => (i + LATEST.length - 1) % LATEST.length)} aria-label="Previous latest products"
-                  style={{
-                    background: "#345888",
-                    border: "none",
-                    color: "#fff",
-                    width: 18,
-                    height: 18,
-                    borderRadius: 2,
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <ChevronLeft size={12} />
-                </button>
-                <button onClick={() => setLatestOffset((i) => (i + 1) % LATEST.length)} aria-label="Next latest products"
-                  style={{
-                    background: B_GOLD,
-                    border: "none",
-                    color: "#fff",
-                    width: 18,
-                    height: 18,
-                    borderRadius: 2,
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <ChevronRight size={12} />
-                </button>
-              </div>
-            </div>
-            {[...LATEST.slice(latestOffset), ...LATEST.slice(0, latestOffset)].map((p) => hydrateProduct(p, catalogue)).map((p) => (
               <div
-                key={p.id}
                 style={{
-                  padding: "10px 12px",
-                  borderBottom: "1px solid #f5f5f5",
+                  background: B_BLUE_DARK,
+                  color: "#fff",
+                  padding: "8px 12px",
+                  fontFamily: "Nunito,sans-serif",
+                  fontWeight: 800,
+                  fontSize: 11.5,
+                  letterSpacing: 0.5,
+                  textTransform: "uppercase",
                   display: "flex",
-                  gap: 10,
                   alignItems: "center",
-                  cursor: "pointer",
+                  gap: 6,
                 }}
               >
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  style={{
-                    width: 54,
-                    height: 54,
-                    objectFit: "contain",
-                    padding: 3,
-                    borderRadius: 3,
-                    border: "1px solid #eee",
-                    flexShrink: 0,
-                  }}
-                />
-                <div>
-                  <div
+                <Flame size={13} color={B_GOLD} /> Latest Products
+                <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+                  <button
+                    onClick={() =>
+                      setLatestOffset(
+                        (i) => (i + LATEST.length - 1) % LATEST.length,
+                      )
+                    }
+                    aria-label="Previous latest products"
                     style={{
-                      fontSize: 11.5,
-                      fontWeight: 600,
-                      color: "#444",
-                      lineHeight: 1.3,
-                      fontFamily: "Nunito,sans-serif",
-                      marginBottom: 3,
-                    }}
-                  >
-                    <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
-                  </div>
-                  <Stars r={0} />
-        <span style={{ display: "block", fontSize: 11, color: "#64748b", marginTop: 5 }}>Guide price · confirm with store</span>
-                  <div
-                    style={{
-                      marginTop: 3,
+                      background: "#345888",
+                      border: "none",
+                      color: "#fff",
+                      width: 18,
+                      height: 18,
+                      borderRadius: 2,
+                      cursor: "pointer",
                       display: "flex",
-                      gap: 6,
                       alignItems: "center",
-                      flexWrap: "wrap",
+                      justifyContent: "center",
                     }}
                   >
-                    <span
-                      style={{
-                        fontWeight: 900,
-                        fontSize: 14,
-                        color: B_BLUE,
-                        fontFamily: "Nunito,sans-serif",
-                      }}
-                    >
-                      {ugx(p.price)}
-                    </span>
-                    {p.oldPrice && (
-                      <span
-                        style={{
-                          fontSize: 10,
-                          color: "#bbb",
-                          textDecoration: "line-through",
-                        }}
-                      >
-                        {ugx(p.oldPrice)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Trust badges */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #e0e8f5",
-              borderRadius: 4,
-              overflow: "hidden",
-            }}
-          >
-            {[
-              {
-                icon: <Truck size={20} color={B_BLUE} />,
-                title: "DELIVERY & COLLECTION",
-                sub: "Confirm arrangements with the store",
-              },
-              {
-                icon: <ShieldCheck size={20} color={B_BLUE} />,
-                title: "ORDER PROTECTION",
-                sub: "Secured information",
-              },
-              {
-                icon: <Gift size={20} color={B_GOLD} />,
-                title: "GENUINE PRODUCTS",
-                sub: "Original technology",
-              },
-            ].map((b) => (
-              <div
-                key={b.title}
-                style={{
-                  padding: "10px 12px",
-                  borderBottom: "1px solid #f5f5f5",
-                  display: "flex",
-                  gap: 10,
-                  alignItems: "center",
-                }}
-              >
-                {b.icon}
-                <div>
-                  <div
+                    <ChevronLeft size={12} />
+                  </button>
+                  <button
+                    onClick={() =>
+                      setLatestOffset((i) => (i + 1) % LATEST.length)
+                    }
+                    aria-label="Next latest products"
                     style={{
-                      fontFamily: "Nunito,sans-serif",
-                      fontWeight: 800,
-                      fontSize: 10.5,
-                      color: "#333",
-                      textTransform: "uppercase",
-                      letterSpacing: 0.3,
+                      background: B_GOLD,
+                      border: "none",
+                      color: "#fff",
+                      width: 18,
+                      height: 18,
+                      borderRadius: 2,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    {b.title}
-                  </div>
-                  <div style={{ fontSize: 10.5, color: "#999" }}>{b.sub}</div>
+                    <ChevronRight size={12} />
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        </aside>
-
-        {/* ── Main content ── */}
-        <main style={{ flex: 1, minWidth: 0 }}>
-          {/* Hero + side banners */}
-          <div className="hero-grid">
-            <section
-              className="hero-stage"
-              aria-roledescription="carousel"
-              aria-label="London Tech promotions"
-              onMouseEnter={() => setHeroHovered(true)}
-              onMouseLeave={() => setHeroHovered(false)}
-              onFocusCapture={() => setHeroHovered(true)}
-              onBlurCapture={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget))
-                  setHeroHovered(false)
-              }}
-            >
-              <div className="hero-copy" key={slide}>
-                <div className="hero-eyebrow">
-                  <span />
-                  {hero.tag}
-                </div>
-                <h1>
-                  {hero.headline}
-                  <br />
-                  <span>{hero.hl}</span>
-                </h1>
-                <button
-                  className="hero-shop"
-                  onClick={() => shopCategory(hero.category)}
-                >
-                  Shop now <ArrowUpRight size={16} />
-                </button>
-              </div>
-              <div className="hero-art">
-                <img
-                  key={hero.bg}
-                  src={hero.bg}
-                  alt={
-                    slide === 0
-                      ? "Collection of phones, headphones, watches, tablets and gaming accessories"
-                      : slide === 1
-                        ? "Apple iPad Pro"
-                        : "Soundcore wireless earbuds"
-                  }
-                />
-              </div>
-              <span className="hero-brand">LONDON TECH / THE EDIT</span>
-              <div className="hero-controls">
-                <span className="hero-count">
-                  0{slide + 1}
-                  <span> / 0{HERO_SLIDES.length}</span>
-                </span>
-                <div className="hero-dots">
-                  {HERO_SLIDES.map((_, i) => (
-                    <button
-                      key={i}
-                      aria-label={`Go to promotion ${i + 1}`}
-                      aria-pressed={slide === i}
-                      className={slide === i ? "active" : ""}
-                      onClick={() => setSlide(i)}
-                    />
-                  ))}
-                </div>
-                <button
-                  aria-label="Previous promotion"
-                  onClick={() =>
-                    setSlide(
-                      (s) => (s - 1 + HERO_SLIDES.length) % HERO_SLIDES.length,
-                    )
-                  }
-                >
-                  <ChevronLeft size={15} />
-                </button>
-                <button
-                  aria-label="Next promotion"
-                  onClick={() => setSlide((s) => (s + 1) % HERO_SLIDES.length)}
-                >
-                  <ChevronRight size={15} />
-                </button>
-              </div>
-            </section>
-
-            <div className="hero-side" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {[
-                {
-                  src: appleWatch,
-                  label: "Smart Watches",
-                  price: "Guide UGX 1,190,000",
-                },
-                {
-                  src: soundcore,
-                  label: "Audio & Earbuds",
-                  price: "Guide UGX 265,000",
-                },
-              ].map((b) => (
+              {catalogueProducts(
+                [
+                  ...LATEST.slice(latestOffset),
+                  ...LATEST.slice(0, latestOffset),
+                ],
+                catalogue,
+              ).map((p) => (
                 <div
-                  key={b.label}
+                  key={p.id}
                   style={{
-                    flex: 1,
-                    borderRadius: 4,
-                    overflow: "hidden",
-                    position: "relative",
+                    padding: "10px 12px",
+                    borderBottom: "1px solid #f5f5f5",
+                    display: "flex",
+                    gap: 10,
+                    alignItems: "center",
                     cursor: "pointer",
-                    minHeight: 126,
                   }}
                 >
                   <img
-                    src={b.src}
-                    alt={b.label}
+                    src={p.image}
+                    alt={p.name}
                     style={{
-                      width: "100%",
-                      height: "100%",
+                      width: 54,
+                      height: 54,
                       objectFit: "contain",
-                      padding: 14,
-                      background: "#fff",
-                      display: "block",
+                      padding: 3,
+                      borderRadius: 3,
+                      border: "1px solid #eee",
+                      flexShrink: 0,
                     }}
                   />
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background:
-                        "linear-gradient(0deg,rgba(4,29,58,.95),transparent 80%)",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-end",
-                      padding: "8px 10px",
-                    }}
-                  >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 11.5,
+                        fontWeight: 600,
+                        color: "#444",
+                        lineHeight: 1.3,
+                        fontFamily: "Nunito,sans-serif",
+                        marginBottom: 3,
+                      }}
+                    >
+                      <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
+                    </div>
+                    <ProductOffer
+                      product={catalogue.find(
+                        (item: { id: string }) => item.id === commerceId(p),
+                      )}
+                      demo={!!offerPreview}
+                      compact
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust badges */}
+            <div
+              style={{
+                background: "#fff",
+                border: "1px solid #e0e8f5",
+                borderRadius: 4,
+                overflow: "hidden",
+              }}
+            >
+              {[
+                {
+                  icon: <Truck size={20} color={B_BLUE} />,
+                  title: "DELIVERY & COLLECTION",
+                  sub: "Confirm arrangements with the store",
+                },
+                {
+                  icon: <ShieldCheck size={20} color={B_BLUE} />,
+                  title: "ORDER PROTECTION",
+                  sub: "Secured information",
+                },
+                {
+                  icon: <Gift size={20} color={B_GOLD} />,
+                  title: "GENUINE PRODUCTS",
+                  sub: "Original technology",
+                },
+              ].map((b) => (
+                <div
+                  key={b.title}
+                  style={{
+                    padding: "10px 12px",
+                    borderBottom: "1px solid #f5f5f5",
+                    display: "flex",
+                    gap: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  {b.icon}
+                  <div>
                     <div
                       style={{
                         fontFamily: "Nunito,sans-serif",
                         fontWeight: 800,
                         fontSize: 10.5,
-                        color: "#fff",
+                        color: "#333",
                         textTransform: "uppercase",
+                        letterSpacing: 0.3,
                       }}
                     >
-                      {b.label}
+                      {b.title}
                     </div>
-                    <div
-                      style={{
-                        fontFamily: "Nunito,sans-serif",
-                        fontWeight: 900,
-                        fontSize: 13,
-                        color: "#fff",
-                      }}
-                    >
-                      {b.price}
-                    </div>
-                    <a
-                      href={"/collections/" + categoryId(b.label) + "/"}
-                      style={{
-                        color: "#fff",
-                        fontSize: 10,
-                        textDecoration: "underline",
-                        marginTop: 3,
-                      }}
-                    >
-                      Shop Now
-                    </a>
+                    <div style={{ fontSize: 10.5, color: "#999" }}>{b.sub}</div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </aside>
 
-          {/* Gift Special */}
-          <div
-            className="gift-special"
-            style={{
-              background: B_BLUE_LIGHT,
-              border: `1px solid #c5d8f0`,
-              borderRadius: 4,
-              padding: "10px 16px",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              marginBottom: 14,
-              flexWrap: "wrap",
-            }}
-          >
-            <Gift size={20} color={B_BLUE} style={{ flexShrink: 0 }} />
-            <strong
-              style={{
-                fontFamily: "Nunito,sans-serif",
-                fontSize: 12.5,
-                color: B_BLUE,
-                textTransform: "uppercase",
-                letterSpacing: 0.5,
-                flexShrink: 0,
-              }}
-            >
-              London Tech Special
-            </strong>
-            <span
-              style={{
-                fontSize: 12,
-                color: "#555",
-                flex: 1,
-                minWidth: 0,
-                wordBreak: "break-word",
-              }}
-            >
-              Original technology, reliable service ·{" "}
-              <strong style={{ color: B_BLUE }}>
-                تقنية أصلية، خدمة موثوقة
-              </strong>
-            </span>
-            <Btn small onClick={() => shopCategory("All")}>Shop Offers</Btn>
-          </div>
-
-          {/* Daily Deals */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #e0e8f5",
-              borderRadius: 4,
-              marginBottom: 14,
-            }}
-          >
-            <SectionHeader
-              label="Daily Deals"
-              icon={<Flame size={16} color={B_BLUE} />}
-              controls={
-                <>
-                  <button onClick={() => setDealOffset((i) => (i + DEALS.length - 1) % DEALS.length)} aria-label="Previous featured products"
-                    style={{
-                      background: "#f5f5f5",
-                      border: "1px solid #ddd",
-                      color: "#666",
-                      width: 26,
-                      height: 26,
-                      borderRadius: 3,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <ChevronLeft size={14} />
-                  </button>
-                  <button onClick={() => setDealOffset((i) => (i + 1) % DEALS.length)} aria-label="Next featured products"
-                    style={{
-                      background: B_BLUE,
-                      border: "none",
-                      color: "#fff",
-                      width: 26,
-                      height: 26,
-                      borderRadius: 3,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <ChevronRight size={14} />
-                  </button>
-                </>
-              }
-            />
-            <div className="deals-grid">
-              {[...DEALS.slice(dealOffset), ...DEALS.slice(0, dealOffset)].map((p) => hydrateProduct(p, catalogue)).map((p, i) => (
-                <div
-                  key={p.id}
-                  className="deal-item"
-                  style={{
-                    padding: "16px 18px",
-                    borderRight: i === 0 ? "1px solid #eee" : "none",
-                    display: "flex",
-                    gap: 14,
-                    alignItems: "flex-start",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <div
-                    className="deal-img-wrap"
-                    style={{ position: "relative", flexShrink: 0 }}
-                  >
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="deal-img"
-                      style={{
-                        width: 150,
-                        height: 120,
-                        objectFit: "contain",
-                        padding: 8,
-                        borderRadius: 4,
-                        display: "block",
-                      }}
-                    />
-                    {p.badge && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: 6,
-                          left: 6,
-                          background: p.badgeColor || B_BLUE,
-                          color: "#fff",
-                          fontSize: 10,
-                          fontWeight: 700,
-                          padding: "2px 6px",
-                          borderRadius: 3,
-                          fontFamily: "Nunito,sans-serif",
-                        }}
-                      >
-                        {p.badge}
-                      </span>
-                    )}
+          {/* ── Main content ── */}
+          <main style={{ flex: 1, minWidth: 0 }}>
+            {/* Hero + side banners */}
+            <div className="hero-grid">
+              <section
+                className="hero-stage"
+                aria-roledescription="carousel"
+                aria-label="London Tech promotions"
+                onMouseEnter={() => setHeroHovered(true)}
+                onMouseLeave={() => setHeroHovered(false)}
+                onFocusCapture={() => setHeroHovered(true)}
+                onBlurCapture={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget))
+                    setHeroHovered(false)
+                }}
+              >
+                <div className="hero-copy" key={slide}>
+                  <div className="hero-eyebrow">
+                    <span />
+                    {hero.tag}
                   </div>
-                  <div style={{ flex: 1, minWidth: 120 }}>
-                    <div
-                      style={{
-                        fontFamily: "Nunito,sans-serif",
-                        fontWeight: 700,
-                        fontSize: 13.5,
-                        color: "#333",
-                        marginBottom: 4,
-                      }}
+                  <h1>
+                    {hero.headline}
+                    <br />
+                    <span>{hero.hl}</span>
+                  </h1>
+                  <button
+                    className="hero-shop"
+                    onClick={() => shopCategory(hero.category)}
+                  >
+                    Shop now <ArrowUpRight size={16} />
+                  </button>
+                </div>
+                <div className="hero-art">
+                  <img key={hero.bg} src={hero.bg} alt={hero.alt} />
+                </div>
+                <span className="hero-brand">LONDON TECH / THE EDIT</span>
+                <div className="hero-controls">
+                  <span className="hero-count">
+                    0{slide + 1}
+                    <span> / 0{HERO_SLIDES.length}</span>
+                  </span>
+                  <div className="hero-dots">
+                    {HERO_SLIDES.map((_, i) => (
+                      <button
+                        key={i}
+                        aria-label={`Go to promotion ${i + 1}`}
+                        aria-pressed={slide === i}
+                        className={slide === i ? "active" : ""}
+                        onClick={() => setSlide(i)}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    aria-label="Previous promotion"
+                    onClick={() =>
+                      setSlide(
+                        (s) =>
+                          (s - 1 + HERO_SLIDES.length) % HERO_SLIDES.length,
+                      )
+                    }
+                  >
+                    <ChevronLeft size={15} />
+                  </button>
+                  <button
+                    aria-label="Next promotion"
+                    onClick={() =>
+                      setSlide((s) => (s + 1) % HERO_SLIDES.length)
+                    }
+                  >
+                    <ChevronRight size={15} />
+                  </button>
+                </div>
+              </section>
+
+              <div className="hero-side hero-category-features">
+                {[
+                  {
+                    id: "apple-watch-series",
+                    label: "Smart watches",
+                    category: "watches",
+                  },
+                  {
+                    id: "bose-qc-ultra",
+                    label: "Personal audio",
+                    category: "audio",
+                  },
+                ]
+                  .map((feature) => ({
+                    ...feature,
+                    product: catalogue.find(
+                      (product: CatalogueProductIdentity) =>
+                        product.id === feature.id && product.active !== false,
+                    ),
+                  }))
+                  .filter((feature) => feature.product)
+                  .map((feature) => (
+                    <a
+                      key={feature.id}
+                      className="hero-category-feature"
+                      href={"/collections/" + feature.category + "/"}
                     >
-                      <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
-                    </div>
-                    <ProductMotionNote category={p.category} />
-                    {p.arabicName && (
-                      <div
-                        dir="rtl"
-                        lang="ar"
-                        style={{
-                          fontSize: 10,
-                          color: "#888",
-                          textAlign: "left",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {p.arabicName}
+                      <img
+                        src={feature.product.image}
+                        alt={feature.product.name}
+                      />
+                      <div>
+                        <small>THE LONDON TECH EDIT</small>
+                        <strong>
+                          {feature.label}
+                          <ArrowUpRight size={16} />
+                        </strong>
+                        <span>Explore the collection</span>
                       </div>
-                    )}
-                    <div
+                    </a>
+                  ))}
+              </div>
+            </div>
+
+            {/* Gift Special */}
+            <div
+              className="gift-special"
+              style={{
+                background: B_BLUE_LIGHT,
+                border: `1px solid #c5d8f0`,
+                borderRadius: 4,
+                padding: "10px 16px",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                marginBottom: 14,
+                flexWrap: "wrap",
+              }}
+            >
+              <Gift size={20} color={B_BLUE} style={{ flexShrink: 0 }} />
+              <strong
+                style={{
+                  fontFamily: "Nunito,sans-serif",
+                  fontSize: 12.5,
+                  color: B_BLUE,
+                  textTransform: "uppercase",
+                  letterSpacing: 0.5,
+                  flexShrink: 0,
+                }}
+              >
+                London Tech Special
+              </strong>
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "#555",
+                  flex: 1,
+                  minWidth: 0,
+                  wordBreak: "break-word",
+                }}
+              >
+                Original technology, reliable service ·{" "}
+                <strong style={{ color: B_BLUE }}>
+                  تقنية أصلية، خدمة موثوقة
+                </strong>
+              </span>
+              <Btn small onClick={() => shopCategory("All")}>
+                Shop Offers
+              </Btn>
+            </div>
+
+            {/* Daily Deals */}
+            <div
+              style={{
+                background: "#fff",
+                border: "1px solid #e0e8f5",
+                borderRadius: 4,
+                marginBottom: 14,
+              }}
+            >
+              <SectionHeader
+                label="Daily Deals"
+                icon={<Flame size={16} color={B_BLUE} />}
+                controls={
+                  <>
+                    <button
+                      onClick={() =>
+                        setDealOffset(
+                          (i) => (i + DEALS.length - 1) % DEALS.length,
+                        )
+                      }
+                      aria-label="Previous featured products"
                       style={{
+                        background: "#f5f5f5",
+                        border: "1px solid #ddd",
+                        color: "#666",
+                        width: 26,
+                        height: 26,
+                        borderRadius: 3,
+                        cursor: "pointer",
                         display: "flex",
-                        gap: 8,
-                        marginBottom: 5,
-                        flexWrap: "wrap",
                         alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      <span
+                      <ChevronLeft size={14} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setDealOffset((i) => (i + 1) % DEALS.length)
+                      }
+                      aria-label="Next featured products"
+                      style={{
+                        background: B_BLUE,
+                        border: "none",
+                        color: "#fff",
+                        width: 26,
+                        height: 26,
+                        borderRadius: 3,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ChevronRight size={14} />
+                    </button>
+                  </>
+                }
+              />
+              <div className="deals-grid">
+                {catalogueProducts(
+                  [...DEALS.slice(dealOffset), ...DEALS.slice(0, dealOffset)],
+                  catalogue,
+                ).map((p, i) => (
+                  <div
+                    key={p.id}
+                    className="deal-item"
+                    style={{
+                      padding: "16px 18px",
+                      borderRight: i === 0 ? "1px solid #eee" : "none",
+                      display: "flex",
+                      gap: 14,
+                      alignItems: "flex-start",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <div
+                      className="deal-img-wrap"
+                      style={{ position: "relative", flexShrink: 0 }}
+                    >
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className="deal-img"
                         style={{
-                          fontFamily: "Nunito,sans-serif",
-                          fontWeight: 900,
-                          fontSize: 21,
-                          color: B_BLUE,
+                          width: 150,
+                          height: 120,
+                          objectFit: "contain",
+                          padding: 8,
+                          borderRadius: 4,
+                          display: "block",
                         }}
-                      >
-                        {ugx(p.price)}
-                      </span>
-                      {p.oldPrice && (
+                      />
+                      {cardBadge(p, catalogue, !!offerPreview) && (
                         <span
                           style={{
-                            fontSize: 11,
-                            color: "#bbb",
-                            textDecoration: "line-through",
+                            position: "absolute",
+                            top: 6,
+                            left: 6,
+                            background: p.badgeColor || B_BLUE,
+                            color: "#fff",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            padding: "2px 6px",
+                            borderRadius: 3,
+                            fontFamily: "Nunito,sans-serif",
                           }}
                         >
-                          {ugx(p.oldPrice)}
+                          {cardBadge(p, catalogue, !!offerPreview)}
                         </span>
                       )}
                     </div>
-                    <div
-                      dir="rtl"
-                      lang="ar"
-                      style={{
-                        fontSize: 9.5,
-                        color: "#888",
-                        textAlign: "left",
-                        marginBottom: 5,
-                      }}
-                    >
-                      {ugxArabic(p.price)}
-                    </div>
-                    <div
-                      style={{ fontSize: 11, color: "#888", marginBottom: 8 }}
-                    >
-                      Stock: <strong>{p.available == null ? "Confirm with store" : p.available}</strong>
-                    </div>
-                    <div
-                      style={{
-                        height: 4,
-                        background: "#e8eef8",
-                        borderRadius: 2,
-                        marginBottom: 12,
-                        overflow: "hidden",
-                      }}
-                    >
+                    <div style={{ flex: 1, minWidth: 120 }}>
                       <div
                         style={{
-                          height: "100%",
-                          background: B_BLUE,
-                          width: `${((p.sold || 0) / (p.available || 1)) * 100}%`,
-                          borderRadius: 2,
+                          fontFamily: "Nunito,sans-serif",
+                          fontWeight: 700,
+                          fontSize: 13.5,
+                          color: "#333",
+                          marginBottom: 4,
                         }}
+                      >
+                        <a href={"/products/" + commerceId(p) + "/"}>
+                          {p.name}
+                        </a>
+                      </div>
+                      <ProductMotionNote category={p.category} />
+                      <ProductOffer
+                        product={catalogue.find(
+                          (item: { id: string }) => item.id === commerceId(p),
+                        )}
+                        demo={!!offerPreview}
                       />
                     </div>
-                    <div style={{ fontSize: 10, color: "#7d8b9d", lineHeight: 1.7 }}>Guide price · Confirm configuration and availability before payment.</div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          <section className="company-promo">
-            <div className="promo-copy">
-              <span className="promo-kicker">LONDON TECH</span>
-              <h2>Everyday essentials.</h2>
-              <button
-                className="hero-shop"
-                onClick={() => shopCategory("Accessories")}
-              >
-                Shop accessories <ArrowUpRight size={15} />
-              </button>
-            </div>
-            <img
-              src="/promotions/accessories.jpg"
-              alt="London Tech selection of chargers, smart watches, earbuds and phone accessories"
-            />
-          </section>
-
-          {/* Trending Items */}
-          <div
-            id="trending"
-            style={{
-              background: "#fff",
-              border: "1px solid #e0e8f5",
-              borderRadius: 4,
-            }}
-          >
-            <SectionHeader
-              label="Trending Items"
-              icon={<TrendingUp size={18} color={B_GOLD} />}
-              controls={
-                <div style={{ display: "flex", gap: 0, flexWrap: "wrap" }}>
-                  {TREND_CATS.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setTcat(cat)}
-                      style={{
-                        padding: "4px 11px",
-                        fontSize: 11.5,
-                        fontFamily: "Nunito,sans-serif",
-                        fontWeight: 600,
-                        background: tcat === cat ? B_BLUE : "none",
-                        color: tcat === cat ? "#fff" : "#666",
-                        border: "none",
-                        cursor: "pointer",
-                        borderRadius: tcat === cat ? 3 : 0,
-                        transition: "all .15s",
-                      }}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              }
-            />
-            <div className="products-grid">
-              {filtered.slice(0, 12).map((p) => (
-                <ProductCard key={p.id} p={p} />
-              ))}
-              {filtered.length === 0 && (
-                <div
-                  style={{
-                    gridColumn: "1/-1",
-                    textAlign: "center",
-                    padding: "40px 0",
-                    color: "#aaa",
-                    fontFamily: "Nunito,sans-serif",
-                  }}
+            <section className="company-promo">
+              <div className="promo-copy">
+                <span className="promo-kicker">LONDON TECH</span>
+                <h2>Everyday essentials.</h2>
+                <button
+                  className="hero-shop"
+                  onClick={() => shopCategory("Accessories")}
                 >
-                  No products in this category yet.
-                </div>
-              )}
+                  Shop accessories <ArrowUpRight size={15} />
+                </button>
+              </div>
+              <img
+                src="/promotions/accessories.jpg"
+                alt="London Tech selection of chargers, smart watches, earbuds and phone accessories"
+              />
+            </section>
+
+            {/* Trending Items */}
+            <div
+              id="trending"
+              style={{
+                background: "#fff",
+                border: "1px solid #e0e8f5",
+                borderRadius: 4,
+              }}
+            >
+              <SectionHeader
+                label="Trending Items"
+                icon={<TrendingUp size={18} color={B_GOLD} />}
+                controls={
+                  <div style={{ display: "flex", gap: 0, flexWrap: "wrap" }}>
+                    {TREND_CATS.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setTcat(cat)}
+                        style={{
+                          padding: "4px 11px",
+                          fontSize: 11.5,
+                          fontFamily: "Nunito,sans-serif",
+                          fontWeight: 600,
+                          background: tcat === cat ? B_BLUE : "none",
+                          color: tcat === cat ? "#fff" : "#666",
+                          border: "none",
+                          cursor: "pointer",
+                          borderRadius: tcat === cat ? 3 : 0,
+                          transition: "all .15s",
+                        }}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                }
+              />
+              <div className="products-grid">
+                {filtered.slice(0, 12).map((p) => (
+                  <ProductCard key={p.id} p={p} />
+                ))}
+                {filtered.length === 0 && (
+                  <div
+                    style={{
+                      gridColumn: "1/-1",
+                      textAlign: "center",
+                      padding: "40px 0",
+                      color: "#aaa",
+                      fontFamily: "Nunito,sans-serif",
+                    }}
+                  >
+                    No products in this category yet.
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </main>
-      </div>}
+          </main>
+        </div>
+      )}
 
       {/* ── Footer ───────────────────────────────────────────────────── */}
-      <footer className="site-footer">
-        <div className="store-container footer-shell">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <a href="/" aria-label="London Tech home" className="footer-logo"><img src={logoImg} alt="London Tech" /></a>
-              <p>Original technology.<br />Thoughtfully chosen. Locally trusted.</p>
-              <span className="footer-arabic" lang="ar" dir="rtl">متجرك الموثوق للتكنولوجيا الأصلية</span>
-            </div>
-            <div className="footer-column">
-              <h3>Explore</h3>
-              <ul>
-                {[
-                  ["Smartphones", "Smartphones"],
-                  ["Tablets", "Tablets"],
-                  ["Audio & earbuds", "Audio"],
-                  ["Accessories", "Accessories"],
-                ].map(([label, category]) => (
-                  <li key={label}><button onClick={() => shopCategory(category)}>{label}</button></li>
-                ))}
-              </ul>
-            </div>
-            <div className="footer-column">
-              <h3>Here to help</h3>
-              <ul>
-                <li><a href="/about/">About us</a></li>
-                <li><a href="/account/orders/">My orders</a></li>
-                <li><a href="/delivery/">Delivery & collection</a></li>
-                <li><a href="/returns/">Returns & warranty</a></li>
-                <li><a href="/contact/">Contact & support</a></li>
-              </ul>
-            </div>
-            <div className="footer-column footer-visit">
-              <h3>Find us</h3>
-              <p>{settings.address}</p>
-              <p className="footer-phones"><a href="tel:+256788341111">0788341111</a><span> / </span><a href="tel:+256709417273">0709417273</a></p>
-              <p>{settings.hours || "Call to confirm opening hours."}</p>
-              <a className="footer-local" href="https://wa.me/256788341111" target="_blank" rel="noreferrer"><WhatsAppIcon size={14} /> Chat with our team <ArrowUpRight size={13} /></a>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} London Tech. All rights reserved.</span>
-            <span>Kampala, Uganda <span className="footer-bottom-dot" /> <a href="/admin/">Store admin</a></span>
-          </div>
-        </div>
-      </footer>
+      <StoreFooter logo={logoImg} />
       <a
         className="floating-whatsapp whatsapp-cta"
         href="https://wa.me/256788341111"

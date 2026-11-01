@@ -5,6 +5,7 @@ import { mkdir } from "node:fs/promises"
 import path from "node:path"
 
 import { products, storeDefaults } from "../src/data/catalog.js"
+import { repairSeedCatalogue } from "./catalogue-migration.js"
 
 let connection
 
@@ -136,6 +137,8 @@ async function initialize() {
     `INSERT INTO products(id,data) SELECT value->>'id',value FROM jsonb_array_elements($1::jsonb) ON CONFLICT(id) DO NOTHING`,
     [JSON.stringify(products)],
   )
+
+  await repairSeedCatalogue(db)
 
   await db.query(
     `INSERT INTO settings(id,data) VALUES('store',$1::jsonb) ON CONFLICT(id) DO NOTHING`,

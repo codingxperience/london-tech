@@ -11,11 +11,15 @@ import { products as seed, storeDefaults } from "./data/catalog.js"
 
 import { api, readStorage, writeStorage, post } from "./lib/api.js"
 import { galleryImages } from "./lib/product-experience.js"
+import { repairCatalogueMedia } from "./lib/catalogue-media.js"
 
-const presentProduct = (product) => ({
-  ...product,
-  image: galleryImages(product)[0]?.src || product.image,
-})
+const presentProduct = (product) => {
+  const corrected = repairCatalogueMedia(product)
+  return {
+    ...corrected,
+    image: galleryImages(corrected)[0]?.src || corrected.image,
+  }
+}
 
 const Context = createContext(/** @type {any} */ (null))
 
@@ -114,6 +118,11 @@ export function StoreProvider({ children }) {
     [cartOpen, setCartOpen] = useState(false),
     [imageSearchOpen, setImageSearchOpen] = useState(false),
     [authDialog, setAuthDialog] = useState(null)
+  const [offerPreview, setOfferPreview] = useState(
+    () =>
+      typeof location !== "undefined" &&
+      new URLSearchParams(location.search).get("preview") === "offers",
+  )
 
   const closeAuth = useCallback(() => setAuthDialog(null), [])
   const openImageSearch = useCallback(() => {
@@ -330,6 +339,8 @@ export function StoreProvider({ children }) {
         products,
         setProducts,
         settings,
+        offerPreview,
+        setOfferPreview,
         setSettings,
         user,
         setUser,

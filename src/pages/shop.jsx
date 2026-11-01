@@ -17,15 +17,15 @@ import {
 import { useStore, navigate } from "../store.jsx"
 import { ProductGallery } from "../components/product-gallery.jsx"
 import { ProductSections } from "../components/product-sections.jsx"
+import { ProductOffer } from "../components/ProductOffer.jsx"
 import { productInformation } from "../lib/product-experience.js"
 
-import { categoryName, money, productPath } from "../data/catalog.js"
+import { categoryName, productPath } from "../data/catalog.js"
 
 import { api, post } from "../lib/api.js"
 
 import {
   ActionLink,
-  Badge,
   Breadcrumb,
   Button,
   Empty,
@@ -59,6 +59,7 @@ export function Product({ id }) {
     user,
     notify,
     openAuth,
+    offerPreview,
   } = useStore()
   const p = products.find((p) => p.id === id)
 
@@ -166,18 +167,14 @@ export function Product({ id }) {
               ))}
           </div>
           <div className="product-price">
-            <strong>{money(p.price)}</strong>
-            {p.price != null && !p.priceConfirmed && (
-              <Badge type="warning">Guide price</Badge>
-            )}
-            {p.comparePrice && p.price && p.comparePrice > p.price && (
-              <del>{money(p.comparePrice)}</del>
-            )}
-            {(p.price == null || !p.priceConfirmed) && (
+            <ProductOffer product={p} demo={offerPreview} />
+            {(offerPreview || p.price == null || !p.priceConfirmed) && (
               <span>
-                {p.price == null
-                  ? "Request the current price and configuration before purchase."
-                  : "Estimated price. Confirm the selected configuration and current selling price before payment."}
+                {offerPreview
+                  ? "Demo comparison prices and stock figures are for review. The store confirms actual pricing and availability before payment."
+                  : p.price == null
+                    ? "Request the current price and configuration before purchase."
+                    : "Estimated price. Confirm the selected configuration and current selling price before payment."}
               </span>
             )}
           </div>
@@ -434,7 +431,7 @@ export function Wishlist() {
 }
 
 export function Compare() {
-  const { products, compare, toggleCompare } = useStore()
+  const { products, compare, toggleCompare, offerPreview } = useStore()
   const items = compare
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean)
@@ -468,7 +465,7 @@ export function Compare() {
                       <img src={p.image} alt="" />
                       <strong>{p.name}</strong>
                     </a>
-                    <span>{money(p.price)}</span>
+                    <ProductOffer product={p} demo={offerPreview} compact />
                   </th>
                 ))}
               </tr>

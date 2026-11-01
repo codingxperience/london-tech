@@ -25,6 +25,7 @@ import {
   productInformation,
 } from "../lib/product-experience.js"
 import { dateLabel } from "../lib/api.js"
+import { ProductSectionNav } from "./ProductSectionNav.jsx"
 
 export function ProductSections({
   product: p,
@@ -100,25 +101,7 @@ export function ProductSections({
           <ProductGrid products={related} />
         </section>
       )}
-      <nav
-        className="detail-section-nav"
-        aria-label="Explore product information"
-      >
-        {[
-          ["overview", "Overview"],
-          ["specifications", "Specifications"],
-          ["reviews", `Reviews (${reviews.length})`],
-          ["description", "Description"],
-          ["guides", "Guides"],
-          ["delivery", "Delivery & returns"],
-          ["questions", "Questions"],
-          ["store", "Our store"],
-        ].map(([id, label]) => (
-          <a key={id} href={`#product-${id}`}>
-            {label}
-          </a>
-        ))}
-      </nav>
+      <ProductSectionNav productId={p.id} reviewCount={reviews.length} />
       <div className="detail-longform">
         <div className="detail-main-content">
           <section

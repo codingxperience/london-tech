@@ -1,4 +1,6 @@
 import originalCatalog from "./legacy-catalog.json" with { type: "json" }
+import productMedia from "./product-media.json" with { type: "json" }
+import catalogueCorrections from "./catalogue-corrections.json" with { type: "json" }
 
 import { guidePrices } from "./prices.js"
 
@@ -367,7 +369,8 @@ const brandOf = (p) =>
 const pathOf = (url) =>
   /^https?:/.test(url) || url.startsWith("/") ? url : "/" + url
 
-export const products = [
+// Historical tuples are retained only for guarded repairs of untouched seed rows.
+export const legacyProducts = [
   ...currentStoreItems,
   ...originalCatalog,
   ...additions,
@@ -406,6 +409,20 @@ export const products = [
     colors: [],
     tags: p.tag ? [p.tag] : [],
     createdAt: "2026-10-30T00:00:00Z",
+  }
+})
+
+export const products = legacyProducts.map((product) => {
+  const media = productMedia[product.id] || []
+  return {
+    ...product,
+    ...catalogueCorrections[product.id],
+    ...(media.length
+      ? {
+          image: media[0].src,
+          gallery: media.map((image) => image.src),
+        }
+      : {}),
   }
 })
 

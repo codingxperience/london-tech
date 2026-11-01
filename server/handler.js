@@ -78,6 +78,7 @@ const productSchema = z.object({
   description: text(5000).min(10),
   image: text(1000),
   gallery: z.array(text(1000)).min(1).max(10),
+  mediaNote: text(500).default(""),
 
   specifications: z.array(z.tuple([text(100), text(500)])).max(40),
 

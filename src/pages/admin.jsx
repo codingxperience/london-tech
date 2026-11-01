@@ -67,34 +67,32 @@ import {
 
 import { CategoryIcon } from "../components/storefront.jsx"
 
-const previewOrders = seed
-  .slice(0, 8)
-  .map((p, i) => ({
-    id: "DEMO-" + (1028 - i),
-    status: [
-      "confirmed",
-      "processing",
-      "ready",
-      "shipped",
-      "completed",
-      "quote_requested",
-      "pending_payment",
-      "completed",
-    ][i],
-    paymentStatus: i < 5 || i === 7 ? "paid" : "unpaid",
-    amount: p.price,
-    currency: "UGX",
-    items: [{ ...p, quantity: 1, unitPrice: p.price }],
-    customer: {
-      name: "Sample customer " + (i + 1),
-      email: "customer" + (i + 1) + "@example.com",
-      phone: "Not a real customer",
-    },
-    fulfillment: i % 2 ? "delivery" : "collection",
-    paymentMethod: ["mtn", "visa", "airtel"][i % 3],
-    createdAt: new Date(Date.now() - i * 86400000 * 2).toISOString(),
-    timeline: [],
-  }))
+const previewOrders = seed.slice(0, 8).map((p, i) => ({
+  id: "DEMO-" + (1028 - i),
+  status: [
+    "confirmed",
+    "processing",
+    "ready",
+    "shipped",
+    "completed",
+    "quote_requested",
+    "pending_payment",
+    "completed",
+  ][i],
+  paymentStatus: i < 5 || i === 7 ? "paid" : "unpaid",
+  amount: p.price,
+  currency: "UGX",
+  items: [{ ...p, quantity: 1, unitPrice: p.price }],
+  customer: {
+    name: "Sample customer " + (i + 1),
+    email: "customer" + (i + 1) + "@example.com",
+    phone: "Not a real customer",
+  },
+  fulfillment: i % 2 ? "delivery" : "collection",
+  paymentMethod: ["mtn", "visa", "airtel"][i % 3],
+  createdAt: new Date(Date.now() - i * 86400000 * 2).toISOString(),
+  timeline: [],
+}))
 
 const tabs = [
   ["dashboard", "Overview", LayoutDashboard],
@@ -1791,6 +1789,17 @@ export function ProductEditor({
                   value={gallery}
                   onChange={(e) => setGallery(e.target.value)}
                   required
+                />
+              </Field>
+              <Field
+                label="Photo or reference note"
+                hint="Clarify when a photo shows a product family or a different reference finish. Update this when adding photos of the actual item."
+              >
+                <textarea
+                  rows={2}
+                  maxLength={500}
+                  value={p.mediaNote || ""}
+                  onChange={(e) => field("mediaNote", e.target.value)}
                 />
               </Field>
               <div className="editor-gallery-preview">

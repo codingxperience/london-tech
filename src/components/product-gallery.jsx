@@ -193,8 +193,8 @@ export function ProductGallery({ product }) {
         to explore
       </p>
       <p className="gallery-note">
-        Images show the product design. Confirm your colour, configuration and
-        included accessories with the store.
+        {product.mediaNote ||
+          "Images show the product design. Confirm your colour, configuration and included accessories with the store."}
       </p>
       {enlarged && (
         <Modal

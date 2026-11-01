@@ -10,6 +10,7 @@ export function galleryImages(product) {
   const edited =
     baseline &&
     (product.name !== baseline.name ||
+      product.image !== baseline.image ||
       changed(product.gallery, baseline.gallery))
   const researched = edited ? [] : productMedia[product.id] || []
   const existing = [product.image, ...(product.gallery || [])]

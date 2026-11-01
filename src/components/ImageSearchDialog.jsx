@@ -8,14 +8,15 @@ import {
 } from "lucide-react"
 import { Modal, Button } from "./ui.jsx"
 import { useStore } from "../store.jsx"
-import { money, productPath, categoryName } from "../data/catalog.js"
+import { productPath, categoryName } from "../data/catalog.js"
+import { ProductOffer } from "./ProductOffer.jsx"
 import {
   createVisualSearchClient,
   validateSearchPhoto,
 } from "../lib/visual-search.js"
 
 export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
-  const { products, setImageSearchOpen } = useStore()
+  const { products, setImageSearchOpen, offerPreview } = useStore()
   const [state, setState] = useState({
     phase: "idle",
     preview: "",
@@ -226,10 +227,11 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
                           </span>
                           <small>{categoryName(product.category)}</small>
                           <h4>{product.name}</h4>
-                          <strong>{money(product.price)}</strong>
-                          {!product.priceConfirmed && product.price != null && (
-                            <em>Guide price</em>
-                          )}
+                          <ProductOffer
+                            product={product}
+                            demo={offerPreview}
+                            compact
+                          />
                           <span className="visual-match-open">
                             View item
                             <ArrowRight size={13} />

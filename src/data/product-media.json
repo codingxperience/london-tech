@@ -83,8 +83,18 @@
   ],
   "iphone-17-orange": [
     {
+      "src": "/assets/official-apple-iphone17-pro-cosmic-orange.jpg",
+      "alt": "iPhone 17 Pro family — Cosmic Orange front and rear",
+      "source": "https://www.apple.com/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max/"
+    },
+    {
       "src": "/assets/product-gallery/iphone-17-pro-c6188bdef5.jpg",
       "alt": "iPhone 17 Pro — camera plateau close-up",
+      "source": "https://www.apple.com/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max/"
+    },
+    {
+      "src": "/assets/official-apple-iphone17-pro-lineup.jpg",
+      "alt": "iPhone 17 Pro family — finish overview",
       "source": "https://www.apple.com/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max/"
     }
   ],
@@ -172,13 +182,13 @@
   ],
   "honor-x9b": [
     {
-      "src": "/assets/product-gallery/honor-x9b-977edda75c.png",
-      "alt": "HONOR X9b — Sunrise Orange side profile",
+      "src": "/assets/product-gallery/honor-x9b-37e83b0a68.png",
+      "alt": "HONOR X9b — Sunrise Orange rear design",
       "source": "https://www.honor.com/global/phones/honor-x9b/"
     },
     {
-      "src": "/assets/product-gallery/honor-x9b-37e83b0a68.png",
-      "alt": "HONOR X9b — Sunrise Orange rear design",
+      "src": "/assets/product-gallery/honor-x9b-977edda75c.png",
+      "alt": "HONOR X9b — Sunrise Orange side profile",
       "source": "https://www.honor.com/global/phones/honor-x9b/"
     },
     {
@@ -252,13 +262,13 @@
   ],
   "canon-r6ii": [
     {
-      "src": "/assets/product-gallery/canon-r6ii-42a16f214d.jpg",
-      "alt": "Canon EOS R6 Mark II — third product angle",
+      "src": "/assets/product-gallery/canon-r6ii-20c96f7841.jpg",
+      "alt": "Canon EOS R6 Mark II — front view",
       "source": "https://www.canon.co.uk/store/canon-eos-r6-mark-ii-mirrorless-camera-body/5666C028/"
     },
     {
-      "src": "/assets/product-gallery/canon-r6ii-20c96f7841.jpg",
-      "alt": "Canon EOS R6 Mark II — front view",
+      "src": "/assets/product-gallery/canon-r6ii-42a16f214d.jpg",
+      "alt": "Canon EOS R6 Mark II — third product angle",
       "source": "https://www.canon.co.uk/store/canon-eos-r6-mark-ii-mirrorless-camera-body/5666C028/"
     },
     {
@@ -298,13 +308,13 @@
   ],
   "switch-2": [
     {
-      "src": "/assets/product-gallery/switch-2-d346bddf83.png",
-      "alt": "Nintendo Switch 2 — top and bottom ports",
+      "src": "/assets/product-gallery/switch-2-7e53b8ecfe.png",
+      "alt": "Nintendo Switch 2 — front view",
       "source": "https://www.nintendo.com/us/gaming-systems/switch-2/tech-specs/"
     },
     {
-      "src": "/assets/product-gallery/switch-2-7e53b8ecfe.png",
-      "alt": "Nintendo Switch 2 — front view",
+      "src": "/assets/product-gallery/switch-2-d346bddf83.png",
+      "alt": "Nintendo Switch 2 — top and bottom ports",
       "source": "https://www.nintendo.com/us/gaming-systems/switch-2/tech-specs/"
     },
     {
@@ -583,6 +593,173 @@
       "src": "/assets/product-gallery/ipad-11-a16-902ecedc7e.jpg",
       "alt": "iPad 11-inch A16 — rear finishes",
       "source": "https://www.apple.com/ipad-11/"
+    }
+  ],
+  "galaxy-s26-ultra": [
+    {
+      "src": "/assets/product-gallery/galaxy-s26-ultra-finish-lineup.jpg",
+      "alt": "Samsung Galaxy S26 Ultra — front, rear, S Pen and finish lineup",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/"
+    },
+    {
+      "src": "/assets/product-gallery/galaxy-s26-ultra-cobalt-rear.jpg",
+      "alt": "Samsung Galaxy S26 Ultra — Cobalt Violet rear design",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/"
+    },
+    {
+      "src": "/assets/official-samsung-galaxy-s26-ultra-share.jpg",
+      "alt": "Samsung Galaxy S26 Ultra — Cobalt Violet camera close-up",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/"
+    }
+  ],
+  "galaxy-s26-ultra-black": [
+    {
+      "src": "/assets/product-gallery/galaxy-s26-ultra-black-rear.jpg",
+      "alt": "Samsung Galaxy S26 Ultra — Black rear design",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/"
+    },
+    {
+      "src": "/assets/product-gallery/galaxy-s26-ultra-finish-lineup.jpg",
+      "alt": "Samsung Galaxy S26 Ultra family — front, rear and finish overview",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/"
+    },
+    {
+      "src": "/assets/official-samsung-galaxy-s26-ultra-share.jpg",
+      "alt": "Samsung Galaxy S26 Ultra family — Cobalt Violet camera close-up",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/"
+    }
+  ],
+  "apple-watch-series": [
+    {
+      "src": "/assets/product-gallery/watch-series-11-display.jpg",
+      "alt": "Apple Watch Series family reference — Series 11 display and Digital Crown",
+      "source": "https://www.apple.com/newsroom/2025/09/apple-debuts-apple-watch-series-11-featuring-groundbreaking-health-insights/"
+    },
+    {
+      "src": "/assets/product-gallery/watch-series-11-family-hero.jpg",
+      "alt": "Apple Watch Series family reference — Series 11 case profile",
+      "source": "https://www.apple.com/newsroom/2025/09/apple-debuts-apple-watch-series-11-featuring-groundbreaking-health-insights/"
+    },
+    {
+      "src": "/assets/product-gallery/watch-series-11-back.jpg",
+      "alt": "Apple Watch Series family reference — Series 11 back and sensor array",
+      "source": "https://www.apple.com/newsroom/2025/09/apple-debuts-apple-watch-series-11-featuring-groundbreaking-health-insights/"
+    }
+  ],
+  "apple-ipad-pro": [
+    {
+      "src": "/assets/product-gallery/ipad-pro-11-m5-9a2290e1a7.jpg",
+      "alt": "Apple iPad Pro family reference — iPad Pro M5 family — Ultra Retina XDR display",
+      "source": "https://www.apple.com/newsroom/2025/10/apple-introduces-the-powerful-new-ipad-pro-with-the-m5-chip/"
+    },
+    {
+      "src": "/assets/product-gallery/ipad-pro-11-m5-c2b251433a.jpg",
+      "alt": "Apple iPad Pro family reference — iPad Pro M5 family — 11-inch and 13-inch finishes",
+      "source": "https://www.apple.com/newsroom/2025/10/apple-introduces-the-powerful-new-ipad-pro-with-the-m5-chip/"
+    },
+    {
+      "src": "/assets/product-gallery/ipad-pro-11-m5-602ecc7ce9.jpg",
+      "alt": "Apple iPad Pro family reference — iPad Pro M5 family — thin side profile",
+      "source": "https://www.apple.com/newsroom/2025/10/apple-introduces-the-powerful-new-ipad-pro-with-the-m5-chip/"
+    },
+    {
+      "src": "/assets/product-gallery/ipad-pro-11-m5-5a7b8cf01f.jpg",
+      "alt": "Apple iPad Pro family reference — iPad Pro M5 family — Apple Pencil Pro illustration, accessory sold separately",
+      "source": "https://www.apple.com/newsroom/2025/10/apple-introduces-the-powerful-new-ipad-pro-with-the-m5-chip/"
+    }
+  ],
+  "samsung-galaxy-tablet": [
+    {
+      "src": "/assets/product-gallery/galaxy-tab-s11-gray-design.jpg",
+      "alt": "Samsung Galaxy tablet family reference — Tab S11 Ultra Gray front, rear and S Pen",
+      "source": "https://www.samsung.com/us/tablets/galaxy-tab-s11/"
+    },
+    {
+      "src": "/assets/product-gallery/galaxy-tab-s11-design.jpg",
+      "alt": "Samsung Galaxy tablet family reference — Tab S11 Ultra front, rear and S Pen",
+      "source": "https://news.samsung.com/us/samsung-unveils-galaxy-tab-s11-series/"
+    }
+  ],
+  "aramid-fibre-case": [
+    {
+      "src": "/assets/product-gallery/pitaka-aramid-case-reference.webp",
+      "alt": "PITAKA aramid-fibre case family reference — woven rear and camera opening",
+      "source": "https://www.ipitaka.com/products/classic-phone-cases"
+    }
+  ],
+  "soundcore-wireless-earbuds": [
+    {
+      "src": "/assets/product-gallery/soundcore-rave-mini-front.jpg",
+      "alt": "Soundcore party-speaker family reference — Rave Mini front and carry handle",
+      "source": "https://www.ankerjapan.com/products/a3390"
+    }
+  ],
+  "soundcore-party-speaker": [
+    {
+      "src": "/assets/product-gallery/soundcore-rave-mini-front.jpg",
+      "alt": "Soundcore party-speaker family reference — Rave Mini front and carry handle",
+      "source": "https://www.ankerjapan.com/products/a3390"
+    }
+  ],
+  "pierre-cardin-softshell-72": [
+    {
+      "src": "/assets/product-gallery/pierre-cardin-72cm-green-front.jpg",
+      "alt": "Pierre Cardin 72cm soft trolley reference — PC 3766 Green front and wheels",
+      "source": "https://pierrecardinhandbags.com.au/products/pierre-cardin-72cm-medium-soft-trolley-case-in-green"
+    },
+    {
+      "src": "/assets/product-gallery/pierre-cardin-72cm-green-open.jpg",
+      "alt": "Pierre Cardin 72cm soft trolley reference — PC 3766 Green open compartments",
+      "source": "https://pierrecardinhandbags.com.au/products/pierre-cardin-72cm-medium-soft-trolley-case-in-green"
+    }
+  ],
+  "jbl-tune-770nc": [
+    {
+      "src": "/assets/official-jbl-tune-770nc-black.jpg",
+      "alt": "JBL Tune 770NC — angled front in Black",
+      "source": "https://www.jbl.com/over-ear-headphones/TUNE770NC.html"
+    },
+    {
+      "src": "/assets/official-jbl-tune-770nc-front-black.jpg",
+      "alt": "JBL Tune 770NC — front in Black",
+      "source": "https://www.jbl.com/over-ear-headphones/TUNE770NC.html"
+    },
+    {
+      "src": "/assets/official-jbl-tune-770nc-left-black.jpg",
+      "alt": "JBL Tune 770NC — side in Black",
+      "source": "https://www.jbl.com/over-ear-headphones/TUNE770NC.html"
+    },
+    {
+      "src": "/assets/official-jbl-tune-770nc-blue.jpg",
+      "alt": "JBL Tune 770NC — Blue finish",
+      "source": "https://www.jbl.com/over-ear-headphones/TUNE770NC.html"
+    },
+    {
+      "src": "/assets/official-jbl-tune-770nc-white.jpg",
+      "alt": "JBL Tune 770NC — White finish",
+      "source": "https://www.jbl.com/over-ear-headphones/TUNE770NC.html"
+    }
+  ],
+  "thinkpad-pro-topload-gen2": [
+    {
+      "src": "/assets/official-lenovo-thinkpad-pro-topload-1.png",
+      "alt": "ThinkPad Professional 16-inch Topload Gen 2 — front",
+      "source": "https://www.lenovo.com/ca/en/p/accessories-and-software/cases-and-bags/briefcases-toploads/4x41m69795"
+    },
+    {
+      "src": "/assets/official-lenovo-thinkpad-pro-topload-2.png",
+      "alt": "ThinkPad Professional 16-inch Topload Gen 2 — angled front",
+      "source": "https://www.lenovo.com/ca/en/p/accessories-and-software/cases-and-bags/briefcases-toploads/4x41m69795"
+    },
+    {
+      "src": "/assets/official-lenovo-thinkpad-pro-topload-3.png",
+      "alt": "ThinkPad Professional 16-inch Topload Gen 2 — side",
+      "source": "https://www.lenovo.com/ca/en/p/accessories-and-software/cases-and-bags/briefcases-toploads/4x41m69795"
+    },
+    {
+      "src": "/assets/official-lenovo-thinkpad-pro-topload-feature-a.png",
+      "alt": "ThinkPad Professional 16-inch Topload Gen 2 — open workstation compartment",
+      "source": "https://www.lenovo.com/ca/en/p/accessories-and-software/cases-and-bags/briefcases-toploads/4x41m69795"
     }
   ]
 }

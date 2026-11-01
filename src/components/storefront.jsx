@@ -34,6 +34,8 @@ import {
 import { useStore, cartKey } from "../store.jsx"
 import { ProductMotionNote } from "./MotionText"
 import { galleryImages, productInformation } from "../lib/product-experience.js"
+import { ProductOffer, StockAvailability } from "./ProductOffer.jsx"
+import { productOffer } from "../lib/offer-details.js"
 
 import {
   categories,
@@ -90,12 +92,20 @@ export function PaymentMarks() {
 }
 
 export function ProductCard({ product: p, detailed = false }) {
-  const { wishlist, toggleWish, addCart, compare, toggleCompare } = useStore()
+  const {
+    wishlist,
+    toggleWish,
+    addCart,
+    compare,
+    toggleCompare,
+    offerPreview,
+  } = useStore()
   const images = galleryImages(p)
   const [photo, setPhoto] = useState(0)
   useEffect(() => setPhoto(0), [p.id, images.length])
   const facts = productInformation(p).specifications.slice(0, 2)
   const saved = wishlist.includes(p.id)
+  const offer = productOffer(p, { demo: !!offerPreview })
 
   return (
     <article
@@ -113,10 +123,8 @@ export function ProductCard({ product: p, detailed = false }) {
         <div className="product-flags">
           {p.stock === 0 ? (
             <Badge type="muted">Out of stock</Badge>
-          ) : p.priceConfirmed && p.comparePrice > p.price && p.price ? (
-            <Badge>
-              Save {Math.round((1 - p.price / p.comparePrice) * 100)}%
-            </Badge>
+          ) : offer.discounted ? (
+            <Badge>−{offer.discountPercent}%</Badge>
           ) : p.featured ? (
             <Badge>Spotlight</Badge>
           ) : null}
@@ -193,17 +201,12 @@ export function ProductCard({ product: p, detailed = false }) {
           </dl>
         )}
         <div className="product-card-bottom">
-          <div>
-            <strong className={p.price == null ? "request-price" : ""}>
-              {money(p.price)}
-            </strong>
-            {p.price != null && !p.priceConfirmed && (
-              <small className="guide-label">Guide price</small>
-            )}
-            {p.comparePrice > p.price && p.price != null && (
-              <del>{money(p.comparePrice)}</del>
-            )}
-          </div>
+          <ProductOffer
+            product={p}
+            demo={!!offerPreview}
+            showStock={!detailed}
+            showDiscountBadge={false}
+          />
           <IconButton
             label={"Add " + p.name + " to cart"}
             onClick={() => addCart(p)}
@@ -226,17 +229,11 @@ export function ProductCard({ product: p, detailed = false }) {
               <span>({p.reviewCount})</span>
             </a>
           )}
-          <span
-            className={
-              p.stock > 0 ? "card-availability confirmed" : "card-availability"
-            }
-          >
-            {p.stock === 0
-              ? "Out of stock"
-              : p.stock > 0
-                ? "In stock"
-                : "Check availability"}
-          </span>
+          <StockAvailability
+            product={p}
+            demo={!!offerPreview}
+            className="card-availability"
+          />
           {p.condition && !/^confirm with store\.?$/i.test(p.condition) && (
             <small>{p.condition}</small>
           )}

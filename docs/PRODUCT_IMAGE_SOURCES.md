@@ -1,5 +1,7 @@
 # Additional product image sources
 
+The 1 November 2026 [full catalogue audit](CATALOGUE_AUDIT.md) supersedes the coverage limits below. The current manifest contains 49 researched/model-reference galleries and 133 curated views. Its changes include the reported phone/watch/tablet mismatches, genuine case/trolley references, and promotion of researched images into primary seed data. The source table below records the original 31 October expansion; it is retained as provenance history.
+
 Updated 31 October 2026. Images were researched on public manufacturer pages and selected exact-model retailer listings. No Pinterest, Cosmos or account credentials were used. Files are served locally from `public/assets/product-gallery/` or an existing identical asset; product-source URLs and descriptive alternative text are retained in `src/data/product-media.json`.
 
 The gallery adds 38 precisely identified catalogue products, using 84 distinct local images (19.51 MB). Shared Pro/Pro Max family images are identified as family imagery; gallery choices do not imply that a pictured colour or accessory is available or included.

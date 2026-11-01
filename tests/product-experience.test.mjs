@@ -33,10 +33,13 @@ let dom,
   CommerceApp,
   ProductCard,
   ImageSearchDialog,
+  UtilityBanner,
+  StoreFooter,
   root,
   container,
   clock
 let reducedMotion = false
+let compactScreen = false
 const mediaListeners = new Set()
 const originalGlobals = new Map()
 
@@ -83,7 +86,10 @@ before(async () => {
   dom.matchMedia = (media) => ({
     media,
     get matches() {
-      return media.includes("prefers-reduced-motion") && reducedMotion
+      return (
+        (media.includes("prefers-reduced-motion") && reducedMotion) ||
+        (media.includes("max-width: 700px") && compactScreen)
+      )
     },
     addEventListener: (_event, callback) => mediaListeners.add(callback),
     removeEventListener: (_event, callback) => mediaListeners.delete(callback),
@@ -113,6 +119,12 @@ before(async () => {
   ;({ ImageSearchDialog } = await server.ssrLoadModule(
     "/src/components/ImageSearchDialog.jsx",
   ))
+  ;({ UtilityBanner } = await server.ssrLoadModule(
+    "/src/components/UtilityBanner.jsx",
+  ))
+  ;({ StoreFooter } = await server.ssrLoadModule(
+    "/src/components/StoreFooter.jsx",
+  ))
   ;({
     default: CommerceApp,
   } = await server.ssrLoadModule("/src/CommerceApp.jsx"))
@@ -120,6 +132,7 @@ before(async () => {
 
 beforeEach(() => {
   reducedMotion = false
+  compactScreen = false
   container = dom.document.createElement("div")
   dom.document.body.append(container)
 })
@@ -195,13 +208,22 @@ function installClock() {
     nextId = 0
   const tasks = new Map()
   const nativeSet = dom.setTimeout,
-    nativeClear = dom.clearTimeout
+    nativeClear = dom.clearTimeout,
+    nativeInterval = dom.setInterval,
+    nativeClearInterval = dom.clearInterval
   dom.setTimeout = (callback, delay = 0, ...args) => {
     const id = ++nextId
     tasks.set(id, { at: now + Number(delay), callback, args })
     return id
   }
   dom.clearTimeout = (id) => tasks.delete(id)
+  dom.setInterval = (callback, delay = 0, ...args) => {
+    const id = ++nextId
+    const repeat = Math.max(1, Number(delay))
+    tasks.set(id, { at: now + repeat, callback, args, repeat })
+    return id
+  }
+  dom.clearInterval = (id) => tasks.delete(id)
   clock = {
     get pending() {
       return tasks.size
@@ -218,6 +240,7 @@ function installClock() {
         )
         tasks.delete(id)
         now = task.at
+        if (task.repeat) tasks.set(id, { ...task, at: now + task.repeat })
         await act(async () => task.callback(...task.args))
       }
       now = target
@@ -226,6 +249,8 @@ function installClock() {
       tasks.clear()
       dom.setTimeout = nativeSet
       dom.clearTimeout = nativeClear
+      dom.setInterval = nativeInterval
+      dom.clearInterval = nativeClearInterval
     },
   }
   return clock
@@ -866,6 +891,110 @@ test("reduced motion presents a complete static hint with no typing timer", asyn
   assert.equal(timer.pending, 0)
   await timer.tick(10000)
   assert.equal(container.querySelector("strong").textContent, "phones")
+})
+
+test("utility side messages stay mounted while the central message rotates, pauses and respects reduced motion", async () => {
+  const timer = installClock()
+  await render(React.createElement(UtilityBanner))
+  const brand = container.querySelector(".utility-brand-lockup")
+  const promise = container.querySelector(".utility-promise")
+  const word = () => container.querySelector(".utility-centre-word").textContent
+  const initial = word()
+  await timer.tick(6200)
+  assert.notEqual(word(), initial)
+  assert.equal(container.querySelector(".utility-brand-lockup"), brand)
+  assert.equal(container.querySelector(".utility-promise"), promise)
+  await click(
+    container.querySelector('[aria-label="Pause announcement motion"]'),
+  )
+  const paused = word()
+  await timer.tick(18000)
+  assert.equal(word(), paused)
+  await click(
+    container.querySelector('[aria-label="Play announcement motion"]'),
+  )
+  await timer.tick(6200)
+  assert.notEqual(word(), paused)
+  reducedMotion = true
+  await act(async () => {
+    for (const listener of mediaListeners) listener()
+  })
+  assert.ok(container.querySelector(".utility-banner.reduced-motion"))
+  assert.equal(container.querySelector(".utility-motion-toggle"), null)
+  assert.equal(timer.pending, 0)
+})
+
+test("footer groups collapse on small screens and retain support, store contacts and payment methods", async () => {
+  compactScreen = true
+  await render(
+    React.createElement(
+      StoreProvider,
+      null,
+      React.createElement(StoreFooter, {
+        logo: "/assets/london-tech-logo.png",
+      }),
+    ),
+  )
+  const care = container.querySelector('nav[aria-label="Customer care"]')
+  assert.equal(
+    care.querySelector("button").getAttribute("aria-expanded"),
+    "false",
+  )
+  assert.equal(care.querySelector("ul").hidden, true)
+  await click(care.querySelector("button"))
+  assert.equal(care.querySelector("ul").hidden, false)
+  assert.ok(care.querySelector('a[href="/returns/"]'))
+  assert.ok(container.querySelector('a[href="tel:+256788341111"]'))
+  assert.ok(container.querySelector('a[href="tel:+256709417273"]'))
+  assert.match(container.textContent, /NYUMBA KUBUA/)
+  assert.match(
+    container.querySelector(".payment-marks").getAttribute("aria-label"),
+    /MTN Mobile Money, Airtel Money and Visa/,
+  )
+  compactScreen = false
+  await act(async () => {
+    for (const listener of mediaListeners) listener()
+  })
+  assert.ok(
+    [...container.querySelectorAll(".footer-group ul")].every(
+      (list) => !list.hidden,
+    ),
+  )
+  assert.equal(container.querySelector(".footer-group button"), null)
+})
+
+test("offer review mode labels every homepage card and can exit without changing catalogue prices or filters", async () => {
+  await openRoute("/?preview=offers")
+  assert.match(
+    container.querySelector(".offer-preview-banner").textContent,
+    /not live offers/,
+  )
+  assert.ok(container.querySelectorAll(".pcard").length > 0)
+  for (const card of container.querySelectorAll(".pcard")) {
+    assert.ok(card.querySelector('.product-offer[data-demo="true"]'))
+    assert.ok(card.querySelector('.offer-arabic[lang="ar"][dir="rtl"]'))
+    assert.match(card.querySelector(".offer-stock").textContent, /Demo stock/)
+    assert.ok(card.querySelector("del"))
+  }
+  await click(container.querySelector('a[href="/collections/mobiles/"]'))
+  assert.ok(
+    container.querySelector(".offer-preview-banner"),
+    "Review mode persists during local navigation",
+  )
+  await click(container.querySelector(".offer-preview-banner button"))
+  assert.equal(container.querySelector(".offer-preview-banner"), null)
+  assert.equal(
+    container.querySelector('.product-offer[data-demo="true"]'),
+    null,
+  )
+  assert.equal(container.querySelector(".offer-demo-label"), null)
+  assert.equal(new URLSearchParams(dom.location.search).has("preview"), false)
+  const first = container.querySelector(".product-card")
+  assert.match(
+    first.querySelector(".offer-stock").textContent,
+    /Check availability/,
+  )
+  assert.equal(first.querySelector(".offer-previous-price"), null)
 })
 
 test("long-form product sections expand real specifications and filter, sort and paginate reviews", async () => {

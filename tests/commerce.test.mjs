@@ -164,6 +164,23 @@ test("cross-origin writes, unsafe images and customer promotion are rejected", a
   assert.equal(unpublished.status, 403)
 })
 
+test("administrative price or stock saves retain the product photo reference note", async () => {
+  const note =
+    "Manufacturer family reference. Confirm the exact stocked variant."
+  const saved = await request("admin/products/" + fixture.id, {
+    method: "PUT",
+    cookie: adminCookie,
+    body: { ...fixture, mediaNote: note },
+  })
+  assert.equal(saved.status, 200)
+  assert.equal(saved.data.product.mediaNote, note)
+  const publicProduct = (await request("catalog")).data.products.find(
+    (product) => product.id === fixture.id,
+  )
+  assert.equal(publicProduct.mediaNote, note)
+  fixture = saved.data.product
+})
+
 const payload = (overrides = {}) => ({
   items: [{ id: fixture.id, quantity: 1, option: "", color: "" }],
   customer: {

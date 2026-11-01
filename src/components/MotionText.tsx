@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-function useReducedMotion() {
+export function useReducedMotion() {
   const [reduced, setReduced] = useState(false)
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)")
