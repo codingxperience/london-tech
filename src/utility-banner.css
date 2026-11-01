@@ -1,20 +1,29 @@
-.utility-bar.utility-banner{position:relative;z-index:110;isolation:isolate;display:block;padding:0;background:#061e3b;color:white;min-height:76px;overflow:visible;border:0}
-.utility-banner .utility-banner-stage{position:relative;max-width:1600px;margin:auto;display:grid;grid-template-columns:1fr 1.5fr 1fr;align-items:center;gap:24px;min-height:76px;overflow-x:clip;overflow-y:visible}
-.utility-banner .utility-brand-lockup{min-width:0;text-align:left;animation:utility-brand-arrive 1.1s cubic-bezier(.2,.8,.2,1) both;pointer-events:none}
-.utility-banner .utility-brand-lockup>span{font:900 clamp(22px,2.4vw,36px)/1 Nunito,sans-serif;letter-spacing:-.055em;white-space:nowrap;display:block}
+.utility-bar.utility-banner{position:relative;isolation:isolate;display:block;padding:0;background:#061e3b;color:#fff;height:64px;overflow:hidden;border:0}
+.utility-banner .utility-banner-stage{position:relative;max-width:1600px;margin:auto;display:grid;grid-template-columns:1fr 2fr 1.25fr;align-items:center;gap:20px;height:100%;padding-right:62px!important}
+.utility-banner .utility-call{display:flex;flex-direction:column;align-items:flex-start;gap:2px;color:inherit;text-decoration:none;min-width:0;animation:utility-call-arrive .85s cubic-bezier(.2,.8,.2,1) both}
+.utility-banner .utility-call>span{font:700 10px/1.2 "Nunito Sans",sans-serif;letter-spacing:.025em;color:#c7d5e7}
+.utility-banner .utility-call>strong{font:900 clamp(18px,1.9vw,26px)/1.1 Nunito,sans-serif;letter-spacing:-.025em;white-space:nowrap}
+.utility-banner .utility-brand-lockup{min-width:0;text-align:right;animation:utility-brand-arrive .85s cubic-bezier(.2,.8,.2,1) both;pointer-events:none}
+.utility-banner .utility-brand-lockup>span{font:900 clamp(24px,2.55vw,37px)/.98 Nunito,sans-serif;letter-spacing:-.055em;white-space:nowrap;display:block}
 .utility-banner .utility-brand-lockup em{font-style:normal;color:#f34453}
-.utility-banner .utility-centre{position:relative;display:grid;place-items:center;min-width:0;min-height:76px;pointer-events:none;text-align:center}
-.utility-banner .utility-centre-word{display:block;font:900 clamp(22px,2.65vw,38px)/1.04 Nunito,sans-serif;letter-spacing:-.055em;white-space:nowrap;transform-origin:50% 50%;animation:utility-centre-land 6.2s cubic-bezier(.16,1,.3,1) both;will-change:transform,opacity}
-.utility-banner .utility-promise{display:flex;flex-direction:column;gap:4px;min-width:0;align-items:flex-end;padding-right:18px;animation:utility-promise-arrive 1.1s cubic-bezier(.2,.8,.2,1) both;pointer-events:none}
-.utility-banner .utility-promise>strong{font:900 clamp(14px,1.6vw,23px)/1 Nunito,sans-serif;letter-spacing:-.035em;white-space:nowrap}
-.utility-banner .utility-promise>span{font-size:9px;font-weight:900;line-height:1.3;letter-spacing:.14em;color:#9fb4d0}
-.utility-banner .utility-motion-toggle{position:absolute;right:9px;bottom:7px;display:grid;place-items:center;width:26px;height:26px;padding:0;border:1px solid #ffffff28;border-radius:50%;color:#b9c9dc;background:#061e3b;opacity:.5;z-index:1}
-.utility-banner .utility-motion-toggle:hover,.utility-banner .utility-motion-toggle:focus-visible{opacity:1;border-color:#ffffff80}
+.utility-banner .utility-brand-lockup>small{display:block;margin-top:4px;font:800 8px/1.2 "Nunito Sans",sans-serif;letter-spacing:.19em;color:#b6c8df}
+.utility-banner .utility-centre{position:relative;display:grid;place-items:center;min-width:0;height:100%;overflow:hidden;text-align:center;color:inherit;text-decoration:none}
+.utility-banner .utility-centre-word{display:block;max-width:100%;font:900 clamp(23px,2.8vw,40px)/1.04 Nunito,sans-serif;letter-spacing:-.045em;white-space:nowrap;transform-origin:50% 50%;animation-duration:2.8s;animation-timing-function:cubic-bezier(.16,1,.3,1);animation-fill-mode:both}
+.utility-banner .utility-centre-word.motion-rise{animation-name:utility-rise}
+.utility-banner .utility-centre-word.motion-drop{animation-name:utility-drop}
+.utility-banner .utility-centre-word.motion-zoom{animation-name:utility-zoom}
+.utility-banner .utility-centre-word.is-pill{padding:5px 18px 6px;border-radius:30px;background:#fff;color:#082a52;font-size:clamp(20px,2.1vw,29px);letter-spacing:-.03em}
+.utility-banner .utility-motion-toggle{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:25px;height:25px;padding:0;border:1px solid #ffffff35;border-radius:50%;color:#c7d5e7;background:#061e3b;z-index:1}
+.utility-banner .utility-motion-toggle:hover,.utility-banner .utility-motion-toggle:focus-visible{color:#fff;border-color:#ffffff90}
+.utility-banner a:focus-visible{outline:2px solid #fff;outline-offset:-3px;border-radius:3px}
 .utility-banner.is-paused .utility-centre-word{animation:none;transform:none;opacity:1}
-@keyframes utility-brand-arrive{from{opacity:0;transform:translateX(-90px)}to{opacity:1;transform:translateX(0)}}
-@keyframes utility-promise-arrive{from{opacity:0;transform:translateX(90px)}to{opacity:1;transform:translateX(0)}}
-@keyframes utility-centre-land{0%{opacity:0;transform:translateY(14px) scale(16)}7%{opacity:.9;transform:translateY(0) scale(4.5)}24%{opacity:1;transform:translateY(0) scale(1)}87%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-24px) scale(.98)}}
-.utility-banner.reduced-motion .utility-brand-lockup,.utility-banner.reduced-motion .utility-promise,.utility-banner.reduced-motion .utility-centre-word{animation:none!important;transform:none;opacity:1}
-@media(max-width:1100px) and (min-width:701px){.utility-banner .utility-banner-stage{gap:16px;grid-template-columns:.9fr 1.5fr 1fr}.utility-banner .utility-brand-lockup>span{font-size:25px}.utility-banner .utility-centre-word{font-size:26px}.utility-banner .utility-promise>strong{font-size:17px}.utility-banner .utility-promise>span{font-size:8px;letter-spacing:.08em}}
-@media(max-width:700px){.utility-bar.utility-banner{min-height:91px}.utility-banner .utility-banner-stage{grid-template-columns:1fr 1fr;gap:0 14px;min-height:91px;padding-block:11px!important}.utility-banner .utility-brand-lockup>span{font-size:23px}.utility-banner .utility-promise{grid-column:2;grid-row:1;padding:0;gap:3px}.utility-banner .utility-promise>strong{font-size:15px}.utility-banner .utility-promise>span{font-size:7px;letter-spacing:.1em}.utility-banner .utility-centre{grid-column:1/-1;grid-row:2;min-height:38px;padding-top:7px}.utility-banner .utility-centre-word{font-size:28px;letter-spacing:-.04em}.utility-banner .utility-motion-toggle{right:7px;bottom:6px;width:24px;height:24px}.utility-banner .utility-promise{padding-right:5px}}
-@media(prefers-reduced-motion:reduce){.utility-banner .utility-brand-lockup,.utility-banner .utility-promise,.utility-banner .utility-centre-word{animation:none!important;transform:none;opacity:1}}
+.utility-banner.is-paused .utility-call,.utility-banner.is-paused .utility-brand-lockup{animation-play-state:paused}
+@keyframes utility-call-arrive{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:translateX(0)}}
+@keyframes utility-brand-arrive{from{opacity:0;transform:translateX(-120px)}to{opacity:1;transform:translateX(0)}}
+@keyframes utility-rise{0%{opacity:0;transform:translateY(110%)}13%,87%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-110%)}}
+@keyframes utility-drop{0%{opacity:0;transform:translateY(-110%)}13%,87%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(110%)}}
+@keyframes utility-zoom{0%{opacity:0;transform:scale(.65)}13%{opacity:1;transform:scale(1.08)}24%,87%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(110%) scale(.98)}}
+.utility-banner.reduced-motion .utility-call,.utility-banner.reduced-motion .utility-brand-lockup,.utility-banner.reduced-motion .utility-centre-word{animation:none!important;transform:none;opacity:1}
+@media(max-width:1100px) and (min-width:701px){.utility-banner .utility-banner-stage{gap:16px;grid-template-columns:1fr 1.8fr 1.2fr;padding-right:52px!important}.utility-banner .utility-brand-lockup>span{font-size:27px}.utility-banner .utility-centre-word{font-size:27px}.utility-banner .utility-call>strong{font-size:20px}.utility-banner .utility-brand-lockup>small{font-size:7px;letter-spacing:.12em}}
+@media(max-width:700px){.utility-bar.utility-banner{height:96px}.utility-banner .utility-banner-stage{grid-template-columns:1fr 1fr;grid-template-rows:43px 43px;gap:0 14px;padding:5px 18px!important}.utility-banner .utility-brand-lockup{grid-column:2;grid-row:1}.utility-banner .utility-brand-lockup>span{font-size:clamp(20px,6.2vw,25px)}.utility-banner .utility-brand-lockup>small{font-size:6px;margin-top:2px;letter-spacing:.15em}.utility-banner .utility-call>strong{font-size:19px}.utility-banner .utility-call>span{font-size:9px}.utility-banner .utility-centre{grid-column:1/-1;grid-row:2;margin-right:25px}.utility-banner .utility-centre-word{font-size:clamp(19px,6vw,29px)}.utility-banner .utility-centre-word.is-pill{font-size:21px;padding:4px 14px}.utility-banner .utility-motion-toggle{right:16px;top:auto;bottom:12px;transform:none;width:22px;height:22px}}
+@media(prefers-reduced-motion:reduce){.utility-banner .utility-call,.utility-banner .utility-brand-lockup,.utility-banner .utility-centre-word{animation:none!important;transform:none;opacity:1}}

@@ -43,9 +43,9 @@ Official documentation: [payment methods](https://developer.flutterwave.com/docs
 
 ## Prices, stock and quotes
 
-The owner requested drafted UGX prices. These are marked **Guide price** and have `priceConfirmed: false`. Stock starts unconfirmed. Draft guide prices are excluded from structured-data offers and cannot be used for immediate payment.
+The owner approved the proposed UGX prices, regular prices and opening quantities as launch values on 1 November 2026. They appear by default across the storefront and order calculation. See [launch offers](LAUNCH_OFFERS.md) for the source records and one-time database migration. Merchant changes and numeric stock counts are preserved.
 
-In admin → Products, confirm the product, its configuration, actual selling price, condition, warranty and stock quantity. Check **This price is confirmed by the store**, enter a stock quantity and save. Enter the delivery charge in Settings, or leave it blank to require a delivery quote. Collection uses the supplied store address.
+In admin → Products, maintain each product's configuration, selling price, regular price, condition, warranty and remaining stock. New products start with unconfirmed prices and inventory: check **This price is confirmed by the store**, enter a stock quantity and save when ready. Unconfirmed guide prices are excluded from structured-data offers and cannot be used for immediate payment. Enter the delivery charge in Settings, or leave it blank to require a delivery quote. Collection uses the supplied store address.
 
 For an unconfirmed item, the customer submits a price and availability request. In admin → Orders, open that request and save a confirmed quote with unit prices, any delivery fee and configuration notes. The quote appears in the customer’s account and is valid for 24 hours. Stock is rechecked and reserved for 30 minutes when the customer starts payment. The application does not claim to send an email when a quote is saved.
 

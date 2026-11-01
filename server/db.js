@@ -6,6 +6,7 @@ import path from "node:path"
 
 import { products, storeDefaults } from "../src/data/catalog.js"
 import { repairSeedCatalogue } from "./catalogue-migration.js"
+import { adoptLaunchOffers } from "./launch-offers-migration.js"
 
 let connection
 
@@ -108,6 +109,7 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, expires_at TIMESTAMPTZ NOT NULL)`,
 
     `CREATE TABLE IF NOT EXISTS products (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `CREATE TABLE IF NOT EXISTS catalogue_migrations (version TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
 
     `CREATE TABLE IF NOT EXISTS settings (id TEXT PRIMARY KEY, data JSONB NOT NULL)`,
 
@@ -139,6 +141,7 @@ async function initialize() {
   )
 
   await repairSeedCatalogue(db)
+  await adoptLaunchOffers(db)
 
   await db.query(
     `INSERT INTO settings(id,data) VALUES('store',$1::jsonb) ON CONFLICT(id) DO NOTHING`,

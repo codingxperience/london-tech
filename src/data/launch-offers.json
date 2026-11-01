@@ -1,0 +1,536 @@
+{
+  "iphone-18-pro-max": {
+    "price": 5650000,
+    "comparePrice": 7534000,
+    "stock": 6,
+    "priceConfirmed": true
+  },
+  "iphone-18-pro-max-burgundy": {
+    "price": 6580000,
+    "comparePrice": 7742000,
+    "stock": 18,
+    "priceConfirmed": true
+  },
+  "samsung-galaxy-tablet": {
+    "price": 2450000,
+    "comparePrice": 2988000,
+    "stock": 4,
+    "priceConfirmed": true
+  },
+  "apple-ipad-pro": {
+    "price": 4200000,
+    "comparePrice": 4667000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "soundcore-wireless-earbuds": {
+    "price": 265000,
+    "comparePrice": 324000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "apple-watch-series": {
+    "price": 1190000,
+    "comparePrice": 1452000,
+    "stock": 19,
+    "priceConfirmed": true
+  },
+  "iphone-17-pro-max": {
+    "price": 5750000,
+    "comparePrice": 7188000,
+    "stock": 5,
+    "priceConfirmed": true
+  },
+  "iphone-17-pro": {
+    "price": 5250000,
+    "comparePrice": 7000000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "iphone-17": {
+    "price": 3350000,
+    "comparePrice": 4467000,
+    "stock": 12,
+    "priceConfirmed": true
+  },
+  "iphone-17-orange": {
+    "price": 5250000,
+    "comparePrice": 6563000,
+    "stock": 8,
+    "priceConfirmed": true
+  },
+  "galaxy-s26-ultra": {
+    "price": 5500000,
+    "comparePrice": 6471000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "galaxy-s26-ultra-black": {
+    "price": 5500000,
+    "comparePrice": 6875000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "iphone-16-plus": {
+    "price": 3100000,
+    "comparePrice": 4134000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "iphone-15-pro-used": {
+    "price": 2650000,
+    "comparePrice": 3534000,
+    "stock": 12,
+    "priceConfirmed": true
+  },
+  "iphone-14-pro-used": {
+    "price": 2100000,
+    "comparePrice": 2625000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "galaxy-s25": {
+    "price": 2850000,
+    "comparePrice": 3167000,
+    "stock": 19,
+    "priceConfirmed": true
+  },
+  "galaxy-z-fold8-ultra": {
+    "price": 8200000,
+    "comparePrice": 9319000,
+    "stock": 17,
+    "priceConfirmed": true
+  },
+  "galaxy-z-fold8": {
+    "price": 7200000,
+    "comparePrice": 9000000,
+    "stock": 20,
+    "priceConfirmed": true
+  },
+  "galaxy-z-flip8": {
+    "price": 4600000,
+    "comparePrice": 5750000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "airpods-max": {
+    "price": 2250000,
+    "comparePrice": 2648000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "bose-qc-ultra": {
+    "price": 1750000,
+    "comparePrice": 1945000,
+    "stock": 4,
+    "priceConfirmed": true
+  },
+  "watch-ultra-3": {
+    "price": 3150000,
+    "comparePrice": 3842000,
+    "stock": 22,
+    "priceConfirmed": true
+  },
+  "galaxy-watch-8": {
+    "price": 1150000,
+    "comparePrice": 1353000,
+    "stock": 18,
+    "priceConfirmed": true
+  },
+  "switch-2": {
+    "price": 2250000,
+    "comparePrice": 2500000,
+    "stock": 10,
+    "priceConfirmed": true
+  },
+  "ps5-pro": {
+    "price": 3550000,
+    "comparePrice": 4035000,
+    "stock": 17,
+    "priceConfirmed": true
+  },
+  "elite-controller": {
+    "price": 650000,
+    "comparePrice": 739000,
+    "stock": 20,
+    "priceConfirmed": true
+  },
+  "retro-handhelds": {
+    "price": 285000,
+    "comparePrice": 380000,
+    "stock": 18,
+    "priceConfirmed": true
+  },
+  "canon-r6ii": {
+    "price": 8500000,
+    "comparePrice": 9660000,
+    "stock": 14,
+    "priceConfirmed": true
+  },
+  "gopro-hero13": {
+    "price": 1750000,
+    "comparePrice": 2334000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "aramid-fibre-case": {
+    "price": 195000,
+    "comparePrice": 260000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "magsafe-powerbank": {
+    "price": 145000,
+    "comparePrice": 194000,
+    "stock": 6,
+    "priceConfirmed": true
+  },
+  "clear-armor-case": {
+    "price": 65000,
+    "comparePrice": 87000,
+    "stock": 9,
+    "priceConfirmed": true
+  },
+  "slim-case-trio": {
+    "price": 85000,
+    "comparePrice": 107000,
+    "stock": 8,
+    "priceConfirmed": true
+  },
+  "hp-omnibook-x-flip-14-fm0013dx": {
+    "price": 3850000,
+    "comparePrice": 4375000,
+    "stock": 20,
+    "priceConfirmed": true
+  },
+  "macbook-air-13-m5": {
+    "price": 4950000,
+    "comparePrice": 5824000,
+    "stock": 15,
+    "priceConfirmed": true
+  },
+  "macbook-air-15-m5": {
+    "price": 5850000,
+    "comparePrice": 7313000,
+    "stock": 20,
+    "priceConfirmed": true
+  },
+  "macbook-pro-14-m5": {
+    "price": 7200000,
+    "comparePrice": 8000000,
+    "stock": 13,
+    "priceConfirmed": true
+  },
+  "macbook-pro-14-m5-pro": {
+    "price": 9850000,
+    "comparePrice": 11589000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "macbook-pro-16-m5-max": {
+    "price": 15900000,
+    "comparePrice": 18069000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "ipad-pro-11-m5": {
+    "price": 4850000,
+    "comparePrice": 5915000,
+    "stock": 13,
+    "priceConfirmed": true
+  },
+  "ipad-pro-13-m5": {
+    "price": 5650000,
+    "comparePrice": 7534000,
+    "stock": 18,
+    "priceConfirmed": true
+  },
+  "ipad-air-11-m4": {
+    "price": 2950000,
+    "comparePrice": 3353000,
+    "stock": 23,
+    "priceConfirmed": true
+  },
+  "ipad-air-13-m4": {
+    "price": 3650000,
+    "comparePrice": 4452000,
+    "stock": 7,
+    "priceConfirmed": true
+  },
+  "ipad-mini-a17-pro": {
+    "price": 2250000,
+    "comparePrice": 3000000,
+    "stock": 15,
+    "priceConfirmed": true
+  },
+  "ipad-11-a16": {
+    "price": 1650000,
+    "comparePrice": 1875000,
+    "stock": 23,
+    "priceConfirmed": true
+  },
+  "creed-viking-cologne": {
+    "price": 1250000,
+    "comparePrice": 1667000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "creed-aventus-cologne": {
+    "price": 1350000,
+    "comparePrice": 1535000,
+    "stock": 14,
+    "priceConfirmed": true
+  },
+  "creed-bois-du-portugal": {
+    "price": 1250000,
+    "comparePrice": 1421000,
+    "stock": 23,
+    "priceConfirmed": true
+  },
+  "creed-original-vetiver": {
+    "price": 1250000,
+    "comparePrice": 1389000,
+    "stock": 10,
+    "priceConfirmed": true
+  },
+  "creed-himalaya": {
+    "price": 1250000,
+    "comparePrice": 1525000,
+    "stock": 7,
+    "priceConfirmed": true
+  },
+  "creed-erolfa": {
+    "price": 1250000,
+    "comparePrice": 1471000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "bleu-de-chanel-edp": {
+    "price": 720000,
+    "comparePrice": 960000,
+    "stock": 18,
+    "priceConfirmed": true
+  },
+  "dior-sauvage-edp": {
+    "price": 625000,
+    "comparePrice": 695000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "valentino-born-in-roma-donna": {
+    "price": 595000,
+    "comparePrice": 662000,
+    "stock": 10,
+    "priceConfirmed": true
+  },
+  "armani-prive-rouge-malachite": {
+    "price": 1150000,
+    "comparePrice": 1278000,
+    "stock": 4,
+    "priceConfirmed": true
+  },
+  "carolina-herrera-212-vip-men": {
+    "price": 385000,
+    "comparePrice": 514000,
+    "stock": 9,
+    "priceConfirmed": true
+  },
+  "braun-series-5-51-b1000s": {
+    "price": 395000,
+    "comparePrice": 449000,
+    "stock": 14,
+    "priceConfirmed": true
+  },
+  "philips-mg5921-15": {
+    "price": 275000,
+    "comparePrice": 367000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "jbl-tune-770nc": {
+    "price": 370000,
+    "comparePrice": 412000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "bose-soundlink-max": {
+    "price": 1650000,
+    "comparePrice": 1875000,
+    "stock": 23,
+    "priceConfirmed": true
+  },
+  "ride-5-ps5": {
+    "price": 225000,
+    "comparePrice": 265000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "ea-sports-fc-26": {
+    "price": 265000,
+    "comparePrice": 295000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "super-mario-party-jamboree": {
+    "price": 245000,
+    "comparePrice": 307000,
+    "stock": 5,
+    "priceConfirmed": true
+  },
+  "witcher-3-switch": {
+    "price": 195000,
+    "comparePrice": 217000,
+    "stock": 7,
+    "priceConfirmed": true
+  },
+  "thinkpad-pro-topload-gen2": {
+    "price": 285000,
+    "comparePrice": 348000,
+    "stock": 7,
+    "priceConfirmed": true
+  },
+  "lenovo-t210-black": {
+    "price": 85000,
+    "comparePrice": 95000,
+    "stock": 19,
+    "priceConfirmed": true
+  },
+  "thinkpad-tl620-brown": {
+    "price": 155000,
+    "comparePrice": 173000,
+    "stock": 19,
+    "priceConfirmed": true
+  },
+  "pierre-cardin-softshell-72": {
+    "price": 425000,
+    "comparePrice": 567000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "pierre-cardin-pc1844": {
+    "price": 365000,
+    "comparePrice": 446000,
+    "stock": 4,
+    "priceConfirmed": true
+  },
+  "hp-smart-tank-580": {
+    "price": 725000,
+    "comparePrice": 907000,
+    "stock": 5,
+    "priceConfirmed": true
+  },
+  "jbl-partybox-stage-320": {
+    "price": 2650000,
+    "comparePrice": 3313000,
+    "stock": 5,
+    "priceConfirmed": true
+  },
+  "powerology-rotating-stand-projector": {
+    "price": 895000,
+    "comparePrice": 1194000,
+    "stock": 21,
+    "priceConfirmed": true
+  },
+  "rayban-meta-smart-glasses": {
+    "price": 1750000,
+    "comparePrice": 2334000,
+    "stock": 18,
+    "priceConfirmed": true
+  },
+  "huawei-watch-gt6-pro": {
+    "price": 1450000,
+    "comparePrice": 1706000,
+    "stock": 12,
+    "priceConfirmed": true
+  },
+  "huawei-watch-ultimate-2": {
+    "price": 2950000,
+    "comparePrice": 3353000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "green-lion-strive-smart-watch": {
+    "price": 165000,
+    "comparePrice": 188000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "porodo-sovo-10000mah": {
+    "price": 155000,
+    "comparePrice": 194000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "iphone-13-pro-max": {
+    "price": 1950000,
+    "comparePrice": 2167000,
+    "stock": 13,
+    "priceConfirmed": true
+  },
+  "iphone-air": {
+    "price": 3750000,
+    "comparePrice": 4262000,
+    "stock": 14,
+    "priceConfirmed": true
+  },
+  "galaxy-s25-ultra": {
+    "price": 3950000,
+    "comparePrice": 4489000,
+    "stock": 23,
+    "priceConfirmed": true
+  },
+  "galaxy-a16": {
+    "price": 625000,
+    "comparePrice": 695000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "honor-x6b": {
+    "price": 465000,
+    "comparePrice": 548000,
+    "stock": 24,
+    "priceConfirmed": true
+  },
+  "honor-x9b": {
+    "price": 975000,
+    "comparePrice": 1300000,
+    "stock": 12,
+    "priceConfirmed": true
+  },
+  "infinix-smart-10-plus": {
+    "price": 395000,
+    "comparePrice": 482000,
+    "stock": 19,
+    "priceConfirmed": true
+  },
+  "infinix-smart-9": {
+    "price": 335000,
+    "comparePrice": 373000,
+    "stock": 16,
+    "priceConfirmed": true
+  },
+  "redmi-13c": {
+    "price": 425000,
+    "comparePrice": 532000,
+    "stock": 17,
+    "priceConfirmed": true
+  },
+  "soundcore-party-speaker": {
+    "price": 850000,
+    "comparePrice": 1063000,
+    "stock": 11,
+    "priceConfirmed": true
+  },
+  "green-lion-usbc-cable": {
+    "price": 45000,
+    "comparePrice": 52000,
+    "stock": 8,
+    "priceConfirmed": true
+  },
+  "dji-pocket-camera": {
+    "price": 2650000,
+    "comparePrice": 3232000,
+    "stock": 16,
+    "priceConfirmed": true
+  }
+}

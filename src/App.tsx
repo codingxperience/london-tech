@@ -1,7 +1,6 @@
 import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
 import { StoreFooter } from "./components/StoreFooter.jsx"
-import { OfferPreviewBanner } from "./components/OfferPreviewBanner.jsx"
 import { ProductOffer } from "./components/ProductOffer.jsx"
 import { productOffer } from "./lib/offer-details.js"
 import { UtilityBanner } from "./components/UtilityBanner.jsx"
@@ -191,20 +190,23 @@ const HERO_SLIDES = [
     headline: "New week.",
     hl: "New tech.",
     bg: "/promotions/gadget-collection.webp",
+    alt: "Collection of phones, headphones, watches, tablets and gaming accessories",
     category: "All",
   },
   {
     tag: "LONDON TECH",
-    headline: "Think bigger.",
-    hl: "Create more.",
-    bg: "/promotions/gadget-collection.webp",
-    category: "Tablets",
+    headline: "Your next",
+    hl: "upgrade.",
+    bg: "/assets/current/ipad-pro.png",
+    alt: "Slim black smartphone, rear and side views",
+    category: "Smartphones",
   },
   {
     tag: "LONDON TECH",
-    headline: "Tune in.",
-    hl: "Go wireless.",
-    bg: "/promotions/gadget-collection.webp",
+    headline: "Turn up",
+    hl: "the music.",
+    bg: "/assets/current/soundcore-earbuds.jpeg",
+    alt: "Soundcore portable party speaker with illuminated drivers",
     category: "Audio",
   },
 ]
@@ -291,22 +293,21 @@ function catalogueProducts(
     return product ? [product] : []
   })
 }
-function cardBadge(p: Product, catalogue: any[], demo: boolean) {
+function cardBadge(p: Product, catalogue: any[]) {
   const product = catalogue.find((item) => item.id === commerceId(p))
-  const offer = product && productOffer(product, { demo })
+  const offer = product && productOffer(product)
   return offer?.discounted ? "−" + offer.discountPercent + "%" : p.badge
 }
 
 // ── Product Card ──────────────────────────────────────────────────────────────
 function ProductCard({ p }: { p: Product }) {
-  const { products, wishlist, toggleWish, addCart, cart, offerPreview } =
-    useStore()
+  const { products, wishlist, toggleWish, addCart, cart } = useStore()
   const item = products.find(
     (item: { id: string }) => item.id === commerceId(p),
   )
   const wished = wishlist.includes(commerceId(p))
   const added = cart.some((line: { id: string }) => line.id === commerceId(p))
-  const badge = cardBadge(p, products, !!offerPreview)
+  const badge = cardBadge(p, products)
   if (!item) return null
   return (
     <div
@@ -453,11 +454,7 @@ function ProductCard({ p }: { p: Product }) {
             {p.arabicName}
           </div>
         )}
-        <ProductOffer
-          product={item}
-          demo={!!offerPreview}
-          showDiscountBadge={false}
-        />
+        <ProductOffer product={item} showDiscountBadge={false} />
         <div
           className="product-actions"
           style={{
@@ -575,7 +572,6 @@ export default function App({ children }: { children?: ReactNode }) {
     cart: cartItems,
     setCartOpen,
     openImageSearch,
-    offerPreview,
   } = useStore()
   const cart = cartItems.reduce(
     (sum: number, line: { quantity: number }) => sum + line.quantity,
@@ -604,22 +600,7 @@ export default function App({ children }: { children?: ReactNode }) {
     return () => clearInterval(t)
   }, [heroHovered])
 
-  const currentSlide = HERO_SLIDES[slide]
-  const heroId =
-    slide === 1 ? "apple-ipad-pro" : slide === 2 ? "bose-qc-ultra" : null
-  const heroItem = heroId
-    ? catalogue.find(
-        (product: CatalogueProductIdentity) =>
-          product.id === heroId && product.active !== false,
-      )
-    : null
-  const hero = {
-    ...currentSlide,
-    bg: heroItem?.image || HERO_SLIDES[0].bg,
-    alt:
-      heroItem?.name ||
-      "Collection of phones, headphones, watches, tablets and gaming accessories",
-  }
+  const hero = HERO_SLIDES[slide]
   const featuredPhone = catalogue.find(
     (product: { id: string }) => product.id === "iphone-18-pro-max",
   )
@@ -697,7 +678,6 @@ export default function App({ children }: { children?: ReactNode }) {
       `}</style>
 
       {/* ── Announcement bar ──────────────────────────────────────────── */}
-      <OfferPreviewBanner />
       <UtilityBanner />
 
       {/* ── Header ────────────────────────────────────────────────────── */}
@@ -1084,11 +1064,7 @@ export default function App({ children }: { children?: ReactNode }) {
                 <img src={featuredPhone.image} alt={featuredPhone.name} />
                 <span>In focus</span>
                 <h3>{featuredPhone.name}</h3>
-                <ProductOffer
-                  product={featuredPhone}
-                  demo={!!offerPreview}
-                  compact
-                />
+                <ProductOffer product={featuredPhone} compact />
               </a>
             )}
 
@@ -1211,7 +1187,6 @@ export default function App({ children }: { children?: ReactNode }) {
                       product={catalogue.find(
                         (item: { id: string }) => item.id === commerceId(p),
                       )}
-                      demo={!!offerPreview}
                       compact
                     />
                   </div>
@@ -1535,7 +1510,7 @@ export default function App({ children }: { children?: ReactNode }) {
                           display: "block",
                         }}
                       />
-                      {cardBadge(p, catalogue, !!offerPreview) && (
+                      {cardBadge(p, catalogue) && (
                         <span
                           style={{
                             position: "absolute",
@@ -1550,7 +1525,7 @@ export default function App({ children }: { children?: ReactNode }) {
                             fontFamily: "Nunito,sans-serif",
                           }}
                         >
-                          {cardBadge(p, catalogue, !!offerPreview)}
+                          {cardBadge(p, catalogue)}
                         </span>
                       )}
                     </div>
@@ -1573,7 +1548,6 @@ export default function App({ children }: { children?: ReactNode }) {
                         product={catalogue.find(
                           (item: { id: string }) => item.id === commerceId(p),
                         )}
-                        demo={!!offerPreview}
                       />
                     </div>
                   </div>

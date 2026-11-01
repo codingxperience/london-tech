@@ -1688,7 +1688,7 @@ export function ProductEditor({
                   onChange={(e) => field("price", number(e.target.value))}
                 />
                 <Field
-                  label="Previous price (optional)"
+                  label="Regular price (optional)"
                   type="number"
                   min="100"
                   max="2000000000"

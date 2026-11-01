@@ -200,6 +200,23 @@ const payload = (overrides = {}) => ({
 
 test("guide prices and unknown stock cannot be paid", async () => {
   process.env.FLW_SECRET_KEY = "FLWSECK_TEST_VALIDATION"
+  // Exercise a newly entered, unconfirmed item independently of launch pricing.
+  fixture = {
+    ...fixture,
+    priceConfirmed: false,
+    comparePrice: null,
+    stock: null,
+  }
+  assert.equal(
+    (
+      await request("admin/products/" + fixture.id, {
+        method: "PUT",
+        cookie: adminCookie,
+        body: fixture,
+      })
+    ).status,
+    200,
+  )
 
   const draft = await request("orders", {
     method: "POST",

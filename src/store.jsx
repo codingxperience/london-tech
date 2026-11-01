@@ -118,11 +118,6 @@ export function StoreProvider({ children }) {
     [cartOpen, setCartOpen] = useState(false),
     [imageSearchOpen, setImageSearchOpen] = useState(false),
     [authDialog, setAuthDialog] = useState(null)
-  const [offerPreview, setOfferPreview] = useState(
-    () =>
-      typeof location !== "undefined" &&
-      new URLSearchParams(location.search).get("preview") === "offers",
-  )
 
   const closeAuth = useCallback(() => setAuthDialog(null), [])
   const openImageSearch = useCallback(() => {
@@ -339,8 +334,6 @@ export function StoreProvider({ children }) {
         products,
         setProducts,
         settings,
-        offerPreview,
-        setOfferPreview,
         setSettings,
         user,
         setUser,

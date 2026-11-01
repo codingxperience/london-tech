@@ -6,8 +6,8 @@ import {
   stockAvailability,
 } from "../lib/offer-details.js"
 
-export function StockAvailability({ product, demo = false, className = "" }) {
-  const stock = stockAvailability(product, { demo })
+export function StockAvailability({ product, className = "" }) {
+  const stock = stockAvailability(product)
   return (
     <div className={`offer-stock ${className}`} data-stock={stock.state}>
       <span className="offer-stock-dot" aria-hidden="true" />
@@ -21,29 +21,19 @@ export function StockAvailability({ product, demo = false, className = "" }) {
 
 export function ProductOffer({
   product,
-  demo = false,
   showStock = true,
   showDiscountBadge = true,
   compact = false,
   className = "",
 }) {
-  const offer = productOffer(product, { demo })
-  const arabicLabel =
-    demo && offer.discounted
-      ? "سعر تجريبي بعد الخصم"
-      : offer.discounted
-        ? "السعر بعد الخصم"
-        : offer.guide
-          ? "سعر إرشادي"
-          : demo
-            ? "سعر تجريبي"
-            : "السعر"
+  const offer = productOffer(product)
+  const arabicLabel = offer.discounted
+    ? "السعر بعد الخصم"
+    : offer.guide
+      ? "سعر إرشادي"
+      : "السعر"
   return (
-    <div
-      className={`product-offer${compact ? " compact" : ""} ${className}`}
-      data-demo={demo || undefined}
-    >
-      {demo && <span className="offer-demo-label">Demo offer</span>}
+    <div className={`product-offer${compact ? " compact" : ""} ${className}`}>
       <div className="offer-price-line">
         <strong
           className={
@@ -56,9 +46,7 @@ export function ProductOffer({
         {showDiscountBadge && offer.discounted && (
           <span
             className="offer-discount"
-            aria-label={`${
-              demo ? "Demo discount" : "Discount"
-            }: ${offer.discountPercent} percent`}
+            aria-label={`Discount: ${offer.discountPercent} percent`}
           >
             −{offer.discountPercent}%
           </span>
@@ -67,9 +55,7 @@ export function ProductOffer({
       {offer.originalPrice !== null && (
         <del
           className="offer-previous-price"
-          aria-label={`${
-            demo ? "Demo previous price" : "Previous price"
-          }: ${offerMoney(offer.originalPrice)}`}
+          aria-label={`Regular price: ${offerMoney(offer.originalPrice)}`}
         >
           {offerMoney(offer.originalPrice)}
         </del>
@@ -81,7 +67,7 @@ export function ProductOffer({
         {offer.price !== null && <span>{arabicLabel}: </span>}
         <bdi>{arabicMoney(offer.price)}</bdi>
       </div>
-      {showStock && <StockAvailability product={product} demo={demo} />}
+      {showStock && <StockAvailability product={product} />}
     </div>
   )
 }

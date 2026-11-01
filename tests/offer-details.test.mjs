@@ -6,7 +6,6 @@ import { createServer } from "vite"
 import { products } from "../src/data/catalog.js"
 import {
   arabicMoney,
-  demoOffer,
   offerMoney,
   productOffer,
   stockAvailability,
@@ -48,14 +47,11 @@ after(async () => {
   }
 })
 
-function renderStore(
-  Component,
-  { demo = false, stored = {}, props = {} } = {},
-) {
+function renderStore(Component, { search = "", stored = {}, props = {} } = {}) {
   Object.defineProperty(globalThis, "location", {
     value: {
       pathname: "/",
-      search: demo ? "?preview=offers" : "",
+      search,
       href: "http://localhost/",
     },
     configurable: true,
@@ -119,38 +115,6 @@ test("known remaining stock is precise, while missing or invalid inventory stays
   }
 })
 
-test("review figures are deterministic, explicitly separate and cannot change actual prices or stock", () => {
-  const product = Object.freeze({
-    id: "phone-a",
-    name: "Phone A",
-    price: 85000,
-    comparePrice: null,
-    stock: null,
-    priceConfirmed: false,
-  })
-  const before = JSON.stringify(product)
-  const first = demoOffer(product),
-    second = demoOffer(product)
-  assert.deepEqual(first, second)
-  assert.equal(JSON.stringify(product), before)
-  assert.equal(first.price, 85000)
-  assert.ok(first.comparePrice > first.price)
-  assert.ok(first.stock > 0)
-  assert.equal(first.priceConfirmed, false)
-  const offer = productOffer(product, { demo: true })
-  assert.equal(offer.demo, true)
-  assert.ok(offer.discountPercent > 0)
-  assert.match(
-    stockAvailability(product, { demo: true }).label,
-    /^Demo stock · \d+ left$/,
-  )
-  assert.equal(productOffer(product).originalPrice, null)
-  assert.equal(stockAvailability(product).quantity, null)
-  assert.equal(demoOffer({ id: "no-price", price: null }).price, null)
-  assert.equal(demoOffer({ id: "no-price", price: null }).comparePrice, null)
-  assert.equal(stockAvailability({ stock: 0 }, { demo: true }).quantity, 0)
-})
-
 test("Arabic prices use Arabic-Indic digits and the Ugandan shilling instead of a converted currency", () => {
   assert.equal(offerMoney(5650000), "UGX 5,650,000")
   assert.equal(arabicMoney(5650000), "٥٬٦٥٠٬٠٠٠ شلن أوغندي")
@@ -186,56 +150,57 @@ test("the shared offer renders struck price, a negative discount, Arabic sale pr
   assert.doesNotMatch(pending, /<del|offer-discount/)
 })
 
-test("demo markup labels both the offer and inventory and supports a single discount badge per card", () => {
-  const product = { id: "test-item", price: 85000, stock: null }
+test("cards can omit redundant badges without hiding regular or Arabic prices", () => {
+  const product = products[0]
   const markup = renderToStaticMarkup(
     React.createElement(ProductOffer, {
       product,
-      demo: true,
       showStock: false,
       showDiscountBadge: false,
     }),
   )
-  assert.match(markup, /Demo offer/)
-  assert.match(markup, /سعر تجريبي بعد الخصم/)
-  assert.match(markup, /<del/)
-  assert.doesNotMatch(markup, /offer-discount|offer-stock/)
-  const stock = renderToStaticMarkup(
-    React.createElement(StockAvailability, { product, demo: true }),
-  )
-  assert.match(stock, /Demo stock · \d+ left/)
-})
-
-test("product details show matching review offers while retaining the real guide-price request workflow", () => {
-  const product = products.find((item) => item.id === "iphone-13-pro-max")
-  const demo = renderStore(Product, { demo: true, props: { id: product.id } })
-  assert.match(demo, /Demo offer/)
-  assert.match(demo, /Demo stock · \d+ left/)
-  assert.match(demo, /سعر تجريبي بعد الخصم/)
+  assert.match(markup, /Regular price:/)
+  assert.match(markup, /السعر بعد الخصم/)
+  assert.doesNotMatch(markup, /offer-discount|offer-stock|data-demo|Demo offer/)
   assert.match(
-    demo,
-    /The store confirms actual pricing and availability before payment/,
+    renderToStaticMarkup(React.createElement(StockAvailability, { product })),
+    /\d+ items left/,
   )
-  assert.match(demo, /Request this item/)
-  assert.doesNotMatch(demo, />Continue to checkout</)
-  const normal = renderStore(Product, { props: { id: product.id } })
-  assert.match(normal, /Guide price/)
-  assert.match(normal, /Stock unconfirmed/)
-  assert.doesNotMatch(normal, /Demo offer|Demo stock/)
 })
 
-test("comparison includes the shared bilingual offer and review mode does not change cart totals", () => {
+test("normal product pages show launch offers without a preview URL", () => {
+  const product = products.find((item) => item.id === "iphone-13-pro-max")
+  const normal = renderStore(Product, { props: { id: product.id } })
+  assert.match(normal, /السعر بعد الخصم/)
+  assert.match(normal, /Regular price:/)
+  assert.match(normal, new RegExp(`${product.stock} items left`))
+  assert.doesNotMatch(
+    normal,
+    /Guide price|Stock unconfirmed|Demo offer|Demo stock/,
+  )
+  const legacyLink = renderStore(Product, {
+    search: "?preview=offers",
+    props: { id: product.id },
+  })
+  assert.equal(
+    legacyLink,
+    normal,
+    "Old preview links display the same normal offers",
+  )
+})
+
+test("comparison, product cards and cart use the same approved selling price", () => {
   const product = products.find((item) => item.id === "iphone-13-pro-max")
   const stored = {
     "lt.compare.v2": [product.id],
     "lt.cart.v2": [{ id: product.id, quantity: 2, option: "", color: "" }],
   }
-  const comparison = renderStore(Compare, { demo: true, stored })
+  const comparison = renderStore(Compare, { stored })
   assert.match(comparison, /comparison-table/)
-  assert.match(comparison, /Demo offer/)
-  assert.match(comparison, /سعر تجريبي بعد الخصم/)
-  assert.match(comparison, /Demo stock · \d+ left/)
-  const cart = renderStore(Cart, { demo: true, stored })
+  assert.match(comparison, /Regular price:/)
+  assert.match(comparison, /السعر بعد الخصم/)
+  assert.match(comparison, new RegExp(`${product.stock} items left`))
+  const cart = renderStore(Cart, { stored })
   const summary = cart.match(
     /<aside class="order-summary">[\s\S]*?<\/aside>/,
   )?.[0]
@@ -245,7 +210,7 @@ test("comparison includes the shared bilingual offer and review mode does not ch
   )
   assert.ok(
     summary.includes(offerMoney(product.price * 2)),
-    "The cart still totals the original guide price",
+    "The cart totals the same approved selling price shown on cards",
   )
   assert.doesNotMatch(summary, /Demo offer|Demo stock|سعر تجريبي/)
 })

@@ -16,7 +16,7 @@ import {
 } from "../lib/visual-search.js"
 
 export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
-  const { products, setImageSearchOpen, offerPreview } = useStore()
+  const { products, setImageSearchOpen } = useStore()
   const [state, setState] = useState({
     phase: "idle",
     preview: "",
@@ -227,11 +227,7 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
                           </span>
                           <small>{categoryName(product.category)}</small>
                           <h4>{product.name}</h4>
-                          <ProductOffer
-                            product={product}
-                            demo={offerPreview}
-                            compact
-                          />
+                          <ProductOffer product={product} compact />
                           <span className="visual-match-open">
                             View item
                             <ArrowRight size={13} />

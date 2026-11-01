@@ -893,28 +893,38 @@ test("reduced motion presents a complete static hint with no typing timer", asyn
   assert.equal(container.querySelector("strong").textContent, "phones")
 })
 
-test("utility side messages stay mounted while the central message rotates, pauses and respects reduced motion", async () => {
+test("utility sides settle once while the centre rises, drops and zooms, with pause and reduced motion", async () => {
   const timer = installClock()
   await render(React.createElement(UtilityBanner))
   const brand = container.querySelector(".utility-brand-lockup")
-  const promise = container.querySelector(".utility-promise")
-  const word = () => container.querySelector(".utility-centre-word").textContent
-  const initial = word()
-  await timer.tick(6200)
-  assert.notEqual(word(), initial)
+  const call = container.querySelector(".utility-call")
+  const word = () => container.querySelector(".utility-centre-word")
+  assert.equal(call.getAttribute("href"), "tel:+256788341111")
+  assert.equal(
+    container.querySelector(".utility-banner-stage").firstElementChild,
+    call,
+  )
+  assert.match(word().textContent, /UPGRADE FOR LESS/)
+  assert.ok(word().classList.contains("motion-rise"))
+  await timer.tick(3650)
+  assert.match(word().textContent, /PHONES & LAPTOPS/)
+  assert.ok(word().classList.contains("motion-drop"))
+  await timer.tick(2800)
+  assert.match(word().textContent, /SAVE UP TO \d+%/)
+  assert.ok(word().classList.contains("motion-zoom"))
   assert.equal(container.querySelector(".utility-brand-lockup"), brand)
-  assert.equal(container.querySelector(".utility-promise"), promise)
+  assert.equal(container.querySelector(".utility-call"), call)
   await click(
     container.querySelector('[aria-label="Pause announcement motion"]'),
   )
-  const paused = word()
+  const paused = word().textContent
   await timer.tick(18000)
-  assert.equal(word(), paused)
+  assert.equal(word().textContent, paused)
   await click(
     container.querySelector('[aria-label="Play announcement motion"]'),
   )
-  await timer.tick(6200)
-  assert.notEqual(word(), paused)
+  await timer.tick(2800)
+  assert.notEqual(word().textContent, paused)
   reducedMotion = true
   await act(async () => {
     for (const listener of mediaListeners) listener()
@@ -963,38 +973,21 @@ test("footer groups collapse on small screens and retain support, store contacts
   assert.equal(container.querySelector(".footer-group button"), null)
 })
 
-test("offer review mode labels every homepage card and can exit without changing catalogue prices or filters", async () => {
-  await openRoute("/?preview=offers")
-  assert.match(
-    container.querySelector(".offer-preview-banner").textContent,
-    /not live offers/,
-  )
+test("ordinary homepage and collection routes show approved offers without demo controls", async () => {
+  await openRoute("/")
+  assert.equal(container.querySelector(".offer-preview-banner"), null)
   assert.ok(container.querySelectorAll(".pcard").length > 0)
   for (const card of container.querySelectorAll(".pcard")) {
-    assert.ok(card.querySelector('.product-offer[data-demo="true"]'))
     assert.ok(card.querySelector('.offer-arabic[lang="ar"][dir="rtl"]'))
-    assert.match(card.querySelector(".offer-stock").textContent, /Demo stock/)
+    assert.match(card.querySelector(".offer-stock").textContent, /items? left/)
     assert.ok(card.querySelector("del"))
   }
   await click(container.querySelector('a[href="/collections/mobiles/"]'))
-  assert.ok(
-    container.querySelector(".offer-preview-banner"),
-    "Review mode persists during local navigation",
-  )
-  await click(container.querySelector(".offer-preview-banner button"))
-  assert.equal(container.querySelector(".offer-preview-banner"), null)
-  assert.equal(
-    container.querySelector('.product-offer[data-demo="true"]'),
-    null,
-  )
-  assert.equal(container.querySelector(".offer-demo-label"), null)
-  assert.equal(new URLSearchParams(dom.location.search).has("preview"), false)
   const first = container.querySelector(".product-card")
-  assert.match(
-    first.querySelector(".offer-stock").textContent,
-    /Check availability/,
-  )
-  assert.equal(first.querySelector(".offer-previous-price"), null)
+  assert.match(first.querySelector(".offer-stock").textContent, /items? left/)
+  assert.ok(first.querySelector(".offer-previous-price"))
+  assert.equal(container.querySelector(".offer-demo-label"), null)
+  assert.equal(container.querySelector("[data-demo]"), null)
 })
 
 test("long-form product sections expand real specifications and filter, sort and paginate reviews", async () => {

@@ -1,57 +1,100 @@
 import React, { useEffect, useState } from "react"
 import { Pause, Play } from "lucide-react"
 import { useReducedMotion } from "./MotionText"
+import { useStore } from "../store.jsx"
+import { products as catalogue, storeDefaults } from "../data/catalog.js"
+import { productOffer } from "../lib/offer-details.js"
 import "../utility-banner.css"
 
-const messages = [
-  "THE TECH YOU LOVE.",
-  "MORE FOR EVERY DAY.",
-  "FIND YOUR NEXT.",
-  "LET’S TALK TECH.",
-]
+const cycle = 2800
+const opening = 850
 
 export function UtilityBanner() {
+  const store = useStore()
+  const products = store?.products || catalogue
+  const phone = store?.settings?.phone || storeDefaults.phone
+  const maxSaving = Math.max(
+    0,
+    ...products
+      .filter((p) => p.active !== false && p.stock > 0)
+      .map((p) => productOffer(p).discountPercent),
+  )
+  const messages = [
+    { text: "UPGRADE FOR LESS.", motion: "rise" },
+    { text: "PHONES & LAPTOPS", motion: "drop" },
+    {
+      text: maxSaving ? `SAVE UP TO ${maxSaving}%` : "UPGRADE TODAY",
+      motion: "zoom",
+      pill: true,
+    },
+    { text: "AUDIO & GAMING", motion: "rise" },
+    { text: "VISIT ARUA PARK", motion: "drop" },
+    { text: "SHOP LONDON TECH", motion: "zoom" },
+  ]
   const reduced = useReducedMotion()
   const [index, setIndex] = useState(0)
+  const [started, setStarted] = useState(false)
   const [paused, setPaused] = useState(false)
+  const [hidden, setHidden] = useState(false)
   useEffect(() => {
-    if (reduced || paused) return
-    const timer = window.setInterval(() => {
-      if (!document.hidden)
+    const update = () => setHidden(document.hidden)
+    update()
+    document.addEventListener("visibilitychange", update)
+    return () => document.removeEventListener("visibilitychange", update)
+  }, [])
+  const stopped = reduced || paused || hidden
+  useEffect(() => {
+    if (stopped) return
+    // The side elements settle first. Subsequent cycles animate only the centre.
+    const timer = window.setTimeout(
+      () => {
+        setStarted(true)
         setIndex((current) => (current + 1) % messages.length)
-    }, 6200)
-    return () => window.clearInterval(timer)
-  }, [reduced, paused])
+      },
+      cycle + (started ? 0 : opening),
+    )
+    return () => window.clearTimeout(timer)
+  }, [index, started, stopped])
+  const message = messages[reduced ? 0 : index]
+  const telephone = phone.replace(/[^\d+]/g, "").replace(/^0/, "+256")
   return (
     <div
       className={
         "utility-bar utility-banner" +
         (reduced ? " reduced-motion" : "") +
-        (paused ? " is-paused" : "")
+        (stopped ? " is-paused" : "")
       }
       aria-label="London Tech announcements"
     >
       <div className="utility-banner-stage store-container">
+        <a className="utility-call" href={`tel:${telephone}`}>
+          <span>Call to order</span>
+          <strong>{phone}</strong>
+        </a>
+        <a
+          className="utility-centre"
+          href="/collections/shop/"
+          aria-label="Shop London Tech offers"
+        >
+          <span className="sr-only">
+            Phones, laptops, audio and gaming. Shop London Tech offers.
+          </span>
+          <span
+            className={`utility-centre-word motion-${message.motion}${
+              message.pill ? " is-pill" : ""
+            }`}
+            aria-hidden="true"
+            key={reduced ? "static" : index}
+            style={{ animationDelay: started ? "0ms" : `${opening}ms` }}
+          >
+            {message.text}
+          </span>
+        </a>
         <div className="utility-brand-lockup" aria-label="London Tech">
           <span>
             LONDON <em>TECH</em>
           </span>
-        </div>
-        <div className="utility-centre">
-          <span className="sr-only">
-            Original technology and local expertise at London Tech, Kampala.
-          </span>
-          <span
-            className="utility-centre-word"
-            aria-hidden="true"
-            key={reduced ? "static" : index}
-          >
-            {messages[reduced ? 0 : index]}
-          </span>
-        </div>
-        <div className="utility-promise">
-          <strong>ORIGINAL TECH.</strong>
-          <span>LOCAL EXPERTISE.</span>
+          <small>TECHNOLOGY STORE</small>
         </div>
         {!reduced && (
           <button
@@ -64,9 +107,9 @@ export function UtilityBanner() {
             onClick={() => setPaused(!paused)}
           >
             {paused ? (
-              <Play size={12} fill="currentColor" />
+              <Play size={11} fill="currentColor" />
             ) : (
-              <Pause size={12} fill="currentColor" />
+              <Pause size={11} fill="currentColor" />
             )}
           </button>
         )}

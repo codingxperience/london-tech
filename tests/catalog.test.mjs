@@ -17,11 +17,12 @@ test("catalogue images exist, identifiers are unique and every category resolves
 
     assert.ok(
       Number.isInteger(product.price) && product.price > 0,
-      product.id + " has a guide price",
+      product.id + " has an approved selling price",
     )
 
-    assert.equal(product.priceConfirmed, false)
-    assert.equal(product.stock, null)
+    assert.equal(product.priceConfirmed, true)
+    assert.ok(product.comparePrice > product.price)
+    assert.ok(Number.isSafeInteger(product.stock) && product.stock > 0)
 
     assert.ok(product.gallery.length > 0)
 
@@ -38,7 +39,7 @@ test("catalogue images exist, identifiers are unique and every category resolves
   assert.equal(storeDefaults.phoneAlt, "0709417273")
 })
 
-test("production pages have white-logo metadata, canonical URLs and no guide-price offers", async () => {
+test("production pages have white-logo metadata, canonical URLs and approved product offers", async () => {
   for (const path of [
     "index.html",
     "products/iphone-17-pro-max/index.html",
@@ -59,7 +60,7 @@ test("production pages have white-logo metadata, canonical URLs and no guide-pri
     assert.ok(!html.includes("london-tech-social-card.png"))
 
     if (path.startsWith("products/"))
-      assert.ok(!html.includes('"@type":"Offer"'))
+      assert.ok(html.includes('"@type":"Offer"'))
 
     if (
       path.startsWith("admin/") ||

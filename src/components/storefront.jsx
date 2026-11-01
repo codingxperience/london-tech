@@ -92,20 +92,13 @@ export function PaymentMarks() {
 }
 
 export function ProductCard({ product: p, detailed = false }) {
-  const {
-    wishlist,
-    toggleWish,
-    addCart,
-    compare,
-    toggleCompare,
-    offerPreview,
-  } = useStore()
+  const { wishlist, toggleWish, addCart, compare, toggleCompare } = useStore()
   const images = galleryImages(p)
   const [photo, setPhoto] = useState(0)
   useEffect(() => setPhoto(0), [p.id, images.length])
   const facts = productInformation(p).specifications.slice(0, 2)
   const saved = wishlist.includes(p.id)
-  const offer = productOffer(p, { demo: !!offerPreview })
+  const offer = productOffer(p)
 
   return (
     <article
@@ -203,7 +196,6 @@ export function ProductCard({ product: p, detailed = false }) {
         <div className="product-card-bottom">
           <ProductOffer
             product={p}
-            demo={!!offerPreview}
             showStock={!detailed}
             showDiscountBadge={false}
           />
@@ -229,11 +221,7 @@ export function ProductCard({ product: p, detailed = false }) {
               <span>({p.reviewCount})</span>
             </a>
           )}
-          <StockAvailability
-            product={p}
-            demo={!!offerPreview}
-            className="card-availability"
-          />
+          <StockAvailability product={p} className="card-availability" />
           {p.condition && !/^confirm with store\.?$/i.test(p.condition) && (
             <small>{p.condition}</small>
           )}

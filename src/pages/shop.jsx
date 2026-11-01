@@ -59,7 +59,6 @@ export function Product({ id }) {
     user,
     notify,
     openAuth,
-    offerPreview,
   } = useStore()
   const p = products.find((p) => p.id === id)
 
@@ -167,14 +166,12 @@ export function Product({ id }) {
               ))}
           </div>
           <div className="product-price">
-            <ProductOffer product={p} demo={offerPreview} />
-            {(offerPreview || p.price == null || !p.priceConfirmed) && (
+            <ProductOffer product={p} />
+            {(p.price == null || !p.priceConfirmed) && (
               <span>
-                {offerPreview
-                  ? "Demo comparison prices and stock figures are for review. The store confirms actual pricing and availability before payment."
-                  : p.price == null
-                    ? "Request the current price and configuration before purchase."
-                    : "Estimated price. Confirm the selected configuration and current selling price before payment."}
+                {p.price == null
+                  ? "Request the current price and configuration before purchase."
+                  : "Estimated price. Confirm the selected configuration and current selling price before payment."}
               </span>
             )}
           </div>
@@ -431,7 +428,7 @@ export function Wishlist() {
 }
 
 export function Compare() {
-  const { products, compare, toggleCompare, offerPreview } = useStore()
+  const { products, compare, toggleCompare } = useStore()
   const items = compare
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean)
@@ -465,7 +462,7 @@ export function Compare() {
                       <img src={p.image} alt="" />
                       <strong>{p.name}</strong>
                     </a>
-                    <ProductOffer product={p} demo={offerPreview} compact />
+                    <ProductOffer product={p} compact />
                   </th>
                 ))}
               </tr>

@@ -1,6 +1,7 @@
 import originalCatalog from "./legacy-catalog.json" with { type: "json" }
 import productMedia from "./product-media.json" with { type: "json" }
 import catalogueCorrections from "./catalogue-corrections.json" with { type: "json" }
+import launchOffers from "./launch-offers.json" with { type: "json" }
 
 import { guidePrices } from "./prices.js"
 
@@ -417,6 +418,7 @@ export const products = legacyProducts.map((product) => {
   return {
     ...product,
     ...catalogueCorrections[product.id],
+    ...launchOffers[product.id],
     ...(media.length
       ? {
           image: media[0].src,
