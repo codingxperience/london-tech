@@ -1290,7 +1290,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   </button>
                 </div>
                 <div className="hero-art">
-                  <img key={hero.bg} src={hero.bg} alt={hero.alt} />
+                  <img key={hero.bg} src={hero.bg} alt={hero.alt} fetchPriority="high" decoding="async" />
                 </div>
                 <span className="hero-brand">
                   <BrandWordmark width={112} />

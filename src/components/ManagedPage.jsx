@@ -2,11 +2,9 @@ import "../managed-page.css"
 import React, { useEffect, useState } from "react"
 import { api } from "../lib/api.js"
 import { Breadcrumb, Notice } from "./ui.jsx"
+import { useStore } from "../store.jsx"
 
 export function PageDocument({ page }) {
-  useEffect(() => {
-    document.title = page.title + " | London Tech"
-  }, [page.title])
   return (
     <main className="container info-page managed-page">
       <Breadcrumb items={[{ label: page.title }]} />
@@ -23,12 +21,16 @@ export function PageDocument({ page }) {
   )
 }
 export function ManagedPage({ slug, fallback = null }) {
-  const [page, setPage] = useState(null),
+  const store = useStore()
+  const [page, setPage] = useState(
+      () => store?.pages?.find((p) => p.slug === slug && p.body) || null,
+    ),
     [loaded, setLoaded] = useState(false)
   useEffect(() => {
     let active = true
-    setLoaded(false)
-    setPage(null)
+    const cached = store?.pages?.find((p) => p.slug === slug && p.body)
+    setLoaded(!!cached)
+    setPage(cached || null)
     api("pages/" + encodeURIComponent(slug))
       .then((d) => {
         if (active) setPage(d.page)

@@ -748,10 +748,15 @@ test("content pages keep drafts private and expose only published metadata and c
   const publicPage = await request("pages/" + page.slug)
   assert.equal(publicPage.status, 200)
   assert.equal(publicPage.data.page.body, body.body)
-  assert.deepEqual(
-    (await request("catalog")).data.pages.find((p) => p.slug === page.slug),
-    { title: body.title, slug: body.slug, footer: true },
+  const listedPage = (await request("catalog")).data.pages.find(
+    (p) => p.slug === page.slug,
   )
+  assert.equal(listedPage.title, body.title)
+  assert.equal(listedPage.slug, body.slug)
+  assert.equal(listedPage.footer, true)
+  assert.equal(listedPage.summary, body.summary)
+  assert.equal(listedPage.body, body.body)
+  assert.ok(listedPage.updatedAt)
   assert.equal(
     (
       await request("admin/pages", {

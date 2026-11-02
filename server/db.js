@@ -7,6 +7,7 @@ import path from "node:path"
 import { products, storeDefaults } from "../src/data/catalog.js"
 import { repairSeedCatalogue } from "./catalogue-migration.js"
 import { adoptLaunchOffers } from "./launch-offers-migration.js"
+import { postgresConfig } from "./postgres-config.js"
 
 let connection
 
@@ -37,12 +38,7 @@ async function initialize() {
   if (url) {
     const { Pool } = await import("pg")
 
-    const pool = new Pool({
-      connectionString: url,
-      max: 3,
-      connectionTimeoutMillis: 10000,
-      idleTimeoutMillis: 20000,
-    })
+    const pool = new Pool(postgresConfig(url))
 
     db = {
       close: () => pool.end(),
@@ -145,6 +141,32 @@ async function initialize() {
   ]
 
   for (const text of statements) await db.query(text)
+
+  // The backend connects as the table owner. Public Supabase Data API roles
+  // have no policies, so enabling RLS closes anonymous access to store data.
+  if (url)
+    for (const table of [
+      "users",
+      "sessions",
+      "products",
+      "catalogue_migrations",
+      "settings",
+      "vendors",
+      "content_pages",
+      "message_threads",
+      "audience_meta",
+      "audience_daily",
+      "audience_visitors",
+      "newsletter_subscribers",
+      "orders",
+      "stock_reservations",
+      "wishlists",
+      "reviews",
+      "rate_limits",
+      "reset_tokens",
+      "audit_events",
+    ])
+      await db.query(`ALTER TABLE ${table} ENABLE ROW LEVEL SECURITY`)
 
   await db.query(
     `INSERT INTO products(id,data) SELECT value->>'id',value FROM jsonb_array_elements($1::jsonb) ON CONFLICT(id) DO NOTHING`,

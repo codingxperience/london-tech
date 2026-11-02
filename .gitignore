@@ -24,3 +24,5 @@ logs/
 .data/
 .vercel/
 coverage/
+
+.output/

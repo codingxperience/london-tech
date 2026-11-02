@@ -26,7 +26,14 @@ const Context = createContext(/** @type {any} */ (null))
 export const useStore = () => useContext(Context)
 
 export function usePath() {
-  const [path, setPath] = useState(location.pathname + location.search)
+  const store = useStore()
+  const [path, setPath] = useState(
+    () =>
+      store?.initialPath ??
+      (typeof location === "undefined"
+        ? "/"
+        : location.pathname + location.search),
+  )
   useEffect(() => {
     const change = () => {
       setPath(location.pathname + location.search)
@@ -89,10 +96,12 @@ const validIds = (value) =>
 
 export const cartKey = (line) => [line.id, line.option, line.color].join("|")
 
-export function StoreProvider({ children }) {
-  const [products, setProducts] = useState(() => seed.map(presentProduct)),
-    [settings, setSettings] = useState(storeDefaults),
-    [pages, setPages] = useState([]),
+export function StoreProvider({ children, initialData, initialPath }) {
+  const [products, setProducts] = useState(() =>
+      (initialData?.products || seed).map(presentProduct),
+    ),
+    [settings, setSettings] = useState(initialData?.settings || storeDefaults),
+    [pages, setPages] = useState(initialData?.pages || []),
     [user, setUser] = useState(null),
     [authLoading, setAuthLoading] = useState(true),
     [config, setConfig] = useState({
@@ -172,7 +181,7 @@ export function StoreProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    refresh().catch(() => {})
+    if (!initialData?.products) refresh().catch(() => {})
     api("config")
       .then(setConfig)
       .catch(() => {})
@@ -333,6 +342,8 @@ export function StoreProvider({ children }) {
   return (
     <Context.Provider
       value={{
+        initialPath,
+        initialReviews: initialData?.reviews || {},
         products,
         setProducts,
         settings,

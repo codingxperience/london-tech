@@ -1,3 +1,4 @@
+import { SeoMetadata } from "./components/SeoMetadata.jsx"
 import { ManagedPage } from "./components/ManagedPage.jsx"
 import { Unsubscribe } from "./pages/unsubscribe.jsx"
 import { recordStoreVisit } from "./lib/visit-tracking.js"
@@ -46,9 +47,8 @@ class ErrorBoundary extends React.Component {
     )
   }
 }
-function Router() {
-  const path = usePath(),
-    normalized = path.split("?")[0].replace(/\/+$/, "") || "/"
+function RouterContent({ path }) {
+  const normalized = path.split("?")[0].replace(/\/+$/, "") || "/"
   const {
     searchOpen,
     cartOpen,
@@ -61,38 +61,12 @@ function Router() {
     closeAuth,
     config,
   } = useStore()
-  const admin = normalized.startsWith("/admin")
+  const admin = /^\/admin(?:\/|$)/.test(normalized)
   useEffect(() => {
     recordStoreVisit({ path: normalized, enabled: config.analytics === true })
   }, [normalized, config.analytics])
   useEffect(() => closeAuth(), [normalized, closeAuth])
   useEffect(() => setImageSearchOpen(false), [normalized, setImageSearchOpen])
-  useEffect(() => {
-    const product = normalized.startsWith("/products/")
-      ? products.find(
-          (p) => p.id === decodeURIComponent(normalized.split("/")[2]),
-        )
-      : null
-    const name =
-      product?.name ||
-      (admin
-        ? "Store Console"
-        : normalized === "/cart"
-          ? "Your cart"
-          : normalized === "/checkout"
-            ? "Checkout"
-            : normalized.startsWith("/account")
-              ? "Your account"
-              : normalized === "/login"
-                ? "Sign in"
-                : normalized === "/register"
-                  ? "Create an account"
-                  : "London Technology Store")
-    document.title =
-      name === "London Technology Store"
-        ? "London Tech | London Technology Store"
-        : name + " | London Tech"
-  }, [normalized, products])
   const authModes = {
     "/login": "login",
     "/register": "register",
@@ -230,10 +204,23 @@ function Router() {
     </>
   )
 }
-export default function CommerceApp() {
+function Router() {
+  const path = usePath()
+  return (
+    <>
+      <SeoMetadata path={path} />
+      <RouterContent path={path} />
+    </>
+  )
+}
+
+export default function CommerceApp({
+  initialData = null,
+  initialPath = undefined,
+} = {}) {
   return (
     <ErrorBoundary>
-      <StoreProvider>
+      <StoreProvider initialData={initialData} initialPath={initialPath}>
         <Router />
       </StoreProvider>
     </ErrorBoundary>

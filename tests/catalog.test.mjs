@@ -67,6 +67,6 @@ test("production pages have white-logo metadata, canonical URLs and approved pro
       path.startsWith("account/") ||
       path.startsWith("register/")
     )
-      assert.ok(html.includes("noindex,nofollow"))
+      assert.ok(html.includes("noindex,follow"))
   }
 })

@@ -32,9 +32,14 @@ import {
 import { ProductGrid } from "../components/storefront.jsx"
 
 export function Collection({ category = "shop" }) {
-  const { products } = useStore()
+  const { products, initialPath } = useStore()
+  const requestPath =
+    initialPath ??
+    (typeof location === "undefined"
+      ? "/"
+      : location.pathname + location.search)
   const [filters, setFilters] = useState(() =>
-    readCollectionFilters(location.search),
+    readCollectionFilters(requestPath.split("?")[1] || ""),
   )
   const [draftMin, setDraftMin] = useState(filters.min),
     [draftMax, setDraftMax] = useState(filters.max)
@@ -79,6 +84,7 @@ export function Collection({ category = "shop" }) {
       "",
       location.pathname + collectionQuery(filters),
     )
+    window.dispatchEvent(new Event("lt:location-meta"))
   }, [filters])
   const change = (values) =>
     setFilters((current) => ({ ...current, ...values, page: 1 }))
@@ -476,30 +482,53 @@ export function Collection({ category = "shop" }) {
           )}
           {pages > 1 && (
             <nav className="pagination" aria-label="Product pages">
-              <IconButton
-                label="Previous page"
-                disabled={page === 1}
-                onClick={() => setFilters({ ...filters, page: page - 1 })}
-              >
-                <ChevronLeft size={17} />
-              </IconButton>
+              {page > 1 ? (
+                <a
+                  className="icon-button"
+                  aria-label="Previous page"
+                  href={
+                    requestPath.split("?")[0] +
+                    collectionQuery({ ...filters, page: page - 1 })
+                  }
+                  rel="prev"
+                >
+                  <ChevronLeft size={17} />
+                </a>
+              ) : (
+                <span className="icon-button" aria-disabled="true">
+                  <ChevronLeft size={17} />
+                </span>
+              )}
               {Array.from({ length: pages }, (_, index) => (
-                <button
+                <a
                   key={index}
+                  href={
+                    requestPath.split("?")[0] +
+                    collectionQuery({ ...filters, page: index + 1 })
+                  }
                   className={page === index + 1 ? "active" : ""}
                   aria-current={page === index + 1 ? "page" : undefined}
-                  onClick={() => setFilters({ ...filters, page: index + 1 })}
                 >
                   {index + 1}
-                </button>
+                </a>
               ))}
-              <IconButton
-                label="Next page"
-                disabled={page === pages}
-                onClick={() => setFilters({ ...filters, page: page + 1 })}
-              >
-                <ChevronRight size={17} />
-              </IconButton>
+              {page < pages ? (
+                <a
+                  className="icon-button"
+                  aria-label="Next page"
+                  href={
+                    requestPath.split("?")[0] +
+                    collectionQuery({ ...filters, page: page + 1 })
+                  }
+                  rel="next"
+                >
+                  <ChevronRight size={17} />
+                </a>
+              ) : (
+                <span className="icon-button" aria-disabled="true">
+                  <ChevronRight size={17} />
+                </span>
+              )}
             </nav>
           )}
         </section>

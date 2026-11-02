@@ -40,6 +40,9 @@ export async function publishedPages(db) {
     title: data.title,
     slug: data.slug,
     footer: data.footer,
+    summary: data.summary,
+    body: data.body,
+    updatedAt: data.updatedAt,
   }))
 }
 

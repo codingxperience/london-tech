@@ -18,6 +18,8 @@ if (
 
 const { getDatabase } = await import("../server/db.js")
 
+if (process.env.DIRECT_URL) process.env.DATABASE_URL = process.env.DIRECT_URL
+
 await getDatabase()
 
 console.log(

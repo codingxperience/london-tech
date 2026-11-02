@@ -59,6 +59,7 @@ export function Product({ id }) {
     user,
     notify,
     openAuth,
+    initialReviews,
   } = useStore()
   const p = products.find((p) => p.id === id)
 
@@ -66,7 +67,7 @@ export function Product({ id }) {
     [option, setOption] = useState(""),
     [color, setColor] = useState(""),
     [reviewError, setReviewError] = useState(false),
-    [reviews, setReviews] = useState([]),
+    [reviews, setReviews] = useState(initialReviews?.[id] || []),
     [reviewForm, setReviewForm] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("")

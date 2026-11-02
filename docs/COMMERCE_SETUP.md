@@ -10,14 +10,17 @@ To create your first local administrator, copy `.env.example` to `.env`, set `PU
 
 ## Production environment in Vercel
 
-Keep the existing London Tech Vercel project and GitHub integration. The build command is `pnpm run build`; output is `dist`. The Node function at `api/router.js` supplies account, catalogue, order and payment endpoints. `vercel.json` explicitly captures `/api/:__lt_route(.*)` and forwards it to that function. The capture includes canonical trailing slashes because Vercel compiles route patterns with strict matching. This Vite deployment does not use Next.js catch-all filename routing. The adapter retains request bodies, cookies, origin headers and business query parameters before calling the shared commerce handler.
+Keep the existing London Tech Vercel project and GitHub integration. The build command is `pnpm run build`; output is `dist`. The Node function at `api/router.js` supplies account, catalogue, order and payment endpoints. `api/pages.js` serves public HTML and the sitemap from current public database records, using the renderer packaged from `.output/server`. See [SEO](SEO.md).
+
+`vercel.json` explicitly captures `/api/:__lt_route(.*)` and forwards it to the commerce function. The capture includes canonical trailing slashes because Vercel compiles route patterns with strict matching. This Vite deployment does not use Next.js catch-all filename routing. The adapter retains request bodies, cookies, origin headers and business query parameters before calling the shared commerce handler.
 
 Set the following in Vercel → Project → Settings → Environment Variables. Keep secret values out of source files, browser code and chat.
 
 | Variable | Purpose |
 | --- | --- |
-| `PUBLIC_SITE_URL` | The verified production origin, currently `https://london-tech-codingxperiences-projects.vercel.app`. No path or trailing slash. |
-| `DATABASE_URL` | Hosted PostgreSQL connection string. A pooled connection is recommended for serverless hosting. Preserve the provider’s required TLS settings. |
+| `PUBLIC_SITE_URL` | The verified production origin, currently `https://london-tech.vercel.app`. No path or trailing slash. |
+| `DATABASE_URL` | Hosted PostgreSQL connection string. Use the Supabase transaction pooler on port 6543 for serverless requests. Supabase TLS verifies against the bundled public CA. |
+| `DIRECT_URL` | Optional session-mode connection on port 5432, used by `pnpm db:setup` for schema initialization. Never expose it in client variables. |
 | `ADMIN_EMAIL` | Email for the initial administrator. Set it before opening registration. |
 | `ADMIN_PASSWORD` | Initial administrator password, at least 12 characters. |
 | `FLW_SECRET_KEY` | Flutterwave v3 server secret. Start with a test secret. |
@@ -27,12 +30,16 @@ Set the following in Vercel → Project → Settings → Environment Variables. 
 
 Redeploy after adding or changing environment variables. On the first database-backed request, the application initializes its tables, adds missing catalogue entries and creates the initial administrator. Existing administrator passwords are not overwritten by later environment changes; use the account password screen to change a password.
 
+The supplied Supabase database was initialized on 2 November 2026 with 89 catalogue records and the requested administrator identity. A supplied database URL does not automatically configure Vercel: the production project must have `DATABASE_URL` set and be redeployed. An existing administrator does not need `ADMIN_PASSWORD` to be set again. Password setup must use a short-lived, single-use reset link or the existing authenticated account flow; no initial password is stored in this repository.
+
+Hosted initialization enables row-level security on the 19 application tables with no anonymous/public policies. The backend uses its server-only database role. `server/certs/supabase-ca.crt` is Supabase's public root certificate, obtained from the [provider's certificate download](https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt); it is not a private key. `server/postgres-config.js` requires certificate verification and removes conflicting URL SSL options. Update the certificate when Supabase rotates its CA. See [Supabase TLS guidance](https://supabase.com/docs/guides/database/psql).
+
 Without a production database, browsing, product information and a device-local cart remain available. Daily visitor measurement and newsletter storage also require that database; they never fabricate totals or successful subscriptions. The server explicitly refuses registration, login and orders until persistent storage is configured. It never silently stores real customer records in a browser-only demo. `/admin/preview/` is an interactive, clearly labelled local preview. Its changes remain in that browser and never modify the live store. See [the administration guide](ADMIN_WORKSPACE.md).
 
 ## Flutterwave
 
 1. Enable Uganda mobile money and card payments on your Flutterwave merchant account. Currency is UGX.
-2. Configure the webhook URL as `https://london-tech-codingxperiences-projects.vercel.app/api/payments/webhook/` (or your verified production origin). Keep the final slash to match Vercel’s URL policy.
+2. Configure the webhook URL as `https://london-tech.vercel.app/api/payments/webhook/` (or your verified production origin). Keep the final slash to match Vercel’s URL policy.
 3. Set the webhook secret hash to the same value as `FLW_SECRET_HASH` and enable webhook retries.
 4. If using per-payment method selection, follow Flutterwave’s dashboard guidance for `payment_options`.
 5. Validate a test card and each available Uganda mobile money network in the merchant sandbox. Then use the approved live merchant secret and redeploy.

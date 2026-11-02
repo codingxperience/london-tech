@@ -1162,7 +1162,7 @@ test("a fresh complete CommerceApp mount opens a product route with its own prov
     await render(React.createElement(CommerceApp))
     const product = products.find((item) => item.id === "iphone-17-pro-max")
     assert.equal(container.querySelector("h1")?.textContent, product.name)
-    assert.equal(dom.document.title, product.name + " | London Tech")
+    assert.equal(dom.document.title, product.name + " in Uganda | London Tech Kampala")
     assert.ok(container.querySelector(".product-main-image img"))
     assert.ok(
       container.querySelectorAll(".product-thumbnails button").length >= 2,

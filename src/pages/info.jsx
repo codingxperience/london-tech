@@ -22,6 +22,11 @@ export function Info({ page }) {
 }
 function DefaultInfo({ page }) {
   const { settings } = useStore()
+  const phoneLink = (phone) =>
+    "tel:" +
+    String(phone || "")
+      .replace(/[^+\d]/g, "")
+      .replace(/^0/, "+256")
 
   if (page === "contact" || page === "visit") return <ContactPage />
 
