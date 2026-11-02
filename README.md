@@ -21,7 +21,7 @@ pnpm run build
 pnpm test
 ```
 
-Vercel serves `dist/` and the Node API in `api/`. Hosted PostgreSQL and Flutterwave credentials are required for live account, order and payment services. See [commerce setup](docs/COMMERCE_SETUP.md) for the exact environment variables, webhook URL and activation steps. No administrator password or payment secret is embedded in the application.
+Vercel publishes assets from `.output/public/`, serves public HTML and the sitemap through `api/pages.js`, and serves commerce endpoints through `api/router.js`. Static review snapshots remain in `dist/`. Hosted PostgreSQL and Flutterwave credentials are required for live account, order and payment services. See [commerce setup](docs/COMMERCE_SETUP.md) for environment variables and activation, and [SEO](docs/SEO.md) for rendering, indexing and search verification. No administrator password or payment secret is embedded in the application.
 
 Vercel API requests use an explicit wildcard rewrite to `api/router.js`; the same commerce handler also powers Vite's local API. Approved launch discounts, regular prices, Arabic prices and stock counts appear on ordinary store pages; see [launch offers](docs/LAUNCH_OFFERS.md). The [89-listing image audit](docs/CATALOGUE_AUDIT.md) records corrected photos and remaining model-reference uncertainties.
 
