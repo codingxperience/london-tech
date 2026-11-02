@@ -1,6 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { readFile } from "node:fs/promises"
+import { readFile, readdir } from "node:fs/promises"
 import { products, storeDefaults } from "../src/data/catalog.js"
 import {
   defaultOrigin,
@@ -161,6 +161,12 @@ test("Supabase pool configuration verifies the public CA and cannot be downgrade
   assert.ok(config.connectionString.includes("pgbouncer=true"))
 })
 test("production HTML contains crawlable product and category content before JavaScript executes", async () => {
+  const publishedFiles = await readdir(".output/public", { recursive: true })
+  assert.ok(
+    !publishedFiles.some((p) => p.endsWith(".html") || p === "sitemap.xml"),
+    "Static files must not bypass the live HTML and sitemap functions",
+  )
+  assert.ok(publishedFiles.some((p) => p.endsWith(".js")))
   const product = await readFile(
     "dist/products/" + products[0].id + "/index.html",
     "utf8",

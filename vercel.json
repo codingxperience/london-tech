@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm run build",
   "installCommand": "pnpm install --frozen-lockfile",
-  "outputDirectory": "dist",
+  "outputDirectory": ".output/public",
   "functions": {
     "api/router.js": {
       "maxDuration": 30,

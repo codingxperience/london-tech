@@ -1,5 +1,5 @@
 import { build } from "vite"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { products, categories, storeDefaults } from "../src/data/catalog.js"
@@ -21,6 +21,7 @@ await build({
     ssr: "src/entry-server.jsx",
     outDir: ".output/server",
     emptyOutDir: true,
+    copyPublicDir: false,
     rollupOptions: { output: { entryFileNames: "render.js" } },
   },
 })
@@ -121,6 +122,13 @@ await writeFile(
     siteUrl +
     "/about/)\n",
 )
+// Vercel resolves existing static files before rewrites. Keep HTML snapshots in
+// dist for local review, but publish only assets so every page uses live data.
+await mkdir(".output/public", { recursive: true })
+await cp(directory, ".output/public", {
+  recursive: true,
+  filter: (source) => !/(?:\.html$|[\\/]sitemap\.xml$)/.test(source),
+})
 console.log(
   `Production build complete: ${data.products.length} products, ${categories.length} categories, ${pages.length} routes. Public HTML and sitemap use the live database at request time.`,
 )

@@ -8,7 +8,7 @@ The team-scoped Vercel alias was checked on 2 November 2026 and redirected unaut
 
 `api/pages.js` serves public pages with their React content already present in the initial HTML. It reads the current public catalogue, store settings, published content pages and customer reviews from PostgreSQL. Page content, metadata, product offers and the sitemap use the same records. A database outage returns HTTP 503 with a retry header rather than publishing outdated prices. Without a configured production database, the approved source catalogue remains browsable.
 
-The build produces the browser assets, static review snapshots in `dist`, and the server renderer and HTML template in `.output/server`. Vercel packages that renderer with the page function. The page response has an `X-London-Tech-Render: server` header. Public responses revalidate; private account pages and filtered search variants use `no-store`.
+The build produces static review snapshots in `dist`, browser assets in `.output/public`, and the server renderer and HTML template in `.output/server`. Vercel publishes `.output/public` and packages the renderer with the page function. HTML and the sitemap are intentionally absent from the published static directory because Vercel serves existing files before rewrites; this keeps database changes visible without a rebuild. The page response has an `X-London-Tech-Render: server` header. Public responses revalidate; private account pages and filtered search variants use `no-store`.
 
 The browser receives only public catalogue records. Account, session, order, subscriber and payment credentials are never included in the HTML bootstrap. Client navigation updates titles, descriptions, canonical links, social metadata and structured data together.
 
