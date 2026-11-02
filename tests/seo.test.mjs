@@ -163,10 +163,19 @@ test("Supabase pool configuration verifies the public CA and cannot be downgrade
 test("production HTML contains crawlable product and category content before JavaScript executes", async () => {
   const publishedFiles = await readdir(".output/public", { recursive: true })
   assert.ok(
-    !publishedFiles.some((p) => p.endsWith(".html") || p === "sitemap.xml"),
+    !publishedFiles.some(
+      (p) =>
+        (p.endsWith(".html") && !/^google[a-f0-9]+\.html$/.test(p)) ||
+        p === "sitemap.xml",
+    ),
     "Static files must not bypass the live HTML and sitemap functions",
   )
   assert.ok(publishedFiles.some((p) => p.endsWith(".js")))
+  const verification = "googlee264a0cdaaba06d8.html"
+  assert.equal(
+    await readFile(".output/public/" + verification, "utf8"),
+    await readFile("public/" + verification, "utf8"),
+  )
   const product = await readFile(
     "dist/products/" + products[0].id + "/index.html",
     "utf8",

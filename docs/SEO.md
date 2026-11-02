@@ -30,6 +30,7 @@ Use [Google's Rich Results Test](https://search.google.com/test/rich-results) an
 ## Owner setup after deployment
 
 1. Verify the production property in [Google Search Console](https://search.google.com/search-console) using an account controlled by the business and submit `/sitemap.xml`. Verification requires the owner's Google access or a supplied verification token.
+   The supplied HTML verification file is published unchanged at `/googlee264a0cdaaba06d8.html`. Choose the URL-prefix property `https://london-tech.vercel.app/`, use HTML file verification and select **Verify** in Google. Keep the file in place after verification; it is the deliberate exception to the static HTML exclusion in the build.
 2. Claim and verify the physical shop in [Google Business Profile](https://www.google.com/business/). Use the same real address and phone numbers, real shop photos, and confirmed opening hours.
 3. Keep product names, images, selling prices, previous prices, quantities and store policies accurate in admin. Review search queries, indexing and real-user performance in Search Console after Google has crawled the site.
 4. Add only confirmed social profiles. The supplied TikTok profile is configured; the other networks remain unset.

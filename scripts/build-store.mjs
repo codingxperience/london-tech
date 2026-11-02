@@ -127,7 +127,10 @@ await writeFile(
 await mkdir(".output/public", { recursive: true })
 await cp(directory, ".output/public", {
   recursive: true,
-  filter: (source) => !/(?:\.html$|[\\/]sitemap\.xml$)/.test(source),
+  filter: (source) =>
+    (path.dirname(source) === directory &&
+      /^google[a-f0-9]+\.html$/.test(path.basename(source))) ||
+    !/(?:\.html$|[\\/]sitemap\.xml$)/.test(source),
 })
 console.log(
   `Production build complete: ${data.products.length} products, ${categories.length} categories, ${pages.length} routes. Public HTML and sitemap use the live database at request time.`,
