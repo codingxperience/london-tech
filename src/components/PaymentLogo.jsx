@@ -1,4 +1,5 @@
 import React from "react"
+import { Banknote } from "lucide-react"
 import "../payment-logos.css"
 
 const methods = {
@@ -8,6 +9,17 @@ const methods = {
 }
 
 export function PaymentLogo({ method, decorative = false }) {
+  if (method === "cod")
+    return (
+      <span
+        className="payment-brand payment-brand-cod"
+        role={decorative ? undefined : "img"}
+        aria-label={decorative ? undefined : "Cash on delivery"}
+      >
+        <Banknote size={24} aria-hidden="true" />
+        <span>Cash</span>
+      </span>
+    )
   const brand = methods[method]
   if (!brand) return null
   return (
@@ -23,7 +35,10 @@ export function PaymentLogo({ method, decorative = false }) {
 }
 
 export function PaymentMethod({ method }) {
-  const brand = methods[method]
+  const brand =
+    method === "cod"
+      ? { name: "Cash on delivery / collection" }
+      : methods[method]
   return brand ? (
     <span className="payment-method-name">
       <PaymentLogo method={method} decorative />

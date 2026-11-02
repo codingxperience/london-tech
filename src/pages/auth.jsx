@@ -40,7 +40,7 @@ export function Auth({
       ? "Forgot your password?"
       : reset
         ? "Set a new password"
-        : "Welcome back"
+        : "Sign in"
   useEffect(() => {
     setError("")
     setSuccess("")
@@ -93,7 +93,7 @@ export function Auth({
   }
 
   return (
-    <div className="auth-card">
+    <div className={"auth-card" + (!register ? " auth-card-simple" : "")}>
       {!dialog && (
         <IconButton
           label="Close and return to shopping"
@@ -103,40 +103,47 @@ export function Auth({
           <X size={21} />
         </IconButton>
       )}
-      <aside className="auth-welcome">
-        <a href="/" className="auth-brand" aria-label="London Tech home">
-          <img src={logoImage} alt="London Tech" />
-        </a>
-        <h2>
-          Welcome to
-          <br />
-          <BrandWordmark width="min(100%, 275px)" />
-        </h2>
-        <p>Your favourites, your orders and a more personal way to shop.</p>
-        <div className="auth-product-composition" aria-hidden="true">
-          <div className="auth-product-circle" />
-          <div className="auth-phone-card">
-            <img src={phoneImage} alt="" loading="lazy" decoding="async" />
+      {register && (
+        <aside className="auth-welcome">
+          <a href="/" className="auth-brand" aria-label="London Tech home">
+            <img src={logoImage} alt="London Tech" />
+          </a>
+          <h2>
+            Welcome to
+            <br />
+            <BrandWordmark width="min(100%, 275px)" />
+          </h2>
+          <p>Your favourites, your orders and a more personal way to shop.</p>
+          <div className="auth-product-composition" aria-hidden="true">
+            <div className="auth-product-circle" />
+            <div className="auth-phone-card">
+              <img src={phoneImage} alt="" loading="lazy" decoding="async" />
+            </div>
+            <div className="auth-audio-card">
+              <img src={audioImage} alt="" loading="lazy" decoding="async" />
+            </div>
+            <span className="auth-saved-note">
+              <Heart size={16} />A place for your favourites
+            </span>
           </div>
-          <div className="auth-audio-card">
-            <img src={audioImage} alt="" loading="lazy" decoding="async" />
+          <div className="auth-welcome-benefits">
+            <span>
+              <Heart size={17} />
+              Save what you love
+            </span>
+            <span>
+              <Package size={17} />
+              Keep track of your orders
+            </span>
           </div>
-          <span className="auth-saved-note">
-            <Heart size={16} />A place for your favourites
-          </span>
-        </div>
-        <div className="auth-welcome-benefits">
-          <span>
-            <Heart size={17} />
-            Save what you love
-          </span>
-          <span>
-            <Package size={17} />
-            Keep track of your orders
-          </span>
-        </div>
-      </aside>
+        </aside>
+      )}
       <section className="auth-form-panel" aria-labelledby="auth-form-title">
+        {!register && (
+          <a href="/" className="auth-form-brand" aria-label="London Tech home">
+            <BrandWordmark width={210} />
+          </a>
+        )}
         {!forgot && !reset ? (
           <div
             className="auth-mode-switch"
@@ -168,15 +175,17 @@ export function Auth({
           </button>
         )}
         <h1 id="auth-form-title">{title}</h1>
-        <p className="auth-form-intro">
-          {register
-            ? "A few details, then you’re ready to explore."
-            : forgot
-              ? "We’ll email you a link to reset your password."
-              : reset
-                ? "Choose a password with at least 12 characters."
-                : "Sign in to your London Tech account."}
-        </p>
+        {(register || forgot || reset) && (
+          <p className="auth-form-intro">
+            {register
+              ? "A few details, then you’re ready to explore."
+              : forgot
+                ? "We’ll email you a link to reset your password."
+                : reset
+                  ? "Choose a password with at least 12 characters."
+                  : "Sign in to your London Tech account."}
+          </p>
+        )}
         {error && <Notice type="error">{error}</Notice>}
         {success ? (
           <div className="auth-success">
@@ -271,14 +280,18 @@ export function Auth({
             </Button>
           </form>
         )}
-        <div className="auth-private-note">
-          <ShieldCheck size={15} />
-          <span>Your details are kept private and secure.</span>
-        </div>
-        <div className="auth-country">
-          <span>Shopping in</span>
-          <strong>Uganda · UGX</strong>
-        </div>
+        {register && (
+          <div className="auth-private-note">
+            <ShieldCheck size={15} />
+            <span>Your details are kept private and secure.</span>
+          </div>
+        )}
+        {register && (
+          <div className="auth-country">
+            <span>Shopping in</span>
+            <strong>Uganda · UGX</strong>
+          </div>
+        )}
       </section>
     </div>
   )

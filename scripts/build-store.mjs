@@ -61,6 +61,7 @@ const privatePaths = [
     "products",
     "wishlist",
     "orders",
+    "checkouts",
     "invoices",
     "history",
     "inventory",

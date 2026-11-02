@@ -1,6 +1,8 @@
 import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import { Overview } from "../admin/Overview.jsx"
 import { WorkspaceSection } from "../admin/Sections.jsx"
+import { CheckoutRecovery } from "../admin/CheckoutRecovery.jsx"
+import { DeliverySettings } from "../admin/DeliverySettings.jsx"
 import {
   previewData,
   previewKey,
@@ -89,6 +91,7 @@ const tabs = [
   ["products", "Products", Package],
   ["wishlist", "Wishlist", Heart],
   ["orders", "Orders", ShoppingBag],
+  ["checkouts", "Checkout follow-up", RotateCcw],
   ["invoices", "Invoices", FileText],
   ["history", "History", Activity],
   ["inventory", "Inventory", Box],
@@ -301,23 +304,10 @@ export default function Admin({
         <span className="admin-gate-lock">
           <LockKeyhole size={25} />
         </span>
-        <p className="eyebrow">STORE CONSOLE</p>
-        <h1>
-          A clearer view
-          <br />
-          of your business.
-        </h1>
-        <p>
-          Sign in with an administrator account to manage products, orders,
-          customers and store settings.
-        </p>
+        <h1>Administrator sign in</h1>
         <a className="button" href="/login/?next=/admin/">
           Administrator sign in
           <ArrowRight size={16} />
-        </a>
-        <a className="text-link" href="/admin/preview/">
-          Preview the dashboard
-          <Eye size={15} />
         </a>
         <a className="text-link" href="/">
           Back to the store
@@ -697,6 +687,23 @@ export default function Admin({
               onOrder={setOrderEditor}
               OrdersTable={OrdersTable}
               locale={preferences.locale}
+            />
+          ) : section === "checkouts" ? (
+            <CheckoutRecovery
+              attempts={data.checkouts || []}
+              search={query}
+              preview={preview}
+              changed={
+                preview
+                  ? (updated) =>
+                      setData((current) => ({
+                        ...current,
+                        checkouts: (current.checkouts || []).map((a) =>
+                          a.id === updated.id ? updated : a,
+                        ),
+                      }))
+                  : load
+              }
             />
           ) : extraSections.includes(section) ? (
             <WorkspaceSection
@@ -1198,6 +1205,23 @@ export default function Admin({
             setOrderEditor(null)
           }}
           onClose={() => setOrderEditor(null)}
+          onCollectCash={async () => {
+            if (preview) {
+              setData((current) => ({
+                ...current,
+                orders: current.orders.map((o) =>
+                  o.id === orderEditor.id ? { ...o, paymentStatus: "paid" } : o,
+                ),
+              }))
+              setOrderEditor(null)
+              return
+            }
+            await post("admin/orders/" + orderEditor.id + "/cash-payment", {
+              confirmed: true,
+            })
+            await load()
+            setOrderEditor(null)
+          }}
           onSave={async (status, note) => {
             if (preview) {
               if (
@@ -1774,6 +1798,7 @@ export function AdminOrderModal({
   onClose,
   onSave,
   onQuote,
+  onCollectCash,
 }) {
   const [status, setStatus] = useState(
       ["quoted", "quote_requested", "pending_payment"].includes(o.status)
@@ -1782,7 +1807,8 @@ export function AdminOrderModal({
     ),
     [note, setNote] = useState(""),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("")
+    [error, setError] = useState(""),
+    [cashReceived, setCashReceived] = useState(false)
   return (
     <Modal
       title={"Order " + o.id}
@@ -1843,7 +1869,41 @@ export function AdminOrderModal({
           <b>{money(p.unitPrice == null ? null : p.unitPrice * p.quantity)}</b>
         </div>
       ))}
+      {o.paymentMethod === "cod" &&
+        o.paymentStatus === "cash_due" &&
+        !["cancelled", "review"].includes(o.status) && (
+          <form
+            className="cash-receipt-form"
+            onSubmit={async (e) => {
+              e.preventDefault()
+              setBusy(true)
+              setError("")
+              try {
+                await onCollectCash()
+              } catch (e) {
+                setError(e.message)
+              } finally {
+                setBusy(false)
+              }
+            }}
+          >
+            <h3>Cash payment</h3>
+            <label>
+              <input
+                type="checkbox"
+                checked={cashReceived}
+                onChange={(e) => setCashReceived(e.target.checked)}
+                required
+              />
+              I have received the full {money(o.amount)} in cash.
+            </label>
+            <Button type="submit" busy={busy} disabled={!cashReceived}>
+              Record cash received <Check size={16} />
+            </Button>
+          </form>
+        )}
       {["quote_requested", "review", "quoted"].includes(o.status) &&
+        o.paymentMethod !== "cod" &&
         o.paymentStatus !== "paid" && (
           <QuoteForm order={o} preview={preview} onSave={onQuote} />
         )}
@@ -1888,8 +1948,9 @@ export function AdminOrderModal({
           />
         </Field>
         <p className="admin-muted small">
-          Payment status can only be set by server verification with
-          Flutterwave. A paid order cannot be cancelled here.
+          {o.paymentMethod === "cod"
+            ? "Cash orders can be prepared and delivered before payment. Record cash received before completing the order."
+            : "Online payments are confirmed by the payment provider."}
         </p>
         <Button type="submit" busy={busy}>
           Save order update
@@ -1980,19 +2041,7 @@ function SettingsPanel({ settings, connection, preview, saved }) {
             onChange={(e) => change("hours", e.target.value)}
             placeholder="Enter confirmed opening hours"
           />
-          <Field
-            label="Standard delivery fee (UGX)"
-            type="number"
-            min="0"
-            value={s.deliveryFee ?? ""}
-            onChange={(e) =>
-              change(
-                "deliveryFee",
-                e.target.value === "" ? null : Number(e.target.value),
-              )
-            }
-            hint="Leave blank to require a delivery quote. Enter 0 only if delivery is free."
-          />
+          <DeliverySettings settings={s} onChange={change} />
           {[
             ["about", "About London Tech"],
             ["delivery", "Delivery information"],
@@ -2082,8 +2131,8 @@ function SettingsPanel({ settings, connection, preview, saved }) {
             <PaymentMarks />
           </div>
           <p>
-            Payment methods must also be enabled on the Flutterwave merchant
-            account.
+            Online methods must also be enabled on the Flutterwave merchant
+            account. Cash on receipt works independently.
           </p>
         </section>
         <a

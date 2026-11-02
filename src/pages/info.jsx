@@ -44,7 +44,7 @@ function DefaultInfo({ page }) {
         ],
         [
           "Delivery arrangements",
-          "Enter your district, address, phone number and useful directions at checkout. If a delivery fee is not listed, request confirmation and the store will confirm the delivery charge and timing before you pay.",
+          "Choose your delivery district and enter your address, phone number and directions at checkout. The delivery fee is calculated and shown before you place your order. Distance-based estimates use district centres; store collection is free.",
         ],
         [
           "Following your order",
@@ -86,6 +86,10 @@ function DefaultInfo({ page }) {
         [
           "Payments",
           "Flutterwave handles payment authorization on its hosted checkout. London Tech does not collect or store your full card number, CVV, card PIN or mobile money PIN. The store records the payment reference, verified status, currency and amount for your order.",
+        ],
+        [
+          "Unfinished checkouts",
+          "When you begin checkout while signed in, we save your selected items, contact details and checkout status. Authorized staff can use these details to help you complete your order or resolve a payment issue. Checkout follow-up does not subscribe you to marketing messages.",
         ],
         [
           "On this device",
@@ -145,12 +149,12 @@ function DefaultInfo({ page }) {
               "Browse the categories, use search, or filter a collection by brand, price and confirmed availability. You can compare up to four products side by side.",
             ],
             [
-              "Are guide prices final?",
-              "Guide prices are estimates until the store confirms the selected configuration, condition and current price. Unconfirmed items can be requested through checkout without paying.",
+              "Which prices apply at checkout?",
+              "Orders use the published product prices. Delivery is calculated separately from your selected district and shown before you place the order.",
             ],
             [
               "How do I pay?",
-              "For confirmed items with available stock, select MTN Mobile Money, Airtel Money or Visa / card. You complete authorization on Flutterwave. The store verifies the payment before marking your order paid.",
+              "Choose cash on delivery or collection. When online payments are available, you can also choose MTN Mobile Money, Airtel Money or Visa / card. Online payment is authorized securely through the payment provider; cash is recorded by the store after it has been received.",
             ],
             [
               "Do I need an account?",

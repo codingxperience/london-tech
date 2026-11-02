@@ -5,9 +5,9 @@ export function PaymentMarks() {
   return (
     <div
       className="payment-marks"
-      aria-label="Payment methods: MTN Mobile Money, Airtel Money and Visa"
+      aria-label="Payment methods: cash on delivery, MTN Mobile Money, Airtel Money and Visa"
     >
-      {["mtn", "airtel", "visa"].map((method) => (
+      {["cod", "mtn", "airtel", "visa"].map((method) => (
         <PaymentLogo key={method} method={method} />
       ))}
     </div>

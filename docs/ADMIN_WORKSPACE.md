@@ -1,6 +1,6 @@
 # London Tech administration
 
-The workspace follows the supplied dashboard reference: a fixed sidebar, a compact toolbar, four metric cards, sales and order charts, two progress cards, recent orders, revenue, a destination map and a product rail. Main controls use 13–14px or larger text; the layout switches to a navigation drawer and stacked charts on smaller screens. Tables scroll inside their panels instead of shrinking their contents.
+The workspace follows the supplied dashboard reference: a fixed sidebar, a compact toolbar, four metric cards, sales and order charts, two progress cards, recent orders, revenue, a destination map and a product rail. Main controls use 14–16px or larger text; the layout switches to a navigation drawer and stacked charts on smaller screens. Tables scroll inside their panels instead of shrinking their contents.
 
 ## Available areas
 
@@ -9,7 +9,8 @@ The workspace follows the supplied dashboard reference: a fixed sidebar, a compa
 - **Customers:** search registered customers, export the directory and inspect customer order histories.
 - **Products / Inventory / Categories:** create and edit products, specifications, images, prices, quantities and supplier assignments; filter, paginate and export the catalogue. Payment verification rules remain enforced on the server.
 - **Wishlist:** inspect saved products from authenticated accounts. Guest wishlists remain on their own devices.
-- **Orders:** filter and export recent orders, review line items, confirm quotes and update fulfillment. Unverified payments cannot be manually marked paid.
+- **Orders:** filter and export orders, review line items, manage historical quotes and update fulfillment. Record a cash receipt explicitly after receiving the full amount; online payments still require provider verification.
+- **Checkout follow-up:** review failed and unfinished authenticated checkouts, contact the customer, save internal notes and track follow-up. See [delivery and checkout](DELIVERY_AND_CHECKOUT.md).
 - **Invoices:** printable order invoices from verified paid orders. Use Print / Save PDF; totals come from the order records.
 - **History:** search and filter the latest 500 audit events by action and date, then export the results. Audit entries do not include conversation message bodies.
 - **Settings:** store contact information, official social profile URLs, policies, delivery fee and integration status. Secret credentials stay in the hosting environment.

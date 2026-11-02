@@ -1,5 +1,4 @@
 import { MessageCentre } from "../components/MessageCentre.jsx"
-import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
 import React, { useEffect, useState } from "react"
 
@@ -190,12 +189,7 @@ export function Account({ section = "overview", orderId }) {
             : []),
         ]}
       />
-      <PageHeading
-        eyebrow={<BrandWordmark width={142} />}
-        title={"Hello, " + user.name.split(" ")[0] + "."}
-      >
-        Your orders, your favourites and all the little details.
-      </PageHeading>
+      <h1 className="sr-only">My account</h1>
       <div className="account-layout">
         <aside className="account-sidebar">
           <div className="account-avatar">
@@ -209,14 +203,15 @@ export function Account({ section = "overview", orderId }) {
               <small>{user.email}</small>
             </span>
           </div>
-          <nav>
+          <nav aria-label="Account navigation">
             {nav.map(([id, label, Icon]) => (
               <a
                 href={"/account/" + (id === "overview" ? "" : id + "/")}
                 key={id}
                 className={section === id ? "active" : ""}
+                aria-current={section === id ? "page" : undefined}
               >
-                <Icon size={17} />
+                <Icon size={20} />
                 {label}
                 <ArrowRight size={13} />
               </a>
@@ -245,7 +240,7 @@ export function Account({ section = "overview", orderId }) {
                   <Package size={22} />
                   <strong>{orders.length}</strong>
                   <span>
-                    Orders & requests
+                    Orders
                     <ArrowRight size={14} />
                   </span>
                 </a>
@@ -274,17 +269,16 @@ export function Account({ section = "overview", orderId }) {
                 </a>
               </div>
               <OrderList orders={orders.slice(0, 3)} loaded={loaded} />
-              <div className="account-welcome">
-                <p className="eyebrow">GOOD TO HAVE YOU HERE</p>
-                <h2>A few details make a difference.</h2>
-                <p>
-                  Save a phone number and delivery address to make your next
-                  checkout a little easier.
-                </p>
-                <ActionLink href="/account/profile/" className="secondary">
-                  Update your details
-                </ActionLink>
-              </div>
+              {(!user.phone || !user.addresses.length) && (
+                <div className="account-profile-reminder">
+                  <span>
+                    Save your contact and delivery details for your next order.
+                  </span>
+                  <a href="/account/profile/">
+                    Account details <ArrowRight size={16} />
+                  </a>
+                </div>
+              )}
             </>
           ) : section === "orders" ? (
             orderId ? (
@@ -295,7 +289,7 @@ export function Account({ section = "overview", orderId }) {
               />
             ) : (
               <>
-                <h2>My orders & requests</h2>
+                <h2>My orders</h2>
                 <OrderList orders={orders} loaded={loaded} />
               </>
             )
@@ -761,20 +755,20 @@ function OrderDetail({ order: o, loaded, reload }) {
               <ArrowRight size={15} />
             </Button>
           )}
-        {["quoted", "pending_payment", "quote_requested"].includes(o.status) &&
+        {(["quoted", "pending_payment", "quote_requested"].includes(o.status) ||
+          (o.paymentMethod === "cod" && o.status === "confirmed")) &&
           o.paymentStatus !== "paid" && (
             <Button
               variant="secondary"
               busy={busy}
               onClick={async () => {
-                if (!window.confirm("Cancel this unpaid order or request?"))
-                  return
+                if (!window.confirm("Cancel this unpaid order?")) return
                 setBusy(true)
                 try {
                   await post("orders/" + o.id + "/cancel")
                   writeStorage("lt.checkout-key", null)
                   await reload()
-                  notify("Your request has been cancelled.")
+                  notify("Your order has been cancelled.")
                 } catch (e) {
                   setError(e.message)
                 } finally {
@@ -782,7 +776,7 @@ function OrderDetail({ order: o, loaded, reload }) {
                 }
               }}
             >
-              Cancel request
+              Cancel order
             </Button>
           )}
         <Button variant="secondary" onClick={() => window.print()}>

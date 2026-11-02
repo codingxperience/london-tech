@@ -1162,7 +1162,10 @@ test("a fresh complete CommerceApp mount opens a product route with its own prov
     await render(React.createElement(CommerceApp))
     const product = products.find((item) => item.id === "iphone-17-pro-max")
     assert.equal(container.querySelector("h1")?.textContent, product.name)
-    assert.equal(dom.document.title, product.name + " in Uganda | London Tech Kampala")
+    assert.equal(
+      dom.document.title,
+      product.name + " in Uganda | London Tech Kampala",
+    )
     assert.ok(container.querySelector(".product-main-image img"))
     assert.ok(
       container.querySelectorAll(".product-thumbnails button").length >= 2,
@@ -1304,7 +1307,9 @@ test("direct registration and sign-in are focused routes without the store heade
     ),
   )
   assert.equal(dom.location.pathname, "/login/")
-  assert.match(container.querySelector("h1").textContent, /Welcome back/)
+  assert.match(container.querySelector("h1").textContent, /Sign in/)
+  assert.equal(container.querySelector(".auth-welcome"), null)
+  assert.equal(container.querySelector(".auth-intro"), null)
   assert.equal(
     new URLSearchParams(dom.location.search).get("next"),
     "/account/wishlist/",
@@ -1312,6 +1317,115 @@ test("direct registration and sign-in are focused routes without the store heade
   await click(container.querySelector(".auth-forgot"))
   assert.equal(dom.location.pathname, "/forgot-password/")
   assert.equal(container.querySelector('input[name="password"]'), null)
+})
+
+test("cash checkout displays a district delivery total, places the order directly and opens the simplified account", async () => {
+  const originalFetch = globalThis.fetch
+  const p = products.find((p) => p.active && p.priceConfirmed && p.stock > 0)
+  const user = {
+    id: "checkout-ui-customer",
+    name: "Samson Customer",
+    email: "samson@example.com",
+    phone: "0700000000",
+    role: "customer",
+    addresses: [],
+  }
+  let submitted, placed
+  const attempts = []
+  dom.localStorage.setItem(
+    "lt.cart.v2",
+    JSON.stringify([
+      {
+        id: p.id,
+        quantity: 1,
+        option: p.options[0] || "",
+        color: p.colors[0] || "",
+      },
+    ]),
+  )
+  globalThis.fetch = async (url, options = {}) => {
+    const path = String(url).replace(/\/$/, "")
+    let data
+    if (path.endsWith("/api/auth/me")) data = { user }
+    else if (path.endsWith("/api/config"))
+      data = {
+        accounts: true,
+        payments: false,
+        cashOnDelivery: true,
+        currency: "UGX",
+      }
+    else if (path.endsWith("/api/checkout/attempts")) {
+      attempts.push(JSON.parse(options.body))
+      data = { saved: true }
+    } else if (path.endsWith("/api/orders") && options.method === "POST") {
+      submitted = JSON.parse(options.body)
+      placed = {
+        ...submitted,
+        id: "LT-UI-ORDER",
+        status: "confirmed",
+        paymentStatus: "cash_due",
+        amount: submitted.expectedTotal,
+        subtotal: p.price,
+        deliveryFee: 5000,
+        currency: "UGX",
+        createdAt: new Date().toISOString(),
+        timeline: [],
+        items: [{ ...p, quantity: 1, unitPrice: p.price }],
+      }
+      data = { order: placed }
+    } else if (path.endsWith("/api/orders"))
+      data = { orders: placed ? [placed] : [] }
+    else return originalFetch(url, options)
+    return { ok: true, json: async () => data }
+  }
+  try {
+    await openRoute("/checkout/")
+    const cash = container.querySelector(
+      '.payment-options input[name="paymentMethod"]',
+    )
+    assert.equal(cash.checked, true)
+    assert.ok(
+      [...container.querySelectorAll(".payment-options input")]
+        .slice(1)
+        .every((input) => input.disabled),
+    )
+    await click(container.querySelectorAll(".fulfillment-choices input")[1])
+    await editAdminField("Delivery district", "Kampala")
+    await editAdminField(
+      "Street, building and delivery directions",
+      "Arua Park test collection point",
+    )
+    await click(container.querySelector(".terms-check input"))
+    assert.match(
+      container.querySelector(".delivery-estimate").textContent,
+      /5,000/,
+    )
+    await click(
+      [...container.querySelectorAll('button[type="submit"]')].find((b) =>
+        b.textContent.includes("Place order"),
+      ),
+    )
+    assert.equal(submitted.enquiry, false)
+    assert.equal(submitted.paymentMethod, "cod")
+    assert.equal(submitted.expectedTotal, p.price + 5000)
+    assert.equal(submitted.customer.district, "Kampala")
+    assert.ok(attempts.length > 0)
+    assert.equal(dom.location.pathname, "/account/orders/LT-UI-ORDER/")
+    assert.deepEqual(JSON.parse(dom.localStorage.getItem("lt.cart.v2")), [])
+    assert.match(
+      container.querySelector(".account-content").textContent,
+      /Cash due on receipt/,
+    )
+    assert.equal(container.querySelector(".account-welcome"), null)
+    assert.equal(container.querySelector(".page-heading"), null)
+    assert.ok(
+      container.querySelector(
+        'nav[aria-label="Account navigation"] a[aria-current="page"]',
+      ),
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
 })
 
 test("the account dropdown groups wishlist and opens a closable registration dialog over the current product", async () => {
@@ -2132,6 +2246,20 @@ test("daily visitor reporting is available in overview and social profile edits 
   await editAdminField(
     "Instagram profile URL",
     "https://www.instagram.com/london-tech-review/",
+  )
+  const settingsForm = container.querySelector(".admin-settings-form")
+  assert.equal(
+    settingsForm.checkValidity(),
+    true,
+    JSON.stringify(
+      [...settingsForm.querySelectorAll("input,select,textarea")]
+        .filter((input) => !input.checkValidity())
+        .map((input) => ({
+          label: input.closest("label")?.textContent,
+          value: input.value,
+          validity: input.validationMessage,
+        })),
+    ),
   )
   await click(adminButton("Save store settings"))
   const saved = JSON.parse(dom.localStorage.getItem("lt.admin.preview.v4"))

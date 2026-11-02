@@ -40,7 +40,9 @@ export const dateLabel = (date) =>
   )
 
 export const statusLabel = (value) =>
-  value.replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  value === "cash_due"
+    ? "Cash due on receipt"
+    : value.replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())
 
 export function downloadCsv(name, rows) {
   const escape = (v) => '"' + String(v ?? "").replaceAll('"', '""') + '"'

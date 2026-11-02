@@ -297,9 +297,13 @@ test("server totals, idempotency, reservations and stock checks", async () => {
   const delivery = await request("orders", {
     method: "POST",
     cookie: customerCookie,
-    body: payload({ fulfillment: "delivery" }),
+    body: payload({
+      fulfillment: "delivery",
+      customer: { ...payload().customer, district: "Unknown district" },
+    }),
   })
   assert.equal(delivery.status, 409)
+  assert.match(delivery.data.error, /district/i)
 
   const overMaximum = await request("orders", {
     method: "POST",

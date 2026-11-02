@@ -26,6 +26,13 @@ import {
 } from "./security.js"
 
 import { createPaymentLink, verifyPayment } from "./payments.js"
+import { calculateDelivery } from "../src/lib/delivery.js"
+import {
+  checkoutRoute,
+  checkoutSummary,
+  updateAttempt,
+} from "./checkout-attempts.js"
+import { restoreCashInventory, collectCash } from "./cash-orders.js"
 import { audienceRoute, audienceSummary } from "./audience.js"
 import {
   workspaceRoute,
@@ -68,7 +75,9 @@ const orderSchema = z.object({
   items: itemsSchema,
   customer: customerSchema,
   fulfillment: z.enum(["delivery", "collection"]),
-  paymentMethod: z.enum(["mtn", "airtel", "visa"]).default("mtn"),
+  paymentMethod: z.enum(["mtn", "airtel", "visa", "cod"]).default("mtn"),
+  attemptId: z.string().uuid().optional(),
+  expectedTotal: z.number().int().min(100).max(2000000000).optional(),
   notes: text(1000).default(""),
   key: z.string().uuid(),
   enquiry: z.boolean().default(false),
@@ -135,29 +144,58 @@ const socialUrl = (domains) =>
       }
     }, "Enter an HTTPS profile link on the selected social platform.")
     .default("")
-const settingsSchema = z.object({
-  name: text(100),
-  tagline: text(150),
-  phone: text(30),
-  phoneAlt: text(30).default(""),
-  email: z.union([email, z.literal("")]),
-  address: text(500),
-  hours: text(500),
-  whatsapp: text(30),
-  about: text(5000),
-  returns: text(5000),
-  delivery: text(5000),
-  deliveryFee: z.number().int().min(0).max(10000000).nullable(),
-  socials: z
-    .object({
-      facebook: socialUrl(["facebook.com", "fb.com"]),
-      x: socialUrl(["x.com", "twitter.com"]),
-      tiktok: socialUrl(["tiktok.com"]),
-      instagram: socialUrl(["instagram.com"]),
-      snapchat: socialUrl(["snapchat.com"]),
-    })
-    .optional(),
-})
+const settingsSchema = z
+  .object({
+    name: text(100),
+    tagline: text(150),
+    phone: text(30),
+    phoneAlt: text(30).default(""),
+    email: z.union([email, z.literal("")]),
+    address: text(500),
+    hours: text(500),
+    whatsapp: text(30),
+    about: text(5000),
+    returns: text(5000),
+    delivery: text(5000),
+    deliveryFee: z.number().int().min(0).max(10000000).nullable(),
+    deliveryPricing: z
+      .object({
+        mode: z.enum(["distance", "flat"]),
+        baseFee: z.number().int().min(0).max(10000000),
+        perKm: z.number().int().min(0).max(100000),
+        minimumFee: z.number().int().min(0).max(10000000),
+        maximumFee: z.number().int().min(0).max(10000000),
+        rounding: z.number().int().min(1).max(10000),
+        distanceMultiplier: z.number().min(1).max(3),
+        overrides: z
+          .array(
+            z.object({
+              districtId: text(30),
+              distanceKm: z.number().min(0).max(2000).nullable().optional(),
+              fee: z.number().int().min(0).max(10000000).nullable().optional(),
+            }),
+          )
+          .max(200),
+      })
+      .refine((p) => p.maximumFee >= p.minimumFee, {
+        message: "Maximum delivery fee must be at least the minimum.",
+      })
+      .nullable()
+      .optional(),
+    socials: z
+      .object({
+        facebook: socialUrl(["facebook.com", "fb.com"]),
+        x: socialUrl(["x.com", "twitter.com"]),
+        tiktok: socialUrl(["tiktok.com"]),
+        instagram: socialUrl(["instagram.com"]),
+        snapchat: socialUrl(["snapchat.com"]),
+      })
+      .optional(),
+  })
+  .refine((s) => s.deliveryPricing?.mode !== "flat" || s.deliveryFee != null, {
+    message: "Enter the flat delivery fee, or select distance-based pricing.",
+    path: ["deliveryFee"],
+  })
 
 const publicUser = (user) =>
   user && {
@@ -220,6 +258,8 @@ function validateImages(p) {
 
 async function createOrder(db, user, payload) {
   const body = orderSchema.parse(payload)
+  if (body.enquiry && body.paymentMethod === "cod")
+    fail(400, "Cash orders use the listed prices.")
 
   return db.transaction(async (tx) => {
     await tx.query("SELECT id FROM users WHERE id=$1 FOR UPDATE", [user.id])
@@ -304,10 +344,11 @@ async function createOrder(db, user, payload) {
       }
     })
 
-    if (!body.enquiry && !process.env.FLW_SECRET_KEY)
+    const cash = body.paymentMethod === "cod" && !body.enquiry
+    if (!body.enquiry && !cash && !process.env.FLW_SECRET_KEY)
       fail(
         503,
-        "Online payments are being connected. You can request a quote instead.",
+        "Online payment is unavailable. Choose cash on delivery or collection.",
       )
 
     if (
@@ -316,24 +357,36 @@ async function createOrder(db, user, payload) {
     )
       fail(400, "Enter your delivery address and district.")
 
-    if (
-      !body.enquiry &&
-      body.fulfillment === "delivery" &&
-      settings.deliveryFee == null
-    )
-      fail(409, "Delivery needs a quote from the store before payment.")
+    const delivery =
+      body.fulfillment === "collection"
+        ? { fee: 0 }
+        : calculateDelivery(settings, body.customer.district)
+    if (!body.enquiry && delivery.fee == null)
+      fail(
+        409,
+        delivery.error ||
+          "Delivery pricing is unavailable. Select store collection.",
+      )
 
     if (!body.enquiry && body.fulfillment === "collection" && !settings.address)
       fail(409, "Collection details must be confirmed before payment.")
 
-    const deliveryFee =
-      body.fulfillment === "delivery" ? settings.deliveryFee : 0
+    const deliveryFee = delivery.fee
 
     const subtotal = items.every((p) => p.unitPrice != null)
       ? items.reduce((sum, p) => sum + p.unitPrice * p.quantity, 0)
       : null
 
     const amount = body.enquiry ? null : subtotal + deliveryFee
+    if (
+      !body.enquiry &&
+      body.expectedTotal != null &&
+      body.expectedTotal !== amount
+    )
+      fail(
+        409,
+        "Prices or delivery rates changed. Review the updated total before placing your order.",
+      )
 
     if (
       !body.enquiry &&
@@ -351,28 +404,47 @@ async function createOrder(db, user, payload) {
       notes: body.notes,
       subtotal,
       deliveryFee,
+      deliveryEstimate: delivery,
+      ...(cash ? { inventoryCommitted: true } : {}),
       timeline: [
         {
-          status: body.enquiry ? "quote_requested" : "pending_payment",
+          status: body.enquiry
+            ? "quote_requested"
+            : cash
+              ? "confirmed"
+              : "pending_payment",
           at: new Date().toISOString(),
         },
       ],
     }
 
     await tx.query(
-      `INSERT INTO orders(id,user_id,idempotency_key,status,amount,details,expires_at) VALUES($1,$2,$3,$4,$5,$6::jsonb,CASE WHEN $7 THEN NULL ELSE NOW()+INTERVAL '30 minutes' END)`,
+      `INSERT INTO orders(id,user_id,idempotency_key,status,amount,details,expires_at,payment_status) VALUES($1,$2,$3,$4,$5,$6::jsonb,CASE WHEN $7 THEN NULL ELSE NOW()+INTERVAL '30 minutes' END,$8)`,
       [
         id,
         user.id,
         body.key,
-        body.enquiry ? "quote_requested" : "pending_payment",
+        body.enquiry
+          ? "quote_requested"
+          : cash
+            ? "confirmed"
+            : "pending_payment",
         amount,
         JSON.stringify(details),
-        body.enquiry,
+        body.enquiry || cash,
+        cash ? "cash_due" : "unpaid",
       ],
     )
 
-    if (!body.enquiry)
+    if (cash)
+      for (const [productId, quantity] of aggregated) {
+        const p = locked.get(productId)
+        await tx.query(
+          "UPDATE products SET data=$2::jsonb,updated_at=NOW() WHERE id=$1",
+          [productId, JSON.stringify({ ...p, stock: p.stock - quantity })],
+        )
+      }
+    if (!body.enquiry && !cash)
       for (const [productId, quantity] of aggregated)
         await tx.query(
           `INSERT INTO stock_reservations(order_id,product_id,quantity,expires_at) VALUES($1,$2,$3,NOW()+INTERVAL '30 minutes')`,
@@ -407,6 +479,7 @@ export default async function handler(req, res) {
         payments: databaseConfigured() && !!process.env.FLW_SECRET_KEY,
         analytics: databaseConfigured(),
         newsletter: databaseConfigured(),
+        cashOnDelivery: databaseConfigured(),
         currency: "UGX",
         country: "Uganda",
         paymentMode: process.env.FLW_SECRET_KEY?.includes("TEST")
@@ -477,6 +550,17 @@ export default async function handler(req, res) {
       userAgent: String(req.headers["user-agent"] || ""),
     })
     if (audience) return send(res, audience.body, audience.status || 200)
+    if (route === "checkout/attempts" || route.startsWith("admin/checkouts/")) {
+      const result = await checkoutRoute({
+        route,
+        method,
+        body,
+        db,
+        user,
+        settings: await storeSettings(db),
+      })
+      if (result) return send(res, result.body, result.status || 200)
+    }
 
     if (route === "auth/me" && method === "GET")
       return send(res, { user: publicUser(user) })
@@ -798,7 +882,29 @@ export default async function handler(req, res) {
       requireUser(user)
       await rateLimit(db, "order:" + user.id, 20, 15)
 
-      const order = await createOrder(db, user, body)
+      let order
+      try {
+        order = await createOrder(db, user, body)
+      } catch (error) {
+        await updateAttempt(db, user.id, body.attemptId, "failed", {
+          failureMessage:
+            error.status && error.status < 500
+              ? String(error.message).slice(0, 240)
+              : "Checkout could not be completed. Please try again.",
+          failureStage: "order",
+        })
+        throw error
+      }
+      await updateAttempt(
+        db,
+        user.id,
+        body.attemptId,
+        order.details.paymentMethod === "cod"
+          ? "order_placed"
+          : "awaiting_payment",
+        { failureMessage: null },
+        order.id,
+      )
       return send(res, { order: publicOrder(order) }, 201)
     }
 
@@ -815,6 +921,8 @@ export default async function handler(req, res) {
         return send(res, { order: publicOrder(row) })
 
       if (method === "POST" && action === "pay") {
+        if (row.details.paymentMethod === "cod")
+          fail(409, "This order is payable in cash when you receive it.")
         if (row.payment_status === "paid")
           fail(409, "This order is already paid.")
 
@@ -912,21 +1020,59 @@ export default async function handler(req, res) {
             "This checkout has expired. Return to your cart and create a new order.",
           )
 
-        return send(res, {
-          url: await createPaymentLink(payable, currentOrigin(req)),
-        })
+        try {
+          const url = await createPaymentLink(payable, currentOrigin(req))
+          await db.query(
+            "UPDATE checkout_attempts SET state='awaiting_payment',updated_at=NOW() WHERE order_id=$1",
+            [row.id],
+          )
+          return send(res, { url })
+        } catch (error) {
+          await db.query(
+            "UPDATE checkout_attempts SET state='failed',details=details||$2::jsonb,updated_at=NOW() WHERE order_id=$1",
+            [
+              row.id,
+              JSON.stringify({
+                failureStage: "payment",
+                failureMessage:
+                  "The payment provider could not start this payment.",
+              }),
+            ],
+          )
+          throw error
+        }
       }
 
       if (method === "POST" && action === "verify") {
+        if (row.details.paymentMethod === "cod")
+          fail(
+            409,
+            "Cash payment is recorded by the store after it is received.",
+          )
         await rateLimit(db, "verify:" + user.id, 30, 15)
         const input = z
           .object({ transactionId: z.union([z.string(), z.number()]) })
           .parse(body)
-        return send(res, {
-          order: publicOrder(
-            await verifyPayment(db, input.transactionId, row.id),
-          ),
-        })
+        try {
+          return send(res, {
+            order: publicOrder(
+              await verifyPayment(db, input.transactionId, row.id),
+            ),
+          })
+        } catch (error) {
+          await db.query(
+            "UPDATE checkout_attempts SET state='failed',details=details||$2::jsonb,updated_at=NOW() WHERE order_id=$1 AND state<>'completed'",
+            [
+              row.id,
+              JSON.stringify({
+                failureStage: "verification",
+                failureMessage:
+                  "Payment could not be confirmed. Check with the customer before retrying.",
+              }),
+            ],
+          )
+          throw error
+        }
       }
 
       if (method === "POST" && action === "cancel") {
@@ -938,16 +1084,25 @@ export default async function handler(req, res) {
           ).rows[0]
           if (
             locked.payment_status === "paid" ||
-            !["quoted", "pending_payment", "quote_requested"].includes(
-              locked.status,
+            !(
+              ["quoted", "pending_payment", "quote_requested"].includes(
+                locked.status,
+              ) ||
+              (locked.details.paymentMethod === "cod" &&
+                locked.status === "confirmed")
             )
           )
             fail(
               409,
               "Please contact the store to discuss cancelling this order.",
             )
+          const details = await restoreCashInventory(tx, locked)
           await tx.query(
-            `UPDATE orders SET status='cancelled',updated_at=NOW() WHERE id=$1`,
+            `UPDATE orders SET status='cancelled',details=$2::jsonb,updated_at=NOW() WHERE id=$1`,
+            [row.id, JSON.stringify(details)],
+          )
+          await tx.query(
+            "UPDATE checkout_attempts SET state='cancelled',updated_at=NOW() WHERE order_id=$1",
             [row.id],
           )
           await tx.query("DELETE FROM stock_reservations WHERE order_id=$1", [
@@ -970,6 +1125,22 @@ export default async function handler(req, res) {
         body.data?.status === "successful"
       )
         await verifyPayment(db, body.data.id)
+      else if (
+        body.event === "charge.completed" &&
+        ["failed", "cancelled"].includes(body.data?.status) &&
+        typeof body.data.tx_ref === "string"
+      )
+        await db.query(
+          "UPDATE checkout_attempts SET state='failed',details=details||$2::jsonb,updated_at=NOW() WHERE order_id=$1 AND state NOT IN ('completed','order_placed')",
+          [
+            body.data.tx_ref,
+            JSON.stringify({
+              failureStage: "payment",
+              failureMessage:
+                "The payment provider reported an unsuccessful payment.",
+            }),
+          ],
+        )
 
       return send(res, { received: true })
     }
@@ -1002,6 +1173,7 @@ export default async function handler(req, res) {
           settings: await storeSettings(db),
           ...(await workspaceSummary(db)),
           ...(await audienceSummary(db)),
+          checkouts: await checkoutSummary(db),
           connection: {
             database: true,
             payments: !!process.env.FLW_SECRET_KEY,
@@ -1068,6 +1240,13 @@ export default async function handler(req, res) {
         return send(res, { product: p })
       }
 
+      const cashPayment = route.match(/^admin\/orders\/([^/]+)\/cash-payment$/)
+      if (cashPayment && method === "POST") {
+        z.object({ confirmed: z.literal(true) }).parse(body)
+        return send(res, {
+          order: publicOrder(await collectCash(db, cashPayment[1], user)),
+        })
+      }
       const adminOrder = route.match(/^admin\/orders\/([^/]+)$/)
 
       if (adminOrder && method === "PATCH") {
@@ -1102,18 +1281,29 @@ export default async function handler(req, res) {
               "shipped",
               "completed",
             ].includes(input.status) &&
-            row.payment_status !== "paid"
+            row.payment_status !== "paid" &&
+            !(
+              row.details.paymentMethod === "cod" &&
+              row.payment_status === "cash_due" &&
+              row.details.inventoryCommitted &&
+              input.status !== "completed" &&
+              row.status !== "cancelled"
+            )
           )
             fail(409, "Payment must be verified before fulfillment.")
 
           if (input.status === "cancelled" && row.payment_status === "paid")
             fail(
               409,
-              "Paid orders need a refund handled in Flutterwave before cancellation. Mark it for review instead.",
+              "Paid orders need a refund reviewed and recorded before cancellation. Mark the order for review instead.",
             )
 
+          const restored =
+            input.status === "cancelled"
+              ? await restoreCashInventory(tx, row)
+              : row.details
           const details = {
-            ...row.details,
+            ...restored,
             timeline: [
               ...(row.details.timeline || []),
               {
@@ -1133,6 +1323,11 @@ export default async function handler(req, res) {
             await tx.query("DELETE FROM stock_reservations WHERE order_id=$1", [
               row.id,
             ])
+          if (input.status === "cancelled")
+            await tx.query(
+              "UPDATE checkout_attempts SET state='cancelled',updated_at=NOW() WHERE order_id=$1",
+              [row.id],
+            )
         })
         await audit(db, user.id, "order.updated", {
           id: adminOrder[1],

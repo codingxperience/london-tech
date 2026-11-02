@@ -1,6 +1,11 @@
 import { PaymentLogo } from "../components/PaymentLogo.jsx"
 import { BrandWordmark } from "../components/BrandWordmark.jsx"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
+import {
+  calculateDelivery,
+  deliveryDistricts,
+  findDeliveryDistrict,
+} from "../lib/delivery.js"
 
 import {
   ArrowRight,
@@ -156,7 +161,7 @@ export function Cart() {
             <ActionLink href="/checkout/">Continue to checkout</ActionLink>
             <div className="secure-note">
               <LockKeyhole size={14} />
-              Your payment details stay with Flutterwave.
+              Cash on receipt or secure online payment.
             </div>
             <PaymentMarks />
           </aside>
@@ -203,13 +208,51 @@ function checkoutKey(cart) {
 }
 
 export function Checkout() {
-  const { lines, cart, subtotal, user, authLoading, settings, config, notify } =
-    useStore()
-  const [method, setMethod] = useState("mtn"),
+  const {
+    lines,
+    cart,
+    subtotal,
+    user,
+    authLoading,
+    settings,
+    config,
+    notify,
+    setCart,
+    refresh,
+  } = useStore()
+  const [method, setMethod] = useState("cod"),
     [fulfillment, setFulfillment] = useState("collection"),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
-    [addressIndex, setAddressIndex] = useState("")
+    [addressIndex, setAddressIndex] = useState(""),
+    [district, setDistrict] = useState(""),
+    [pendingOrder, setPendingOrder] = useState(null)
+  const attemptId = useMemo(
+    () => (cart.length ? checkoutKey(cart) : null),
+    [JSON.stringify(cart)],
+  )
+  const track = async (form) => {
+    if (!user || !attemptId) return
+    const phone = String(form?.get("phone") || user.phone || "")
+    try {
+      await post("checkout/attempts", {
+        id: attemptId,
+        items: cart,
+        paymentMethod: method,
+        fulfillment,
+        district,
+        phone: /^\+?[0-9\s()-]{9,25}$/.test(phone) ? phone : "",
+      })
+    } catch {}
+  }
+  useEffect(() => {
+    track()
+  }, [user?.id, attemptId, method, fulfillment, district])
+
+  const delivery =
+    fulfillment === "collection"
+      ? { fee: 0 }
+      : calculateDelivery(settings, district)
 
   const payable =
     lines.length > 0 &&
@@ -219,12 +262,10 @@ export function Checkout() {
         l.product?.price > 0 &&
         l.product?.stock >= l.quantity,
     ) &&
-    config.payments &&
-    (fulfillment === "collection"
-      ? !!settings.address
-      : settings.deliveryFee != null)
+    (method === "cod" || config.payments) &&
+    (fulfillment === "collection" ? !!settings.address : delivery.fee != null)
 
-  const deliveryFee = fulfillment === "collection" ? 0 : settings.deliveryFee
+  const deliveryFee = delivery.fee
   const total =
     subtotal == null || deliveryFee == null ? null : subtotal + deliveryFee
 
@@ -234,6 +275,11 @@ export function Checkout() {
     setBusy(true)
     const fd = new FormData(e.currentTarget)
     try {
+      if (!payable)
+        throw new Error(
+          "Review your items, delivery details and payment method before placing the order.",
+        )
+      await track(fd)
       const data = await post("orders", {
         items: cart,
         customer: {
@@ -246,19 +292,48 @@ export function Checkout() {
         fulfillment,
         paymentMethod: method,
         notes: fd.get("notes") || "",
-        key: checkoutKey(cart),
-        enquiry: !payable,
+        key: attemptId,
+        enquiry: false,
+        attemptId,
+        expectedTotal: total,
       })
-      if (!payable) {
+      setPendingOrder(data.order)
+      if (data.order.status === "cancelled")
+        throw new Error(
+          "This order was cancelled. Start again below to place a new order.",
+        )
+      if (data.order.paymentMethod !== method)
+        throw new Error(
+          "This checkout already has an order. Open it below, or cancel it before choosing another payment method.",
+        )
+      if (data.order.paymentMethod === "cod") {
         writeStorage("lt.checkout-key", null)
+        setCart((old) =>
+          old.flatMap((line) => {
+            const purchased = data.order.items.find(
+              (i) => cartKey(i) === cartKey(line),
+            )
+            return !purchased
+              ? [line]
+              : line.quantity > purchased.quantity
+                ? [{ ...line, quantity: line.quantity - purchased.quantity }]
+                : []
+          }),
+        )
+        refresh().catch(() => {})
         navigate("/account/orders/" + data.order.id + "/")
-        notify("Your confirmation request has been sent to the store.")
+        notify(
+          fulfillment === "delivery"
+            ? "Order placed. Pay when it is delivered."
+            : "Order placed. Pay when you collect it.",
+        )
         return
       }
       const payment = await post("orders/" + data.order.id + "/pay")
       location.assign(payment.url)
     } catch (err) {
       setError(err.message)
+      refresh().catch(() => {})
     } finally {
       setBusy(false)
     }
@@ -320,10 +395,7 @@ export function Checkout() {
         items={[{ label: "Cart", href: "/cart/" }, { label: "Checkout" }]}
       />
       <div className="checkout-heading">
-        <PageHeading
-          eyebrow="YOUR NEXT, A LITTLE CLOSER"
-          title="Let’s make it yours."
-        />
+        <PageHeading title="Checkout" />
         <span>
           <LockKeyhole size={15} />
           Secure checkout
@@ -341,9 +413,50 @@ export function Checkout() {
           03 <b>Payment</b>
         </span>
       </div>
-      <form onSubmit={submit} className="checkout-layout">
+      <form
+        onSubmit={submit}
+        className="checkout-layout"
+        onBlur={(e) => track(new FormData(e.currentTarget))}
+      >
         <div className="checkout-form">
           {error && <Notice type="error">{error}</Notice>}
+          {pendingOrder && (
+            <Notice>
+              <a href={"/account/orders/" + pendingOrder.id + "/"}>
+                Open order {pendingOrder.id}
+              </a>
+              {pendingOrder.paymentStatus !== "paid" &&
+                (["pending_payment", "quoted", "cancelled"].includes(
+                  pendingOrder.status,
+                ) ||
+                  (pendingOrder.status === "confirmed" &&
+                    pendingOrder.paymentMethod === "cod")) && (
+                  <button
+                    type="button"
+                    className="text-link"
+                    disabled={busy}
+                    onClick={async () => {
+                      setBusy(true)
+                      try {
+                        if (pendingOrder.status !== "cancelled")
+                          await post("orders/" + pendingOrder.id + "/cancel")
+                        writeStorage("lt.checkout-key", null)
+                        setPendingOrder(null)
+                        setError("")
+                        notify("Checkout reset. You can place a new order.")
+                        navigate("/checkout/?retry=" + Date.now())
+                      } catch (e) {
+                        setError(e.message)
+                      } finally {
+                        setBusy(false)
+                      }
+                    }}
+                  >
+                    Cancel previous order and start again
+                  </button>
+                )}
+            </Notice>
+          )}
           {config.paymentMode === "test" && (
             <Notice>
               This checkout is in Flutterwave test mode. No live payment will be
@@ -386,6 +499,10 @@ export function Checkout() {
                 maxLength={25}
               />
             </div>
+            <p className="checkout-contact-note">
+              We use your contact details for order updates and help completing
+              checkout.
+            </p>
           </section>
           <section className="form-card">
             <div className="form-section-heading">
@@ -417,9 +534,9 @@ export function Checkout() {
                 <span>
                   <strong>Delivery</strong>
                   <small>
-                    {settings.deliveryFee == null
-                      ? "Delivery fee confirmed by the store"
-                      : money(settings.deliveryFee)}
+                    {delivery.fee == null
+                      ? "Calculated by your district"
+                      : money(delivery.fee)}
                   </small>
                 </span>
               </label>
@@ -439,7 +556,14 @@ export function Checkout() {
                   <Field label="Use a saved address">
                     <select
                       value={addressIndex}
-                      onChange={(e) => setAddressIndex(e.target.value)}
+                      onChange={(e) => {
+                        setAddressIndex(e.target.value)
+                        setDistrict(
+                          findDeliveryDistrict(
+                            user.addresses?.[Number(e.target.value)]?.district,
+                          )?.name || "",
+                        )
+                      }}
                     >
                       <option value="">Enter an address</option>
                       {user.addresses.map((a, i) => (
@@ -451,15 +575,21 @@ export function Checkout() {
                   </Field>
                 )}
                 <div className="form-grid">
-                  <Field
-                    label="District / city"
-                    name="district"
-                    placeholder="e.g. Kampala"
-                    defaultValue={saved?.district || ""}
-                    key={"district" + addressIndex}
-                    required
-                    maxLength={100}
-                  />
+                  <Field label="Delivery district">
+                    <select
+                      name="district"
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                      required
+                    >
+                      <option value="">Select a district</option>
+                      {deliveryDistricts.map((d) => (
+                        <option key={d.id} value={d.name}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
                   <Field
                     label="Street, building and delivery directions"
                     name="address"
@@ -471,6 +601,20 @@ export function Checkout() {
                     maxLength={400}
                   />
                 </div>
+                {delivery.fee != null && (
+                  <p className="delivery-estimate">
+                    <Truck size={17} />
+                    <span>
+                      <strong>{money(delivery.fee)} delivery</strong>
+                      {delivery.distanceKm != null && (
+                        <small>
+                          Estimated district distance from Kampala:{" "}
+                          {delivery.distanceKm} km
+                        </small>
+                      )}
+                    </span>
+                  </p>
+                )}
               </>
             )}
           </section>
@@ -481,6 +625,15 @@ export function Checkout() {
             </div>
             <div className="payment-options">
               {[
+                [
+                  "cod",
+                  fulfillment === "delivery"
+                    ? "Cash on delivery"
+                    : "Cash on collection",
+                  fulfillment === "delivery"
+                    ? "Pay when your order arrives."
+                    : "Pay when you collect your order.",
+                ],
                 [
                   "mtn",
                   "MTN Mobile Money",
@@ -497,34 +650,52 @@ export function Checkout() {
                   "Enter card details securely on Flutterwave.",
                 ],
               ].map(([id, title, desc]) => (
-                <label key={id} className={method === id ? "selected" : ""}>
+                <label
+                  key={id}
+                  className={
+                    (method === id ? "selected" : "") +
+                    (id !== "cod" && !config.payments ? " unavailable" : "")
+                  }
+                >
                   <input
                     type="radio"
                     name="paymentMethod"
                     checked={method === id}
+                    disabled={id !== "cod" && !config.payments}
                     onChange={() => setMethod(id)}
                   />
                   <PaymentLogo method={id} decorative />
                   <span>
                     <strong>{title}</strong>
-                    <small>{desc}</small>
+                    <small>
+                      {id !== "cod" && !config.payments
+                        ? "Online payment is currently unavailable."
+                        : desc}
+                    </small>
                   </span>
                   {method === id && <CheckCircle2 size={18} />}
                 </label>
               ))}
             </div>
-            <p className="secure-note">
-              <ShieldCheck size={15} />
-              Payment is completed on Flutterwave. We never ask for your card
-              PIN or mobile money PIN.
-            </p>
-            {!payable && (
-              <Notice>
-                We’ll first confirm the price, stock and fulfillment details.
-                This step sends a request to the store and does not collect a
-                payment.
-              </Notice>
+            {method !== "cod" && (
+              <p className="secure-note">
+                <ShieldCheck size={15} />
+                Payment is completed on Flutterwave. We never ask for your card
+                PIN or mobile money PIN.
+              </p>
             )}
+            {!payable &&
+              lines.some(
+                (l) =>
+                  !l.product?.priceConfirmed ||
+                  !l.product?.stock ||
+                  l.product.stock < l.quantity,
+              ) && (
+                <Notice>
+                  An item is unavailable for checkout. Review your cart before
+                  placing the order.
+                </Notice>
+              )}
           </section>
           <section className="form-card">
             <Field label="Anything we should know? (optional)">
@@ -566,7 +737,7 @@ export function Checkout() {
             ))}
           </div>
           <div className="summary-row">
-            <span>Estimated subtotal</span>
+            <span>Subtotal</span>
             <strong>{money(subtotal)}</strong>
           </div>
           <div className="summary-row">
@@ -578,23 +749,19 @@ export function Checkout() {
             </span>
           </div>
           <div className="summary-total">
-            <span>{payable ? "Total" : "Estimated total"}</span>
+            <span>Total</span>
             <strong>{money(total)}</strong>
           </div>
-          <Button
-            type="submit"
-            busy={busy}
-            disabled={lines.some((line) => !line.product)}
-          >
-            {payable
-              ? "Continue to secure payment"
-              : "Request price & availability"}
+          <Button type="submit" busy={busy} disabled={!payable}>
+            {method === "cod" ? "Place order" : "Continue to secure payment"}
             <ArrowRight size={17} />
           </Button>
           <p className="small muted">
-            {payable
-              ? "You’ll be redirected to Flutterwave to complete your payment."
-              : "The store will contact you before payment. Guide prices are subject to confirmation."}
+            {method === "cod"
+              ? fulfillment === "delivery"
+                ? "Pay the order total when it is delivered."
+                : "Pay the order total when you collect it."
+              : "You’ll be redirected to complete your payment securely."}
           </p>
           <PaymentMarks />
           <a href="/cart/" className="text-link">

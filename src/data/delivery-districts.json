@@ -1,0 +1,819 @@
+{
+  "source": "Uganda Bureau of Statistics administrative boundaries, distributed through OCHA/HDX and UNOSAT",
+  "sourceUrl": "https://data.humdata.org/dataset/cod-ab-uga",
+  "centroidSource": "https://unosat-geodrr.cern.ch/data/rest/services/Hosted/UGA_District_Boundary/FeatureServer/23",
+  "license": "CC BY-IGO",
+  "boundaryVersion": "2020-08-24",
+  "districts": [
+    {
+      "id": "UG3064",
+      "name": "Abim",
+      "latitude": 2.70299,
+      "longitude": 33.75309
+    },
+    {
+      "id": "UG3065",
+      "name": "Adjumani",
+      "latitude": 3.22349,
+      "longitude": 31.76965
+    },
+    {
+      "id": "UG3066",
+      "name": "Agago",
+      "latitude": 2.91013,
+      "longitude": 33.34606
+    },
+    {
+      "id": "UG3067",
+      "name": "Alebtong",
+      "latitude": 2.26668,
+      "longitude": 33.25571
+    },
+    {
+      "id": "UG3068",
+      "name": "Amolatar",
+      "latitude": 1.61987,
+      "longitude": 32.73588
+    },
+    {
+      "id": "UG3069",
+      "name": "Amudat",
+      "latitude": 1.80277,
+      "longitude": 34.87633
+    },
+    {
+      "id": "UG2027",
+      "name": "Amuria",
+      "latitude": 2.00791,
+      "longitude": 33.63802
+    },
+    {
+      "id": "UG3070",
+      "name": "Amuru",
+      "latitude": 3.05143,
+      "longitude": 31.97461
+    },
+    {
+      "id": "UG3071",
+      "name": "Apac",
+      "latitude": 1.87062,
+      "longitude": 32.4294
+    },
+    {
+      "id": "UG3072",
+      "name": "Arua",
+      "latitude": 3.04095,
+      "longitude": 31.05266
+    },
+    {
+      "id": "UG2028",
+      "name": "Budaka",
+      "latitude": 1.05967,
+      "longitude": 33.98857
+    },
+    {
+      "id": "UG2029",
+      "name": "Bududa",
+      "latitude": 1.03198,
+      "longitude": 34.40786
+    },
+    {
+      "id": "UG2030",
+      "name": "Bugiri",
+      "latitude": 0.53128,
+      "longitude": 33.77445
+    },
+    {
+      "id": "UG2031",
+      "name": "Bugweri",
+      "latitude": 0.62675,
+      "longitude": 33.60558
+    },
+    {
+      "id": "UG4101",
+      "name": "Buhweju",
+      "latitude": -0.32891,
+      "longitude": 30.35018
+    },
+    {
+      "id": "UG1001",
+      "name": "Buikwe",
+      "latitude": 0.30576,
+      "longitude": 33.0404
+    },
+    {
+      "id": "UG2032",
+      "name": "Bukedea",
+      "latitude": 1.36228,
+      "longitude": 34.12431
+    },
+    {
+      "id": "UG1002",
+      "name": "Bukomansimbi",
+      "latitude": -0.12971,
+      "longitude": 31.62826
+    },
+    {
+      "id": "UG2033",
+      "name": "Bukwo",
+      "latitude": 1.27852,
+      "longitude": 34.68632
+    },
+    {
+      "id": "UG2034",
+      "name": "Bulambuli",
+      "latitude": 1.36446,
+      "longitude": 34.35971
+    },
+    {
+      "id": "UG4102",
+      "name": "Buliisa",
+      "latitude": 1.95989,
+      "longitude": 31.39165
+    },
+    {
+      "id": "UG4103",
+      "name": "Bundibugyo",
+      "latitude": 0.69555,
+      "longitude": 30.05623
+    },
+    {
+      "id": "UG4104",
+      "name": "Bunyangabu",
+      "latitude": 0.49483,
+      "longitude": 30.17253
+    },
+    {
+      "id": "UG4105",
+      "name": "Bushenyi",
+      "latitude": -0.48376,
+      "longitude": 30.15185
+    },
+    {
+      "id": "UG2035",
+      "name": "Busia",
+      "latitude": 0.41184,
+      "longitude": 34.00535
+    },
+    {
+      "id": "UG2036",
+      "name": "Butaleja",
+      "latitude": 0.88357,
+      "longitude": 33.93406
+    },
+    {
+      "id": "UG1003",
+      "name": "Butambala",
+      "latitude": 0.15369,
+      "longitude": 32.07471
+    },
+    {
+      "id": "UG2037",
+      "name": "Butebo",
+      "latitude": 1.18223,
+      "longitude": 33.98429
+    },
+    {
+      "id": "UG1004",
+      "name": "Buvuma",
+      "latitude": -0.39168,
+      "longitude": 33.20888
+    },
+    {
+      "id": "UG2038",
+      "name": "Buyende",
+      "latitude": 1.2605,
+      "longitude": 33.14687
+    },
+    {
+      "id": "UG3073",
+      "name": "Dokolo",
+      "latitude": 1.93734,
+      "longitude": 33.0759
+    },
+    {
+      "id": "UG1005",
+      "name": "Gomba",
+      "latitude": 0.19567,
+      "longitude": 31.70265
+    },
+    {
+      "id": "UG3074",
+      "name": "Gulu",
+      "latitude": 2.97483,
+      "longitude": 32.3951
+    },
+    {
+      "id": "UG4106",
+      "name": "Hoima",
+      "latitude": 1.58184,
+      "longitude": 31.21389
+    },
+    {
+      "id": "UG4107",
+      "name": "Ibanda",
+      "latitude": -0.07917,
+      "longitude": 30.48953
+    },
+    {
+      "id": "UG2039",
+      "name": "Iganga",
+      "latitude": 0.72723,
+      "longitude": 33.47893
+    },
+    {
+      "id": "UG4108",
+      "name": "Isingiro",
+      "latitude": -0.85324,
+      "longitude": 30.87765
+    },
+    {
+      "id": "UG2040",
+      "name": "Jinja",
+      "latitude": 0.56549,
+      "longitude": 33.21272
+    },
+    {
+      "id": "UG3075",
+      "name": "Kaabong",
+      "latitude": 3.54335,
+      "longitude": 34.15563
+    },
+    {
+      "id": "UG4109",
+      "name": "Kabale",
+      "latitude": -1.33088,
+      "longitude": 30.01768
+    },
+    {
+      "id": "UG4110",
+      "name": "Kabarole",
+      "latitude": 0.63594,
+      "longitude": 30.33458
+    },
+    {
+      "id": "UG2041",
+      "name": "Kaberamaido",
+      "latitude": 1.69439,
+      "longitude": 33.12851
+    },
+    {
+      "id": "UG4111",
+      "name": "Kagadi",
+      "latitude": 1.0147,
+      "longitude": 30.81055
+    },
+    {
+      "id": "UG4112",
+      "name": "Kakumiro",
+      "latitude": 0.98464,
+      "longitude": 31.29844
+    },
+    {
+      "id": "UG2042",
+      "name": "Kalaki",
+      "latitude": 1.835,
+      "longitude": 33.33628
+    },
+    {
+      "id": "UG1006",
+      "name": "Kalangala",
+      "latitude": -0.57851,
+      "longitude": 32.44178
+    },
+    {
+      "id": "UG2043",
+      "name": "Kaliro",
+      "latitude": 1.06759,
+      "longitude": 33.48335
+    },
+    {
+      "id": "UG1007",
+      "name": "Kalungu",
+      "latitude": -0.10209,
+      "longitude": 31.80266
+    },
+    {
+      "id": "UG1008",
+      "name": "Kampala",
+      "latitude": 0.31572,
+      "longitude": 32.59696
+    },
+    {
+      "id": "UG2044",
+      "name": "Kamuli",
+      "latitude": 0.93709,
+      "longitude": 33.10749
+    },
+    {
+      "id": "UG4113",
+      "name": "Kamwenge",
+      "latitude": 0.31574,
+      "longitude": 30.55842
+    },
+    {
+      "id": "UG4114",
+      "name": "Kanungu",
+      "latitude": -0.81018,
+      "longitude": 29.72585
+    },
+    {
+      "id": "UG2045",
+      "name": "Kapchorwa",
+      "latitude": 1.34453,
+      "longitude": 34.43004
+    },
+    {
+      "id": "UG2046",
+      "name": "Kapelebyong",
+      "latitude": 2.21339,
+      "longitude": 33.74388
+    },
+    {
+      "id": "UG3076",
+      "name": "Karenga",
+      "latitude": 3.72805,
+      "longitude": 33.7882
+    },
+    {
+      "id": "UG4115",
+      "name": "Kasese",
+      "latitude": 0.11766,
+      "longitude": 30.00188
+    },
+    {
+      "id": "UG1009",
+      "name": "Kassanda",
+      "latitude": 0.53822,
+      "longitude": 31.7548
+    },
+    {
+      "id": "UG2047",
+      "name": "Katakwi",
+      "latitude": 1.92224,
+      "longitude": 34.03813
+    },
+    {
+      "id": "UG1010",
+      "name": "Kayunga",
+      "latitude": 0.98191,
+      "longitude": 32.89254
+    },
+    {
+      "id": "UG4116",
+      "name": "Kazo",
+      "latitude": 0.04152,
+      "longitude": 30.79238
+    },
+    {
+      "id": "UG4117",
+      "name": "Kibaale",
+      "latitude": 0.80221,
+      "longitude": 31.06735
+    },
+    {
+      "id": "UG1011",
+      "name": "Kiboga",
+      "latitude": 0.84024,
+      "longitude": 31.95665
+    },
+    {
+      "id": "UG2048",
+      "name": "Kibuku",
+      "latitude": 1.05344,
+      "longitude": 33.80112
+    },
+    {
+      "id": "UG4118",
+      "name": "Kikuube",
+      "latitude": 1.30802,
+      "longitude": 30.95021
+    },
+    {
+      "id": "UG4119",
+      "name": "Kiruhura",
+      "latitude": -0.34968,
+      "longitude": 30.91488
+    },
+    {
+      "id": "UG4120",
+      "name": "Kiryandongo",
+      "latitude": 2.02293,
+      "longitude": 32.04085
+    },
+    {
+      "id": "UG4121",
+      "name": "Kisoro",
+      "latitude": -1.21725,
+      "longitude": 29.68019
+    },
+    {
+      "id": "UG4122",
+      "name": "Kitagwenda",
+      "latitude": 0.01222,
+      "longitude": 30.34111
+    },
+    {
+      "id": "UG3077",
+      "name": "Kitgum",
+      "latitude": 3.39801,
+      "longitude": 33.25808
+    },
+    {
+      "id": "UG3078",
+      "name": "Koboko",
+      "latitude": 3.52558,
+      "longitude": 31.00798
+    },
+    {
+      "id": "UG3079",
+      "name": "Kole",
+      "latitude": 2.29153,
+      "longitude": 32.76627
+    },
+    {
+      "id": "UG3080",
+      "name": "Kotido",
+      "latitude": 3.02409,
+      "longitude": 33.9881
+    },
+    {
+      "id": "UG2049",
+      "name": "Kumi",
+      "latitude": 1.47356,
+      "longitude": 33.96144
+    },
+    {
+      "id": "UG3081",
+      "name": "Kwania",
+      "latitude": 1.91678,
+      "longitude": 32.73415
+    },
+    {
+      "id": "UG2050",
+      "name": "Kween",
+      "latitude": 1.43664,
+      "longitude": 34.56952
+    },
+    {
+      "id": "UG1012",
+      "name": "Kyankwanzi",
+      "latitude": 1.1214,
+      "longitude": 31.64158
+    },
+    {
+      "id": "UG4123",
+      "name": "Kyegegwa",
+      "latitude": 0.45067,
+      "longitude": 31.00209
+    },
+    {
+      "id": "UG4124",
+      "name": "Kyenjojo",
+      "latitude": 0.65627,
+      "longitude": 30.66237
+    },
+    {
+      "id": "UG1013",
+      "name": "Kyotera",
+      "latitude": -0.80573,
+      "longitude": 31.66036
+    },
+    {
+      "id": "UG3082",
+      "name": "Lamwo",
+      "latitude": 3.55061,
+      "longitude": 32.72386
+    },
+    {
+      "id": "UG3083",
+      "name": "Lira",
+      "latitude": 2.30355,
+      "longitude": 32.96345
+    },
+    {
+      "id": "UG2051",
+      "name": "Luuka",
+      "latitude": 0.80393,
+      "longitude": 33.33849
+    },
+    {
+      "id": "UG1014",
+      "name": "Luwero",
+      "latitude": 0.82894,
+      "longitude": 32.58325
+    },
+    {
+      "id": "UG1015",
+      "name": "Lwengo",
+      "latitude": -0.41336,
+      "longitude": 31.42586
+    },
+    {
+      "id": "UG1016",
+      "name": "Lyantonde",
+      "latitude": -0.22313,
+      "longitude": 31.18807
+    },
+    {
+      "id": "UG3084",
+      "name": "Madi Okollo",
+      "latitude": 2.85312,
+      "longitude": 31.23118
+    },
+    {
+      "id": "UG2052",
+      "name": "Manafwa",
+      "latitude": 0.8751,
+      "longitude": 34.27093
+    },
+    {
+      "id": "UG3085",
+      "name": "Maracha",
+      "latitude": 3.23694,
+      "longitude": 30.92692
+    },
+    {
+      "id": "UG1017",
+      "name": "Masaka",
+      "latitude": -0.49126,
+      "longitude": 31.85558
+    },
+    {
+      "id": "UG4125",
+      "name": "Masindi",
+      "latitude": 1.74385,
+      "longitude": 31.71229
+    },
+    {
+      "id": "UG2053",
+      "name": "Mayuge",
+      "latitude": -0.0885,
+      "longitude": 33.55178
+    },
+    {
+      "id": "UG2054",
+      "name": "Mbale",
+      "latitude": 1.01924,
+      "longitude": 34.19842
+    },
+    {
+      "id": "UG4126",
+      "name": "Mbarara",
+      "latitude": -0.49329,
+      "longitude": 30.60633
+    },
+    {
+      "id": "UG4127",
+      "name": "Mitooma",
+      "latitude": -0.6243,
+      "longitude": 30.02254
+    },
+    {
+      "id": "UG1018",
+      "name": "Mityana",
+      "latitude": 0.44325,
+      "longitude": 32.05965
+    },
+    {
+      "id": "UG3086",
+      "name": "Moroto",
+      "latitude": 2.64869,
+      "longitude": 34.63165
+    },
+    {
+      "id": "UG3087",
+      "name": "Moyo",
+      "latitude": 3.64281,
+      "longitude": 31.76585
+    },
+    {
+      "id": "UG1019",
+      "name": "Mpigi",
+      "latitude": 0.06705,
+      "longitude": 32.15897
+    },
+    {
+      "id": "UG1020",
+      "name": "Mubende",
+      "latitude": 0.50404,
+      "longitude": 31.37908
+    },
+    {
+      "id": "UG1021",
+      "name": "Mukono",
+      "latitude": 0.2756,
+      "longitude": 32.77354
+    },
+    {
+      "id": "UG3088",
+      "name": "Nabilatuk",
+      "latitude": 2.02398,
+      "longitude": 34.50319
+    },
+    {
+      "id": "UG3089",
+      "name": "Nakapiripirit",
+      "latitude": 1.78101,
+      "longitude": 34.608
+    },
+    {
+      "id": "UG1022",
+      "name": "Nakaseke",
+      "latitude": 1.04873,
+      "longitude": 32.16925
+    },
+    {
+      "id": "UG1023",
+      "name": "Nakasongola",
+      "latitude": 1.35194,
+      "longitude": 32.42563
+    },
+    {
+      "id": "UG2055",
+      "name": "Namayingo",
+      "latitude": -0.31738,
+      "longitude": 33.80457
+    },
+    {
+      "id": "UG2056",
+      "name": "Namisindwa",
+      "latitude": 0.8766,
+      "longitude": 34.37284
+    },
+    {
+      "id": "UG2057",
+      "name": "Namutumba",
+      "latitude": 0.86866,
+      "longitude": 33.68173
+    },
+    {
+      "id": "UG3090",
+      "name": "Napak",
+      "latitude": 2.39225,
+      "longitude": 34.2638
+    },
+    {
+      "id": "UG3091",
+      "name": "Nebbi",
+      "latitude": 2.43023,
+      "longitude": 31.17742
+    },
+    {
+      "id": "UG2058",
+      "name": "Ngora",
+      "latitude": 1.49635,
+      "longitude": 33.75444
+    },
+    {
+      "id": "UG4128",
+      "name": "Ntoroko",
+      "latitude": 1.01047,
+      "longitude": 30.36319
+    },
+    {
+      "id": "UG4129",
+      "name": "Ntungamo",
+      "latitude": -0.94212,
+      "longitude": 30.27224
+    },
+    {
+      "id": "UG3092",
+      "name": "Nwoya",
+      "latitude": 2.52841,
+      "longitude": 31.83744
+    },
+    {
+      "id": "UG3093",
+      "name": "Obongi",
+      "latitude": 3.392,
+      "longitude": 31.55684
+    },
+    {
+      "id": "UG3094",
+      "name": "Omoro",
+      "latitude": 2.66759,
+      "longitude": 32.46817
+    },
+    {
+      "id": "UG3095",
+      "name": "Otuke",
+      "latitude": 2.47492,
+      "longitude": 33.38256
+    },
+    {
+      "id": "UG3096",
+      "name": "Oyam",
+      "latitude": 2.37221,
+      "longitude": 32.48438
+    },
+    {
+      "id": "UG3097",
+      "name": "Pader",
+      "latitude": 2.92938,
+      "longitude": 32.8675
+    },
+    {
+      "id": "UG3098",
+      "name": "Pakwach",
+      "latitude": 2.49314,
+      "longitude": 31.37024
+    },
+    {
+      "id": "UG2059",
+      "name": "Pallisa",
+      "latitude": 1.23145,
+      "longitude": 33.67531
+    },
+    {
+      "id": "UG1024",
+      "name": "Rakai",
+      "latitude": -0.70701,
+      "longitude": 31.30366
+    },
+    {
+      "id": "UG4130",
+      "name": "Rubanda",
+      "latitude": -1.17106,
+      "longitude": 29.86602
+    },
+    {
+      "id": "UG4131",
+      "name": "Rubirizi",
+      "latitude": -0.26022,
+      "longitude": 29.9924
+    },
+    {
+      "id": "UG4132",
+      "name": "Rukiga",
+      "latitude": -1.15052,
+      "longitude": 30.09126
+    },
+    {
+      "id": "UG4133",
+      "name": "Rukungiri",
+      "latitude": -0.70592,
+      "longitude": 29.88902
+    },
+    {
+      "id": "UG4134",
+      "name": "Rwampara",
+      "latitude": -0.74637,
+      "longitude": 30.49346
+    },
+    {
+      "id": "UG2060",
+      "name": "Serere",
+      "latitude": 1.48811,
+      "longitude": 33.37235
+    },
+    {
+      "id": "UG4135",
+      "name": "Sheema",
+      "latitude": -0.60364,
+      "longitude": 30.32664
+    },
+    {
+      "id": "UG2061",
+      "name": "Sironko",
+      "latitude": 1.17158,
+      "longitude": 34.31871
+    },
+    {
+      "id": "UG2062",
+      "name": "Soroti",
+      "latitude": 1.77108,
+      "longitude": 33.59095
+    },
+    {
+      "id": "UG1025",
+      "name": "Ssembabule",
+      "latitude": -0.02646,
+      "longitude": 31.33989
+    },
+    {
+      "id": "UG2063",
+      "name": "Tororo",
+      "latitude": 0.72497,
+      "longitude": 34.08225
+    },
+    {
+      "id": "UG1026",
+      "name": "Wakiso",
+      "latitude": 0.22038,
+      "longitude": 32.44603
+    },
+    {
+      "id": "UG3099",
+      "name": "Yumbe",
+      "latitude": 3.52053,
+      "longitude": 31.28872
+    },
+    {
+      "id": "UG3100",
+      "name": "Zombo",
+      "latitude": 2.51874,
+      "longitude": 30.89543
+    }
+  ]
+}

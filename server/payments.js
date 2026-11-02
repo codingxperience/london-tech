@@ -29,6 +29,7 @@ export async function flutterwave(path, options = {}) {
 
 export function matchesPayment(order, payment) {
   return (
+    order.details?.paymentMethod !== "cod" &&
     payment.status === "successful" &&
     payment.tx_ref === order.id &&
     payment.currency === order.currency &&
@@ -158,6 +159,10 @@ export async function verifyPayment(db, transactionId, expectedOrderId) {
     await tx.query("DELETE FROM stock_reservations WHERE order_id=$1", [
       order.id,
     ])
+    await tx.query(
+      "UPDATE checkout_attempts SET state='completed',updated_at=NOW() WHERE order_id=$1",
+      [order.id],
+    )
 
     await tx.query(
       "INSERT INTO audit_events(id,action,details) VALUES($1,$2,$3::jsonb)",

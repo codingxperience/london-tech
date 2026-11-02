@@ -121,6 +121,9 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS newsletter_subscribers (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, token_hash TEXT NOT NULL UNIQUE, status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','unsubscribed')), consent_version TEXT NOT NULL, consented_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), unsubscribed_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
 
     `CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), idempotency_key TEXT NOT NULL, status TEXT NOT NULL, payment_status TEXT NOT NULL DEFAULT 'unpaid', amount BIGINT, currency TEXT NOT NULL DEFAULT 'UGX', details JSONB NOT NULL, transaction_id TEXT UNIQUE, expires_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), UNIQUE(user_id,idempotency_key))`,
+    `CREATE TABLE IF NOT EXISTS checkout_attempts (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,state TEXT NOT NULL DEFAULT 'started',details JSONB NOT NULL DEFAULT '{}',order_id TEXT REFERENCES orders(id) ON DELETE SET NULL,follow_up_status TEXT NOT NULL DEFAULT 'open',follow_up_note TEXT NOT NULL DEFAULT '',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `CREATE INDEX IF NOT EXISTS checkout_attempts_updated_idx ON checkout_attempts(updated_at DESC)`,
+    `CREATE INDEX IF NOT EXISTS checkout_attempts_order_idx ON checkout_attempts(order_id)`,
 
     `CREATE TABLE IF NOT EXISTS stock_reservations (order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE, product_id TEXT NOT NULL REFERENCES products(id), quantity INTEGER NOT NULL CHECK(quantity>0), expires_at TIMESTAMPTZ NOT NULL, PRIMARY KEY(order_id,product_id))`,
 
@@ -159,6 +162,7 @@ async function initialize() {
       "audience_visitors",
       "newsletter_subscribers",
       "orders",
+      "checkout_attempts",
       "stock_reservations",
       "wishlists",
       "reviews",
