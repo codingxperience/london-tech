@@ -6,16 +6,11 @@
   "functions": {
     "api/router.js": {
       "maxDuration": 30,
-      "includeFiles": [
-        "server/certs/**"
-      ]
+      "includeFiles": "server/certs/**"
     },
     "api/pages.js": {
       "maxDuration": 30,
-      "includeFiles": [
-        ".output/server/**",
-        "server/certs/**"
-      ]
+      "includeFiles": "{.output/server/**,server/certs/**}"
     }
   },
   "trailingSlash": true,
