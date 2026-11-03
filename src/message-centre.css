@@ -61,6 +61,50 @@
   border-radius: 50%;
   background: var(--workspace-success, #167453);
 }
+.message-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 19px;
+  min-height: 19px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: #b91f3d;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+.admin-topbar .icon-button:has(.admin-message-count) {
+  position: relative;
+}
+.admin-topbar .admin-message-count {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: -6px;
+  inset-inline-end: -5px;
+  border: 2px solid var(--workspace-paper, #fff);
+  min-width: 21px;
+  min-height: 21px;
+}
+.message-row-meta {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+.message-centre .message-thread-title .message-typing {
+  color: var(--workspace-accent, #174c79);
+  font-weight: 750;
+}
+.message-queue {
+  margin: 0;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--chat-line);
+  background: var(--chat-soft);
+  color: var(--chat-muted);
+  font-size: 13px;
+}
 .message-centre .message-inbox-head h2,
 .message-centre .message-thread-title h3 {
   margin: 0;

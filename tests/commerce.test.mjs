@@ -825,7 +825,7 @@ test("customer conversations preserve ownership, accept store replies and record
         cookie: adminCookie,
       })
     ).data,
-    { version: inbox.version, threads: null },
+    { ...inbox, threads: null },
   )
   const customerInbox = (await request("messages", { cookie: customerCookie }))
     .data
@@ -916,5 +916,141 @@ test("customer conversations preserve ownership, accept store replies and record
     !overview.events.some((e) =>
       JSON.stringify(e.details).includes("One more question"),
     ),
+  )
+})
+
+test("message activity tracks unread receipts, expiring typing and the support queue", async () => {
+  const second = await request("auth/register", {
+    method: "POST",
+    body: {
+      name: "Queue test customer",
+      email: "queue-test@example.com",
+      password: "Another-test-password-79!",
+    },
+  })
+  assert.equal(second.status, 201)
+  const firstThread = (
+    await request("messages", {
+      method: "POST",
+      cookie: customerCookie,
+      body: {
+        subject: "First queue request",
+        body: "I'm waiting for support.",
+      },
+    })
+  ).data.thread
+  // The preceding message test may leave an older, open thread. Compare with
+  // the second thread instead of assuming the inbox started empty.
+  const secondThread = (
+    await request("messages", {
+      method: "POST",
+      cookie: second.cookie,
+      body: { subject: "Second queue request", body: "Can you help?" },
+    })
+  ).data.thread
+  const read = (threadId, messageId, cookie = adminCookie) =>
+    request(`messages/${threadId}/read`, {
+      method: "POST",
+      cookie,
+      body: { messageId },
+    })
+  const typing = (threadId, cookie, value) =>
+    request(`messages/${threadId}/typing`, {
+      method: "POST",
+      cookie,
+      body: { typing: value },
+    })
+  const inbox = async (path, cookie) => (await request(path, { cookie })).data
+  const firstMessageId = firstThread.messages[0].id
+  const firstAdminInbox = await inbox("admin/messages", adminCookie)
+  const firstAhead = firstAdminInbox.threads.find(
+    (t) => t.id === firstThread.id,
+  ).queueAhead
+  const secondInbox = await inbox("messages", second.cookie)
+  assert.equal(secondInbox.threads[0].queueAhead, firstAhead + 1)
+  assert.equal(
+    (await read(firstThread.id, firstMessageId, second.cookie)).status,
+    404,
+  )
+  assert.equal(
+    (await read(firstThread.id, firstMessageId, customerCookie)).status,
+    404,
+  )
+  assert.equal((await typing(firstThread.id, second.cookie, true)).status, 404)
+  assert.equal((await typing(firstThread.id, adminCookie, true)).status, 200)
+  const typingInbox = await inbox("messages", customerCookie)
+  assert.equal(
+    typingInbox.threads.find((t) => t.id === firstThread.id).otherTyping,
+    true,
+  )
+  assert.equal(
+    (await inbox("admin/messages", adminCookie)).threads.find(
+      (t) => t.id === firstThread.id,
+    ).otherTyping,
+    false,
+  )
+  await db.query(
+    "UPDATE message_threads SET admin_typing_until=NOW()-INTERVAL '1 second' WHERE id=$1",
+    [firstThread.id],
+  )
+  const expired = await inbox(
+    "messages?version=" + typingInbox.version,
+    customerCookie,
+  )
+  assert.equal(
+    expired.threads.find((t) => t.id === firstThread.id).otherTyping,
+    false,
+  )
+
+  const newMessage = await request(`messages/${firstThread.id}/replies`, {
+    method: "POST",
+    cookie: customerCookie,
+    body: { body: "One more detail." },
+  })
+  const newId = newMessage.data.thread.messages.at(-1).id
+  const summary = await inbox("admin/messages?summary=1", adminCookie)
+  assert.equal(summary.latestInboundId, newId)
+  assert.equal(summary.threads, undefined)
+  assert.equal((await read(firstThread.id, firstMessageId)).status, 200)
+  const readFirst = await inbox("admin/messages", adminCookie)
+  assert.equal(
+    readFirst.threads.find((t) => t.id === firstThread.id).unreadCount,
+    1,
+  )
+  assert.equal(readFirst.latestInboundId, newId)
+  assert.equal(readFirst.unreadTotal, summary.unreadTotal - 1)
+  assert.equal((await read(firstThread.id, newId)).status, 200)
+  assert.equal((await read(firstThread.id, firstMessageId)).status, 200)
+  assert.equal(
+    (await inbox("admin/messages", adminCookie)).threads.find(
+      (t) => t.id === firstThread.id,
+    ).unreadCount,
+    0,
+  )
+
+  const answered = await request(`messages/${firstThread.id}/replies`, {
+    method: "POST",
+    cookie: adminCookie,
+    body: { body: "We're happy to help." },
+  })
+  assert.equal(answered.status, 200)
+  const newQueue = await inbox(
+    "messages?version=" + secondInbox.version,
+    second.cookie,
+  )
+  assert.equal(newQueue.threads[0].queueAhead, firstAhead)
+  const delivered = await inbox("messages", customerCookie)
+  const reply = delivered.threads.find((t) => t.id === firstThread.id)
+  assert.equal(reply.unreadCount, 1)
+  assert.equal(reply.queueAhead, null)
+  assert.equal(reply.admin_typing_until, undefined)
+  const replyId = reply.messages.at(-1).id
+  assert.equal(
+    (await read(firstThread.id, replyId, customerCookie)).status,
+    200,
+  )
+  assert.equal(
+    (await inbox("messages?summary=1", customerCookie)).unreadTotal,
+    delivered.unreadTotal - 1,
   )
 })

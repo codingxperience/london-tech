@@ -8,6 +8,8 @@ import {
   RefreshCw,
   Search,
   Send,
+  Volume2,
+  VolumeX,
 } from "lucide-react"
 import { api } from "../lib/api.js"
 import { Button, Empty, Field, Modal, Notice } from "./ui.jsx"
@@ -42,6 +44,7 @@ export function MessageCentre({
   preview = false,
   changed,
   synced,
+  alerts,
   workspaceQuery = "",
 }) {
   const [threads, setThreads] = useState(supplied || []),
@@ -57,6 +60,14 @@ export function MessageCentre({
   const refreshInbox = useRef(null)
   const messages = useRef(null)
   const followingLatest = useRef(true)
+  const [atLatest, setAtLatest] = useState(true)
+  const typing = useRef({
+    pending: Promise.resolve(),
+    id: null,
+    lastSent: 0,
+    timer: null,
+  })
+  const readThrough = useRef(null)
   const inboxSearch = useRef(null)
   const conversationTitle = useRef(null)
   useEffect(() => {
@@ -127,8 +138,15 @@ export function MessageCentre({
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean)
   const ownRole = admin ? "admin" : "customer"
+  const latestInbound = thread?.messages.findLast(
+    (message) => message.role !== ownRole,
+  )?.id
   const shown = threads
-    .filter((t) => filter === "all" || t.status === filter)
+    .filter((t) => {
+      if (filter === "unread") return t.unreadCount > 0
+      if (filter === "waiting") return t.queueAhead != null
+      return filter === "all" || t.status === filter
+    })
     .filter((t) => {
       const fields = [
         t.subject,
@@ -140,7 +158,11 @@ export function MessageCentre({
         fields.some((value) => value?.toLowerCase().includes(term)),
       )
     })
-    .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
+    .sort((a, b) =>
+      filter === "waiting"
+        ? a.queueAhead - b.queueAhead
+        : Date.parse(b.updated_at) - Date.parse(a.updated_at),
+    )
   const messageCount = thread?.messages.length
 
   useEffect(() => {
@@ -148,8 +170,122 @@ export function MessageCentre({
       messages.current.scrollTop = messages.current.scrollHeight
   }, [selected, messageCount])
 
+  useEffect(() => {
+    if (
+      preview ||
+      !thread?.id ||
+      !latestInbound ||
+      !thread.unreadCount ||
+      !atLatest
+    )
+      return
+    const id = thread.id
+    let active = true
+    let retry
+    function markViewed() {
+      if (
+        document.hidden ||
+        !document.hasFocus() ||
+        readThrough.current === latestInbound
+      )
+        return
+      window.clearTimeout(retry)
+      readThrough.current = latestInbound
+      api(`messages/${id}/read/`, {
+        method: "POST",
+        body: { messageId: latestInbound },
+        signal: AbortSignal.timeout(10000),
+      })
+        .then(() => {
+          setThreads((current) =>
+            current.map((entry) =>
+              entry.id === id &&
+              entry.messages.findLast((message) => message.role !== ownRole)
+                ?.id === latestInbound
+                ? { ...entry, unreadCount: 0 }
+                : entry,
+            ),
+          )
+          alerts?.refresh()
+        })
+        .catch((error) => {
+          if (readThrough.current === latestInbound) readThrough.current = null
+          if (active && (!error.status || error.status >= 500))
+            retry = window.setTimeout(markViewed, 3000)
+        })
+    }
+    markViewed()
+    window.addEventListener("focus", markViewed)
+    document.addEventListener("visibilitychange", markViewed)
+    return () => {
+      active = false
+      window.clearTimeout(retry)
+      window.removeEventListener("focus", markViewed)
+      document.removeEventListener("visibilitychange", markViewed)
+    }
+  }, [
+    atLatest,
+    latestInbound,
+    ownRole,
+    preview,
+    thread?.id,
+    thread?.unreadCount,
+    alerts?.refresh,
+  ])
+
+  function sendTyping(id, active) {
+    const state = typing.current
+    state.pending = state.pending
+      .then(() =>
+        api(`messages/${id}/typing/`, {
+          method: "POST",
+          body: { typing: active },
+          signal: AbortSignal.timeout(4000),
+          keepalive: !active,
+        }),
+      )
+      .catch(() => {})
+  }
+
+  function stopTyping() {
+    const state = typing.current
+    window.clearTimeout(state.timer)
+    if (!state.id) return
+    sendTyping(state.id, false)
+    state.id = null
+    state.lastSent = 0
+  }
+
+  function trackTyping(value) {
+    if (preview || !selected) return
+    if (!value.trim()) return stopTyping()
+    const state = typing.current
+    const now = Date.now()
+    if (state.id !== selected) stopTyping()
+    if (now - state.lastSent >= 2500) {
+      state.id = selected
+      state.lastSent = now
+      sendTyping(selected, true)
+    }
+    window.clearTimeout(state.timer)
+    state.timer = window.setTimeout(stopTyping, 3000)
+  }
+
+  useEffect(() => {
+    const onHide = () => {
+      if (document.hidden) stopTyping()
+    }
+    document.addEventListener("visibilitychange", onHide)
+    return () => {
+      document.removeEventListener("visibilitychange", onHide)
+      stopTyping()
+    }
+  }, [])
+
   function openThread(id) {
+    stopTyping()
     followingLatest.current = true
+    setAtLatest(true)
     setSelected(id)
     setError("")
     setReply("")
@@ -159,7 +295,11 @@ export function MessageCentre({
   }
 
   async function update(action, body) {
-    if (action === "reply") followingLatest.current = true
+    if (action === "reply") {
+      stopTyping()
+      followingLatest.current = true
+      setAtLatest(true)
+    }
     setBusy(true)
     setError("")
     try {
@@ -266,6 +406,26 @@ export function MessageCentre({
               )}
             </div>
             <div className="message-inbox-actions">
+              {!preview && alerts && (
+                <button
+                  type="button"
+                  className="message-refresh"
+                  aria-label="Message sound"
+                  aria-pressed={alerts.enabled}
+                  title={
+                    alerts.enabled
+                      ? "Mute message sound"
+                      : "Enable message sound"
+                  }
+                  onClick={alerts.toggle}
+                >
+                  {alerts.enabled ? (
+                    <Volume2 size={17} aria-hidden="true" />
+                  ) : (
+                    <VolumeX size={17} aria-hidden="true" />
+                  )}
+                </button>
+              )}
               {!preview && (
                 <button
                   type="button"
@@ -308,6 +468,10 @@ export function MessageCentre({
               onChange={(e) => setFilter(e.target.value)}
             >
               <option value="all">All conversations</option>
+              {!preview && <option value="unread">Unread</option>}
+              {admin && !preview && (
+                <option value="waiting">Waiting for reply</option>
+              )}
               <option value="open">Open</option>
               <option value="resolved">Resolved</option>
             </select>
@@ -331,6 +495,7 @@ export function MessageCentre({
                       <span>
                         {counterpart(t)}
                         {t.status === "resolved" && " · Resolved"}
+                        {admin && t.queueAhead != null && " · Waiting"}
                       </span>
                       {last && (
                         <small>
@@ -339,9 +504,19 @@ export function MessageCentre({
                         </small>
                       )}
                     </span>
-                    <time dateTime={t.updated_at}>
-                      {shortDate.format(new Date(t.updated_at))}
-                    </time>
+                    <span className="message-row-meta">
+                      <time dateTime={t.updated_at}>
+                        {shortDate.format(new Date(t.updated_at))}
+                      </time>
+                      {t.unreadCount > 0 && (
+                        <span
+                          className="message-count"
+                          aria-label={`${t.unreadCount} unread messages`}
+                        >
+                          {t.unreadCount > 99 ? "99+" : t.unreadCount}
+                        </span>
+                      )}
+                    </span>
                   </button>
                 )
               })
@@ -369,6 +544,7 @@ export function MessageCentre({
                   className="message-back"
                   aria-label="Back to inbox"
                   onClick={() => {
+                    stopTyping()
                     setSelected(null)
                     setReply("")
                     window.requestAnimationFrame(() =>
@@ -384,9 +560,17 @@ export function MessageCentre({
                   <h3 ref={conversationTitle} tabIndex={-1}>
                     {thread.subject}
                   </h3>
-                  <p>
-                    {counterpart(thread)} ·{" "}
-                    {thread.status === "resolved" ? "Resolved" : "Open"}
+                  <p
+                    role="status"
+                    className={
+                      thread.otherTyping ? "message-typing" : undefined
+                    }
+                  >
+                    {thread.otherTyping
+                      ? `${counterpart(thread)} is typing…`
+                      : `${counterpart(thread)} · ${
+                          thread.status === "resolved" ? "Resolved" : "Open"
+                        }`}
                   </p>
                 </div>
                 {admin && (
@@ -406,6 +590,17 @@ export function MessageCentre({
                   </Button>
                 )}
               </header>
+              {!admin && thread.queueAhead != null && (
+                <p className="message-queue" role="status">
+                  {thread.queueAhead === 0
+                    ? "You’re next in the support queue."
+                    : `${thread.queueAhead} ${
+                        thread.queueAhead === 1
+                          ? "conversation"
+                          : "conversations"
+                      } ahead of you.`}
+                </p>
+              )}
               <div
                 className="message-bubbles"
                 ref={messages}
@@ -414,6 +609,7 @@ export function MessageCentre({
                     e.currentTarget
                   followingLatest.current =
                     scrollHeight - scrollTop - clientHeight < 48
+                  setAtLatest(followingLatest.current)
                 }}
                 role="log"
                 aria-label="Conversation messages"
@@ -454,7 +650,11 @@ export function MessageCentre({
                   aria-label="Your reply"
                   placeholder="Write a reply…"
                   value={reply}
-                  onChange={(e) => setReply(e.target.value)}
+                  onBlur={stopTyping}
+                  onChange={(e) => {
+                    setReply(e.target.value)
+                    trackTyping(e.target.value)
+                  }}
                 />
                 <Button
                   busy={busy}

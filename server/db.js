@@ -113,6 +113,11 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS content_pages (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
     `CREATE UNIQUE INDEX IF NOT EXISTS content_pages_slug_idx ON content_pages((data->>'slug'))`,
     `CREATE TABLE IF NOT EXISTS message_threads (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, subject TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open','resolved')), messages JSONB NOT NULL DEFAULT '[]', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `ALTER TABLE message_threads
+      ADD COLUMN IF NOT EXISTS admin_read_count INTEGER NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS customer_read_count INTEGER NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS admin_typing_until TIMESTAMPTZ,
+      ADD COLUMN IF NOT EXISTS customer_typing_until TIMESTAMPTZ`,
     `CREATE INDEX IF NOT EXISTS message_threads_user_idx ON message_threads(user_id,updated_at DESC)`,
     `CREATE TABLE IF NOT EXISTS audience_meta (id TEXT PRIMARY KEY, started_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
     `INSERT INTO audience_meta(id) VALUES('traffic') ON CONFLICT(id) DO NOTHING`,

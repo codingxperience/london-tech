@@ -13,6 +13,7 @@ import "../admin-navigation.css"
 import "../admin-theme.css"
 import { PaymentMarks } from "../components/PaymentMarks.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
+import { useMessageAlerts } from "../lib/message-alerts.js"
 import React, { useCallback, useEffect, useState, useRef } from "react"
 
 import {
@@ -157,6 +158,10 @@ export default function Admin({
     [collapsed],
   )
   const { user, authLoading, logout, refresh } = useStore()
+  const messageAlerts = useMessageAlerts(
+    !preview && user?.role === "admin" ? user.id : null,
+    true,
+  )
   const [preferences, updatePreferences] = useState(() => ({
     ...preferenceDefaults,
     ...readStorage("lt.admin.preferences.v1", {}),
@@ -279,9 +284,9 @@ export default function Admin({
   }
 
   async function load() {
+    setError("")
     try {
       setData(await api("admin/overview"))
-      setError("")
     } catch (e) {
       setError(e.message)
     }
@@ -305,7 +310,7 @@ export default function Admin({
   if (authLoading && !preview)
     return (
       <div className="admin-gate">
-        <p>Opening the store console…</p>
+        <p role="status">Opening the store console…</p>
       </div>
     )
 
@@ -344,11 +349,13 @@ export default function Admin({
     return (
       <div className="admin-gate">
         {error ? (
-          <Notice type="error">{error}</Notice>
+          <>
+            <Notice type="error">{error}</Notice>
+            <Button onClick={load}>Retry</Button>
+          </>
         ) : (
-          <p>Loading store data…</p>
+          <p role="status">Loading store data…</p>
         )}
-        <Button onClick={load}>Retry</Button>
       </div>
     )
 
@@ -586,10 +593,21 @@ export default function Admin({
             <a
               href={base + "messages/"}
               className="icon-button"
-              aria-label="Open customer messages"
+              aria-label={
+                messageAlerts.unread
+                  ? `Open customer messages, ${messageAlerts.unread} unread`
+                  : "Open customer messages"
+              }
             >
               <MessageSquare size={19} />
-              {data.messages?.some((t) => t.status === "open") && <i />}
+              {messageAlerts.unread > 0 && (
+                <span
+                  className="message-count admin-message-count"
+                  aria-hidden="true"
+                >
+                  {messageAlerts.unread > 99 ? "99+" : messageAlerts.unread}
+                </span>
+              )}
             </a>
             <div className="admin-notification-wrap">
               <IconButton
@@ -617,9 +635,8 @@ export default function Admin({
                     low-stock products
                   </a>
                   <a href={base + "messages/"}>
-                    {data.messages?.filter((t) => t.status === "open").length ||
-                      0}{" "}
-                    open conversations
+                    {messageAlerts.unread} unread{" "}
+                    {messageAlerts.unread === 1 ? "message" : "messages"}
                   </a>
                 </div>
               )}
@@ -791,6 +808,7 @@ export default function Admin({
               preferences={preferences}
               setPreferences={setPreferences}
               syncedMessages={preview ? undefined : syncMessages}
+              messageAlerts={messageAlerts}
               changedMessages={
                 preview
                   ? (messages) =>

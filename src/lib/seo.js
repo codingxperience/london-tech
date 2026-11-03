@@ -42,18 +42,18 @@ const phone = (value) =>
     .replace(/[^+\d]/g, "")
     .replace(/^0/, "+256")
 const curated = {
-  shop: "Phones, Laptops & Electronics",
+  shop: "Shop Electronics",
   "apple-products-london": "Apple Products",
   "iphones-london": "iPhones",
   "samsung-galaxy-ultra-london": "Samsung Galaxy Ultra",
 }
 const info = {
   about: [
-    "About London Tech Uganda",
+    "About the Store",
     "Meet London Tech, your local technology store in Arua Park, Kampala. See the shop, explore our products and watch our community videos.",
   ],
   contact: [
-    "Contact & Visit London Tech Kampala",
+    "Visit Our Kampala Store",
     "Find London Tech in Kampala. Contact the store for products, directions and opening hours.",
   ],
   delivery: [
@@ -115,7 +115,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
     pages = data.pages || []
   const result = {
     status: 200,
-    title: "London Tech Uganda | Phones, Laptops & Electronics in Kampala",
+    title: "London Tech Uganda | Electronics in Kampala",
     description: `Shop phones, laptops, audio, watches, gaming and accessories at London Tech in Arua Park, Kampala. Explore prices in UGX and visit shop FN:19.`,
     canonical: origin + canonicalPath,
     noindex: false,
@@ -142,6 +142,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
       "@id": origin + "/#website",
       url: origin + "/",
       name: "London Tech",
+      alternateName: ["London Tech Uganda", "London Technology Store"],
       inLanguage: "en-UG",
       publisher: { "@id": store["@id"] },
     })

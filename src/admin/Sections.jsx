@@ -1113,6 +1113,7 @@ export function WorkspaceSection({
   preview,
   changedMessages,
   syncedMessages,
+  messageAlerts,
   preferences,
   setPreferences,
   user,
@@ -1141,6 +1142,7 @@ export function WorkspaceSection({
         preview={preview}
         changed={changedMessages}
         synced={syncedMessages}
+        alerts={messageAlerts}
       />
     )
   if (section === "language")

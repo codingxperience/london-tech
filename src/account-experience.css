@@ -20,9 +20,10 @@
 .commerce-surface .account-sidebar nav{min-height:0;overflow-y:auto;scrollbar-width:thin}
 .commerce-surface .account-sidebar .account-avatar{display:flex;align-items:center;gap:13px;padding:21px;background:#f3f6fa;border-bottom:1px solid #e1e7f0}
 .commerce-surface .account-sidebar .account-profile-icon{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;border-radius:50%;border:1px solid #d8e2ee;background:white;color:#153959}
-.commerce-surface .account-sidebar .account-identity{min-width:0;display:flex;flex-direction:column;gap:3px}
+.commerce-surface .account-sidebar .account-identity{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.commerce-surface .account-sidebar .account-identity>strong,.commerce-surface .account-sidebar .account-identity>small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .commerce-surface .account-sidebar .account-identity strong{font-size:16px;line-height:1.4}
-.commerce-surface .account-sidebar .account-identity small{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.commerce-surface .account-sidebar .account-identity small{font-size:14px;line-height:1.5}
 .commerce-surface .account-sidebar nav[hidden]{display:none}
 .commerce-surface .account-content{min-width:0}
 .commerce-surface .account-content .form-card{min-width:0;max-width:100%}

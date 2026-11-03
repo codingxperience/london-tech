@@ -188,4 +188,27 @@ test("production HTML contains crawlable product and category content before Jav
   const home = await readFile("dist/index.html", "utf8")
   assert.ok(home.includes('id="root"><'))
   assert.ok(!home.includes('id="root"></div>'))
+  const icon = "/assets/london-tech-icon-192.png"
+  const icons = [
+    ...home.matchAll(/<link\b[^>]+rel="(?:icon|shortcut icon)"[^>]*>/g),
+  ]
+  assert.equal(icons.length, 1)
+  assert.ok(icons[0][0].includes(`href="${icon}"`))
+  const favicon = await readFile(".output/public" + icon)
+  assert.equal(favicon.readUInt32BE(16), 192)
+  assert.equal(favicon.readUInt32BE(20), 192)
+  const website = resolveSeo("/", data).schemas.find(
+    (node) => node["@type"] === "WebSite",
+  )
+  assert.equal(website.name, "London Tech")
+  assert.equal(website.url, defaultOrigin + "/")
+  assert.ok(website.alternateName.includes("London Tech Uganda"))
+  for (const [path, label] of [
+    ["/collections/shop/", "Shop all electronics"],
+    ["/about/", "About London Tech"],
+    ["/contact/", "Visit our Kampala store"],
+  ]) {
+    assert.ok(home.includes(`href="${path}">${label}</a>`))
+    assert.equal(resolveSeo(path, data).noindex, false)
+  }
 })

@@ -22,6 +22,7 @@ const sections = [
   {
     title: "Shop the collection",
     links: [
+      ["Shop all electronics", "/collections/shop/"],
       ["Phones", "/collections/mobiles/"],
       ["Laptops", "/collections/laptops/"],
       ["Tablets", "/collections/tablets/"],
@@ -36,8 +37,8 @@ const sections = [
   {
     title: "London Tech",
     links: [
-      ["About us", "/about/"],
-      ["Visit the shop", "/contact/"],
+      ["About London Tech", "/about/"],
+      ["Visit our Kampala store", "/contact/"],
       ["Your account", "/account/"],
       ["Privacy policy", "/privacy/"],
       ["Terms & conditions", "/terms/"],

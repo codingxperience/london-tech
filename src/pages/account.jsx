@@ -26,6 +26,7 @@ import {
 
 import { useStore, navigate } from "../store.jsx"
 import { useMediaQuery } from "../lib/use-media-query.js"
+import { useMessageAlerts } from "../lib/message-alerts.js"
 
 import { money, productPath } from "../data/catalog.js"
 
@@ -107,6 +108,7 @@ export function Account({ section = "overview", orderId }) {
     notify,
     openAuth,
   } = useStore()
+  const messageAlerts = useMessageAlerts(user?.id)
   const [orders, setOrders] = useState([]),
     [loaded, setLoaded] = useState(false),
     [error, setError] = useState(""),
@@ -218,8 +220,8 @@ export function Account({ section = "overview", orderId }) {
               <UserRound size={23} />
             </span>
             <span className="account-identity">
-              <strong>{user.name}</strong>
-              <small>{user.email}</small>
+              <strong title={user.name}>{user.name}</strong>
+              <small title={user.email}>{user.email}</small>
             </span>
           </div>
           {compactNavigation && (
@@ -251,6 +253,14 @@ export function Account({ section = "overview", orderId }) {
               >
                 <Icon size={20} />
                 {label}
+                {id === "messages" && messageAlerts.unread > 0 && (
+                  <span
+                    className="message-count"
+                    aria-label={`${messageAlerts.unread} unread messages`}
+                  >
+                    {messageAlerts.unread > 99 ? "99+" : messageAlerts.unread}
+                  </span>
+                )}
                 <ArrowRight size={13} />
               </a>
             ))}
@@ -270,7 +280,7 @@ export function Account({ section = "overview", orderId }) {
         <div className="account-content">
           {error && <Notice type="error">{error}</Notice>}
           {section === "messages" ? (
-            <MessageCentre key={user.id} />
+            <MessageCentre key={user.id} alerts={messageAlerts} />
           ) : section === "overview" ? (
             <>
               <div className="account-stat-grid">
@@ -381,7 +391,9 @@ export function Account({ section = "overview", orderId }) {
                 />
                 <Field
                   label="Email address"
+                  type="email"
                   value={user.email}
+                  title={user.email}
                   readOnly
                   hint="Your email identifies your account."
                 />
