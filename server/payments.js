@@ -104,10 +104,10 @@ export async function createPaymentLink(order, origin) {
     key,
   )
 
-  return hostedPaymentUrl(data?.link)
+  return hostedPaymentUrl(data?.link, mode)
 }
 
-function hostedPaymentUrl(link) {
+function hostedPaymentUrl(link, mode) {
   let paymentUrl
 
   try {
@@ -116,9 +116,15 @@ function hostedPaymentUrl(link) {
     fail(502, "The payment provider returned an invalid checkout link.")
   }
 
+  const hosted = /(^|\.)flutterwave\.com$/.test(paymentUrl.hostname)
+  const sandbox =
+    mode === "test" && paymentUrl.hostname === "checkout-v2.dev-flutterwave.com"
   if (
     paymentUrl.protocol !== "https:" ||
-    !/(^|\.)flutterwave\.com$/.test(paymentUrl.hostname)
+    paymentUrl.port ||
+    paymentUrl.username ||
+    paymentUrl.password ||
+    (!hosted && !sandbox)
   )
     fail(502, "The payment provider returned an unexpected checkout link.")
 

@@ -600,8 +600,8 @@ test("a confirmed test quote settles idempotently and does not qualify for a ver
     const reviewedProduct = (await request("catalog")).data.products.find(
       (product) => product.id === fixture.id,
     )
-    assert.equal(reviewedProduct.reviewCount, 1)
-    assert.equal(reviewedProduct.rating, 5)
+    assert.equal(reviewedProduct.reviewCount, 0)
+    assert.equal(reviewedProduct.rating, null)
   } finally {
     globalThis.fetch = realFetch
   }

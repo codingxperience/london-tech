@@ -639,7 +639,7 @@ test("production test checkout reserves stock and settles through the customer o
       return Response.json({
         status: "success",
         data: {
-          link: "https://checkout.flutterwave.com/v3/hosted/pay/fixture",
+          link: "https://checkout-v2.dev-flutterwave.com/v3/hosted/pay/fixture",
         },
       })
     }
@@ -683,7 +683,10 @@ test("production test checkout reserves stock and settles through the customer o
     )
     const start = await request(path + "/pay", { method: "POST" })
     assert.equal(start.status, 200)
-    assert.match(start.data.url, /^https:\/\/checkout\.flutterwave\.com\//)
+    assert.equal(
+      new URL(start.data.url).hostname,
+      "checkout-v2.dev-flutterwave.com",
+    )
     assert.equal(starts[0].tx_ref, order.id)
     assert.equal(starts[0].amount, 100000)
     assert.equal(starts[0].currency, "UGX")
