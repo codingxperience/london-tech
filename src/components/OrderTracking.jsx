@@ -1,8 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   ArrowUpRight,
+  CalendarDays,
   Check,
+  ChevronDown,
   Clock3,
+  Copy,
+  MapPin,
+  Package,
   PackageCheck,
   RefreshCw,
   Store,
@@ -10,105 +15,199 @@ import {
 } from "lucide-react"
 import { statusLabel } from "../lib/api.js"
 
+const kampala = "Africa/Kampala"
 const eventTime = new Intl.DateTimeFormat("en-UG", {
   dateStyle: "medium",
   timeStyle: "short",
-  timeZone: "Africa/Kampala",
+  timeZone: kampala,
 })
-const estimatedDay = new Intl.DateTimeFormat("en-UG", {
-  dateStyle: "full",
-  timeZone: "Africa/Kampala",
+const dayLabel = new Intl.DateTimeFormat("en-UG", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  timeZone: kampala,
 })
+const statuses = {
+  pending_payment: "Awaiting payment",
+  quote_requested: "Request received",
+  quoted: "Quote ready",
+  review: "Under review",
+  ready: "Ready for dispatch",
+}
+
+function CopyReference({ value, label }) {
+  const [result, setResult] = useState("")
+  return (
+    <button
+      className="tracking-copy"
+      type="button"
+      aria-label={`Copy ${label}`}
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(value)
+          setResult("Copied")
+        } catch {
+          setResult("Select to copy")
+        }
+      }}
+    >
+      {result === "Copied" ? (
+        <Check size={15} aria-hidden="true" />
+      ) : (
+        <Copy size={15} aria-hidden="true" />
+      )}
+      <span aria-live="polite">{result || "Copy"}</span>
+    </button>
+  )
+}
 
 export function OrderTracking({ order, refreshing, refresh }) {
   const pickup = order.fulfillment === "collection"
+  const mode = pickup ? "Store pickup" : "Delivery"
   const stages = [
     ["confirmed", "Confirmed", Check],
-    ["processing", "Preparing", PackageCheck],
-    [
-      pickup ? "ready" : "shipped",
-      pickup ? "Ready for pickup" : "Dispatched",
-      pickup ? Store : Truck,
-    ],
+    ["processing", "Preparing", Package],
+    ...(pickup
+      ? [["ready", "Ready for pickup", Store]]
+      : [["shipped", "Dispatched", Truck]]),
     ["completed", pickup ? "Collected" : "Delivered", PackageCheck],
   ]
   const timeline = order.timeline || []
   const history = [...timeline].reverse()
   const labels = Object.fromEntries(stages.map(([key, label]) => [key, label]))
-  const paymentWindowExpired =
+  const statusTitle = (status) =>
+    labels[status] || statuses[status] || statusLabel(status)
+  const expired =
     ["pending_payment", "quoted"].includes(order.status) &&
     order.expiresAt &&
     new Date(order.expiresAt) <= new Date()
-  const displayStatus = paymentWindowExpired
+  const displayStatus = expired
     ? order.status === "quoted"
       ? "Quote expired"
       : "Payment window expired"
-    : labels[order.status] ||
-      (order.status === "ready"
-        ? "Ready for dispatch"
-        : statusLabel(order.status))
-  const tracking = order.tracking || {}
+    : statusTitle(order.status)
   const active =
-    !paymentWindowExpired &&
-    !["cancelled", "review", "expired"].includes(order.status)
+    !expired && !["cancelled", "review", "expired"].includes(order.status)
+  const tracking = order.tracking || {}
+  const estimated =
+    !pickup && active && order.status !== "completed" && tracking.estimatedDate
+  const latest = history[0]?.at || order.updatedAt || order.createdAt
+  const hasCourier =
+    !pickup &&
+    [tracking.carrier, tracking.reference, tracking.url].some(Boolean)
+  const itemCount = (order.items || []).reduce(
+    (sum, item) => sum + item.quantity,
+    0,
+  )
+  const ModeIcon = pickup ? Store : Truck
+
   return (
     <section className="tracking-card" aria-labelledby="tracking-title">
-      <div className="tracking-heading">
-        <div>
+      <div className="tracking-hero">
+        <div className="tracking-hero-top">
           <span className="tracking-kicker">
-            {pickup ? "STORE PICKUP" : "DELIVERY"}
+            <ModeIcon size={16} aria-hidden="true" />
+            {mode}
           </span>
-          <h3 id="tracking-title">{displayStatus}</h3>
+          <button
+            className="tracking-refresh"
+            type="button"
+            disabled={refreshing}
+            onClick={refresh}
+          >
+            <RefreshCw size={16} aria-hidden="true" />
+            {refreshing ? "Refreshing…" : "Refresh"}
+          </button>
         </div>
-        <button
-          className="tracking-refresh"
-          type="button"
-          disabled={refreshing}
-          onClick={refresh}
-        >
-          <RefreshCw size={16} />
-          {refreshing ? "Refreshing…" : "Refresh"}
-        </button>
+        <div className="tracking-hero-main">
+          <div aria-live="polite">
+            <h3 id="tracking-title">{displayStatus}</h3>
+            {!pickup && order.customer?.district && (
+              <p className="tracking-destination">
+                <MapPin size={16} aria-hidden="true" />
+                {order.customer.district}
+              </p>
+            )}
+            {pickup && (
+              <p className="tracking-destination">
+                <MapPin size={16} aria-hidden="true" />
+                London Tech · Arua Park
+              </p>
+            )}
+          </div>
+          <div className="tracking-emblem" aria-hidden="true">
+            <ModeIcon size={43} strokeWidth={1.35} />
+          </div>
+        </div>
+        {(estimated || latest) && (
+          <div className="tracking-time-panel">
+            <CalendarDays size={18} aria-hidden="true" />
+            <div>
+              <span>
+                {estimated ? "Estimated delivery" : "Last order update"}
+              </span>
+              <strong>
+                {estimated
+                  ? dayLabel.format(new Date(`${estimated}T12:00:00Z`))
+                  : eventTime.format(new Date(latest)) + " EAT"}
+              </strong>
+            </div>
+          </div>
+        )}
       </div>
-      {active && (
-        <ol className="tracking-stages" aria-label="Order milestones">
-          {stages.map(([key, label, Icon]) => {
-            const recorded = timeline.find(
-              (event) =>
-                event.status === key &&
-                !["tracking", "note"].includes(event.kind) &&
-                (event.kind !== "payment" || key === "confirmed"),
-            )
-            const current =
-              order.status === key ||
-              (key === "processing" && !pickup && order.status === "ready")
-            return (
-              <li
-                key={key}
-                className={current ? "current" : recorded ? "recorded" : ""}
-                aria-current={current ? "step" : undefined}
-              >
-                <span className="tracking-stage-icon">
-                  <Icon size={19} aria-hidden="true" />
-                </span>
-                <strong>{label}</strong>
-                {recorded && (
-                  <time dateTime={recorded.at}>
-                    {eventTime.format(new Date(recorded.at))}
-                  </time>
-                )}
-              </li>
-            )
-          })}
-        </ol>
-      )}
-      {!pickup &&
-        [
-          tracking.carrier,
-          tracking.reference,
-          tracking.estimatedDate,
-          tracking.url,
-        ].some(Boolean) && (
+      <div className="tracking-body">
+        <div className="tracking-reference-row">
+          <div>
+            <span>Order reference</span>
+            <strong>{order.id}</strong>
+          </div>
+          <CopyReference
+            key={order.id}
+            value={order.id}
+            label="order reference"
+          />
+          {itemCount > 0 && (
+            <span className="tracking-item-count">
+              {itemCount} {itemCount === 1 ? "item" : "items"}
+            </span>
+          )}
+        </div>
+        {active && (
+          <ol className="tracking-stages" aria-label="Order milestones">
+            {stages.map(([key, label, Icon]) => {
+              const recorded = timeline.find(
+                (event) =>
+                  event.status === key &&
+                  !["tracking", "note"].includes(event.kind) &&
+                  (event.kind !== "payment" || key === "confirmed"),
+              )
+              const current =
+                order.status === key ||
+                (key === "processing" && !pickup && order.status === "ready")
+              const StepIcon = recorded && !current ? Check : Icon
+              return (
+                <li
+                  key={key}
+                  className={current ? "current" : recorded ? "recorded" : ""}
+                  aria-current={current ? "step" : undefined}
+                >
+                  <span className="tracking-stage-icon">
+                    <StepIcon size={18} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <strong>{label}</strong>
+                    {recorded && (
+                      <time dateTime={recorded.at}>
+                        {dayLabel.format(new Date(recorded.at))}
+                      </time>
+                    )}
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
+        )}
+        {hasCourier && (
           <div className="tracking-courier">
             <dl>
               {tracking.carrier && (
@@ -123,59 +222,61 @@ export function OrderTracking({ order, refreshing, refresh }) {
                   <dd>{tracking.reference}</dd>
                 </div>
               )}
-              {tracking.estimatedDate &&
-                active &&
-                order.status !== "completed" && (
-                  <div>
-                    <dt>Estimated delivery</dt>
-                    <dd>
-                      {estimatedDay.format(
-                        new Date(`${tracking.estimatedDate}T12:00:00Z`),
-                      )}
-                    </dd>
-                  </div>
-                )}
             </dl>
-            {tracking.url && (
-              <a
-                className="text-link"
-                href={tracking.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Courier tracking <ArrowUpRight size={15} />
-              </a>
-            )}
+            <div className="tracking-courier-actions">
+              {tracking.reference && (
+                <CopyReference
+                  key={tracking.reference}
+                  value={tracking.reference}
+                  label="courier reference"
+                />
+              )}
+              {tracking.url && (
+                <a
+                  className="text-link"
+                  href={tracking.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Track with courier{" "}
+                  <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
+              )}
+            </div>
           </div>
         )}
-      {history.length > 0 && (
-        <details className="tracking-history" open>
-          <summary>
-            <Clock3 size={17} /> Activity history
-          </summary>
-          <ol>
-            {history.map((event, i) => (
-              <li key={`${event.at}-${i}`}>
-                <div>
-                  <strong>
-                    {event.kind === "payment"
-                      ? "Payment received"
-                      : event.kind === "tracking"
-                        ? "Delivery details updated"
-                        : event.kind === "note"
-                          ? "Store update"
-                          : labels[event.status] || statusLabel(event.status)}
-                  </strong>
-                  <time dateTime={event.at}>
-                    {eventTime.format(new Date(event.at))} EAT
-                  </time>
-                </div>
-                {event.note && <p>{event.note}</p>}
-              </li>
-            ))}
-          </ol>
-        </details>
-      )}
+        {history.length > 0 && (
+          <details className="tracking-history">
+            <summary>
+              <Clock3 size={18} aria-hidden="true" />
+              <span>Activity history</span>
+              <span className="tracking-history-count">{history.length}</span>
+              <ChevronDown size={17} aria-hidden="true" />
+            </summary>
+            <ol>
+              {history.map((event, i) => (
+                <li key={`${event.at}-${i}`}>
+                  <div>
+                    <strong>
+                      {event.kind === "payment"
+                        ? "Payment received"
+                        : event.kind === "tracking"
+                          ? "Delivery details updated"
+                          : event.kind === "note"
+                            ? "Store update"
+                            : statusTitle(event.status)}
+                    </strong>
+                    <time dateTime={event.at}>
+                      {eventTime.format(new Date(event.at))} EAT
+                    </time>
+                  </div>
+                  {event.note && <p>{event.note}</p>}
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
+      </div>
     </section>
   )
 }

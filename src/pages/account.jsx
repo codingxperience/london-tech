@@ -657,18 +657,12 @@ function OrderDetail({ order: o, loaded, reload }) {
 
   return (
     <div className="customer-order-detail">
-      <div className="section-heading">
-        <div>
-          <a className="text-link" href="/account/orders/">
-            <ArrowLeft size={13} />
-            All orders
-          </a>
-          <h2>{o.id}</h2>
-          <p className="muted small">Placed {dateLabel(o.createdAt)}</p>
-        </div>
-        <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
-          {statusLabel(o.status)}
-        </Badge>
+      <div className="order-tracking-heading">
+        <a className="text-link" href="/account/orders/">
+          <ArrowLeft size={15} />
+          All orders
+        </a>
+        <h2>Track order</h2>
       </div>
       {error && <Notice type="error">{error}</Notice>}
       {o.status === "quote_requested" && (
@@ -684,12 +678,10 @@ function OrderDetail({ order: o, loaded, reload }) {
           subject to available stock.
         </Notice>
       )}
-      {o.paymentStatus === "paid" && (
+      {o.paymentStatus === "paid" && o.status === "review" && (
         <Notice type="success">
-          Payment confirmed.{" "}
-          {o.status === "review"
-            ? "The store is reviewing fulfillment and will contact you."
-            : "Follow the order progress below."}
+          Payment confirmed. The store is reviewing fulfillment and will contact
+          you.
         </Notice>
       )}
       <OrderTracking
@@ -704,8 +696,11 @@ function OrderDetail({ order: o, loaded, reload }) {
           }
         }}
       />
-      <div className="form-card">
-        <h3>Order items</h3>
+      <div className="form-card order-items-card">
+        <div className="order-items-heading">
+          <h3>Order items</h3>
+          <time dateTime={o.createdAt}>Placed {dateLabel(o.createdAt)}</time>
+        </div>
         {o.items.map((p, i) => (
           <div className="order-detail-item" key={i}>
             <img src={p.image} alt="" />
