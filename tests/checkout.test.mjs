@@ -624,3 +624,120 @@ test("order email survives provider failure, retries once, and follows actual fu
     delete process.env.EMAIL_FROM
   }
 })
+
+test("owner sandbox checkout creates and verifies Flutterwave tests without touching retail orders", async () => {
+  const originalFetch = globalThis.fetch
+  const originalVercel = process.env.VERCEL_ENV
+  const starts = []
+  let payment,
+    verified = 0
+  process.env.FLW_SECRET_KEY = "FLWSECK_TEST-fixture"
+  process.env.FLW_SECRET_HASH = "checkout-test-webhook-fixture"
+  process.env.VERCEL_ENV = "production"
+  globalThis.fetch = async (url, options) => {
+    if (String(url) === "https://api.flutterwave.com/v3/payments") {
+      starts.push(JSON.parse(options.body))
+      return Response.json({
+        status: "success",
+        data: {
+          link: "https://checkout.flutterwave.com/v3/hosted/pay/fixture",
+        },
+      })
+    }
+    if (
+      String(url) === "https://api.flutterwave.com/v3/transactions/42/verify"
+    ) {
+      verified++
+      return Response.json({ status: "success", data: payment })
+    }
+    return originalFetch(url, options)
+  }
+  const path = "admin/payment-test"
+  const invoke = (body, cookie = admin) =>
+    request(path, { method: "POST", body, cookie })
+  try {
+    const before = await db.query(
+      "SELECT (SELECT COUNT(*) FROM orders)::int AS orders, (SELECT COUNT(*) FROM order_emails)::int AS emails, (SELECT COUNT(*) FROM stock_reservations)::int AS reservations",
+    )
+    assert.equal((await request("config")).data.payments, false)
+    assert.equal(
+      (await invoke({ action: "start", paymentMethod: "visa" }, customer))
+        .status,
+      403,
+    )
+    assert.equal(
+      (await invoke({ action: "start", paymentMethod: "visa" }, null)).status,
+      401,
+    )
+    assert.equal(starts.length, 0)
+    assert.equal(
+      (await request("admin/overview", { cookie: admin })).data.connection
+        .paymentTest.amount,
+      10000,
+    )
+    for (const method of ["mtn", "airtel", "visa"]) {
+      const response = await invoke({ action: "start", paymentMethod: method })
+      assert.equal(response.status, 200)
+      assert.match(response.data.url, /^https:\/\/checkout\.flutterwave\.com\//)
+      assert.equal(
+        starts.at(-1).payment_options,
+        method === "visa" ? "card" : "mobilemoneyuganda",
+      )
+    }
+    const session = starts.at(-1)
+    const redirect = new URL(session.redirect_url)
+    assert.equal(redirect.pathname, "/admin/settings/")
+    assert.equal(redirect.origin, origin)
+    const proof = redirect.searchParams.get("payment_test")
+    const verify = (token = proof) =>
+      invoke({ action: "verify", proof: token, transactionId: "42" })
+    assert.equal((await verify(proof + "x")).status, 400)
+    assert.equal(verified, 0)
+    payment = {
+      id: 42,
+      tx_ref: session.tx_ref,
+      status: "successful",
+      currency: "UGX",
+      amount: 9999,
+    }
+    assert.equal((await verify()).status, 409)
+    payment.amount = 10000
+    assert.deepEqual((await verify()).data, {
+      status: "successful",
+      reference: session.tx_ref,
+      amount: 10000,
+      currency: "UGX",
+    })
+    assert.equal(
+      (
+        await request("payments/webhook", {
+          method: "POST",
+          cookie: null,
+          headers: { "verif-hash": process.env.FLW_SECRET_HASH },
+          body: {
+            event: "charge.completed",
+            data: { id: 42, tx_ref: session.tx_ref, status: "successful" },
+          },
+        })
+      ).status,
+      200,
+    )
+    assert.equal(verified, 2)
+    const after = await db.query(
+      "SELECT (SELECT COUNT(*) FROM orders)::int AS orders, (SELECT COUNT(*) FROM order_emails)::int AS emails, (SELECT COUNT(*) FROM stock_reservations)::int AS reservations",
+    )
+    assert.deepEqual(after.rows, before.rows)
+    process.env.FLW_SECRET_KEY = "FLWSECK-live-fixture"
+    assert.equal(
+      (await invoke({ action: "start", paymentMethod: "visa" })).status,
+      503,
+    )
+    assert.equal(starts.length, 3)
+  } finally {
+    globalThis.fetch = originalFetch
+    delete process.env.FLW_SECRET_KEY
+    delete process.env.FLW_SECRET_HASH
+    if (originalVercel === undefined) delete process.env.VERCEL_ENV
+    else process.env.VERCEL_ENV = originalVercel
+  }
+})

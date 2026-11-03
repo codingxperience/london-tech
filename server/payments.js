@@ -1,6 +1,6 @@
-import { randomUUID } from "node:crypto"
+import { createHmac, randomUUID } from "node:crypto"
 
-import { fail } from "./security.js"
+import { fail, safeEqual } from "./security.js"
 import { queueOrderEmail } from "./order-emails.js"
 
 export const paymentMode = () =>
@@ -22,7 +22,10 @@ export const onlinePaymentsReady = () =>
 export async function flutterwave(path, options = {}) {
   if (!process.env.FLW_SECRET_KEY || sandboxBlocked())
     fail(503, "Online payments are being connected. Your cart has been saved.")
+  return providerRequest(path, options)
+}
 
+async function providerRequest(path, options = {}) {
   const response = await fetch("https://api.flutterwave.com/v3" + path, {
     ...options,
     signal: AbortSignal.timeout(15000),
@@ -88,10 +91,14 @@ export async function createPaymentLink(order, origin) {
     }),
   })
 
+  return hostedPaymentUrl(data?.link)
+}
+
+function hostedPaymentUrl(link) {
   let paymentUrl
 
   try {
-    paymentUrl = new URL(data.link)
+    paymentUrl = new URL(link)
   } catch {
     fail(502, "The payment provider returned an invalid checkout link.")
   }
@@ -103,6 +110,108 @@ export async function createPaymentLink(order, origin) {
     fail(502, "The payment provider returned an unexpected checkout link.")
 
   return paymentUrl.href
+}
+
+export const sandboxAmount = 10000
+const sandboxPrefix = "LT-TEST-"
+const sandboxReference = /^LT-TEST-[0-9a-f-]{36}$/
+export const isSandboxReference = (value) =>
+  typeof value === "string" && sandboxReference.test(value)
+
+export function isPaymentTestOwner(user) {
+  const ownerEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
+  return Boolean(
+    ownerEmail && user?.role === "admin" && user.email === ownerEmail,
+  )
+}
+
+export function paymentTestReady(user) {
+  return (
+    isPaymentTestOwner(user) &&
+    Boolean(
+      process.env.FLW_SECRET_HASH &&
+        /^FLWSECK_TEST[-_]/.test(process.env.FLW_SECRET_KEY || ""),
+    )
+  )
+}
+
+function requirePaymentTest(user) {
+  if (!isPaymentTestOwner(user))
+    fail(403, "Only the store owner can run payment tests.")
+  if (!paymentTestReady(user))
+    fail(
+      503,
+      "A Flutterwave test secret and webhook hash are required for this demo.",
+    )
+}
+
+const signTest = (user, reference, expires) =>
+  createHmac("sha256", process.env.FLW_SECRET_HASH)
+    .update(`${user.id}:${reference}:${expires}`)
+    .digest("base64url")
+
+export async function startPaymentTest(user, method, origin) {
+  requirePaymentTest(user)
+  const reference = sandboxPrefix + randomUUID()
+  const expires = Date.now() + 45 * 60 * 1000
+  const proof = `${reference}.${expires}.${signTest(user, reference, expires)}`
+  const redirect = new URL("/admin/settings/", origin)
+  redirect.searchParams.set("payment_test", proof)
+  const data = await providerRequest("/payments", {
+    method: "POST",
+    body: JSON.stringify({
+      tx_ref: reference,
+      amount: sandboxAmount,
+      currency: "UGX",
+      redirect_url: redirect.href,
+      payment_options: method === "visa" ? "card" : "mobilemoneyuganda",
+      customer: {
+        email: "checkout-demo@example.com",
+        name: "London Tech Test Customer",
+      },
+      customizations: {
+        title: "London Tech · Test Mode",
+        description: "Sample checkout",
+        logo: origin + "/assets/london-tech-logo.png",
+      },
+      meta: { sandbox: true, requested_method: method },
+    }),
+  })
+  return { url: hostedPaymentUrl(data?.link) }
+}
+
+export async function verifyPaymentTest(user, proof, transactionId) {
+  requirePaymentTest(user)
+  const [reference, expires, signature, extra] = proof.split(".")
+  if (
+    extra !== undefined ||
+    !isSandboxReference(reference) ||
+    !/^\d{13}$/.test(expires || "") ||
+    Number(expires) <= Date.now() ||
+    !safeEqual(signature, signTest(user, reference, expires))
+  )
+    fail(400, "This test session is invalid or expired. Start another test.")
+  const payment = await providerRequest(
+    "/transactions/" + transactionId + "/verify",
+  )
+  if (
+    payment?.tx_ref !== reference ||
+    String(payment.id) !== transactionId ||
+    payment.currency !== "UGX" ||
+    (payment.status === "successful" &&
+      Number(payment.amount) !== sandboxAmount)
+  )
+    fail(409, "Flutterwave returned details that do not match this test.")
+  if (
+    !["successful", "failed", "cancelled", "pending"].includes(payment.status)
+  )
+    fail(502, "Flutterwave returned an unknown test payment status.")
+  return {
+    status: payment.status,
+    reference,
+    amount: sandboxAmount,
+    currency: "UGX",
+  }
 }
 
 export async function verifyPayment(db, transactionId, expectedOrderId) {

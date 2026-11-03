@@ -555,3 +555,81 @@
     background: #fff;
   }
 }
+
+.payment-test-content {
+  display: grid;
+  gap: 15px;
+  padding: 0 22px 22px;
+}
+.payment-test-content > p,
+.payment-test-help p {
+  margin: 0;
+}
+.payment-test-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--workspace-soft);
+}
+.payment-test-total span:first-child {
+  display: block;
+  color: var(--workspace-muted);
+}
+.payment-test-total strong {
+  display: block;
+  font-size: 23px;
+}
+.payment-test-methods {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.payment-test-methods legend {
+  margin-bottom: 7px;
+  font-weight: 800;
+}
+.payment-test-methods label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--workspace-line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.payment-test-methods label.selected {
+  background: var(--workspace-soft);
+  border-color: var(--workspace-control);
+}
+.payment-test-methods .payment-brand {
+  width: 58px;
+  height: 30px;
+  padding: 4px;
+}
+.payment-test-methods .payment-brand-visa img {
+  width: 50px;
+  height: 50px;
+}
+.payment-test-reference {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.payment-test-help {
+  color: var(--workspace-muted);
+}
+.payment-test-help summary {
+  color: var(--workspace-ink);
+  font-weight: 800;
+  cursor: pointer;
+}
+.payment-test-help p {
+  margin: 8px 0;
+}

@@ -47,6 +47,8 @@ Checkout creates an order with a server-calculated amount. The customer is redir
 
 See [Uganda merchant onboarding](https://flutterwave.com/rw/support/general/heres-all-you-need-to-know-about-operating-a-flutterwave-account-in-uganda), [payment methods](https://developer.flutterwave.com/docs/payment-methods), [transaction verification](https://developer.flutterwave.com/docs/transaction-verification) and [v3 webhooks](https://developer.flutterwave.com/v3.0.0/docs/webhooks).
 
+With a Flutterwave test secret saved, the owner identified by `ADMIN_EMAIL` can open **Admin → Settings → Try Flutterwave checkout**. Choose MTN, Airtel or Visa to open a sample UGX 10,000 hosted checkout. The return page verifies the test transaction with Flutterwave. The demo uses its own transaction reference and skips the retail order, inventory and email records. The owner panel is available with test keys, and public production checkout requires live keys. [Flutterwave test credentials](https://developer.flutterwave.com/docs/testing)
+
 ## Order tracking and email
 
 Open **Admin → Orders → an order → Update fulfillment**. Save a status, a customer-visible note or delivery tracking details. The customer sees the recorded milestones, Kampala timestamps, courier and tracking reference, and any estimated date or courier link you provide. The account page fetches the individual order and has a Refresh button. Staff updates and courier links supply the tracking information.
