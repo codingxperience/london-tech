@@ -3,14 +3,24 @@ import { randomUUID } from "node:crypto"
 import { fail } from "./security.js"
 import { queueOrderEmail } from "./order-emails.js"
 
+export const paymentMode = () =>
+  process.env.FLW_SECRET_KEY?.includes("TEST") ? "test" : "live"
+
+const sandboxBlocked = () =>
+  paymentMode() === "test" &&
+  (process.env.VERCEL_ENV === "production" ||
+    (process.env.NODE_ENV === "production" &&
+      process.env.VERCEL_ENV !== "preview"))
+
 export const onlinePaymentsReady = () =>
   Boolean(
     process.env.FLW_SECRET_KEY &&
+      !sandboxBlocked() &&
       (process.env.NODE_ENV !== "production" || process.env.FLW_SECRET_HASH),
   )
 
 export async function flutterwave(path, options = {}) {
-  if (!process.env.FLW_SECRET_KEY)
+  if (!process.env.FLW_SECRET_KEY || sandboxBlocked())
     fail(503, "Online payments are being connected. Your cart has been saved.")
 
   const response = await fetch("https://api.flutterwave.com/v3" + path, {

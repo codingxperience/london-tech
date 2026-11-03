@@ -446,7 +446,7 @@ export function Checkout() {
                 )}
             </Notice>
           )}
-          {config.paymentMode === "test" && (
+          {config.paymentMode === "test" && config.payments && (
             <Notice>
               This checkout is in Flutterwave test mode. No live payment will be
               collected.

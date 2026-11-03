@@ -28,6 +28,7 @@ import {
 import {
   createPaymentLink,
   onlinePaymentsReady,
+  paymentMode,
   verifyPayment,
 } from "./payments.js"
 import { calculateDelivery } from "../src/lib/delivery.js"
@@ -524,9 +525,7 @@ export default async function handler(req, res) {
         cashOnDelivery: databaseConfigured(),
         currency: "UGX",
         country: "Uganda",
-        paymentMode: process.env.FLW_SECRET_KEY?.includes("TEST")
-          ? "test"
-          : "live",
+        paymentMode: paymentMode(),
       })
 
     if (route === "catalog" && method === "GET") {
@@ -1242,9 +1241,7 @@ export default async function handler(req, res) {
             database: true,
             payments: onlinePaymentsReady(),
             email: orderEmailReady(),
-            paymentMode: process.env.FLW_SECRET_KEY?.includes("TEST")
-              ? "test"
-              : "live",
+            paymentMode: paymentMode(),
           },
         })
       }
