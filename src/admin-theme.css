@@ -1,0 +1,529 @@
+/* Keep the admin palette independent of the storefront's light surfaces. */
+.commerce-surface .admin-shell[data-theme] {
+  color-scheme: light;
+  --workspace-bg: #f3f5fa;
+  --workspace-paper: #fff;
+  --workspace-ink: #223149;
+  --workspace-muted: #52627a;
+  --workspace-line: #dce3ee;
+  --workspace-soft: #eff3f9;
+  --workspace-hover: #e8eef7;
+  --workspace-accent: #4842a1;
+  --workspace-accent-bg: #ebe9ff;
+  --workspace-control: #74839a;
+  --workspace-action: #10365f;
+  --workspace-action-hover: #082647;
+  --workspace-action-ink: #fff;
+  --workspace-success: #176046;
+  --workspace-success-bg: #e5f5ee;
+  --workspace-warning: #694908;
+  --workspace-warning-bg: #fff2ce;
+  --workspace-danger: #a11b3d;
+  --workspace-danger-bg: #fce8ed;
+  --workspace-focus: #5348bc;
+  background: var(--workspace-bg);
+  color: var(--workspace-ink);
+  accent-color: var(--workspace-accent);
+}
+
+.commerce-surface .admin-shell[data-theme="dark"] {
+  color-scheme: dark;
+  --workspace-bg: #141c2a;
+  --workspace-paper: #1e293b;
+  --workspace-ink: #edf3fd;
+  --workspace-muted: #b1c0d5;
+  --workspace-line: #41516a;
+  --workspace-soft: #27354a;
+  --workspace-hover: #32435c;
+  --workspace-accent: #c0bcff;
+  --workspace-accent-bg: #353455;
+  --workspace-control: #7286a3;
+  --workspace-action: #b9cefa;
+  --workspace-action-hover: #d1dfff;
+  --workspace-action-ink: #172b49;
+  --workspace-success: #a8e8c8;
+  --workspace-success-bg: #203e36;
+  --workspace-warning: #ffe292;
+  --workspace-warning-bg: #473b20;
+  --workspace-danger: #ffb6c5;
+  --workspace-danger-bg: #482b3c;
+  --workspace-focus: #aebeff;
+}
+
+.commerce-surface .admin-shell[data-theme] :is(.admin-main, .admin-workspace) {
+  background: var(--workspace-bg);
+  color: var(--workspace-ink);
+}
+
+.commerce-surface .admin-shell[data-theme] :is(h1, h2, h3, h4) {
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-panel,
+    .admin-sidebar,
+    .admin-sidebar-bottom,
+    .admin-topbar,
+    .admin-notification-popover,
+    .admin-profile-popover,
+    .modal,
+    .message-centre
+  ) {
+  background: var(--workspace-paper);
+  border-color: var(--workspace-line);
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-footer,
+    .admin-search,
+    .checkout-search,
+    .delivery-price-preview,
+    .admin-quote-form,
+    .admin-products-grid > article > div,
+    .admin-product-cell > img,
+    .workspace-product-rail > a > div,
+    .admin-order-product img,
+    .editor-gallery-preview > img,
+    .editor-asset-library button
+  ) {
+  background: var(--workspace-soft);
+  border-color: var(--workspace-line);
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-breadcrumb,
+    .admin-date,
+    .admin-muted,
+    .admin-page-heading p,
+    .admin-panel-heading p,
+    .admin-panel-heading h2 > span,
+    .admin-nav-label,
+    .admin-user small,
+    .admin-user > svg,
+    .admin-product-stats,
+    .admin-product-cell small,
+    .admin-order-product small,
+    .admin-customer-cell small,
+    .admin-customer-detail p,
+    .admin-products-grid article > small,
+    .admin-products-grid article > span,
+    .admin-categories p,
+    .admin-categories article small,
+    .admin-table-toolbar > span,
+    .admin-pagination,
+    .integration-panel > p,
+    .integration-panel > div:not(.admin-panel-heading),
+    .settings-preview-link small,
+    .admin-activity p,
+    .admin-activity small,
+    .admin-editor .detail-copy-columns p,
+    .admin-editor .order-detail-item small,
+    .plot-y-axis,
+    .plot-x-axis,
+    .workspace-metric > span:not(.metric-float),
+    .workspace-legend,
+    .chart-footer,
+    .chart-note,
+    .message-list span,
+    .message-list small,
+    .message-conversation header p,
+    .message-bubbles time,
+    .admin-footer small,
+    .field small,
+    .empty-state p,
+    .secure-note
+  ) {
+  color: var(--workspace-muted);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-page-heading h1,
+    .admin-panel-heading h2,
+    .admin-categories h2,
+    .admin-categories strong,
+    .admin-product-stats b,
+    .admin-products-grid h3,
+    .admin-products-grid article > strong,
+    .admin-product-cell strong,
+    .admin-customer-cell strong,
+    .admin-activity strong,
+    .admin-payment-summary strong,
+    .admin-payment-summary b,
+    .admin-ready-panel strong,
+    .admin-order-top > strong,
+    .admin-editor .detail-copy-columns h3,
+    .admin-editor .detail-copy-columns h4,
+    .admin-editor .order-detail-item b,
+    .integration-panel strong,
+    .editor-content h3,
+    .empty-state h2,
+    .field > span,
+    .checkbox-label,
+    .workspace-metric > strong
+  ) {
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-brand,
+    .admin-table td,
+    .admin-table-toolbar,
+    .admin-pagination,
+    .admin-status-tabs,
+    .admin-products-grid > article,
+    .workspace-product-rail > a,
+    .admin-activity > div,
+    .integration-panel > div,
+    .editor-tabs,
+    .editor-footer,
+    .admin-order-top,
+    .admin-editor .order-detail-item,
+    .delivery-settings,
+    .message-layout,
+    .message-list,
+    .message-list > button,
+    .message-conversation > header,
+    .message-conversation form,
+    .admin-payment-summary > div
+  ) {
+  border-color: var(--workspace-line);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-text-link,
+    .text-link,
+    .settings-preview-link,
+    .admin-table a,
+    .admin-order-reference,
+    .chart-footer > button,
+    .visitor-panel summary,
+    .admin-search button,
+    .admin-preview-banner a,
+    .checkout-contact a
+  ) {
+  color: var(--workspace-accent);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-table th,
+    .admin-table tbody tr:nth-child(even),
+    .workspace-toolbar select,
+    .admin-table-toolbar select,
+    .admin-customer-cell > span,
+    .admin-customer-detail > span,
+    .admin-category-icon,
+    .admin-activity > div > span,
+    .admin-status-tabs b,
+    .empty-icon,
+    .message-bubbles > article
+  ) {
+  background: var(--workspace-soft);
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-sidebar nav > a,
+    .admin-sidebar-bottom > button,
+    .admin-profile-popover > button,
+    .admin-profile-popover > a,
+    .message-list > button,
+    .admin-status-tabs button,
+    .editor-tabs button
+  ) {
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-sidebar nav > a svg,
+    .admin-sidebar-bottom svg,
+    .admin-search > svg
+  ) {
+  color: var(--workspace-muted);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-sidebar nav > a:hover,
+    .admin-sidebar-bottom > button:hover,
+    .admin-profile-popover > a:hover,
+    .admin-profile-popover > button:hover,
+    .message-list > button:hover
+  ) {
+  background: var(--workspace-hover);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .admin-sidebar nav > a.active,
+    .admin-sidebar nav > a.active:hover,
+    .admin-status-tabs button.active,
+    .admin-status-tabs button.active b,
+    .editor-tabs button.active,
+    .message-list > button.selected,
+    .message-bubbles > article.from-store,
+    .admin-preview-banner
+  ) {
+  background: var(--workspace-accent-bg);
+  color: var(--workspace-accent);
+  border-color: var(--workspace-accent);
+}
+
+.commerce-surface .admin-shell[data-theme] .admin-sidebar nav > a.active svg {
+  color: var(--workspace-accent);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  .admin-sidebar
+  nav
+  > a
+  > .admin-nav-text {
+  background: none;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  margin: 0;
+  text-align: start;
+  min-width: 0;
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  .admin-sidebar
+  nav
+  > a
+  > .admin-nav-count {
+  background: var(--workspace-danger-bg);
+  color: var(--workspace-danger);
+  border-color: var(--workspace-line);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.badge, .notice, .admin-user > span) {
+  background: var(--workspace-soft);
+  color: var(--workspace-ink);
+  border-color: var(--workspace-line);
+}
+
+.commerce-surface .admin-shell[data-theme] :is(.badge.danger, .notice.error) {
+  background: var(--workspace-danger-bg);
+  color: var(--workspace-danger);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.badge.success, .notice.success, .cash-receipt-form) {
+  background: var(--workspace-success-bg);
+  color: var(--workspace-success);
+  border-color: var(--workspace-line);
+}
+
+.commerce-surface .admin-shell[data-theme] .badge.warning {
+  background: var(--workspace-warning-bg);
+  color: var(--workspace-warning);
+}
+
+.commerce-surface .admin-shell[data-theme] :is(.button, .button:hover) {
+  background: var(--workspace-action);
+  color: var(--workspace-action-ink);
+}
+
+.commerce-surface .admin-shell[data-theme] .button:hover {
+  background: var(--workspace-action-hover);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .button.secondary,
+    .icon-button,
+    .modal .icon-button,
+    .view-toggle .icon-button
+  ) {
+  background: var(--workspace-soft);
+  color: var(--workspace-ink);
+  border-color: var(--workspace-line);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.button.secondary:hover, .icon-button:hover, .modal .icon-button:hover) {
+  background: var(--workspace-hover);
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.view-toggle .icon-button[aria-pressed="true"], .icon-button.selected) {
+  background: var(--workspace-accent-bg);
+  color: var(--workspace-accent);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(
+    .field input,
+    .field select,
+    .field textarea,
+    .workspace-toolbar input,
+    .workspace-toolbar select,
+    .admin-table-toolbar select
+  ) {
+  background: var(--workspace-paper);
+  color: var(--workspace-ink);
+  border-color: var(--workspace-control);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.admin-search, .checkout-search) {
+  border-color: var(--workspace-control);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.admin-search input, .checkout-search input) {
+  color: var(--workspace-ink);
+}
+
+.commerce-surface .admin-shell[data-theme] .publish-price-check {
+  background: var(--workspace-soft);
+  border-color: var(--workspace-line);
+  color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(.delivery-settings h3, .settings-preview-link strong) {
+  color: var(--workspace-ink);
+}
+
+.commerce-surface .admin-shell[data-theme] .admin-table td > b {
+  color: var(--workspace-ink);
+}
+
+.commerce-surface .admin-shell[data-theme] .settings-preview-link strong {
+  font-size: 15px;
+}
+
+.commerce-surface .admin-shell[data-theme] .settings-preview-link small {
+  font-size: 14px;
+}
+
+.commerce-surface .admin-shell[data-theme] .button {
+  font-size: 14px;
+}
+
+.commerce-surface .admin-shell[data-theme] .field :is(input, select, textarea) {
+  font-size: 15px;
+}
+
+.commerce-surface .admin-shell[data-theme] :is(input, textarea)::placeholder {
+  color: var(--workspace-muted);
+  opacity: 1;
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  :is(a, button, summary, input, textarea, select):focus-visible {
+  outline: 2px solid var(--workspace-focus);
+  outline-offset: 2px;
+}
+
+.commerce-surface .admin-shell[data-theme] .chart-period-buttons button {
+  background: var(--workspace-soft);
+  color: var(--workspace-muted);
+}
+
+.commerce-surface
+  .admin-shell[data-theme]
+  .chart-period-buttons
+  button.selected {
+  background: var(--workspace-warning-bg);
+  color: var(--workspace-warning);
+}
+
+.commerce-surface .admin-shell[data-theme] .metric-float {
+  background: var(--workspace-success-bg);
+  color: var(--workspace-success);
+  border-color: var(--workspace-paper);
+}
+
+.commerce-surface .admin-shell[data-theme] .metric-float.red {
+  background: var(--workspace-danger-bg);
+  color: var(--workspace-danger);
+}
+.commerce-surface .admin-shell[data-theme] .metric-float.violet {
+  background: var(--workspace-accent-bg);
+  color: var(--workspace-accent);
+}
+.commerce-surface .admin-shell[data-theme] .metric-float.amber {
+  background: var(--workspace-warning-bg);
+  color: var(--workspace-warning);
+}
+.commerce-surface .admin-shell[data-theme] .workspace-plot svg > line {
+  stroke: var(--workspace-line);
+  opacity: 1;
+}
+.commerce-surface .admin-shell[data-theme] .visitor-bars > div > span {
+  background: var(--workspace-accent);
+}
+.commerce-surface
+  .admin-shell[data-theme]
+  .visitor-bars
+  > div.not-recorded
+  > span {
+  background: var(--workspace-control);
+}
+.commerce-surface .admin-shell[data-theme] .payment-brand-cod {
+  color: var(--workspace-ink);
+}
+
+/* Invoices keep the same paper colours on screen and in print. */
+.commerce-surface .admin-shell[data-theme] .invoice-document {
+  color-scheme: light;
+  color: #223149;
+  background: #fff;
+}
+.commerce-surface .admin-shell[data-theme] .invoice-document h2 {
+  color: #223149;
+}
+.commerce-surface .admin-shell[data-theme] .invoice-document :is(h3, small) {
+  color: #52627a;
+}
+.commerce-surface
+  .admin-shell[data-theme]
+  .invoice-document
+  .payment-brand-cod {
+  color: #223149;
+}
+
+@media print {
+  .commerce-surface .admin-shell[data-theme]:has(.invoice-document) .modal {
+    color: #223149;
+    background: #fff;
+  }
+}

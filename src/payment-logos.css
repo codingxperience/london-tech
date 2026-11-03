@@ -9,3 +9,14 @@
 .shop-footer .payment-marks{gap:8px}
 .shop-footer .payment-marks>.payment-brand,.commerce-surface .product-page .payment-marks>.payment-brand{padding:7px 10px;min-height:38px;border:1px solid #e2e8f0;border-radius:4px}
 @media(max-width:500px){.payment-brand{width:76px;height:35px;padding:6px 8px}.payment-options .payment-brand{width:65px;height:34px}.payment-method-name{gap:8px}.shop-footer .payment-marks>.payment-brand,.commerce-surface .product-page .payment-marks>.payment-brand{min-height:35px}}
+
+.payment-brand.payment-brand-cod{color:#0b2c54;background:transparent;border-color:transparent;padding:3px 10px;min-width:0}
+.payment-brand-cod .cash-on-delivery-icon{display:block;width:32px;height:32px;flex-shrink:0}
+.shop-footer .payment-marks>.payment-brand-cod,.store-footer .payment-marks>.payment-brand-cod{width:43px;color:#fff;background:transparent;border-color:transparent;padding:3px}
+@media(max-width:700px){
+  .shop-footer .footer-payments{min-width:0;max-width:100%;padding-inline-end:0;flex-shrink:1}
+  .shop-footer .payment-marks{flex-wrap:wrap;max-width:100%}
+}
+@media(max-width:500px){
+  .shop-footer .payment-marks>.payment-brand:not(.payment-brand-cod){width:66px}
+}

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react"
 import {
   ArrowRight,
   ArrowLeft,
+  ChevronDown,
   CheckCircle2,
   Heart,
   Home,
@@ -23,6 +24,7 @@ import {
 } from "lucide-react"
 
 import { useStore, navigate } from "../store.jsx"
+import { useMediaQuery } from "../lib/use-media-query.js"
 
 import { money, productPath } from "../data/catalog.js"
 
@@ -92,6 +94,8 @@ function GuestWishlist() {
 }
 
 export function Account({ section = "overview", orderId }) {
+  const compactNavigation = useMediaQuery("(max-width: 1100px)")
+  const [navigationOpen, setNavigationOpen] = useState(false)
   const {
     user,
     setUser,
@@ -117,6 +121,10 @@ export function Account({ section = "overview", orderId }) {
   useEffect(() => {
     if (user) load()
   }, [user?.id])
+  useEffect(
+    () => setNavigationOpen(false),
+    [section, orderId, compactNavigation],
+  )
 
   if (!user && section === "wishlist") return <GuestWishlist />
 
@@ -191,25 +199,51 @@ export function Account({ section = "overview", orderId }) {
       />
       <h1 className="sr-only">My account</h1>
       <div className="account-layout">
-        <aside className="account-sidebar">
+        <aside
+          className="account-sidebar"
+          onKeyDown={(event) => {
+            if (event.key !== "Escape" || !navigationOpen) return
+            setNavigationOpen(false)
+            event.currentTarget
+              .querySelector(".account-navigation-toggle")
+              ?.focus()
+          }}
+        >
           <div className="account-avatar">
-            {user.name
-              .split(" ")
-              .map((v) => v[0])
-              .slice(0, 2)
-              .join("")}
-            <span>
+            <span className="account-profile-icon" aria-hidden="true">
+              <UserRound size={23} />
+            </span>
+            <span className="account-identity">
               <strong>{user.name}</strong>
               <small>{user.email}</small>
             </span>
           </div>
-          <nav aria-label="Account navigation">
+          {compactNavigation && (
+            <button
+              className="account-navigation-toggle"
+              aria-expanded={navigationOpen}
+              aria-controls="account-navigation"
+              onClick={() => setNavigationOpen((open) => !open)}
+            >
+              <span>Account menu</span>
+              <strong>
+                {nav.find(([id]) => id === section)?.[1] || "My orders"}
+              </strong>
+              <ChevronDown size={19} />
+            </button>
+          )}
+          <nav
+            id="account-navigation"
+            aria-label="Account navigation"
+            hidden={compactNavigation && !navigationOpen}
+          >
             {nav.map(([id, label, Icon]) => (
               <a
                 href={"/account/" + (id === "overview" ? "" : id + "/")}
                 key={id}
                 className={section === id ? "active" : ""}
                 aria-current={section === id ? "page" : undefined}
+                onClick={() => setNavigationOpen(false)}
               >
                 <Icon size={20} />
                 {label}

@@ -9,6 +9,8 @@ import {
   preferenceDefaults,
 } from "../admin/preview.js"
 import "../admin-workspace.css"
+import "../admin-navigation.css"
+import "../admin-theme.css"
 import { PaymentMarks } from "../components/PaymentMarks.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
 import React, { useEffect, useState, useRef } from "react"
@@ -34,6 +36,8 @@ import {
   LockKeyhole,
   LogOut,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Package,
   Plus,
   Search,
@@ -54,6 +58,7 @@ import {
 } from "lucide-react"
 
 import { useStore, navigate } from "../store.jsx"
+import { useMediaQuery } from "../lib/use-media-query.js"
 
 import {
   categories,
@@ -91,7 +96,7 @@ const tabs = [
   ["products", "Products", Package],
   ["wishlist", "Wishlist", Heart],
   ["orders", "Orders", ShoppingBag],
-  ["checkouts", "Checkout follow-up", RotateCcw],
+  ["checkouts", "Follow-ups", RotateCcw],
   ["invoices", "Invoices", FileText],
   ["history", "History", Activity],
   ["inventory", "Inventory", Box],
@@ -143,6 +148,14 @@ export default function Admin({
   preview = false,
   search = "",
 }) {
+  const compactSidebar = useMediaQuery("(max-width: 1100px)")
+  const [collapsed, setCollapsed] = useState(
+    () => readStorage("lt.admin.sidebar-collapsed.v1", false) === true,
+  )
+  useEffect(
+    () => writeStorage("lt.admin.sidebar-collapsed.v1", collapsed),
+    [collapsed],
+  )
   const { user, authLoading, logout, refresh } = useStore()
   const [preferences, updatePreferences] = useState(() => ({
     ...preferenceDefaults,
@@ -179,11 +192,14 @@ export default function Admin({
     [customer, setCustomer] = useState(null)
 
   const base = preview ? "/admin/preview/" : "/admin/"
+  useEffect(() => setMenu(false), [compactSidebar])
+  const toggleSidebar = () =>
+    compactSidebar ? setMenu((open) => !open) : setCollapsed((value) => !value)
   useEffect(() => {
     if (preview && data) writeStorage(previewKey, data)
   }, [preview, data])
   useEffect(() => {
-    if (!menu) return
+    if (!menu || !compactSidebar) return
     const old = document.body.style.overflow
     document.body.style.overflow = "hidden"
     const previous = document.activeElement
@@ -209,7 +225,7 @@ export default function Admin({
       document.removeEventListener("keydown", key)
       previous?.focus()
     }
-  }, [menu])
+  }, [menu, compactSidebar])
   function previewChange(action, details, change) {
     setData((current) => ({
       ...change(current),
@@ -367,14 +383,39 @@ export default function Admin({
   const storeLink = () => window.open("/", "_blank", "noopener,noreferrer")
 
   return (
-    <div className="admin-shell" data-theme={preferences.theme}>
+    <div
+      className={
+        "admin-shell" +
+        (collapsed && !compactSidebar ? " sidebar-collapsed" : "")
+      }
+      data-theme={preferences.theme}
+    >
       <aside
         ref={sidebar}
+        id="admin-sidebar"
         className={"admin-sidebar " + (menu ? "open" : "")}
         aria-label="Administration navigation"
+        role={compactSidebar && menu ? "dialog" : undefined}
+        aria-modal={compactSidebar && menu ? true : undefined}
+        inert={compactSidebar && !menu ? true : undefined}
       >
-        <a className="admin-brand" href={base}>
-          <BrandWordmark width={174} inverse={preferences.theme === "dark"} />
+        <a
+          className="admin-brand"
+          href={base}
+          aria-label="London Tech dashboard"
+        >
+          <img
+            className="admin-brand-logo"
+            src="/assets/london-tech-logo.png"
+            width="46"
+            height="46"
+            alt=""
+          />
+          <BrandWordmark
+            decorative
+            width={152}
+            inverse={preferences.theme === "dark"}
+          />
         </a>
         <p className="admin-nav-label">WORKSPACE</p>
         <nav>
@@ -384,14 +425,16 @@ export default function Admin({
               key={id}
               className={section === id ? "active" : ""}
               aria-current={section === id ? "page" : undefined}
+              aria-label={label}
+              title={collapsed && !compactSidebar ? label : undefined}
               onClick={() => setMenu(false)}
             >
               <Icon size={19} />
-              {label}
+              <span className="admin-nav-text">{label}</span>
               {id === "orders" &&
                 orders.filter((o) => o.status === "quote_requested").length >
                   0 && (
-                  <span>
+                  <span className="admin-nav-count">
                     {
                       orders.filter((o) => o.status === "quote_requested")
                         .length
@@ -402,32 +445,61 @@ export default function Admin({
           ))}
         </nav>
         <div className="admin-sidebar-bottom">
+          <button
+            className="admin-sidebar-toggle"
+            onClick={toggleSidebar}
+            aria-label={
+              compactSidebar
+                ? "Close navigation"
+                : collapsed
+                  ? "Expand sidebar"
+                  : "Collapse sidebar"
+            }
+            title={collapsed && !compactSidebar ? "Expand sidebar" : undefined}
+            aria-controls="admin-sidebar"
+            aria-expanded={compactSidebar ? menu : !collapsed}
+          >
+            {collapsed && !compactSidebar ? (
+              <PanelLeftOpen size={19} />
+            ) : (
+              <PanelLeftClose size={19} />
+            )}
+            <span className="admin-nav-text">
+              {compactSidebar ? "Close menu" : "Collapse sidebar"}
+            </span>
+          </button>
           <button onClick={storeLink}>
             <ExternalLink size={16} />
-            View storefront
+            <span className="admin-nav-text">View storefront</span>
             <ArrowUpRight size={13} />
           </button>
           {!preview && (
             <button onClick={() => logout().catch((e) => setError(e.message))}>
               <LogOut size={16} />
-              Sign out
+              <span className="admin-nav-text">Sign out</span>
             </button>
           )}
         </div>
       </aside>
-      {menu && (
+      {menu && compactSidebar && (
         <button
           className="admin-sidebar-overlay"
           aria-label="Close navigation"
+          tabIndex={-1}
           onClick={() => setMenu(false)}
         />
       )}
-      <div className="admin-workspace">
+      <div
+        className="admin-workspace"
+        inert={compactSidebar && menu ? true : undefined}
+      >
         <header className="admin-topbar">
           <IconButton
             label="Toggle navigation"
             className="admin-menu"
-            onClick={() => setMenu(!menu)}
+            aria-controls="admin-sidebar"
+            aria-expanded={compactSidebar ? menu : !collapsed}
+            onClick={toggleSidebar}
           >
             <Menu size={20} />
           </IconButton>

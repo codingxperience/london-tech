@@ -90,7 +90,8 @@ before(async () => {
     get matches() {
       return (
         (media.includes("prefers-reduced-motion") && reducedMotion) ||
-        (media.includes("max-width: 700px") && compactScreen)
+        Number(media.match(/max-width:\s*(\d+)px/)?.[1] || 0) >=
+          (compactScreen ? 640 : 1366)
       )
     },
     addEventListener: (_event, callback) => mediaListeners.add(callback),
@@ -1423,6 +1424,21 @@ test("cash checkout displays a district delivery total, places the order directl
         'nav[aria-label="Account navigation"] a[aria-current="page"]',
       ),
     )
+    assert.ok(container.querySelector(".account-profile-icon svg"))
+    compactScreen = true
+    await act(async () => {
+      for (const listener of mediaListeners) listener()
+    })
+    const menuToggle = container.querySelector(".account-navigation-toggle")
+    assert.equal(menuToggle.getAttribute("aria-expanded"), "false")
+    assert.equal(container.querySelector("#account-navigation").hidden, true)
+    await click(menuToggle)
+    assert.equal(container.querySelector("#account-navigation").hidden, false)
+    await click(
+      container.querySelector('#account-navigation a[href="/account/"]'),
+    )
+    assert.equal(dom.location.pathname, "/account/")
+    assert.equal(container.querySelector("#account-navigation").hidden, true)
   } finally {
     globalThis.fetch = originalFetch
   }
@@ -1962,6 +1978,7 @@ test("the complete admin preview routes every navigation item to its own screen 
     "products",
     "wishlist",
     "orders",
+    "checkouts",
     "invoices",
     "history",
     "inventory",
@@ -1985,6 +2002,33 @@ test("the complete admin preview routes every navigation item to its own screen 
     )
     assert.ok(container.querySelector(".admin-main h1").textContent.length)
   }
+  const collapse = container.querySelector(".admin-sidebar-toggle")
+  assert.ok(
+    collapse
+      .closest(".admin-sidebar-bottom")
+      .previousElementSibling.matches("nav"),
+  )
+  await click(collapse)
+  assert.ok(container.querySelector(".admin-shell.sidebar-collapsed"))
+  assert.ok(container.querySelector(".admin-brand-logo"))
+  assert.equal(
+    JSON.parse(dom.localStorage.getItem("lt.admin.sidebar-collapsed.v1")),
+    true,
+  )
+  assert.equal(
+    container
+      .querySelector('.admin-sidebar a[href$="/checkouts/"]')
+      .getAttribute("aria-label"),
+    "Follow-ups",
+  )
+  compactScreen = true
+  await act(async () => {
+    for (const listener of mediaListeners) listener()
+  })
+  assert.equal(
+    container.querySelector(".admin-sidebar").hasAttribute("inert"),
+    true,
+  )
   await click(container.querySelector('[aria-label="Toggle navigation"]'))
   assert.ok(container.querySelector(".admin-sidebar.open"))
   await dispatch(
