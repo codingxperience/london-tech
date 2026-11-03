@@ -1,6 +1,13 @@
 import { randomUUID } from "node:crypto"
 
 import { fail } from "./security.js"
+import { queueOrderEmail } from "./order-emails.js"
+
+export const onlinePaymentsReady = () =>
+  Boolean(
+    process.env.FLW_SECRET_KEY &&
+      (process.env.NODE_ENV !== "production" || process.env.FLW_SECRET_HASH),
+  )
 
 export async function flutterwave(path, options = {}) {
   if (!process.env.FLW_SECRET_KEY)
@@ -145,6 +152,7 @@ export async function verifyPayment(db, transactionId, expectedOrderId) {
         ...(order.details.timeline || []),
         {
           status,
+          kind: "payment",
           at: new Date().toISOString(),
           note: "Payment verified with Flutterwave.",
         },
@@ -173,7 +181,17 @@ export async function verifyPayment(db, transactionId, expectedOrderId) {
       ],
     )
 
-    return (await tx.query("SELECT * FROM orders WHERE id=$1", [order.id]))
-      .rows[0]
+    const updated = (
+      await tx.query("SELECT * FROM orders WHERE id=$1", [order.id])
+    ).rows[0]
+    await queueOrderEmail(
+      tx,
+      updated,
+      "payment",
+      needsReview
+        ? "Payment received · order under review"
+        : "Payment confirmed",
+    )
+    return updated
   })
 }

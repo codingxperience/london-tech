@@ -1,5 +1,6 @@
 import { MessageCentre } from "../components/MessageCentre.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
+import { OrderTracking } from "../components/OrderTracking.jsx"
 import React, { useEffect, useState } from "react"
 
 import {
@@ -113,14 +114,17 @@ export function Account({ section = "overview", orderId }) {
     [addressModal, setAddressModal] = useState(null)
 
   const load = () =>
-    api("orders")
-      .then((d) => setOrders(d.orders))
+    api(orderId ? "orders/" + encodeURIComponent(orderId) : "orders")
+      .then((d) => {
+        setError("")
+        setOrders(orderId ? [d.order].filter(Boolean) : d.orders)
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoaded(true))
 
   useEffect(() => {
     if (user) load()
-  }, [user?.id])
+  }, [user?.id, orderId])
   useEffect(
     () => setNavigationOpen(false),
     [section, orderId, compactNavigation],
@@ -640,7 +644,8 @@ function OrderList({ orders, loaded }) {
 function OrderDetail({ order: o, loaded, reload }) {
   const { settings, notify } = useStore()
   const [busy, setBusy] = useState(false),
-    [error, setError] = useState("")
+    [error, setError] = useState(""),
+    [refreshing, setRefreshing] = useState(false)
 
   if (!loaded) return <p className="loading-line">Opening your order…</p>
   if (!o)
@@ -687,23 +692,20 @@ function OrderDetail({ order: o, loaded, reload }) {
             : "Follow the order progress below."}
         </Notice>
       )}
-      <div className="order-timeline">
-        {(o.timeline || []).map((event, i) => (
-          <div key={i}>
-            <span>
-              <CheckCircle2 size={16} />
-            </span>
-            <div>
-              <strong>{statusLabel(event.status)}</strong>
-              <small>
-                {dateLabel(event.at)}
-                {event.note ? " · " + event.note : ""}
-              </small>
-            </div>
-          </div>
-        ))}
-      </div>
+      <OrderTracking
+        order={o}
+        refreshing={refreshing}
+        refresh={async () => {
+          setRefreshing(true)
+          try {
+            await reload()
+          } finally {
+            setRefreshing(false)
+          }
+        }}
+      />
       <div className="form-card">
+        <h3>Order items</h3>
         {o.items.map((p, i) => (
           <div className="order-detail-item" key={i}>
             <img src={p.image} alt="" />
@@ -761,6 +763,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
             {statusLabel(o.paymentStatus)}
           </Badge>
+          {o.cashReceipt?.receipt && <p>Receipt {o.cashReceipt.receipt}</p>}
           {o.notes && (
             <>
               <h4>Your note</h4>

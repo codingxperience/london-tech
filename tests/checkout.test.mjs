@@ -15,6 +15,8 @@ process.env.ADMIN_PASSWORD = "Checkout-test-administrator-46!"
 delete process.env.DATABASE_URL
 delete process.env.POSTGRES_URL
 delete process.env.FLW_SECRET_KEY
+delete process.env.RESEND_API_KEY
+delete process.env.EMAIL_FROM
 const { default: handler } = await import("../server/handler.js")
 const { getDatabase } = await import("../server/db.js")
 let db, server, origin, admin, customer, other, product
@@ -518,5 +520,107 @@ test("cash receipt and cancellation cannot both win a simultaneous request", asy
   } else {
     assert.equal(current.paymentStatus, "paid")
     assert.equal(stock, 0)
+  }
+})
+
+test("order email survives provider failure, retries once, and follows actual fulfillment changes", async () => {
+  const p = await fixture("checkout-email-journey", 2)
+  const originalFetch = globalThis.fetch
+  const sends = []
+  let rejectMail = true
+  process.env.RESEND_API_KEY = "resend-test-fixture"
+  process.env.EMAIL_FROM = "London Tech <orders@example.com>"
+  globalThis.fetch = async (url, options) => {
+    if (String(url) !== "https://api.resend.com/emails")
+      return originalFetch(url, options)
+    sends.push({
+      key: options.headers["Idempotency-Key"],
+      body: JSON.parse(options.body),
+    })
+    return Response.json(
+      rejectMail ? {} : { id: "provider-fixture-" + sends.length },
+      { status: rejectMail ? 503 : 200 },
+    )
+  }
+  try {
+    const base = orderBody(p)
+    const body = {
+      ...base,
+      fulfillment: "delivery",
+      customer: {
+        ...base.customer,
+        district: "Kampala",
+        address: "Private sample delivery address",
+      },
+    }
+    const result = await request("orders", { method: "POST", body })
+    assert.equal(result.status, 201)
+    const order = result.data.order,
+      root = "admin/orders/" + order.id,
+      emailPath = root + "/emails"
+    assert.equal((await request(emailPath)).status, 403)
+    const failed = (await request(emailPath, { cookie: admin })).data.emails[0]
+    assert.equal(failed.state, "failed")
+    assert.equal(sends[0].body.to[0], base.customer.email)
+    assert.doesNotMatch(sends[0].body.text, /Private sample delivery address/)
+    assert.match(sends[0].body.text, new RegExp("/account/orders/" + order.id))
+    rejectMail = false
+    const retry = () =>
+      request(emailPath, {
+        method: "POST",
+        cookie: admin,
+        body: { id: failed.id },
+      })
+    await Promise.all([retry(), retry()])
+    assert.equal(sends.length, 2)
+    assert.equal(sends[0].key, sends[1].key)
+    assert.equal(
+      (await request(emailPath, { cookie: admin })).data.emails[0].state,
+      "sent",
+    )
+    const update = {
+      status: "shipped",
+      note: "With the courier",
+      tracking: {
+        carrier: "Example courier",
+        reference: "UG-42",
+        estimatedDate: "2027-01-15",
+        url: "https://example.com/track/UG-42",
+      },
+    }
+    const save = (payload) =>
+      request(root, { method: "PATCH", cookie: admin, body: payload })
+    assert.equal(
+      (
+        await save({
+          ...update,
+          tracking: { ...update.tracking, url: "javascript:alert(1)" },
+        })
+      ).status,
+      400,
+    )
+    assert.equal((await save(update)).status, 200)
+    assert.equal((await save(update)).status, 200)
+    assert.equal(sends.length, 3)
+    assert.match(sends[2].body.subject, /Order dispatched/)
+    const tracked = (await request("orders/" + order.id)).data.order
+    assert.deepEqual(tracked.tracking, update.tracking)
+    assert.equal(tracked.timeline.at(-1).note, update.note)
+    assert.equal(
+      (
+        await request(root + "/cash-payment", {
+          method: "POST",
+          cookie: admin,
+          body: { confirmed: true },
+        })
+      ).status,
+      200,
+    )
+    assert.match(sends[3].body.subject, /Cash payment received/)
+    assert.match(sends[3].body.text, /Cash receipt CASH-/)
+  } finally {
+    globalThis.fetch = originalFetch
+    delete process.env.RESEND_API_KEY
+    delete process.env.EMAIL_FROM
   }
 })

@@ -15,7 +15,7 @@
 @media(max-width:700px){.commerce-surface .account-sidebar nav>a>svg:last-child{display:none}.commerce-surface .account-sidebar nav>a>svg:first-child{flex-shrink:0}.commerce-surface .account-stat-grid{gap:12px}.commerce-surface .account-stat-grid span{font-size:14px}.checkout-contact-actions{width:100%}}
 @media(max-width:480px){.commerce-surface .auth-card-simple .auth-form-panel{padding:31px 23px}.commerce-surface .auth-form-brand{margin-bottom:28px}.commerce-surface .auth-card-simple h1{font-size:26px}.commerce-surface .account-stat-grid{grid-template-columns:minmax(0,1fr)}.checkout-recovery .admin-panel-heading{flex-wrap:wrap}.cash-receipt-form{padding:16px}}
 
-.commerce-surface .account-sidebar{min-width:0;overflow:hidden;border-radius:9px}
+.commerce-surface .account-sidebar{position:static;align-self:start;min-width:0;overflow:hidden;border-radius:9px}
 .commerce-surface .account-sidebar .account-avatar{display:flex;align-items:center;gap:13px;padding:21px;background:#f3f6fa;border-bottom:1px solid #e1e7f0}
 .commerce-surface .account-sidebar .account-profile-icon{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;border-radius:50%;border:1px solid #d8e2ee;background:white;color:#153959}
 .commerce-surface .account-sidebar .account-identity{min-width:0;display:flex;flex-direction:column;gap:3px}

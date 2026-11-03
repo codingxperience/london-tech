@@ -1,0 +1,397 @@
+.commerce-surface .refined-checkout {
+  gap: 24px;
+  align-items: start;
+}
+.refined-checkout .checkout-form {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.commerce-surface
+  .refined-checkout
+  :is(.form-card, .checkout-summary, .checkout-terms) {
+  margin: 0;
+  min-width: 0;
+  padding: clamp(17px, 2.3vw, 29px);
+  border: 1px solid #dfe7f1;
+  border-radius: 13px;
+  background: #fff;
+}
+.commerce-surface .refined-checkout .form-section-heading {
+  align-items: center;
+  margin-bottom: 19px;
+}
+.commerce-surface .refined-checkout .form-section-heading h2 {
+  font-size: 19px;
+  font-weight: 800;
+}
+.commerce-surface .refined-checkout .form-section-heading > span {
+  background: #edf2f8;
+  color: #173a61;
+  font-weight: 800;
+}
+.commerce-surface
+  .refined-checkout
+  :is(.fulfillment-choices, .payment-options) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 0;
+}
+.commerce-surface
+  .refined-checkout
+  :is(.fulfillment-choices, .payment-options)
+  > label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 75px;
+  padding: 12px;
+  border: 1px solid #dce5ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #153959;
+}
+.commerce-surface
+  .refined-checkout
+  :is(.fulfillment-choices, .payment-options)
+  > label.selected {
+  background: #eef4fb;
+  border-color: #174574;
+  box-shadow: inset 0 0 0 1px #174574;
+}
+.commerce-surface
+  .refined-checkout
+  :is(.fulfillment-choices, .payment-options)
+  > label:focus-within {
+  outline: 2px solid #456e9d;
+  outline-offset: 2px;
+}
+.refined-checkout .fulfillment-choices input {
+  grid-column: 3;
+  grid-row: 1;
+}
+.refined-checkout .fulfillment-choices > label > svg {
+  grid-column: 1;
+  grid-row: 1;
+}
+.refined-checkout .fulfillment-choices > label > span {
+  grid-column: 2;
+  grid-row: 1;
+}
+.refined-checkout
+  :is(.fulfillment-choices, .payment-options)
+  input[type="radio"] {
+  position: static;
+  opacity: 1;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #143c67;
+}
+.commerce-surface
+  .refined-checkout
+  :is(.fulfillment-choices, .payment-options)
+  strong {
+  margin: 0;
+  color: #112e50;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.commerce-surface .refined-checkout .fulfillment-choices small {
+  display: block;
+  color: #53677e;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.refined-checkout .payment-options .payment-brand {
+  width: 58px;
+  height: 32px;
+  padding: 3px 5px;
+}
+.refined-checkout .payment-options .payment-brand-visa img {
+  width: 50px;
+  height: 50px;
+}
+.refined-checkout .payment-options .payment-brand-cod {
+  border: 0;
+  padding: 0;
+}
+.commerce-surface .refined-checkout .payment-options .unavailable {
+  opacity: 0.67;
+  background: #f6f8fb;
+}
+.commerce-surface .refined-checkout .checkout-distance {
+  margin: 13px 0 0;
+  color: #53677e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.refined-checkout
+  .fulfillment-choices
+  + :is(.field, .form-grid, .collection-address) {
+  margin-top: 17px;
+}
+.refined-checkout .checkout-terms summary {
+  font-size: 14px;
+  color: #153959;
+  font-weight: 800;
+  cursor: pointer;
+}
+.refined-checkout .checkout-terms details .field {
+  margin-top: 12px;
+}
+.commerce-surface .refined-checkout .terms-check {
+  margin: 15px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.commerce-surface .refined-checkout .checkout-summary h2 {
+  font-size: 20px;
+  font-weight: 800;
+}
+.commerce-surface .refined-checkout .checkout-summary {
+  position: static;
+}
+.commerce-surface
+  .refined-checkout
+  .checkout-summary
+  :is(
+    .checkout-items strong,
+    .checkout-items b,
+    .summary-row,
+    .summary-row strong,
+    .summary-total > span
+  ) {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.commerce-surface .refined-checkout .checkout-items small {
+  font-size: 13px;
+}
+.commerce-surface .refined-checkout .checkout-summary .terms-check {
+  margin: 15px 0;
+}
+.commerce-surface .refined-checkout .checkout-summary .summary-total strong {
+  font-size: clamp(18px, 2vw, 26px);
+}
+.commerce-surface .refined-checkout .checkout-summary .button {
+  min-height: 49px;
+  border-radius: 7px;
+  font-size: 15px;
+}
+.refined-checkout .checkout-summary > p {
+  margin-bottom: 12px;
+}
+
+.tracking-card {
+  min-width: 0;
+  margin: 20px 0;
+  padding: clamp(17px, 2.2vw, 28px);
+  background: #fff;
+  border: 1px solid #dfe7f1;
+  border-radius: 13px;
+}
+.tracking-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.tracking-kicker {
+  display: block;
+  color: #526780;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+.commerce-surface .tracking-heading h3 {
+  margin: 3px 0 0;
+  font-size: 24px;
+  font-weight: 850;
+}
+.tracking-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #dae5ef;
+  border-radius: 6px;
+  background: #f4f7fb;
+  color: #183c64;
+  font-size: 14px;
+  cursor: pointer;
+}
+.tracking-stages {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 22px 0 0;
+  list-style: none;
+}
+.tracking-stages li {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f5f7fa;
+  color: #53677e;
+}
+.tracking-stages li.recorded {
+  color: #176046;
+  background: #eef7f3;
+}
+.tracking-stages li.current {
+  color: #0d3157;
+  background: #e8f0fa;
+  outline: 1px solid #b3c8e1;
+}
+.tracking-stage-icon {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #fff;
+}
+.tracking-stages strong,
+.tracking-courier dd {
+  font-size: 14px;
+  line-height: 1.35;
+}
+.tracking-stages time,
+.tracking-history time,
+.tracking-courier dt {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #53677e;
+}
+.tracking-courier {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px;
+  margin-top: 17px;
+  border-radius: 8px;
+  background: #f4f7fb;
+}
+.tracking-courier dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin: 0;
+}
+.tracking-courier dd {
+  margin: 4px 0 0;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.tracking-history {
+  margin-top: 20px;
+  border-top: 1px solid #e3eaf2;
+  padding-top: 14px;
+}
+.tracking-history summary,
+.admin-delivery-tracking summary {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 800;
+}
+.tracking-history summary > svg {
+  display: inline;
+  vertical-align: -3px;
+  margin-inline: 4px;
+}
+.tracking-history ol {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.tracking-history li {
+  border-left: 2px solid #dbe7f4;
+  padding: 8px 0 12px 12px;
+}
+.tracking-history li > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 13px;
+}
+.commerce-surface .tracking-history li p {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+.admin-delivery-tracking {
+  border-top: 1px solid var(--workspace-line);
+  margin: 18px 0 0;
+  padding: 13px 0;
+}
+.admin-delivery-tracking .form-grid {
+  margin-top: 13px;
+}
+.admin-order-email-list {
+  list-style: none;
+  padding: 0;
+}
+.admin-order-email-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--workspace-line);
+}
+.admin-order-email-list li > span:first-child {
+  flex: 1;
+}
+.admin-order-email-list small {
+  display: block;
+  color: var(--workspace-muted);
+}
+
+@media (max-width: 860px) {
+  .commerce-surface .refined-checkout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 540px) {
+  .commerce-surface .refined-checkout .payment-options > label {
+    grid-template-columns: 1fr auto;
+    gap: 5px 8px;
+  }
+  .refined-checkout .payment-options .payment-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .refined-checkout .payment-options input {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .refined-checkout .payment-options strong {
+    grid-column: 1 / -1;
+  }
+  .commerce-surface .refined-checkout .fulfillment-choices > label {
+    gap: 5px;
+    padding-inline: 8px;
+  }
+  .tracking-stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media print {
+  .tracking-refresh {
+    display: none;
+  }
+  .tracking-card {
+    break-inside: avoid;
+  }
+}

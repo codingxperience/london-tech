@@ -16,7 +16,7 @@ import {
   LockKeyhole,
   MapPin,
   Phone,
-  ShieldCheck,
+  Store,
   ShoppingBag,
   Trash2,
   Truck,
@@ -387,7 +387,8 @@ export function Checkout() {
       </main>
     )
 
-  const saved = user.addresses?.[Number(addressIndex)]
+  const saved =
+    addressIndex === "" ? undefined : user.addresses?.[Number(addressIndex)]
 
   return (
     <main className="container standard-page">
@@ -401,21 +402,9 @@ export function Checkout() {
           Secure checkout
         </span>
       </div>
-      <div className="checkout-steps">
-        <a href="/cart/">
-          <Check size={14} />
-          Cart
-        </a>
-        <span className="active">
-          02 <b>Your details</b>
-        </span>
-        <span>
-          03 <b>Payment</b>
-        </span>
-      </div>
       <form
         onSubmit={submit}
-        className="checkout-layout"
+        className="checkout-layout refined-checkout"
         onBlur={(e) => track(new FormData(e.currentTarget))}
       >
         <div className="checkout-form">
@@ -499,17 +488,22 @@ export function Checkout() {
                 maxLength={25}
               />
             </div>
-            <p className="checkout-contact-note">
-              We use your contact details for order updates and help completing
-              checkout.
-            </p>
+            {config.orderEmails && (
+              <p className="checkout-contact-note">
+                Order updates go to this email.
+              </p>
+            )}
           </section>
           <section className="form-card">
             <div className="form-section-heading">
               <span>02</span>
-              <h2>How would you like to receive it?</h2>
+              <h2>Delivery or pickup</h2>
             </div>
-            <div className="fulfillment-choices">
+            <div
+              className="fulfillment-choices"
+              role="group"
+              aria-label="Delivery or pickup"
+            >
               <label className={fulfillment === "collection" ? "selected" : ""}>
                 <input
                   type="radio"
@@ -517,10 +511,10 @@ export function Checkout() {
                   checked={fulfillment === "collection"}
                   onChange={() => setFulfillment("collection")}
                 />
-                <MapPin size={20} />
+                <Store size={22} aria-hidden="true" />
                 <span>
-                  <strong>Store collection</strong>
-                  <small>Arrange pickup with the store</small>
+                  <strong>Store pickup</strong>
+                  <small>Free</small>
                 </span>
               </label>
               <label className={fulfillment === "delivery" ? "selected" : ""}>
@@ -530,12 +524,12 @@ export function Checkout() {
                   checked={fulfillment === "delivery"}
                   onChange={() => setFulfillment("delivery")}
                 />
-                <Truck size={20} />
+                <Truck size={22} aria-hidden="true" />
                 <span>
                   <strong>Delivery</strong>
                   <small>
-                    {delivery.fee == null
-                      ? "Calculated by your district"
+                    {fulfillment !== "delivery" || delivery.fee == null
+                      ? "By district"
                       : money(delivery.fee)}
                   </small>
                 </span>
@@ -559,9 +553,12 @@ export function Checkout() {
                       onChange={(e) => {
                         setAddressIndex(e.target.value)
                         setDistrict(
-                          findDeliveryDistrict(
-                            user.addresses?.[Number(e.target.value)]?.district,
-                          )?.name || "",
+                          e.target.value === ""
+                            ? ""
+                            : findDeliveryDistrict(
+                                user.addresses?.[Number(e.target.value)]
+                                  ?.district,
+                              )?.name || "",
                         )
                       }}
                     >
@@ -601,18 +598,9 @@ export function Checkout() {
                     maxLength={400}
                   />
                 </div>
-                {delivery.fee != null && (
-                  <p className="delivery-estimate">
-                    <Truck size={17} />
-                    <span>
-                      <strong>{money(delivery.fee)} delivery</strong>
-                      {delivery.distanceKm != null && (
-                        <small>
-                          Estimated district distance from Kampala:{" "}
-                          {delivery.distanceKm} km
-                        </small>
-                      )}
-                    </span>
+                {delivery.distanceKm != null && (
+                  <p className="checkout-distance">
+                    Estimated district distance · {delivery.distanceKm} km
                   </p>
                 )}
               </>
@@ -623,65 +611,58 @@ export function Checkout() {
               <span>03</span>
               <h2>Payment method</h2>
             </div>
-            <div className="payment-options">
+            <div
+              className="payment-options"
+              role="group"
+              aria-label="Payment method"
+            >
               {[
                 [
                   "cod",
                   fulfillment === "delivery"
                     ? "Cash on delivery"
-                    : "Cash on collection",
-                  fulfillment === "delivery"
-                    ? "Pay when your order arrives."
-                    : "Pay when you collect your order.",
+                    : "Cash at pickup",
                 ],
-                [
-                  "mtn",
-                  "MTN Mobile Money",
-                  "Approve the payment on your MTN mobile number.",
-                ],
-                [
-                  "airtel",
-                  "Airtel Money",
-                  "Approve the payment on your Airtel mobile number.",
-                ],
-                [
-                  "visa",
-                  "Visa / card",
-                  "Enter card details securely on Flutterwave.",
-                ],
-              ].map(([id, title, desc]) => (
-                <label
-                  key={id}
-                  className={
-                    (method === id ? "selected" : "") +
-                    (id !== "cod" && !config.payments ? " unavailable" : "")
-                  }
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    checked={method === id}
-                    disabled={id !== "cod" && !config.payments}
-                    onChange={() => setMethod(id)}
-                  />
-                  <PaymentLogo method={id} decorative />
-                  <span>
+                ["mtn", "MTN Mobile Money"],
+                ["airtel", "Airtel Money"],
+                ["visa", "Visa card"],
+              ].map(([id, title]) => {
+                const disabled = id !== "cod" && !config.payments
+                return (
+                  <label
+                    key={id}
+                    className={`${method === id ? "selected" : ""}${
+                      disabled ? " unavailable" : ""
+                    }`}
+                  >
+                    <PaymentLogo method={id} decorative />
                     <strong>{title}</strong>
-                    <small>
-                      {id !== "cod" && !config.payments
-                        ? "Online payment is currently unavailable."
-                        : desc}
-                    </small>
-                  </span>
-                  {method === id && <CheckCircle2 size={18} />}
-                </label>
-              ))}
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={id}
+                      checked={method === id}
+                      disabled={disabled}
+                      onChange={() => setMethod(id)}
+                    />
+                  </label>
+                )
+              })}
             </div>
+            {!config.payments && (
+              <p className="checkout-distance">
+                Online payment is currently unavailable.
+              </p>
+            )}
             {method !== "cod" && (
-              <p className="secure-note">
-                <ShieldCheck size={15} />
-                Payment is completed on Flutterwave. We never ask for your card
-                PIN or mobile money PIN.
+              <p className="checkout-distance">
+                Choose your{" "}
+                {method === "visa"
+                  ? "card"
+                  : method === "mtn"
+                    ? "MTN number"
+                    : "Airtel number"}{" "}
+                on Flutterwave.
               </p>
             )}
             {!payable &&
@@ -697,22 +678,18 @@ export function Checkout() {
                 </Notice>
               )}
           </section>
-          <section className="form-card">
-            <Field label="Anything we should know? (optional)">
-              <textarea
-                name="notes"
-                rows={3}
-                maxLength={1000}
-                placeholder="A preferred colour, configuration or question for the store…"
-              />
-            </Field>
-            <label className="checkbox-label terms-check">
-              <input type="checkbox" required />
-              <span>
-                I have reviewed the <a href="/terms/">terms</a> and{" "}
-                <a href="/privacy/">privacy information</a>.
-              </span>
-            </label>
+          <section className="checkout-terms">
+            <details>
+              <summary>Add an order note</summary>
+              <Field label="Order note">
+                <textarea
+                  name="notes"
+                  rows={3}
+                  maxLength={1000}
+                  placeholder="Optional"
+                />
+              </Field>
+            </details>
           </section>
         </div>
         <aside className="order-summary checkout-summary">
@@ -752,18 +729,24 @@ export function Checkout() {
             <span>Total</span>
             <strong>{money(total)}</strong>
           </div>
+          <label className="checkbox-label terms-check">
+            <input type="checkbox" required />
+            <span>
+              I agree to the <a href="/terms/">terms</a> and have read the{" "}
+              <a href="/privacy/">privacy information</a>.
+            </span>
+          </label>
           <Button type="submit" busy={busy} disabled={!payable}>
-            {method === "cod" ? "Place order" : "Continue to secure payment"}
+            {method === "cod" ? "Place order" : "Continue to payment"}
             <ArrowRight size={17} />
           </Button>
           <p className="small muted">
             {method === "cod"
               ? fulfillment === "delivery"
-                ? "Pay the order total when it is delivered."
-                : "Pay the order total when you collect it."
-              : "You’ll be redirected to complete your payment securely."}
+                ? "Pay on delivery."
+                : "Pay at pickup."
+              : "Secure payment through Flutterwave."}
           </p>
-          <PaymentMarks />
           <a href="/cart/" className="text-link">
             <ArrowLeft size={14} />
             Back to cart

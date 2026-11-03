@@ -1370,11 +1370,13 @@ test("cash checkout displays a district delivery total, places the order directl
         deliveryFee: 5000,
         currency: "UGX",
         createdAt: new Date().toISOString(),
-        timeline: [],
+        timeline: [{ status: "confirmed", at: new Date().toISOString() }],
         items: [{ ...p, quantity: 1, unitPrice: p.price }],
       }
       data = { order: placed }
-    } else if (path.endsWith("/api/orders"))
+    } else if (path.endsWith("/api/orders/LT-UI-ORDER"))
+      data = { order: placed }
+    else if (path.endsWith("/api/orders"))
       data = { orders: placed ? [placed] : [] }
     else return originalFetch(url, options)
     return { ok: true, json: async () => data }
@@ -1398,7 +1400,7 @@ test("cash checkout displays a district delivery total, places the order directl
     )
     await click(container.querySelector(".terms-check input"))
     assert.match(
-      container.querySelector(".delivery-estimate").textContent,
+      container.querySelector(".checkout-summary").textContent,
       /5,000/,
     )
     await click(
@@ -1418,6 +1420,30 @@ test("cash checkout displays a district delivery total, places the order directl
       /Cash due on receipt/,
     )
     assert.equal(container.querySelector(".account-welcome"), null)
+    assert.equal(
+      container.querySelector(".tracking-stages [aria-current='step'] strong")
+        .textContent,
+      "Confirmed",
+    )
+    placed = {
+      ...placed,
+      status: "shipped",
+      tracking: { carrier: "Example courier", reference: "UG-100" },
+      timeline: [
+        ...placed.timeline,
+        { status: "shipped", at: new Date().toISOString() },
+      ],
+    }
+    await click(container.querySelector(".tracking-refresh"))
+    assert.match(
+      container.querySelector(".tracking-courier").textContent,
+      /Example courier.*UG-100/,
+    )
+    assert.equal(
+      container.querySelector(".tracking-stages [aria-current='step'] strong")
+        .textContent,
+      "Dispatched",
+    )
     assert.equal(container.querySelector(".page-heading"), null)
     assert.ok(
       container.querySelector(

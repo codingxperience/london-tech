@@ -28,15 +28,15 @@
 
 .commerce-surface .admin-shell[data-theme="dark"] {
   color-scheme: dark;
-  --workspace-bg: #141c2a;
-  --workspace-paper: #1e293b;
-  --workspace-ink: #edf3fd;
-  --workspace-muted: #b1c0d5;
-  --workspace-line: #41516a;
-  --workspace-soft: #27354a;
-  --workspace-hover: #32435c;
-  --workspace-accent: #c0bcff;
-  --workspace-accent-bg: #353455;
+  --workspace-bg: #161c29;
+  --workspace-paper: #202839;
+  --workspace-ink: #edf2fb;
+  --workspace-muted: #b8c4d8;
+  --workspace-line: #344053;
+  --workspace-soft: #242e43;
+  --workspace-hover: #313d59;
+  --workspace-accent: #d5d4ff;
+  --workspace-accent-bg: #313d59;
   --workspace-control: #7286a3;
   --workspace-action: #b9cefa;
   --workspace-action-hover: #d1dfff;
@@ -57,6 +57,34 @@
 
 .commerce-surface .admin-shell[data-theme] :is(h1, h2, h3, h4) {
   color: var(--workspace-ink);
+}
+
+.commerce-surface
+  .admin-shell[data-theme="dark"]
+  :is(.admin-main, .admin-workspace) {
+  background: #f3f5fa;
+  color: #223149;
+}
+
+.commerce-surface
+  .admin-shell[data-theme="dark"]
+  .admin-main
+  > .admin-page-heading {
+  --workspace-ink: #223149;
+  --workspace-muted: #52627a;
+  --workspace-paper: #fff;
+  --workspace-soft: #fff;
+  --workspace-hover: #e8eef7;
+  --workspace-line: #dce3ee;
+  --workspace-accent: #4842a1;
+}
+
+.commerce-surface
+  .admin-shell[data-theme="dark"]
+  .admin-main
+  > .admin-product-stats {
+  --workspace-ink: #223149;
+  --workspace-muted: #52627a;
 }
 
 .commerce-surface

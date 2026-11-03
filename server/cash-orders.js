@@ -1,5 +1,6 @@
 import { randomBytes } from "node:crypto"
 import { fail, audit } from "./security.js"
+import { queueOrderEmail } from "./order-emails.js"
 
 export async function restoreCashInventory(tx, row) {
   if (
@@ -46,6 +47,7 @@ export async function collectCash(db, id, user) {
         ...(row.details.timeline || []),
         {
           status: row.status,
+          kind: "payment",
           at,
           note: "Cash payment received. Receipt " + receipt + ".",
         },
@@ -64,6 +66,9 @@ export async function collectCash(db, id, user) {
       amount: Number(row.amount),
       receipt,
     })
-    return (await tx.query("SELECT * FROM orders WHERE id=$1", [id])).rows[0]
+    const updated = (await tx.query("SELECT * FROM orders WHERE id=$1", [id]))
+      .rows[0]
+    await queueOrderEmail(tx, updated, "payment", "Cash payment received")
+    return updated
   })
 }

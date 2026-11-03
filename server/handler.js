@@ -25,7 +25,11 @@ import {
   safeEqual,
 } from "./security.js"
 
-import { createPaymentLink, verifyPayment } from "./payments.js"
+import {
+  createPaymentLink,
+  onlinePaymentsReady,
+  verifyPayment,
+} from "./payments.js"
 import { calculateDelivery } from "../src/lib/delivery.js"
 import {
   checkoutRoute,
@@ -33,6 +37,13 @@ import {
   updateAttempt,
 } from "./checkout-attempts.js"
 import { restoreCashInventory, collectCash } from "./cash-orders.js"
+import {
+  deliverOrderEmail,
+  listOrderEmails,
+  orderEmailReady,
+  orderUpdateTitle,
+  queueOrderEmail,
+} from "./order-emails.js"
 import { audienceRoute, audienceSummary } from "./audience.js"
 import {
   workspaceRoute,
@@ -41,6 +52,24 @@ import {
 } from "./workspace.js"
 
 const text = (max = 200) => z.string().trim().max(max)
+
+const trackingSchema = z.object({
+  carrier: text(80).default(""),
+  reference: text(100).default(""),
+  estimatedDate: z.union([z.iso.date(), z.literal("")]).default(""),
+  url: z
+    .union([
+      z.literal(""),
+      z
+        .url({ protocol: /^https$/ })
+        .max(500)
+        .refine((value) => {
+          const url = new URL(value)
+          return !url.username && !url.password
+        }),
+    ])
+    .default(""),
+})
 
 const addressSchema = z.object({
   id: text(80).optional(),
@@ -345,7 +374,7 @@ async function createOrder(db, user, payload) {
     })
 
     const cash = body.paymentMethod === "cod" && !body.enquiry
-    if (!body.enquiry && !cash && !process.env.FLW_SECRET_KEY)
+    if (!body.enquiry && !cash && !onlinePaymentsReady())
       fail(
         503,
         "Online payment is unavailable. Choose cash on delivery or collection.",
@@ -451,7 +480,19 @@ async function createOrder(db, user, payload) {
           [id, productId, quantity],
         )
 
-    return (await tx.query("SELECT * FROM orders WHERE id=$1", [id])).rows[0]
+    const order = (await tx.query("SELECT * FROM orders WHERE id=$1", [id]))
+      .rows[0]
+    await queueOrderEmail(
+      tx,
+      order,
+      "placed",
+      body.enquiry
+        ? "Order request received"
+        : cash
+          ? "Order confirmed"
+          : "Order received · payment pending",
+    )
+    return order
   })
 }
 
@@ -476,7 +517,8 @@ export default async function handler(req, res) {
     if (route === "config" && method === "GET")
       return send(res, {
         accounts: databaseConfigured(),
-        payments: databaseConfigured() && !!process.env.FLW_SECRET_KEY,
+        payments: databaseConfigured() && onlinePaymentsReady(),
+        orderEmails: databaseConfigured() && orderEmailReady(),
         analytics: databaseConfigured(),
         newsletter: databaseConfigured(),
         cashOnDelivery: databaseConfigured(),
@@ -899,12 +941,21 @@ export default async function handler(req, res) {
         db,
         user.id,
         body.attemptId,
-        order.details.paymentMethod === "cod"
-          ? "order_placed"
-          : "awaiting_payment",
+        order.status === "cancelled"
+          ? "cancelled"
+          : order.payment_status === "paid"
+            ? "completed"
+            : order.details.paymentMethod === "cod"
+              ? "order_placed"
+              : "awaiting_payment",
         { failureMessage: null },
         order.id,
       )
+      if (
+        ["quote_requested", "pending_payment"].includes(order.status) ||
+        (order.status === "confirmed" && order.payment_status === "cash_due")
+      )
+        await deliverOrderEmail(db, `${order.id}-placed`, order.id)
       return send(res, { order: publicOrder(order) }, 201)
     }
 
@@ -926,7 +977,7 @@ export default async function handler(req, res) {
         if (row.payment_status === "paid")
           fail(409, "This order is already paid.")
 
-        if (!process.env.FLW_SECRET_KEY)
+        if (!onlinePaymentsReady())
           fail(
             503,
             "Online payments are being connected. Please contact the store.",
@@ -1054,11 +1105,9 @@ export default async function handler(req, res) {
           .object({ transactionId: z.union([z.string(), z.number()]) })
           .parse(body)
         try {
-          return send(res, {
-            order: publicOrder(
-              await verifyPayment(db, input.transactionId, row.id),
-            ),
-          })
+          const verified = await verifyPayment(db, input.transactionId, row.id)
+          await deliverOrderEmail(db, `${verified.id}-payment`, verified.id)
+          return send(res, { order: publicOrder(verified) })
         } catch (error) {
           await db.query(
             "UPDATE checkout_attempts SET state='failed',details=details||$2::jsonb,updated_at=NOW() WHERE order_id=$1 AND state<>'completed'",
@@ -1096,7 +1145,14 @@ export default async function handler(req, res) {
               409,
               "Please contact the store to discuss cancelling this order.",
             )
-          const details = await restoreCashInventory(tx, locked)
+          const restored = await restoreCashInventory(tx, locked)
+          const details = {
+            ...restored,
+            timeline: [
+              ...(restored.timeline || []),
+              { status: "cancelled", at: new Date().toISOString() },
+            ],
+          }
           await tx.query(
             `UPDATE orders SET status='cancelled',details=$2::jsonb,updated_at=NOW() WHERE id=$1`,
             [row.id, JSON.stringify(details)],
@@ -1108,7 +1164,14 @@ export default async function handler(req, res) {
           await tx.query("DELETE FROM stock_reservations WHERE order_id=$1", [
             row.id,
           ])
+          await queueOrderEmail(
+            tx,
+            { ...locked, details },
+            "cancelled",
+            "Order cancelled",
+          )
         })
+        await deliverOrderEmail(db, `${row.id}-cancelled`, row.id)
         return send(res, { ok: true })
       }
     }
@@ -1123,9 +1186,10 @@ export default async function handler(req, res) {
       if (
         body.event === "charge.completed" &&
         body.data?.status === "successful"
-      )
-        await verifyPayment(db, body.data.id)
-      else if (
+      ) {
+        const verified = await verifyPayment(db, body.data.id)
+        await deliverOrderEmail(db, `${verified.id}-payment`, verified.id)
+      } else if (
         body.event === "charge.completed" &&
         ["failed", "cancelled"].includes(body.data?.status) &&
         typeof body.data.tx_ref === "string"
@@ -1176,8 +1240,8 @@ export default async function handler(req, res) {
           checkouts: await checkoutSummary(db),
           connection: {
             database: true,
-            payments: !!process.env.FLW_SECRET_KEY,
-            email: !!process.env.RESEND_API_KEY,
+            payments: onlinePaymentsReady(),
+            email: orderEmailReady(),
             paymentMode: process.env.FLW_SECRET_KEY?.includes("TEST")
               ? "test"
               : "live",
@@ -1243,8 +1307,22 @@ export default async function handler(req, res) {
       const cashPayment = route.match(/^admin\/orders\/([^/]+)\/cash-payment$/)
       if (cashPayment && method === "POST") {
         z.object({ confirmed: z.literal(true) }).parse(body)
+        const order = await collectCash(db, cashPayment[1], user)
+        await deliverOrderEmail(db, `${order.id}-payment`, order.id)
+        return send(res, { order: publicOrder(order) })
+      }
+      const orderEmails = route.match(/^admin\/orders\/([^/]+)\/emails$/)
+      if (orderEmails && ["GET", "POST"].includes(method)) {
+        if (method === "POST") {
+          if (!orderEmailReady())
+            fail(503, "Connect the order email sender first.")
+          await rateLimit(db, "order-email:" + user.id, 15, 15)
+          const input = z.object({ id: text(120).min(1) }).parse(body)
+          await deliverOrderEmail(db, input.id, orderEmails[1])
+        }
         return send(res, {
-          order: publicOrder(await collectCash(db, cashPayment[1], user)),
+          configured: orderEmailReady(),
+          emails: await listOrderEmails(db, orderEmails[1]),
         })
       }
       const adminOrder = route.match(/^admin\/orders\/([^/]+)$/)
@@ -1262,10 +1340,11 @@ export default async function handler(req, res) {
               "review",
             ]),
             note: text(1000).default(""),
+            tracking: trackingSchema.optional(),
           })
           .parse(body)
 
-        await db.transaction(async (tx) => {
+        const notification = await db.transaction(async (tx) => {
           const row = (
             await tx.query("SELECT * FROM orders WHERE id=$1 FOR UPDATE", [
               adminOrder[1],
@@ -1298,16 +1377,40 @@ export default async function handler(req, res) {
               "Paid orders need a refund reviewed and recorded before cancellation. Mark the order for review instead.",
             )
 
+          const tracking =
+            row.details.fulfillment === "delivery" && input.tracking
+              ? input.tracking
+              : row.details.tracking
+          const trackingChanged = [
+            "carrier",
+            "reference",
+            "estimatedDate",
+            "url",
+          ].some(
+            (key) =>
+              (tracking?.[key] || "") !== (row.details.tracking?.[key] || ""),
+          )
+          const statusChanged = row.status !== input.status
+          const noteChanged =
+            input.note && input.note !== row.details.timeline?.at(-1)?.note
+          if (!statusChanged && !trackingChanged && !noteChanged) return null
+
           const restored =
             input.status === "cancelled"
               ? await restoreCashInventory(tx, row)
               : row.details
           const details = {
             ...restored,
+            ...(tracking ? { tracking } : {}),
             timeline: [
               ...(row.details.timeline || []),
               {
                 status: input.status,
+                kind: statusChanged
+                  ? "status"
+                  : trackingChanged
+                    ? "tracking"
+                    : "note",
                 note: input.note,
                 at: new Date().toISOString(),
               },
@@ -1328,7 +1431,18 @@ export default async function handler(req, res) {
               "UPDATE checkout_attempts SET state='cancelled',updated_at=NOW() WHERE order_id=$1",
               [row.id],
             )
+          return queueOrderEmail(
+            tx,
+            { ...row, details },
+            randomUUID(),
+            statusChanged
+              ? orderUpdateTitle(input.status, details.fulfillment)
+              : trackingChanged
+                ? "Delivery details updated"
+                : "New order update",
+          )
         })
+        await deliverOrderEmail(db, notification, adminOrder[1])
         await audit(db, user.id, "order.updated", {
           id: adminOrder[1],
           status: input.status,

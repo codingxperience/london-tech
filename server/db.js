@@ -124,6 +124,8 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS checkout_attempts (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,state TEXT NOT NULL DEFAULT 'started',details JSONB NOT NULL DEFAULT '{}',order_id TEXT REFERENCES orders(id) ON DELETE SET NULL,follow_up_status TEXT NOT NULL DEFAULT 'open',follow_up_note TEXT NOT NULL DEFAULT '',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
     `CREATE INDEX IF NOT EXISTS checkout_attempts_updated_idx ON checkout_attempts(updated_at DESC)`,
     `CREATE INDEX IF NOT EXISTS checkout_attempts_order_idx ON checkout_attempts(order_id)`,
+    `CREATE TABLE IF NOT EXISTS order_emails (id TEXT PRIMARY KEY, order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE, payload JSONB NOT NULL, state TEXT NOT NULL DEFAULT 'pending', attempts INTEGER NOT NULL DEFAULT 0, provider_id TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    `CREATE INDEX IF NOT EXISTS order_emails_order_idx ON order_emails(order_id,created_at DESC)`,
 
     `CREATE TABLE IF NOT EXISTS stock_reservations (order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE, product_id TEXT NOT NULL REFERENCES products(id), quantity INTEGER NOT NULL CHECK(quantity>0), expires_at TIMESTAMPTZ NOT NULL, PRIMARY KEY(order_id,product_id))`,
 
@@ -163,6 +165,7 @@ async function initialize() {
       "newsletter_subscribers",
       "orders",
       "checkout_attempts",
+      "order_emails",
       "stock_reservations",
       "wishlists",
       "reviews",

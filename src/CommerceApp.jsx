@@ -19,6 +19,7 @@ import "./product-detail.css"
 import "./shopping-experience.css"
 import "./offer-details.css"
 import "./account-experience.css"
+import "./order-experience.css"
 const Admin = React.lazy(() => import("./pages/admin.jsx"))
 class ErrorBoundary extends React.Component {
   state = { failed: false }

@@ -1294,7 +1294,7 @@ export default function Admin({
             await load()
             setOrderEditor(null)
           }}
-          onSave={async (status, note) => {
+          onSave={async (status, note, tracking) => {
             if (preview) {
               if (
                 orderEditor.paymentStatus !== "paid" &&
@@ -1311,7 +1311,15 @@ export default function Admin({
                 ...current,
                 orders: current.orders.map((o) =>
                   o.id === orderEditor.id
-                    ? { ...o, status, notes: note || o.notes }
+                    ? {
+                        ...o,
+                        status,
+                        tracking: tracking || o.tracking,
+                        timeline: [
+                          ...(o.timeline || []),
+                          { status, note, at: new Date().toISOString() },
+                        ],
+                      }
                     : o,
                 ),
               }))
@@ -1320,7 +1328,7 @@ export default function Admin({
             }
             await api("admin/orders/" + orderEditor.id, {
               method: "PATCH",
-              body: { status, note },
+              body: { status, note, tracking },
             })
             await load()
             setOrderEditor(null)
@@ -1878,6 +1886,13 @@ export function AdminOrderModal({
         : o.status,
     ),
     [note, setNote] = useState(""),
+    [tracking, setTracking] = useState(() => ({
+      carrier: "",
+      reference: "",
+      estimatedDate: "",
+      url: "",
+      ...o.tracking,
+    })),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [cashReceived, setCashReceived] = useState(false)
@@ -1985,7 +2000,11 @@ export function AdminOrderModal({
           e.preventDefault()
           setBusy(true)
           try {
-            await onSave(status, note)
+            await onSave(
+              status,
+              note,
+              o.fulfillment === "delivery" ? tracking : undefined,
+            )
           } catch (e) {
             setError(e.message)
           } finally {
@@ -2011,6 +2030,43 @@ export function AdminOrderModal({
             ))}
           </select>
         </Field>
+        {o.fulfillment === "delivery" && (
+          <details
+            className="admin-delivery-tracking"
+            open={
+              tracking.carrier ||
+              tracking.reference ||
+              tracking.estimatedDate ||
+              tracking.url
+                ? true
+                : undefined
+            }
+          >
+            <summary>Delivery tracking</summary>
+            <div className="form-grid">
+              {[
+                ["carrier", "Courier", "text", 80],
+                ["reference", "Tracking reference", "text", 100],
+                ["estimatedDate", "Estimated delivery", "date"],
+                ["url", "Courier tracking link", "url", 500],
+              ].map(([key, label, type, maxLength]) => (
+                <Field
+                  key={key}
+                  label={label}
+                  type={type}
+                  maxLength={maxLength}
+                  value={tracking[key]}
+                  onChange={(event) =>
+                    setTracking((current) => ({
+                      ...current,
+                      [key]: event.target.value,
+                    }))
+                  }
+                />
+              ))}
+            </div>
+          </details>
+        )}
         <Field label="Customer-visible update (optional)">
           <textarea
             rows={3}
@@ -2029,7 +2085,85 @@ export function AdminOrderModal({
           <Check size={16} />
         </Button>
       </form>
+      {!preview && <OrderEmailLog orderId={o.id} />}
     </Modal>
+  )
+}
+
+function OrderEmailLog({ orderId }) {
+  const [data, setData] = useState(null)
+  const [error, setError] = useState("")
+  const [busy, setBusy] = useState(false)
+  const path = `admin/orders/${encodeURIComponent(orderId)}/emails`
+  async function load(id) {
+    setBusy(true)
+    setError("")
+    try {
+      setData(await (id ? post(path, { id }) : api(path)))
+    } catch (failure) {
+      setError(failure.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <details
+      className="admin-delivery-tracking"
+      onToggle={(event) => {
+        if (event.currentTarget.open && !busy) load()
+      }}
+    >
+      <summary>Customer emails</summary>
+      {error && <Notice type="error">{error}</Notice>}
+      {busy && <p role="status">Loading email activity…</p>}
+      {data && (
+        <>
+          {!data.configured && (
+            <p className="admin-muted">
+              Connect the email sender in Vercel to send order updates.
+            </p>
+          )}
+          {data.emails.length ? (
+            <ul className="admin-order-email-list">
+              {data.emails.map((email) => (
+                <li key={email.id}>
+                  <span>
+                    <strong>{email.title}</strong>
+                    <small>{dateLabel(email.createdAt)}</small>
+                  </span>
+                  <Badge
+                    type={
+                      email.state === "sent"
+                        ? "success"
+                        : email.state === "failed"
+                          ? "warning"
+                          : ""
+                    }
+                  >
+                    {email.state === "sent"
+                      ? "Accepted by Resend"
+                      : statusLabel(email.state)}
+                  </Badge>
+                  {data.configured &&
+                    ["pending", "failed"].includes(email.state) && (
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        disabled={busy}
+                        onClick={() => load(email.id)}
+                      >
+                        Retry email
+                      </Button>
+                    )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="admin-muted">No email activity for this order yet.</p>
+          )}
+        </>
+      )}
+    </details>
   )
 }
 
@@ -2171,7 +2305,7 @@ function SettingsPanel({ settings, connection, preview, saved }) {
           {[
             ["PostgreSQL database", connection.database],
             ["Flutterwave payments", connection.payments],
-            ["Password reset email", connection.email],
+            ["Transactional email", connection.email],
           ].map(([name, ready]) => (
             <div key={name}>
               <span>{name}</span>
