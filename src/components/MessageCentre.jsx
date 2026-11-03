@@ -389,21 +389,15 @@ export function MessageCentre({
                 <a className="message-live-link" href="/admin/messages/">
                   Open live inbox
                 </a>
-              ) : (
-                <span
-                  className="message-connection"
-                  data-state={connection}
-                  role="status"
-                >
-                  {connection === "connected"
-                    ? "Auto-updating"
-                    : connection === "signed-out"
-                      ? "Sign in to reconnect"
-                      : connection === "retrying"
-                        ? "Reconnecting…"
-                        : "Connecting…"}
+              ) : connection !== "connected" ? (
+                <span className="message-connection" role="status">
+                  {connection === "signed-out"
+                    ? "Sign in to reconnect"
+                    : connection === "retrying"
+                      ? "Reconnecting…"
+                      : "Connecting…"}
                 </span>
-              )}
+              ) : null}
             </div>
             <div className="message-inbox-actions">
               {!preview && alerts && (

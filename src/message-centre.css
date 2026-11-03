@@ -49,18 +49,6 @@
   color: var(--chat-muted);
   font-size: 12px;
 }
-.message-connection {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.message-connection[data-state="connected"]::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--workspace-success, #167453);
-}
 .message-count {
   display: inline-grid;
   place-items: center;
