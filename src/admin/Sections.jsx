@@ -690,6 +690,7 @@ function Invoices({ data, query }) {
   const rows = data.orders.filter(
     (o) =>
       o.paymentStatus === "paid" &&
+      o.paymentMode !== "test" &&
       [o.id, o.customer.name, o.customer.email]
         .join(" ")
         .toLowerCase()

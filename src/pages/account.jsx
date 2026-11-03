@@ -628,6 +628,7 @@ function OrderList({ orders, loaded }) {
             <small>
               {dateLabel(o.createdAt)} · {o.items.length} item
               {o.items.length !== 1 ? "s" : ""}
+              {o.paymentMode === "test" && " · Test order"}
             </small>
           </div>
           <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
@@ -756,6 +757,7 @@ function OrderDetail({ order: o, loaded, reload }) {
             <PaymentMethod method={o.paymentMethod} />
           </p>
           <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
+            {o.paymentMode === "test" ? "Test · " : ""}
             {statusLabel(o.paymentStatus)}
           </Badge>
           {o.cashReceipt?.receipt && <p>Receipt {o.cashReceipt.receipt}</p>}

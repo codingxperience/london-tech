@@ -27,15 +27,10 @@ import {
 
 import {
   createPaymentLink,
-  isPaymentTestOwner,
   isSandboxReference,
   onlinePaymentsReady,
   paymentMode,
-  paymentTestReady,
-  sandboxAmount,
-  startPaymentTest,
   verifyPayment,
-  verifyPaymentTest,
 } from "./payments.js"
 import { calculateDelivery } from "../src/lib/delivery.js"
 import {
@@ -442,6 +437,7 @@ async function createOrder(db, user, payload) {
       deliveryFee,
       deliveryEstimate: delivery,
       ...(cash ? { inventoryCommitted: true } : {}),
+      ...(!cash && !body.enquiry ? { paymentMode: paymentMode() } : {}),
       timeline: [
         {
           status: body.enquiry
@@ -887,7 +883,7 @@ export default async function handler(req, res) {
 
         const paid = (
           await db.query(
-            `SELECT id FROM orders WHERE user_id=$1 AND payment_status='paid' AND details->'items' @> $2::jsonb LIMIT 1`,
+            `SELECT id FROM orders WHERE user_id=$1 AND payment_status='paid' AND details->>'paymentMode' IS DISTINCT FROM 'test' AND details->'items' @> $2::jsonb LIMIT 1`,
             [user.id, JSON.stringify([{ id: productId }])],
           )
         ).rows[0]
@@ -1058,8 +1054,8 @@ export default async function handler(req, res) {
             }
 
             await tx.query(
-              `UPDATE orders SET status='pending_payment',expires_at=NOW()+INTERVAL '30 minutes',updated_at=NOW() WHERE id=$1`,
-              [locked.id],
+              `UPDATE orders SET status='pending_payment',expires_at=NOW()+INTERVAL '30 minutes',details=details||$2::jsonb,updated_at=NOW() WHERE id=$1`,
+              [locked.id, JSON.stringify({ paymentMode: paymentMode() })],
             )
 
             return (
@@ -1223,40 +1219,6 @@ export default async function handler(req, res) {
     if (route.startsWith("admin/")) {
       requireAdmin(user)
 
-      if (route === "admin/payment-test" && method === "POST") {
-        if (!isPaymentTestOwner(user))
-          fail(403, "Only the store owner can run payment tests.")
-        const input = z
-          .discriminatedUnion("action", [
-            z.object({
-              action: z.literal("start"),
-              paymentMethod: z.enum(["mtn", "airtel", "visa"]),
-            }),
-            z.object({
-              action: z.literal("verify"),
-              proof: z.string().max(140),
-              transactionId: z.string().regex(/^\d{1,25}$/),
-            }),
-          ])
-          .parse(body)
-        await rateLimit(
-          db,
-          "payment-test:" + user.id + ":" + input.action,
-          12,
-          15,
-        )
-        return send(
-          res,
-          input.action === "start"
-            ? await startPaymentTest(
-                user,
-                input.paymentMethod,
-                currentOrigin(req),
-              )
-            : await verifyPaymentTest(user, input.proof, input.transactionId),
-        )
-      }
-
       if (route === "admin/overview" && method === "GET") {
         const [orders, customers, catalog, events] = await Promise.all([
           db.query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 500"),
@@ -1285,9 +1247,6 @@ export default async function handler(req, res) {
             payments: onlinePaymentsReady(),
             email: orderEmailReady(),
             paymentMode: paymentMode(),
-            paymentTest: paymentTestReady(user)
-              ? { amount: sandboxAmount }
-              : null,
           },
         })
       }

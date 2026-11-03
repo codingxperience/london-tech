@@ -202,7 +202,9 @@ export function Overview({
       () => salesSeries(data.orders, period),
       [data.orders, period],
     )
-  const paid = data.orders.filter((o) => o.paymentStatus === "paid"),
+  const paid = data.orders.filter(
+      (o) => o.paymentStatus === "paid" && o.paymentMode !== "test",
+    ),
     sales = paid.reduce((n, o) => n + (o.amount || 0), 0)
   const stocked = data.products.filter((p) => p.active && p.stock > 0).length,
     completed = paid.filter((o) => o.status === "completed").length

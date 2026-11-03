@@ -39,15 +39,15 @@ Without a production database, browsing, product information and a device-local 
 ## Flutterwave
 
 1. Complete the Uganda merchant verification and enable **Card** and **Mobile Money Uganda** in Flutterwave under **Settings → Business Preferences → Payment Methods**. This covers Visa, MTN and Airtel in UGX.
-2. Start with the Flutterwave v3 **test** secret key in a separate Vercel Preview environment with an isolated test database. The hosted page presents the mobile network choice. Test MTN, Airtel and a Visa test card, including a failed payment and the return to order tracking.
-3. Configure the production webhook at `https://london-tech.vercel.app/api/payments/webhook/`. Keep the final slash and enable Flutterwave webhook retries. Use the same randomly generated secret hash in Flutterwave and in Vercel’s production `FLW_SECRET_HASH`.
-4. Save the approved **live** Flutterwave v3 secret key as production `FLW_SECRET_KEY` in **Vercel → London Tech → Settings → Environment Variables**, then redeploy. Keep both values server-side. Production checkout requires both settings and a live key. Test keys can run on Preview and local development.
+2. Configure the webhook at `https://london-tech.vercel.app/api/payments/webhook/`. Enable Flutterwave webhook retries and set the matching secret hash as production `FLW_SECRET_HASH`.
+3. Set the Flutterwave v3 test key as production `FLW_SECRET_KEY` and redeploy to let the owner exercise the regular storefront checkout. The hosted payment page handles the mobile network choice. Use [Flutterwave's test details](https://developer.flutterwave.com/docs/testing).
+4. When ready to accept real payments, replace the test key and webhook hash with the approved live credentials and redeploy. An order can only be paid or verified in the payment environment recorded when it entered checkout.
 
 Checkout creates an order with a server-calculated amount. The customer is redirected to Flutterwave; card details and mobile money PINs are never collected by London Tech. Both the return route and signed webhook call Flutterwave’s transaction verification endpoint. Reference, currency, amount and successful status must match before the order is marked paid. Duplicate verification does not deduct inventory twice.
 
 See [Uganda merchant onboarding](https://flutterwave.com/rw/support/general/heres-all-you-need-to-know-about-operating-a-flutterwave-account-in-uganda), [payment methods](https://developer.flutterwave.com/docs/payment-methods), [transaction verification](https://developer.flutterwave.com/docs/transaction-verification) and [v3 webhooks](https://developer.flutterwave.com/v3.0.0/docs/webhooks).
 
-With a Flutterwave test secret saved, the owner identified by `ADMIN_EMAIL` can open **Admin → Settings → Try Flutterwave checkout**. Choose MTN, Airtel or Visa to open a sample UGX 10,000 hosted checkout. The return page verifies the test transaction with Flutterwave. The demo uses its own transaction reference and skips the retail order, inventory and email records. The owner panel is available with test keys, and public production checkout requires live keys. [Flutterwave test credentials](https://developer.flutterwave.com/docs/testing)
+Test payments use normal order and stock handling. The storefront, order records and email titles identify test payments. Sales totals and paid invoices exclude them. Cash orders remain regular orders.
 
 ## Order tracking and email
 

@@ -104,21 +104,10 @@ export function OrderTracking({ order, refreshing, refresh }) {
   return (
     <section className="tracking-card" aria-labelledby="tracking-title">
       <div className="tracking-hero">
-        <div className="tracking-hero-top">
-          <span className="tracking-kicker">
-            <ModeIcon size={16} aria-hidden="true" />
-            {mode}
-          </span>
-          <button
-            className="tracking-refresh"
-            type="button"
-            disabled={refreshing}
-            onClick={refresh}
-          >
-            <RefreshCw size={16} aria-hidden="true" />
-            {refreshing ? "Refreshing…" : "Refresh"}
-          </button>
-        </div>
+        <span className="tracking-kicker">
+          <ModeIcon size={15} aria-hidden="true" />
+          {mode}
+        </span>
         <div className="tracking-hero-main">
           <div aria-live="polite">
             <h3 id="tracking-title">{displayStatus}</h3>
@@ -135,25 +124,42 @@ export function OrderTracking({ order, refreshing, refresh }) {
               </p>
             )}
           </div>
-          <div className="tracking-emblem" aria-hidden="true">
-            <ModeIcon size={43} strokeWidth={1.35} />
-          </div>
         </div>
-        {(estimated || latest) && (
+        {estimated && (
           <div className="tracking-time-panel">
             <CalendarDays size={18} aria-hidden="true" />
             <div>
-              <span>
-                {estimated ? "Estimated delivery" : "Last order update"}
-              </span>
+              <span>Estimated delivery</span>
               <strong>
-                {estimated
-                  ? dayLabel.format(new Date(`${estimated}T12:00:00Z`))
-                  : eventTime.format(new Date(latest)) + " EAT"}
+                {dayLabel.format(new Date(`${estimated}T12:00:00Z`))}
               </strong>
             </div>
           </div>
         )}
+        <div className="tracking-update">
+          <span aria-live="polite">
+            {refreshing
+              ? "Checking for updates…"
+              : latest && (
+                  <>
+                    Last update{" "}
+                    <time dateTime={latest}>
+                      {eventTime.format(new Date(latest))} EAT
+                    </time>
+                  </>
+                )}
+          </span>
+          <button
+            className="tracking-refresh"
+            type="button"
+            aria-label="Check for tracking updates"
+            title="Check for tracking updates"
+            disabled={refreshing}
+            onClick={refresh}
+          >
+            <RefreshCw size={15} aria-hidden="true" />
+          </button>
+        </div>
       </div>
       <div className="tracking-body">
         <div className="tracking-reference-row">

@@ -465,7 +465,7 @@ test("wishlist persists and reviews require verified purchases", async () => {
   )
 })
 
-test("a confirmed quote can be paid and payment settlement is idempotent", async () => {
+test("a confirmed test quote settles idempotently and does not qualify for a verified review", async () => {
   const quote = await request("orders", {
     method: "POST",
     cookie: customerCookie,
@@ -550,6 +550,7 @@ test("a confirmed quote can be paid and payment settlement is idempotent", async
     })
     assert.equal(verified.status, 200)
     assert.equal(verified.data.order.paymentStatus, "paid")
+    assert.equal(verified.data.order.paymentMode, "test")
     assert.equal(verified.data.order.status, "confirmed")
 
     assert.equal(
@@ -594,7 +595,7 @@ test("a confirmed quote can be paid and payment settlement is idempotent", async
           },
         })
       ).status,
-      201,
+      403,
     )
     const reviewedProduct = (await request("catalog")).data.products.find(
       (product) => product.id === fixture.id,

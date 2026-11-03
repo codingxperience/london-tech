@@ -446,12 +446,6 @@ export function Checkout() {
                 )}
             </Notice>
           )}
-          {config.paymentMode === "test" && config.payments && (
-            <Notice>
-              This checkout is in Flutterwave test mode. No live payment will be
-              collected.
-            </Notice>
-          )}
           <section className="form-card">
             <div className="form-section-heading">
               <span>01</span>
@@ -611,6 +605,19 @@ export function Checkout() {
               <span>03</span>
               <h2>Payment method</h2>
             </div>
+            {config.paymentMode === "test" && config.payments && (
+              <Notice>
+                Online payments use Flutterwave Test Mode. Use{" "}
+                <a
+                  href="https://developer.flutterwave.com/docs/testing"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Flutterwave test details
+                </a>{" "}
+                for a simulated payment. Cash orders use regular checkout.
+              </Notice>
+            )}
             <div
               className="payment-options"
               role="group"
@@ -829,6 +836,7 @@ export function PaymentResult() {
     )
 
   const paid = order?.paymentStatus === "paid"
+  const testPayment = order?.paymentMode === "test"
 
   return (
     <main className="container standard-page">
@@ -847,12 +855,16 @@ export function PaymentResult() {
           {busy
             ? "Checking your payment…"
             : paid
-              ? "Thank you. It’s confirmed."
+              ? testPayment
+                ? "Test payment confirmed."
+                : "Thank you. It’s confirmed."
               : "Let’s check your payment."}
         </h1>
         <p>
           {paid
-            ? "Your payment has been verified. You can follow the order and see the next steps in your account."
+            ? testPayment
+              ? "Flutterwave verified your test payment. You can follow this order in your account."
+              : "Your payment has been verified. You can follow the order and see the next steps in your account."
             : "Your order is only marked paid after confirmation from Flutterwave. A pending or cancelled payment is not a completed order."}
         </p>
         {error && <Notice type="error">{error}</Notice>}
@@ -864,6 +876,7 @@ export function PaymentResult() {
             <span>
               Payment{" "}
               <Badge type={paid ? "success" : ""}>
+                {testPayment ? "Test · " : ""}
                 {statusLabel(order.paymentStatus)}
               </Badge>
             </span>

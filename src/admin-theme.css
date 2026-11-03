@@ -160,10 +160,6 @@
     .workspace-legend,
     .chart-footer,
     .chart-note,
-    .message-list span,
-    .message-list small,
-    .message-conversation header p,
-    .message-bubbles time,
     .admin-footer small,
     .field small,
     .empty-state p,
@@ -220,10 +216,6 @@
     .admin-editor .order-detail-item,
     .delivery-settings,
     .message-layout,
-    .message-list,
-    .message-list > button,
-    .message-conversation > header,
-    .message-conversation form,
     .admin-payment-summary > div
   ) {
   border-color: var(--workspace-line);
@@ -258,8 +250,7 @@
     .admin-category-icon,
     .admin-activity > div > span,
     .admin-status-tabs b,
-    .empty-icon,
-    .message-bubbles > article
+    .empty-icon
   ) {
   background: var(--workspace-soft);
   color: var(--workspace-ink);
@@ -272,7 +263,6 @@
     .admin-sidebar-bottom > button,
     .admin-profile-popover > button,
     .admin-profile-popover > a,
-    .message-list > button,
     .admin-status-tabs button,
     .editor-tabs button
   ) {
@@ -295,8 +285,7 @@
     .admin-sidebar nav > a:hover,
     .admin-sidebar-bottom > button:hover,
     .admin-profile-popover > a:hover,
-    .admin-profile-popover > button:hover,
-    .message-list > button:hover
+    .admin-profile-popover > button:hover
   ) {
   background: var(--workspace-hover);
 }
@@ -309,8 +298,6 @@
     .admin-status-tabs button.active,
     .admin-status-tabs button.active b,
     .editor-tabs button.active,
-    .message-list > button.selected,
-    .message-bubbles > article.from-store,
     .admin-preview-banner
   ) {
   background: var(--workspace-accent-bg);
@@ -554,82 +541,4 @@
     color: #223149;
     background: #fff;
   }
-}
-
-.payment-test-content {
-  display: grid;
-  gap: 15px;
-  padding: 0 22px 22px;
-}
-.payment-test-content > p,
-.payment-test-help p {
-  margin: 0;
-}
-.payment-test-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 14px;
-  border-radius: 8px;
-  background: var(--workspace-soft);
-}
-.payment-test-total span:first-child {
-  display: block;
-  color: var(--workspace-muted);
-}
-.payment-test-total strong {
-  display: block;
-  font-size: 23px;
-}
-.payment-test-methods {
-  min-width: 0;
-  display: grid;
-  gap: 7px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.payment-test-methods legend {
-  margin-bottom: 7px;
-  font-weight: 800;
-}
-.payment-test-methods label {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border: 1px solid var(--workspace-line);
-  border-radius: 6px;
-  cursor: pointer;
-}
-.payment-test-methods label.selected {
-  background: var(--workspace-soft);
-  border-color: var(--workspace-control);
-}
-.payment-test-methods .payment-brand {
-  width: 58px;
-  height: 30px;
-  padding: 4px;
-}
-.payment-test-methods .payment-brand-visa img {
-  width: 50px;
-  height: 50px;
-}
-.payment-test-reference {
-  display: block;
-  overflow-wrap: anywhere;
-}
-.payment-test-help {
-  color: var(--workspace-muted);
-}
-.payment-test-help summary {
-  color: var(--workspace-ink);
-  font-weight: 800;
-  cursor: pointer;
-}
-.payment-test-help p {
-  margin: 8px 0;
 }

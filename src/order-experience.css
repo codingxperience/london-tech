@@ -224,7 +224,6 @@
   background-size: 26px 26px;
   mask-image: linear-gradient(90deg, transparent 28%, black);
 }
-.tracking-hero-top,
 .tracking-hero-main {
   display: flex;
   align-items: center;
@@ -256,7 +255,6 @@
   margin: 9px 0 0;
   color: #d5e7f7;
 }
-.tracking-refresh,
 .tracking-copy {
   display: inline-flex;
   align-items: center;
@@ -269,29 +267,41 @@
   font-size: 13px;
   font-weight: 750;
 }
-.tracking-refresh {
-  border: 1px solid #92b1cf73;
-  background: #e1efff12;
+.tracking-update {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  min-height: 44px;
+  padding-top: 4px;
+  border-top: 1px solid #b1cae045;
+  color: #d9e9f9;
+  font-size: 13px;
+}
+.tracking-update time {
+  margin-inline-start: 5px;
   color: #fff;
 }
-.tracking-refresh:hover {
+.tracking-refresh {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #e8f3ff;
+  cursor: pointer;
+}
+.tracking-refresh:hover,
+.tracking-refresh:focus-visible {
   background: #e1efff25;
 }
 .tracking-refresh:disabled {
   cursor: wait;
-}
-.tracking-emblem {
-  display: grid;
-  place-items: center;
-  width: 94px;
-  height: 94px;
-  flex: 0 0 94px;
-  color: #d8ebff;
-  border: 1px solid #b0cce96b;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 10px #c7e0fc10,
-    0 0 0 21px #c7e0fc0c;
+  opacity: 0.6;
 }
 .tracking-time-panel {
   display: flex;
@@ -526,15 +536,6 @@
   .tracking-hero {
     gap: 18px;
   }
-  .tracking-emblem {
-    position: absolute;
-    right: 29px;
-    top: 73px;
-    width: 62px;
-    height: 62px;
-    opacity: 0.15;
-    z-index: -1;
-  }
   .tracking-stages {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
@@ -611,8 +612,7 @@
 }
 @media print {
   .tracking-refresh,
-  .tracking-copy,
-  .tracking-emblem {
+  .tracking-copy {
     display: none;
   }
   .tracking-hero {
@@ -623,7 +623,9 @@
   .commerce-surface .tracking-hero .tracking-destination,
   .tracking-kicker,
   .tracking-time-panel,
-  .tracking-time-panel strong {
+  .tracking-time-panel strong,
+  .tracking-update,
+  .tracking-update time {
     color: #112d4a;
   }
   .tracking-time-panel {

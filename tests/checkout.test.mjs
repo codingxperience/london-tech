@@ -625,12 +625,11 @@ test("order email survives provider failure, retries once, and follows actual fu
   }
 })
 
-test("owner sandbox checkout creates and verifies Flutterwave tests without touching retail orders", async () => {
+test("production test checkout reserves stock and settles through the customer order", async () => {
   const originalFetch = globalThis.fetch
   const originalVercel = process.env.VERCEL_ENV
   const starts = []
-  let payment,
-    verified = 0
+  let payment
   process.env.FLW_SECRET_KEY = "FLWSECK_TEST-fixture"
   process.env.FLW_SECRET_HASH = "checkout-test-webhook-fixture"
   process.env.VERCEL_ENV = "production"
@@ -644,95 +643,103 @@ test("owner sandbox checkout creates and verifies Flutterwave tests without touc
         },
       })
     }
-    if (
-      String(url) === "https://api.flutterwave.com/v3/transactions/42/verify"
-    ) {
-      verified++
+    if (String(url) === "https://api.flutterwave.com/v3/transactions/42/verify")
       return Response.json({ status: "success", data: payment })
-    }
     return originalFetch(url, options)
   }
-  const path = "admin/payment-test"
-  const invoke = (body, cookie = admin) =>
-    request(path, { method: "POST", body, cookie })
   try {
-    const before = await db.query(
-      "SELECT (SELECT COUNT(*) FROM orders)::int AS orders, (SELECT COUNT(*) FROM order_emails)::int AS emails, (SELECT COUNT(*) FROM stock_reservations)::int AS reservations",
-    )
-    assert.equal((await request("config")).data.payments, false)
+    const p = await fixture("checkout-production-test", 4)
+    const stock = async () =>
+      (await db.query("SELECT data FROM products WHERE id=$1", [p.id])).rows[0]
+        .data.stock
+    const config = (await request("config")).data
+    assert.equal(config.payments, true)
+    assert.equal(config.paymentMode, "test")
+
+    const body = orderBody(p, { paymentMethod: "visa", expectedTotal: 100000 })
+    const created = await request("orders", { method: "POST", body })
+    assert.equal(created.status, 201)
+    const order = created.data.order
+    const path = "orders/" + order.id
+    assert.equal(order.paymentMode, "test")
+    assert.equal(order.status, "pending_payment")
     assert.equal(
-      (await invoke({ action: "start", paymentMethod: "visa" }, customer))
-        .status,
-      403,
+      (await request("orders", { method: "POST", body })).data.order.id,
+      order.id,
     )
-    assert.equal(
-      (await invoke({ action: "start", paymentMethod: "visa" }, null)).status,
-      401,
-    )
-    assert.equal(starts.length, 0)
-    assert.equal(
-      (await request("admin/overview", { cookie: admin })).data.connection
-        .paymentTest.amount,
-      10000,
-    )
-    for (const method of ["mtn", "airtel", "visa"]) {
-      const response = await invoke({ action: "start", paymentMethod: method })
-      assert.equal(response.status, 200)
-      assert.match(response.data.url, /^https:\/\/checkout\.flutterwave\.com\//)
-      assert.equal(
-        starts.at(-1).payment_options,
-        method === "visa" ? "card" : "mobilemoneyuganda",
-      )
-    }
-    const session = starts.at(-1)
-    const redirect = new URL(session.redirect_url)
-    assert.equal(redirect.pathname, "/admin/settings/")
-    assert.equal(redirect.origin, origin)
-    const proof = redirect.searchParams.get("payment_test")
-    const verify = (token = proof) =>
-      invoke({ action: "verify", proof: token, transactionId: "42" })
-    assert.equal((await verify(proof + "x")).status, 400)
-    assert.equal(verified, 0)
-    payment = {
-      id: 42,
-      tx_ref: session.tx_ref,
-      status: "successful",
-      currency: "UGX",
-      amount: 9999,
-    }
-    assert.equal((await verify()).status, 409)
-    payment.amount = 10000
-    assert.deepEqual((await verify()).data, {
-      status: "successful",
-      reference: session.tx_ref,
-      amount: 10000,
-      currency: "UGX",
-    })
     assert.equal(
       (
-        await request("payments/webhook", {
-          method: "POST",
-          cookie: null,
-          headers: { "verif-hash": process.env.FLW_SECRET_HASH },
-          body: {
-            event: "charge.completed",
-            data: { id: 42, tx_ref: session.tx_ref, status: "successful" },
-          },
-        })
-      ).status,
-      200,
+        await db.query(
+          "SELECT quantity FROM stock_reservations WHERE order_id=$1",
+          [order.id],
+        )
+      ).rows[0].quantity,
+      1,
     )
-    assert.equal(verified, 2)
-    const after = await db.query(
-      "SELECT (SELECT COUNT(*) FROM orders)::int AS orders, (SELECT COUNT(*) FROM order_emails)::int AS emails, (SELECT COUNT(*) FROM stock_reservations)::int AS reservations",
-    )
-    assert.deepEqual(after.rows, before.rows)
-    process.env.FLW_SECRET_KEY = "FLWSECK-live-fixture"
+    assert.equal(await stock(), 4)
     assert.equal(
-      (await invoke({ action: "start", paymentMethod: "visa" })).status,
-      503,
+      (await request(path + "/pay", { method: "POST", cookie: other })).status,
+      404,
     )
-    assert.equal(starts.length, 3)
+    const start = await request(path + "/pay", { method: "POST" })
+    assert.equal(start.status, 200)
+    assert.match(start.data.url, /^https:\/\/checkout\.flutterwave\.com\//)
+    assert.equal(starts[0].tx_ref, order.id)
+    assert.equal(starts[0].amount, 100000)
+    assert.equal(starts[0].currency, "UGX")
+    assert.equal(starts[0].payment_options, "card")
+    assert.equal(
+      starts[0].redirect_url,
+      origin + "/checkout/result/?order=" + order.id,
+    )
+
+    payment = {
+      id: 42,
+      tx_ref: order.id,
+      status: "successful",
+      currency: "UGX",
+      amount: 99999,
+    }
+    const verify = () =>
+      request(path + "/verify", { method: "POST", body: { transactionId: 42 } })
+    assert.equal((await verify()).status, 409)
+    assert.equal(await stock(), 4)
+
+    payment.amount = 100000
+    process.env.FLW_SECRET_KEY = "FLWSECK-live-fixture"
+    assert.equal((await request(path + "/pay", { method: "POST" })).status, 409)
+    assert.equal(starts.length, 1)
+    assert.equal((await verify()).status, 409)
+    assert.equal(await stock(), 4)
+    process.env.FLW_SECRET_KEY = "FLWSECK_TEST-fixture"
+
+    const webhook = request("payments/webhook", {
+      method: "POST",
+      cookie: null,
+      headers: { "verif-hash": process.env.FLW_SECRET_HASH },
+      body: { event: "charge.completed", data: payment },
+    })
+    const [verified, hook] = await Promise.all([verify(), webhook])
+    assert.equal(verified.status, 200)
+    assert.equal(hook.status, 200)
+    assert.equal(verified.data.order.paymentStatus, "paid")
+    assert.equal(verified.data.order.paymentMode, "test")
+    assert.equal(verified.data.order.status, "confirmed")
+    assert.equal(await stock(), 3)
+    assert.equal(
+      (
+        await db.query(
+          "SELECT quantity FROM stock_reservations WHERE order_id=$1",
+          [order.id],
+        )
+      ).rowCount,
+      0,
+    )
+    assert.equal(
+      (await request("admin/payment-test", { method: "POST", cookie: admin }))
+        .status,
+      404,
+    )
   } finally {
     globalThis.fetch = originalFetch
     delete process.env.FLW_SECRET_KEY

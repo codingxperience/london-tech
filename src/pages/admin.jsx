@@ -3,7 +3,6 @@ import { Overview } from "../admin/Overview.jsx"
 import { WorkspaceSection } from "../admin/Sections.jsx"
 import { CheckoutRecovery } from "../admin/CheckoutRecovery.jsx"
 import { DeliverySettings } from "../admin/DeliverySettings.jsx"
-import { PaymentTest } from "../admin/PaymentTest.jsx"
 import {
   previewData,
   previewKey,
@@ -1408,6 +1407,7 @@ function OrdersTable({ orders, onOrder }) {
                 <Badge
                   type={o.paymentStatus === "paid" ? "success" : "warning"}
                 >
+                  {o.paymentMode === "test" ? "Test · " : ""}
                   {statusLabel(o.paymentStatus)}
                 </Badge>
               </td>
@@ -1913,6 +1913,7 @@ export function AdminOrderModal({
       <div className="admin-order-top">
         <span>
           <Badge type={o.paymentStatus === "paid" ? "success" : "warning"}>
+            {o.paymentMode === "test" ? "Test · " : ""}
             {statusLabel(o.paymentStatus)}
           </Badge>
           <Badge>{statusLabel(o.status)}</Badge>
@@ -2298,9 +2299,6 @@ function SettingsPanel({ settings, connection, preview, saved }) {
         </div>
       </form>
       <aside>
-        {!preview && connection.paymentTest && (
-          <PaymentTest amount={connection.paymentTest.amount} />
-        )}
         <section className="admin-panel integration-panel">
           <div className="admin-panel-heading">
             <h2>Store connections</h2>
@@ -2314,11 +2312,7 @@ function SettingsPanel({ settings, connection, preview, saved }) {
             <div key={name}>
               <span>{name}</span>
               <Badge type={ready ? "success" : "warning"}>
-                {ready
-                  ? "Connected"
-                  : name === "Flutterwave payments" && connection.paymentTest
-                    ? "Test only"
-                    : "Setup needed"}
+                {ready ? "Connected" : "Setup needed"}
               </Badge>
             </div>
           ))}

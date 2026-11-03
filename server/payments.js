@@ -1,37 +1,41 @@
-import { createHmac, randomUUID } from "node:crypto"
+import { randomUUID } from "node:crypto"
 
-import { fail, safeEqual } from "./security.js"
+import { fail } from "./security.js"
 import { queueOrderEmail } from "./order-emails.js"
 
-export const paymentMode = () =>
-  process.env.FLW_SECRET_KEY?.includes("TEST") ? "test" : "live"
-
-const sandboxBlocked = () =>
-  paymentMode() === "test" &&
-  (process.env.VERCEL_ENV === "production" ||
-    (process.env.NODE_ENV === "production" &&
-      process.env.VERCEL_ENV !== "preview"))
+const modeForKey = (key) =>
+  /^FLWSECK_TEST[-_]/.test(key || "") ? "test" : "live"
+export const paymentMode = () => modeForKey(process.env.FLW_SECRET_KEY)
 
 export const onlinePaymentsReady = () =>
   Boolean(
     process.env.FLW_SECRET_KEY &&
-      !sandboxBlocked() &&
-      (process.env.NODE_ENV !== "production" || process.env.FLW_SECRET_HASH),
+      ((process.env.VERCEL_ENV !== "production" &&
+        process.env.NODE_ENV !== "production") ||
+        process.env.FLW_SECRET_HASH),
   )
 
-export async function flutterwave(path, options = {}) {
-  if (!process.env.FLW_SECRET_KEY || sandboxBlocked())
-    fail(503, "Online payments are being connected. Your cart has been saved.")
-  return providerRequest(path, options)
+function requireOrderMode(order, mode) {
+  if ((order.details.paymentMode || "live") !== mode)
+    fail(
+      409,
+      "The payment environment changed for this order. Contact the store for help.",
+    )
 }
 
-async function providerRequest(path, options = {}) {
+async function providerRequest(
+  path,
+  options = {},
+  key = process.env.FLW_SECRET_KEY,
+) {
+  if (!key)
+    fail(503, "Online payments are being connected. Your cart has been saved.")
   const response = await fetch("https://api.flutterwave.com/v3" + path, {
     ...options,
     signal: AbortSignal.timeout(15000),
 
     headers: {
-      Authorization: "Bearer " + process.env.FLW_SECRET_KEY,
+      Authorization: "Bearer " + key,
       "Content-Type": "application/json",
     },
   })
@@ -59,37 +63,46 @@ export function matchesPayment(order, payment) {
 }
 
 export async function createPaymentLink(order, origin) {
-  const data = await flutterwave("/payments", {
-    method: "POST",
-    body: JSON.stringify({
-      tx_ref: order.id,
-      amount: Number(order.amount),
-      currency: "UGX",
+  const key = process.env.FLW_SECRET_KEY
+  const mode = modeForKey(key)
+  requireOrderMode(order, mode)
+  const data = await providerRequest(
+    "/payments",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        tx_ref: order.id,
+        amount: Number(order.amount),
+        currency: "UGX",
 
-      redirect_url:
-        origin + "/checkout/result/?order=" + encodeURIComponent(order.id),
+        redirect_url:
+          origin + "/checkout/result/?order=" + encodeURIComponent(order.id),
 
-      payment_options:
-        order.details.paymentMethod === "visa" ? "card" : "mobilemoneyuganda",
+        payment_options:
+          order.details.paymentMethod === "visa" ? "card" : "mobilemoneyuganda",
 
-      customer: {
-        email: order.details.customer.email,
-        name: order.details.customer.name,
-        phonenumber: order.details.customer.phone,
-      },
+        customer: {
+          email: order.details.customer.email,
+          name: order.details.customer.name,
+          phonenumber: order.details.customer.phone,
+        },
 
-      customizations: {
-        title: "London Tech",
-        description: "Order " + order.id,
-        logo: origin + "/assets/london-tech-logo.png",
-      },
+        customizations: {
+          title:
+            mode === "test" ? "London Tech · Test checkout" : "London Tech",
+          description: "Order " + order.id,
+          logo: origin + "/assets/london-tech-logo.png",
+        },
 
-      meta: {
-        order_id: order.id,
-        requested_method: order.details.paymentMethod,
-      },
-    }),
-  })
+        meta: {
+          order_id: order.id,
+          requested_method: order.details.paymentMethod,
+          payment_mode: mode,
+        },
+      }),
+    },
+    key,
+  )
 
   return hostedPaymentUrl(data?.link)
 }
@@ -112,114 +125,20 @@ function hostedPaymentUrl(link) {
   return paymentUrl.href
 }
 
-export const sandboxAmount = 10000
-const sandboxPrefix = "LT-TEST-"
-const sandboxReference = /^LT-TEST-[0-9a-f-]{36}$/
+// Acknowledge callbacks from the retired owner-only demo.
 export const isSandboxReference = (value) =>
-  typeof value === "string" && sandboxReference.test(value)
-
-export function isPaymentTestOwner(user) {
-  const ownerEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
-  return Boolean(
-    ownerEmail && user?.role === "admin" && user.email === ownerEmail,
-  )
-}
-
-export function paymentTestReady(user) {
-  return (
-    isPaymentTestOwner(user) &&
-    Boolean(
-      process.env.FLW_SECRET_HASH &&
-        /^FLWSECK_TEST[-_]/.test(process.env.FLW_SECRET_KEY || ""),
-    )
-  )
-}
-
-function requirePaymentTest(user) {
-  if (!isPaymentTestOwner(user))
-    fail(403, "Only the store owner can run payment tests.")
-  if (!paymentTestReady(user))
-    fail(
-      503,
-      "A Flutterwave test secret and webhook hash are required for this demo.",
-    )
-}
-
-const signTest = (user, reference, expires) =>
-  createHmac("sha256", process.env.FLW_SECRET_HASH)
-    .update(`${user.id}:${reference}:${expires}`)
-    .digest("base64url")
-
-export async function startPaymentTest(user, method, origin) {
-  requirePaymentTest(user)
-  const reference = sandboxPrefix + randomUUID()
-  const expires = Date.now() + 45 * 60 * 1000
-  const proof = `${reference}.${expires}.${signTest(user, reference, expires)}`
-  const redirect = new URL("/admin/settings/", origin)
-  redirect.searchParams.set("payment_test", proof)
-  const data = await providerRequest("/payments", {
-    method: "POST",
-    body: JSON.stringify({
-      tx_ref: reference,
-      amount: sandboxAmount,
-      currency: "UGX",
-      redirect_url: redirect.href,
-      payment_options: method === "visa" ? "card" : "mobilemoneyuganda",
-      customer: {
-        email: "checkout-demo@example.com",
-        name: "London Tech Test Customer",
-      },
-      customizations: {
-        title: "London Tech · Test Mode",
-        description: "Sample checkout",
-        logo: origin + "/assets/london-tech-logo.png",
-      },
-      meta: { sandbox: true, requested_method: method },
-    }),
-  })
-  return { url: hostedPaymentUrl(data?.link) }
-}
-
-export async function verifyPaymentTest(user, proof, transactionId) {
-  requirePaymentTest(user)
-  const [reference, expires, signature, extra] = proof.split(".")
-  if (
-    extra !== undefined ||
-    !isSandboxReference(reference) ||
-    !/^\d{13}$/.test(expires || "") ||
-    Number(expires) <= Date.now() ||
-    !safeEqual(signature, signTest(user, reference, expires))
-  )
-    fail(400, "This test session is invalid or expired. Start another test.")
-  const payment = await providerRequest(
-    "/transactions/" + transactionId + "/verify",
-  )
-  if (
-    payment?.tx_ref !== reference ||
-    String(payment.id) !== transactionId ||
-    payment.currency !== "UGX" ||
-    (payment.status === "successful" &&
-      Number(payment.amount) !== sandboxAmount)
-  )
-    fail(409, "Flutterwave returned details that do not match this test.")
-  if (
-    !["successful", "failed", "cancelled", "pending"].includes(payment.status)
-  )
-    fail(502, "Flutterwave returned an unknown test payment status.")
-  return {
-    status: payment.status,
-    reference,
-    amount: sandboxAmount,
-    currency: "UGX",
-  }
-}
+  typeof value === "string" && /^LT-TEST-[0-9a-f-]{36}$/.test(value)
 
 export async function verifyPayment(db, transactionId, expectedOrderId) {
   if (!/^\d+$/.test(String(transactionId)))
     fail(400, "A valid transaction reference is required.")
 
-  const payment = await flutterwave(
+  const key = process.env.FLW_SECRET_KEY
+  const mode = modeForKey(key)
+  const payment = await providerRequest(
     "/transactions/" + transactionId + "/verify",
+    {},
+    key,
   )
 
   if (expectedOrderId && payment.tx_ref !== expectedOrderId)
@@ -234,9 +153,18 @@ export async function verifyPayment(db, transactionId, expectedOrderId) {
 
     if (!order) fail(404, "Order was not found.")
 
-    if (order.payment_status === "paid") return order
+    requireOrderMode(order, mode)
 
-    if (!matchesPayment(order, payment))
+    if (order.payment_status === "paid") {
+      if (String(order.transaction_id) !== String(payment.id))
+        fail(409, "This order already has a verified payment.")
+      return order
+    }
+
+    if (
+      String(payment.id) !== String(transactionId) ||
+      !matchesPayment(order, payment)
+    )
       fail(409, "Payment is not confirmed. You have not been marked as paid.")
 
     let needsReview = ["cancelled", "expired"].includes(order.status)
@@ -273,7 +201,10 @@ export async function verifyPayment(db, transactionId, expectedOrderId) {
           status,
           kind: "payment",
           at: new Date().toISOString(),
-          note: "Payment verified with Flutterwave.",
+          note:
+            mode === "test"
+              ? "Test payment verified with Flutterwave."
+              : "Payment verified with Flutterwave.",
         },
       ],
     }

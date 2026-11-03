@@ -27,7 +27,8 @@ export async function queueOrderEmail(tx, order, event, title) {
   const details = order.details
   const payload = {
     to: details.customer.email,
-    title,
+    title: details.paymentMode === "test" ? "Test order · " + title : title,
+    test: details.paymentMode === "test",
     amount: order.amount == null ? null : Number(order.amount),
     payment: order.payment_status,
     fulfillment: details.fulfillment,
@@ -67,6 +68,9 @@ export async function deliverOrderEmail(db, id, orderId) {
     const url = `${origin}/account/orders/${encodeURIComponent(job.order_id)}/`
     const lines = [
       `Order ${job.order_id}`,
+      p.test
+        ? "This order uses a simulated payment. No money was collected."
+        : "",
       p.amount == null ? "" : `Total ${money(p.amount)}`,
       p.payment === "cash_due" && !/cancelled/i.test(p.title)
         ? `Pay in cash ${

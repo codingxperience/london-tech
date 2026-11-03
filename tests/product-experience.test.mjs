@@ -1953,7 +1953,12 @@ test("sign-in errors preserve the form and registration submits working credenti
 const adminInput = (label) =>
   [...container.querySelectorAll("label.field")]
     .find((field) => field.querySelector("span")?.textContent === label)
-    ?.querySelector("input,textarea,select")
+    ?.querySelector("input,textarea,select") ||
+  [
+    ...container.querySelectorAll(
+      "input[aria-label],textarea[aria-label],select[aria-label]",
+    ),
+  ].find((input) => input.getAttribute("aria-label") === label)
 async function editAdminField(label, value) {
   const input = adminInput(label)
   assert.ok(input, "Admin field exists: " + label)
@@ -1973,8 +1978,10 @@ async function editAdminField(label, value) {
   })
 }
 const adminButton = (text) =>
-  [...container.querySelectorAll("button")].find((button) =>
-    button.textContent.trim().includes(text),
+  [...container.querySelectorAll("button")].find(
+    (button) =>
+      button.getAttribute("aria-label") === text ||
+      button.textContent.trim().includes(text),
   )
 
 test("the complete admin preview routes every navigation item to its own screen with readable controls", async () => {

@@ -46,7 +46,7 @@ export function salesSeries(orders, period = "year", now = new Date()) {
     if (!bucket) continue
     bucket.orders++
     bucket.total += Number.isFinite(order.amount) ? order.amount : 0
-    if (order.paymentStatus === "paid") {
+    if (order.paymentStatus === "paid" && order.paymentMode !== "test") {
       bucket.paid++
       bucket.sales += order.amount || 0
     } else if (order.status !== "cancelled") bucket.pending++
@@ -56,7 +56,9 @@ export function salesSeries(orders, period = "year", now = new Date()) {
 
 export function bestSellers(products, orders) {
   const totals = new Map()
-  for (const order of orders.filter((o) => o.paymentStatus === "paid"))
+  for (const order of orders.filter(
+    (o) => o.paymentStatus === "paid" && o.paymentMode !== "test",
+  ))
     for (const item of order.items) {
       const entry = totals.get(item.id) || { units: 0, revenue: 0 }
       entry.units += item.quantity
@@ -73,7 +75,9 @@ export function bestSellers(products, orders) {
 
 export function destinations(orders) {
   const totals = new Map()
-  for (const order of orders.filter((o) => o.paymentStatus === "paid")) {
+  for (const order of orders.filter(
+    (o) => o.paymentStatus === "paid" && o.paymentMode !== "test",
+  )) {
     const place =
       order.fulfillment === "collection"
         ? "Store collection"
