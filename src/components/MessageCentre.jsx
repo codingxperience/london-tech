@@ -5,6 +5,7 @@ import {
   CheckCheck,
   MessageSquare,
   Plus,
+  RefreshCw,
   Search,
   Send,
 } from "lucide-react"
@@ -40,6 +41,8 @@ export function MessageCentre({
   admin = false,
   preview = false,
   changed,
+  synced,
+  workspaceQuery = "",
 }) {
   const [threads, setThreads] = useState(supplied || []),
     [selected, setSelected] = useState(null)
@@ -50,42 +53,103 @@ export function MessageCentre({
     [error, setError] = useState("")
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState("all")
-  const [loading, setLoading] = useState(!supplied)
+  const [connection, setConnection] = useState("connecting")
+  const refreshInbox = useRef(null)
   const messages = useRef(null)
+  const followingLatest = useRef(true)
   const inboxSearch = useRef(null)
   const conversationTitle = useRef(null)
   useEffect(() => {
-    if (supplied) setThreads(supplied)
-    else
-      api("messages")
-        .then((d) => setThreads(d.threads))
-        .catch((e) => setError(e.message))
-        .finally(() => setLoading(false))
-  }, [supplied])
+    if (preview) setThreads(supplied || [])
+  }, [preview, supplied])
+  useEffect(() => {
+    if (preview || busy) return
+    const controller = new AbortController()
+    let timer,
+      inFlight = false,
+      version = ""
+    async function refresh() {
+      if (document.hidden || inFlight || controller.signal.aborted) return
+      window.clearTimeout(timer)
+      inFlight = true
+      try {
+        const path = admin ? "admin/messages/" : "messages/"
+        const result = await api(
+          path + (version ? "?version=" + version : ""),
+          {
+            signal: AbortSignal.any([
+              controller.signal,
+              AbortSignal.timeout(12000),
+            ]),
+            cache: "no-store",
+          },
+        )
+        if (controller.signal.aborted) return
+        if (Array.isArray(result.threads)) {
+          setThreads(result.threads)
+          synced?.(result.threads)
+        } else if (!version || result.version !== version) {
+          throw new Error("Unexpected inbox response")
+        }
+        version = result.version || ""
+        setConnection("connected")
+      } catch (e) {
+        if (controller.signal.aborted) return
+        if ([401, 403].includes(e.status)) {
+          setThreads([])
+          setConnection("signed-out")
+          return
+        }
+        setConnection("retrying")
+      } finally {
+        inFlight = false
+      }
+      if (!controller.signal.aborted) timer = window.setTimeout(refresh, 3000)
+    }
+    refreshInbox.current = refresh
+    refresh()
+    document.addEventListener("visibilitychange", refresh)
+    window.addEventListener("focus", refresh)
+    window.addEventListener("online", refresh)
+    return () => {
+      controller.abort()
+      window.clearTimeout(timer)
+      refreshInbox.current = null
+      document.removeEventListener("visibilitychange", refresh)
+      window.removeEventListener("focus", refresh)
+      window.removeEventListener("online", refresh)
+    }
+  }, [admin, preview, busy, synced])
   const thread = threads.find((t) => t.id === selected)
   const counterpart = (t) =>
     admin ? t.customer_name || "Customer" : "London Tech"
-  const term = query.trim().toLowerCase()
+  const terms = [workspaceQuery, query]
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean)
   const ownRole = admin ? "admin" : "customer"
   const shown = threads
     .filter((t) => filter === "all" || t.status === filter)
-    .filter((t) =>
-      [
+    .filter((t) => {
+      const fields = [
         t.subject,
         counterpart(t),
         admin ? t.customer_email : "",
         ...t.messages.map((m) => m.body),
-      ].some((value) => value?.toLowerCase().includes(term)),
-    )
+      ]
+      return terms.every((term) =>
+        fields.some((value) => value?.toLowerCase().includes(term)),
+      )
+    })
     .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
   const messageCount = thread?.messages.length
 
   useEffect(() => {
-    if (messages.current)
+    if (followingLatest.current && messages.current)
       messages.current.scrollTop = messages.current.scrollHeight
   }, [selected, messageCount])
 
   function openThread(id) {
+    followingLatest.current = true
     setSelected(id)
     setError("")
     setReply("")
@@ -95,6 +159,7 @@ export function MessageCentre({
   }
 
   async function update(action, body) {
+    if (action === "reply") followingLatest.current = true
     setBusy(true)
     setError("")
     try {
@@ -178,17 +243,52 @@ export function MessageCentre({
       <div className={`message-layout${thread ? " has-conversation" : ""}`}>
         <aside className="message-inbox" aria-label="Inbox">
           <div className="message-inbox-head">
-            <h2>{admin ? "Customer messages" : "Messages"}</h2>
-            <Button
-              onClick={() => {
-                setError("")
-                setCompose(true)
-              }}
-              aria-label="New message"
-              title="New message"
-            >
-              <Plus size={19} aria-hidden="true" />
-            </Button>
+            <div>
+              <h2>{admin ? "Customer messages" : "Messages"}</h2>
+              {preview ? (
+                <a className="message-live-link" href="/admin/messages/">
+                  Open live inbox
+                </a>
+              ) : (
+                <span
+                  className="message-connection"
+                  data-state={connection}
+                  role="status"
+                >
+                  {connection === "connected"
+                    ? "Auto-updating"
+                    : connection === "signed-out"
+                      ? "Sign in to reconnect"
+                      : connection === "retrying"
+                        ? "Reconnecting…"
+                        : "Connecting…"}
+                </span>
+              )}
+            </div>
+            <div className="message-inbox-actions">
+              {!preview && (
+                <button
+                  type="button"
+                  className="message-refresh"
+                  aria-label="Refresh inbox"
+                  title="Refresh inbox"
+                  disabled={busy}
+                  onClick={() => refreshInbox.current?.()}
+                >
+                  <RefreshCw size={16} aria-hidden="true" />
+                </button>
+              )}
+              <Button
+                onClick={() => {
+                  setError("")
+                  setCompose(true)
+                }}
+                aria-label="New message"
+                title="New message"
+              >
+                <Plus size={19} aria-hidden="true" />
+              </Button>
+            </div>
           </div>
           <div className="message-toolbar">
             <label className="message-search">
@@ -247,11 +347,15 @@ export function MessageCentre({
               })
             ) : (
               <p className="message-list-empty" role="status">
-                {loading
+                {!preview && connection === "connecting"
                   ? "Loading conversations…"
-                  : term || filter !== "all"
-                    ? "No matching conversations."
-                    : "No conversations yet."}
+                  : !preview && connection === "signed-out"
+                    ? "Sign in again to open your conversations."
+                    : !preview && connection === "retrying" && !threads.length
+                      ? "Inbox temporarily unavailable. Reconnecting…"
+                      : terms.length || filter !== "all"
+                        ? "No matching conversations."
+                        : "No conversations yet."}
               </p>
             )}
           </div>
@@ -305,6 +409,12 @@ export function MessageCentre({
               <div
                 className="message-bubbles"
                 ref={messages}
+                onScroll={(e) => {
+                  const { scrollHeight, scrollTop, clientHeight } =
+                    e.currentTarget
+                  followingLatest.current =
+                    scrollHeight - scrollTop - clientHeight < 48
+                }}
                 role="log"
                 aria-label="Conversation messages"
                 tabIndex={0}

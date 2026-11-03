@@ -1213,7 +1213,14 @@ export default async function handler(req, res) {
       return send(res, { received: true })
     }
 
-    const workspace = await workspaceRoute({ route, method, body, db, user })
+    const workspace = await workspaceRoute({
+      route,
+      method,
+      body,
+      db,
+      user,
+      query: url.searchParams,
+    })
     if (workspace) return send(res, workspace.body, workspace.status || 200)
 
     if (route.startsWith("admin/")) {

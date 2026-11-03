@@ -13,7 +13,7 @@ import "../admin-navigation.css"
 import "../admin-theme.css"
 import { PaymentMarks } from "../components/PaymentMarks.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
-import React, { useEffect, useState, useRef } from "react"
+import React, { useCallback, useEffect, useState, useRef } from "react"
 
 import {
   Activity,
@@ -286,6 +286,9 @@ export default function Admin({
       setError(e.message)
     }
   }
+  const syncMessages = useCallback((messages) => {
+    setData((current) => (current ? { ...current, messages } : current))
+  }, [])
 
   useEffect(() => {
     if (!preview && user?.role === "admin") load()
@@ -787,6 +790,7 @@ export default function Admin({
               user={user}
               preferences={preferences}
               setPreferences={setPreferences}
+              syncedMessages={preview ? undefined : syncMessages}
               changedMessages={
                 preview
                   ? (messages) =>

@@ -793,6 +793,12 @@ test("customer conversations preserve ownership, accept store replies and record
     (await request("messages", { method: "POST", body: input })).status,
     401,
   )
+  assert.equal((await request("admin/messages")).status, 401)
+  assert.equal(
+    (await request("admin/messages", { cookie: customerCookie })).status,
+    403,
+  )
+  const before = (await request("admin/messages", { cookie: adminCookie })).data
   const created = await request("messages", {
     method: "POST",
     cookie: customerCookie,
@@ -802,6 +808,27 @@ test("customer conversations preserve ownership, accept store replies and record
   const thread = created.data.thread
   assert.equal(thread.user_id, customerId)
   assert.equal(thread.messages[0].role, "customer")
+  const inbox = (
+    await request("admin/messages?version=" + before.version, {
+      cookie: adminCookie,
+    })
+  ).data
+  assert.notEqual(inbox.version, before.version)
+  assert.ok(
+    inbox.threads.some(
+      (t) => t.id === thread.id && t.customer_email === "customer@example.com",
+    ),
+  )
+  assert.deepEqual(
+    (
+      await request("admin/messages?version=" + inbox.version, {
+        cookie: adminCookie,
+      })
+    ).data,
+    { version: inbox.version, threads: null },
+  )
+  const customerInbox = (await request("messages", { cookie: customerCookie }))
+    .data
   const second = await request("auth/register", {
     method: "POST",
     body: {
@@ -833,6 +860,16 @@ test("customer conversations preserve ownership, accept store replies and record
   })
   assert.equal(replied.status, 200)
   assert.equal(replied.data.thread.messages.at(-1).role, "admin")
+  const customerUpdate = (
+    await request("messages?version=" + customerInbox.version, {
+      cookie: customerCookie,
+    })
+  ).data
+  assert.notEqual(customerUpdate.version, customerInbox.version)
+  assert.equal(
+    customerUpdate.threads.find((t) => t.id === thread.id).messages.at(-1).body,
+    "We can compare those configurations.",
+  )
   assert.equal(
     (
       await request("admin/messages/" + thread.id, {

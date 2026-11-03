@@ -32,6 +32,34 @@ const messageSchema = z.object({
   body: text(4000).min(2),
 })
 
+async function readInbox(db, userId, version = "") {
+  const admin = userId === null
+  const { rows } = await db.query(
+    `WITH inbox AS (
+       SELECT id, updated_at FROM message_threads
+       ${admin ? "" : "WHERE user_id=$2"}
+       ORDER BY updated_at DESC, id DESC LIMIT ${admin ? 300 : 100}
+     ), revision AS (
+       SELECT md5(COALESCE(string_agg(id || ':' || updated_at::text, ',' ORDER BY updated_at DESC, id DESC), '')) AS version
+       FROM inbox
+     )
+     SELECT version, CASE WHEN version <> $1 THEN (
+       SELECT COALESCE(jsonb_agg(
+         to_jsonb(t) ${
+           admin
+             ? "|| jsonb_build_object('customer_name', u.name, 'customer_email', u.email)"
+             : ""
+         }
+         ORDER BY i.updated_at DESC, i.id DESC
+       ), '[]'::jsonb)
+       FROM inbox i JOIN message_threads t ON t.id=i.id
+       ${admin ? "JOIN users u ON u.id=t.user_id" : ""}
+     ) END AS threads FROM revision`,
+    admin ? [version] : [version, userId],
+  )
+  return rows[0]
+}
+
 export async function publishedPages(db) {
   const rows = await db.query(
     "SELECT data FROM content_pages WHERE data->>'status'='published' ORDER BY data->>'title'",
@@ -50,9 +78,7 @@ export async function workspaceSummary(db) {
   const [vendors, pages, messages, wishlists] = await Promise.all([
     db.query("SELECT id,data FROM vendors ORDER BY data->>'name'"),
     db.query("SELECT id,data FROM content_pages ORDER BY updated_at DESC"),
-    db.query(
-      "SELECT t.*,u.name AS customer_name,u.email AS customer_email FROM message_threads t JOIN users u ON u.id=t.user_id ORDER BY t.updated_at DESC LIMIT 300",
-    ),
+    readInbox(db, null),
     db.query(
       "SELECT w.user_id,w.product_ids,u.name,u.email FROM wishlists w JOIN users u ON u.id=w.user_id WHERE jsonb_array_length(w.product_ids)>0",
     ),
@@ -60,13 +86,13 @@ export async function workspaceSummary(db) {
   return {
     vendors: vendors.rows.map(({ id, data }) => ({ ...data, id })),
     pages: pages.rows.map(({ id, data }) => ({ ...data, id })),
-    messages: messages.rows,
+    messages: messages.threads,
     wishlists: wishlists.rows,
   }
 }
 
 /** Persisted workspace tools. Every write shares the API's origin and session checks. */
-export async function workspaceRoute({ route, method, body, db, user }) {
+export async function workspaceRoute({ route, method, body, db, user, query }) {
   const page = route.match(/^pages\/([a-z0-9-]+)$/)
   if (page && method === "GET") {
     const row = (
@@ -79,13 +105,16 @@ export async function workspaceRoute({ route, method, body, db, user }) {
     return { body: { page: row.data } }
   }
 
-  if (route === "messages" && method === "GET") {
+  if (
+    (route === "messages" || route === "admin/messages") &&
+    method === "GET"
+  ) {
     requireUser(user)
-    const rows = await db.query(
-      "SELECT * FROM message_threads WHERE user_id=$1 ORDER BY updated_at DESC LIMIT 100",
-      [user.id],
-    )
-    return { body: { threads: rows.rows } }
+    const admin = route === "admin/messages"
+    if (admin) requireAdmin(user)
+    const token = query.get("version") || ""
+    const version = /^[a-f0-9]{32}$/.test(token) ? token : ""
+    return { body: await readInbox(db, admin ? null : user.id, version) }
   }
   if (
     (route === "messages" || route === "admin/messages") &&
@@ -149,7 +178,7 @@ export async function workspaceRoute({ route, method, body, db, user }) {
       }
       return (
         await tx.query(
-          "UPDATE message_threads SET messages=messages || $2::jsonb,status='open',updated_at=NOW() WHERE id=$1 RETURNING *",
+          "UPDATE message_threads SET messages=messages || $2::jsonb,status='open',updated_at=clock_timestamp() WHERE id=$1 RETURNING *",
           [reply[1], JSON.stringify([message])],
         )
       ).rows[0]
@@ -235,7 +264,7 @@ export async function workspaceRoute({ route, method, body, db, user }) {
     const input = z.object({ status: z.enum(["open", "resolved"]) }).parse(body)
     const row = (
       await db.query(
-        "UPDATE message_threads SET status=$2,updated_at=NOW() WHERE id=$1 RETURNING *",
+        "UPDATE message_threads SET status=$2,updated_at=clock_timestamp() WHERE id=$1 RETURNING *",
         [status[1], input.status],
       )
     ).rows[0]

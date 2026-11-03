@@ -1112,6 +1112,7 @@ export function WorkspaceSection({
   perform,
   preview,
   changedMessages,
+  syncedMessages,
   preferences,
   setPreferences,
   user,
@@ -1134,12 +1135,12 @@ export function WorkspaceSection({
     return (
       <MessageCentre
         admin
-        threads={(data.messages || []).filter((t) =>
-          JSON.stringify(t).toLowerCase().includes(query.toLowerCase()),
-        )}
+        threads={preview ? data.messages : undefined}
+        workspaceQuery={query}
         customers={data.customers}
         preview={preview}
         changed={changedMessages}
+        synced={syncedMessages}
       />
     )
   if (section === "language")

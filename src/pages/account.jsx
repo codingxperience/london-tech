@@ -270,7 +270,7 @@ export function Account({ section = "overview", orderId }) {
         <div className="account-content">
           {error && <Notice type="error">{error}</Notice>}
           {section === "messages" ? (
-            <MessageCentre />
+            <MessageCentre key={user.id} />
           ) : section === "overview" ? (
             <>
               <div className="account-stat-grid">

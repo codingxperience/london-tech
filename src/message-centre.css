@@ -39,6 +39,28 @@
 .message-inbox-head {
   justify-content: space-between;
 }
+.message-inbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.message-connection,
+.message-live-link {
+  color: var(--chat-muted);
+  font-size: 12px;
+}
+.message-connection {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.message-connection[data-state="connected"]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--workspace-success, #167453);
+}
 .message-centre .message-inbox-head h2,
 .message-centre .message-thread-title h3 {
   margin: 0;
@@ -47,7 +69,8 @@
   font-weight: 850;
   overflow-wrap: anywhere;
 }
-.commerce-surface .message-centre :is(.message-inbox-head, .message-composer) > .button,
+.commerce-surface .message-centre :is(.message-inbox-actions, .message-composer) > .button,
+.message-refresh,
 .message-back {
   display: inline-grid;
   place-items: center;
@@ -58,7 +81,19 @@
   padding: 0;
   border-radius: 50%;
 }
-.message-centre :is(.message-inbox-head, .message-composer) > .button > svg {
+.message-refresh {
+  border: 0;
+  background: transparent;
+  color: var(--chat-muted);
+  cursor: pointer;
+}
+.message-refresh:hover {
+  background: var(--chat-soft);
+}
+.message-refresh:disabled {
+  opacity: 0.55;
+}
+.message-centre :is(.message-inbox-actions, .message-composer) > .button > svg {
   flex-shrink: 0;
 }
 .reference-storefront:has(.account-content .message-centre) .floating-whatsapp {
