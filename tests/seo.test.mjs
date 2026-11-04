@@ -200,9 +200,9 @@ test("production HTML contains crawlable product and category content before Jav
   const website = resolveSeo("/", data).schemas.find(
     (node) => node["@type"] === "WebSite",
   )
-  assert.equal(website.name, "London Tech")
+  assert.equal(website.name, "London Tech Stores")
   assert.equal(website.url, defaultOrigin + "/")
-  assert.ok(website.alternateName.includes("London Tech Uganda"))
+  assert.ok(website.alternateName.includes("London Tech"))
   for (const [path, label] of [
     ["/collections/shop/", "Shop all electronics"],
     ["/about/", "About London Tech"],

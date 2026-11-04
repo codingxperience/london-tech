@@ -50,31 +50,31 @@ const curated = {
 const info = {
   about: [
     "About the Store",
-    "Meet London Tech, your local technology store in Arua Park, Kampala. See the shop, explore our products and watch our community videos.",
+    "Meet London Tech Stores, your local technology store in Arua Park, Kampala. See the shop, explore our products and watch our community videos.",
   ],
   contact: [
     "Visit Our Kampala Store",
-    "Find London Tech in Kampala. Contact the store for products, directions and opening hours.",
+    "Find London Tech Stores in Kampala. Contact the store for products, directions and opening hours.",
   ],
   delivery: [
     "Delivery & Collection in Uganda",
-    "Explore London Tech delivery and collection options in Uganda. Check availability, delivery charges and collection readiness before you order.",
+    "Explore London Tech Stores delivery and collection options in Uganda. Check availability, delivery charges and collection readiness before you order.",
   ],
   returns: [
     "Returns & Warranty",
-    "Read London Tech return and warranty information. Confirm the product-specific coverage, condition and sale terms before purchasing.",
+    "Read London Tech Stores return and warranty information. Confirm the product-specific coverage, condition and sale terms before purchasing.",
   ],
   help: [
     "Shopping Help & FAQs",
-    "Find answers about ordering, MTN and Airtel Mobile Money, Visa, store collection, payments and shopping at London Tech Uganda.",
+    "Find answers about ordering, MTN and Airtel Mobile Money, Visa, store collection, payments and shopping at London Tech Stores.",
   ],
   privacy: [
     "Privacy Information",
-    "How London Tech uses account, order, newsletter and anonymous visitor information, and how to manage your choices.",
+    "How London Tech Stores uses account, order, newsletter and anonymous visitor information, and how to manage your choices.",
   ],
   terms: [
     "Shopping Terms",
-    "Read London Tech shopping terms covering confirmed prices, orders, payment verification, delivery, collection and returns.",
+    "Read London Tech Stores shopping terms covering confirmed prices, orders, payment verification, delivery, collection and returns.",
   ],
 }
 const privateRoute =
@@ -86,8 +86,8 @@ export function storeSchema(settings, origin) {
   return {
     "@type": "ElectronicsStore",
     "@id": origin + "/#store",
-    name: "London Tech",
-    alternateName: "London Technology Store",
+    name: "London Tech Stores",
+    alternateName: ["London Tech", "London Technology Store"],
     url: origin + "/",
     logo: origin + "/assets/london-tech-logo.png",
     image: origin + "/assets/about/store-interior.webp",
@@ -115,8 +115,8 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
     pages = data.pages || []
   const result = {
     status: 200,
-    title: "London Tech Uganda | Electronics in Kampala",
-    description: `Shop phones, laptops, audio, watches, gaming and accessories at London Tech in Arua Park, Kampala. Explore prices in UGX and visit shop FN:19.`,
+    title: "London Tech Stores | Electronics in Kampala",
+    description: `Shop phones, laptops, audio, watches, gaming and accessories at London Tech Stores in Arua Park, Kampala. Explore prices in UGX and visit shop FN:19.`,
     canonical: origin + canonicalPath,
     noindex: false,
     render: true,
@@ -131,7 +131,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
   if (privateRoute.test(pathname))
     return {
       ...result,
-      title: "Your Account & Shopping | London Tech",
+      title: "Your Account & Shopping | London Tech Stores",
       noindex: true,
       render: false,
       schemas: [],
@@ -141,8 +141,8 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
       "@type": "WebSite",
       "@id": origin + "/#website",
       url: origin + "/",
-      name: "London Tech",
-      alternateName: ["London Tech Uganda", "London Technology Store"],
+      name: "London Tech Stores",
+      alternateName: ["London Tech", "London Technology Store"],
       inLanguage: "en-UG",
       publisher: { "@id": store["@id"] },
     })
@@ -151,9 +151,9 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
       p = products.find((p) => p.id === id)
     if (!p || pathname.split("/").length !== 3) result.status = 404
     else {
-      result.title = `${p.name} in Uganda | London Tech Kampala`
+      result.title = `${p.name} in Uganda | London Tech Stores Kampala`
       result.description = summary(
-        `${p.name}. ${productInformation(p).description} Explore prices in UGX at London Tech, Kampala.`,
+        `${p.name}. ${productInformation(p).description} Explore prices in UGX at London Tech Stores, Kampala.`,
       )
       crumbs.push(
         {
@@ -230,9 +230,9 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
         (!faceted && filters.page > 1 ? "?page=" + filters.page : "")
       result.title = `${title} in Uganda${
         filters.page > 1 ? " – Page " + filters.page : ""
-      } | London Tech`
+      } | London Tech Stores`
       result.description = summary(
-        `${cat?.description || "Explore " + title.toLowerCase() + ", compare products and check current prices in UGX."} Shop at London Tech in Arua Park, Kampala.`,
+        `${cat?.description || "Explore " + title.toLowerCase() + ", compare products and check current prices in UGX."} Shop at London Tech Stores in Arua Park, Kampala.`,
       )
       pageType = "CollectionPage"
       crumbs.push({ name: title, url: result.canonical })
@@ -270,15 +270,15 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
       (pathname === "/pages/" + slug || (info[slug] && pathname === "/" + slug))
     ) {
       if (info[slug]) result.canonical = origin + "/" + slug + "/"
-      result.title = managed.title + " | London Tech Uganda"
+      result.title = managed.title + " | London Tech Stores"
       result.description = summary(managed.summary || managed.body)
       crumbs.push({ name: managed.title, url: result.canonical })
     } else if (info[slug] && pathname.split("/").length === 2) {
-      result.title = info[slug][0] + " | London Tech"
+      result.title = info[slug][0] + " | London Tech Stores"
       result.description =
         slug === "contact"
           ? summary(
-              `Find London Tech at ${settings.address}, Kampala. Call ${[settings.phone, settings.phoneAlt].filter(Boolean).join(" or ")} for products, directions and opening hours.`,
+              `Find London Tech Stores at ${settings.address}, Kampala. Call ${[settings.phone, settings.phoneAlt].filter(Boolean).join(" or ")} for products, directions and opening hours.`,
             )
           : info[slug][1]
       pageType =
@@ -293,9 +293,9 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
   if (result.status === 404)
     return {
       ...result,
-      title: "Page Not Found | London Tech",
+      title: "Page Not Found | London Tech Stores",
       description:
-        "This page is unavailable. Explore phones, laptops and more at London Tech Uganda.",
+        "This page is unavailable. Explore phones, laptops and more at London Tech Stores.",
       noindex: true,
       schemas: [],
     }
