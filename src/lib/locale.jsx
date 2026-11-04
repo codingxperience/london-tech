@@ -97,6 +97,9 @@ const arabic = {
   "Or continue with": "أو تابع باستخدام",
   "Continue with Google": "المتابعة باستخدام Google",
   "Continue with Facebook": "المتابعة باستخدام Facebook",
+  "Continue with Apple": "المتابعة باستخدام Apple",
+  "Social sign-in will be available soon.":
+    "ستتوفر خيارات تسجيل الدخول عبر الحسابات الاجتماعية قريباً.",
   "Forgot password?": "هل نسيت كلمة المرور؟",
   "Reset password": "إعادة تعيين كلمة المرور",
   "Send reset link": "إرسال رابط إعادة التعيين",

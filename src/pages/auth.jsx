@@ -15,6 +15,18 @@ import { api, post } from "../lib/api.js"
 import { Button, Field, IconButton, Notice } from "../components/ui.jsx"
 
 function ProviderIcon({ provider }) {
+  if (provider === "apple")
+    return (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M17.05 12.54c.03 3.07 2.69 4.09 2.72 4.1-.02.07-.43 1.46-1.41 2.9-.85 1.24-1.73 2.47-3.12 2.5-1.36.03-1.8-.81-3.35-.81-1.55 0-2.04.78-3.32.84-1.34.05-2.36-1.34-3.22-2.58-1.75-2.53-3.08-7.16-1.28-10.28a5 5 0 0 1 4.23-2.56c1.32-.03 2.57.89 3.37.89.81 0 2.32-1.1 3.91-.94.67.03 2.54.27 3.74 2.03-.1.06-2.23 1.3-2.21 3.91ZM14.5 4.96c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.65.75-1.23 1.96-1.08 3.12 1.14.09 2.3-.58 3.01-1.41Z" />
+      </svg>
+    )
   return provider === "google" ? (
     <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
       <path
@@ -364,23 +376,25 @@ export function Auth({
               <span>{t("Or continue with")}</span>
             </div>
             <div className="auth-social-options">
-              {["google", "facebook"].map((provider) => {
-                const available = config.socialProviders?.[provider] === true
+              {[
+                ["google", "Google"],
+                ["facebook", "Facebook"],
+                ["apple", "Apple"],
+              ].map(([provider, name]) => {
+                const available =
+                  provider !== "apple" &&
+                  config.socialProviders?.[provider] === true
                 return (
                   <button
                     type="button"
                     key={provider}
                     disabled={!available || busy}
                     onClick={() => social(provider)}
-                    aria-label={t(
-                      provider === "google"
-                        ? "Continue with Google"
-                        : "Continue with Facebook",
-                    )}
+                    aria-label={t("Continue with " + name)}
                     title={!available ? t("Available soon") : undefined}
                   >
                     <ProviderIcon provider={provider} />
-                    <span>{provider === "google" ? "Google" : "Facebook"}</span>
+                    <span>{name}</span>
                   </button>
                 )
               })}
@@ -388,7 +402,7 @@ export function Auth({
             {!config.socialProviders?.google &&
               !config.socialProviders?.facebook && (
                 <p className="auth-provider-status">
-                  {t("Google and Facebook sign-in will be available soon.")}
+                  {t("Social sign-in will be available soon.")}
                 </p>
               )}
             <p className="auth-country">
