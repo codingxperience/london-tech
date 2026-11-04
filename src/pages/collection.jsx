@@ -1,3 +1,4 @@
+import { useLocale } from "../lib/locale.jsx"
 import React, { useEffect, useId, useState } from "react"
 import {
   ArrowRight,
@@ -32,6 +33,7 @@ import {
 import { ProductGrid } from "../components/storefront.jsx"
 
 export function Collection({ category = "shop" }) {
+  const { t, formatNumber } = useLocale()
   const { products, initialPath } = useStore()
   const requestPath =
     initialPath ??
@@ -68,7 +70,7 @@ export function Collection({ category = "shop" }) {
           ? "Find your next iPhone."
           : category === "samsung-galaxy-ultra-london"
             ? "The Galaxy Ultra collection."
-            : categoryName(category) + "."
+            : t(categoryName(category)) + "."
   const recommended = categories
     .map((item) => ({
       ...item,
@@ -145,25 +147,26 @@ export function Collection({ category = "shop" }) {
       <div className="refined-filter-heading">
         <span>
           <SlidersHorizontal size={17} />
-          Filters{active > 0 && <b>{active}</b>}
+          {t("Filters")}
+          {active > 0 && <b>{formatNumber(active)}</b>}
         </span>
         {(active > 0 || filters.query) && (
           <button type="button" onClick={clear}>
-            Reset
+            {t("Reset")}
           </button>
         )}
       </div>
       <details className="refined-filter-group" open>
         <summary>
-          Brand
+          {t("Brand")}
           <ChevronDown size={15} />
         </summary>
         {brands.length > 6 && (
           <label className="filter-brand-search">
             <Search size={14} />
             <input
-              aria-label="Search brands"
-              placeholder="Find a brand"
+              aria-label={t("Search brands")}
+              placeholder={t("Find a brand")}
               value={brandSearch}
               onChange={(event) => setBrandSearch(event.target.value)}
             />
@@ -178,26 +181,32 @@ export function Collection({ category = "shop" }) {
                 onChange={() => toggleBrand(brand)}
               />
               <span>{brand}</span>
-              <small>{all.filter((p) => p.brand === brand).length}</small>
+              <small>
+                {formatNumber(all.filter((p) => p.brand === brand).length)}
+              </small>
             </label>
           ))}
         </div>
         {!searchedBrands.length && (
-          <p className="filter-note">No matching brands.</p>
+          <p className="filter-note">{t("No matching brands.")}</p>
         )}
         {brands.length > 6 && !brandSearch && (
           <button
             className="filter-show-more"
             onClick={() => setShowBrands(!showBrands)}
           >
-            {showBrands ? "Show fewer" : `View all ${brands.length} brands`}
+            {showBrands
+              ? t("Show fewer")
+              : t("View all {count} brands", {
+                  count: formatNumber(brands.length),
+                })}
             <ChevronDown size={13} />
           </button>
         )}
       </details>
       <details className="refined-filter-group" open>
         <summary>
-          Price <small>UGX</small>
+          {t("Price")} <small>{t("UGX")}</small>
           <ChevronDown size={15} />
         </summary>
         <form className="refined-price-form" onSubmit={applyPrice}>
@@ -209,7 +218,7 @@ export function Collection({ category = "shop" }) {
               min="0"
               step="any"
               inputMode="numeric"
-              placeholder="Min"
+              placeholder={t("Min")}
               value={draftMin}
               onChange={(event) => setDraftMin(event.target.value)}
             />
@@ -221,7 +230,7 @@ export function Collection({ category = "shop" }) {
               min="0"
               step="any"
               inputMode="numeric"
-              placeholder="Max"
+              placeholder={t("Max")}
               value={draftMax}
               onChange={(event) => setDraftMax(event.target.value)}
             />
@@ -238,7 +247,7 @@ export function Collection({ category = "shop" }) {
       </details>
       <details className="refined-filter-group" open>
         <summary>
-          Availability
+          {t("Availability")}
           <ChevronDown size={15} />
         </summary>
         <label className="refined-availability">
@@ -247,7 +256,7 @@ export function Collection({ category = "shop" }) {
             checked={filters.inStock}
             onChange={(event) => change({ inStock: event.target.checked })}
           />
-          <span>Confirmed in stock</span>
+          <span>{t("Confirmed in stock")}</span>
         </label>
       </details>
       <p className="filter-note">
@@ -273,13 +282,13 @@ export function Collection({ category = "shop" }) {
       </PageHeading>
       <section
         className="collection-discovery"
-        aria-label="Explore categories and brands"
+        aria-label={t("Explore categories and brands")}
       >
         <div className="discovery-heading">
           <div
             className="discovery-tabs"
             role="tablist"
-            aria-label="Discover products"
+            aria-label={t("Discover products")}
           >
             {[
               ["recommended", "Recommended"],
@@ -296,7 +305,7 @@ export function Collection({ category = "shop" }) {
                 onClick={() => setDiscovery(id)}
                 onKeyDown={tabKey}
               >
-                {label}
+                {t(label)}
               </button>
             ))}
           </div>
@@ -318,7 +327,7 @@ export function Collection({ category = "shop" }) {
                   <span>
                     <img src={item.product.image} alt="" loading="lazy" />
                   </span>
-                  <strong>{item.name}</strong>
+                  <strong>{t(item.name)}</strong>
                 </a>
               ))
             : brands.map((brand) => {
@@ -359,39 +368,39 @@ export function Collection({ category = "shop" }) {
       <div className="collection-layout">
         <aside
           className="collection-sidebar refined-sidebar"
-          aria-label="Product filters"
+          aria-label={t("Product filters")}
         >
           {controls}
         </aside>
         <section
           className="collection-results"
-          aria-label="Collection products"
+          aria-label={t("Collection products")}
         >
           <div className="collection-toolbar refined-toolbar">
             <div className="collection-result-total" role="status">
-              {filtered.length}
-              <span> product{filtered.length === 1 ? "" : "s"}</span>
+              {formatNumber(filtered.length)}
+              <span> {t(filtered.length === 1 ? "product" : "products")}</span>
             </div>
             <div className="catalog-search">
               <Search size={16} />
               <input
-                aria-label="Search this collection"
-                placeholder="Search this collection"
+                aria-label={t("Search this collection")}
+                placeholder={t("Search this collection")}
                 value={filters.query}
                 onChange={(event) => change({ query: event.target.value })}
               />
             </div>
             <label className="collection-sort">
-              <span>Sort by</span>
+              <span>{t("Sort by")}</span>
               <select
-                aria-label="Sort products"
+                aria-label={t("Sort products")}
                 value={filters.sort}
                 onChange={(event) => change({ sort: event.target.value })}
               >
-                <option value="featured">Recommended</option>
-                <option value="name">Name: A–Z</option>
-                <option value="price-low">Price: low to high</option>
-                <option value="price-high">Price: high to low</option>
+                <option value="featured">{t("Recommended")}</option>
+                <option value="name">{t("Name: A–Z")}</option>
+                <option value="price-low">{t("Price: low to high")}</option>
+                <option value="price-high">{t("Price: high to low")}</option>
               </select>
             </label>
             <div className="view-toggle">
@@ -415,11 +424,15 @@ export function Collection({ category = "shop" }) {
               onClick={() => setFilterOpen(true)}
             >
               <SlidersHorizontal size={16} />
-              Filters{active > 0 && <b>{active}</b>}
+              {t("Filters")}
+              {active > 0 && <b>{formatNumber(active)}</b>}
             </Button>
           </div>
           {active > 0 && (
-            <div className="refined-filter-chips" aria-label="Active filters">
+            <div
+              className="refined-filter-chips"
+              aria-label={t("Active filters")}
+            >
               {filters.brands.map((brand) => (
                 <button
                   key={brand}
@@ -437,29 +450,29 @@ export function Collection({ category = "shop" }) {
                     setDraftMin("")
                     setDraftMax("")
                   }}
-                  aria-label="Remove price filter"
+                  aria-label={t("Remove price filter")}
                 >
                   {filters.min !== ""
                     ? money(Number(filters.min))
-                    : "Any price"}{" "}
+                    : t("Any price")}{" "}
                   –{" "}
                   {filters.max !== ""
                     ? money(Number(filters.max))
-                    : "and above"}
+                    : t("and above")}
                   <X size={13} />
                 </button>
               )}
               {filters.inStock && (
                 <button
                   onClick={() => change({ inStock: false })}
-                  aria-label="Remove availability filter"
+                  aria-label={t("Remove availability filter")}
                 >
-                  In stock
+                  {t("In stock")}
                   <X size={13} />
                 </button>
               )}
               <button className="reset-all" onClick={clear}>
-                Clear all
+                {t("Clear all")}
               </button>
             </div>
           )}
@@ -481,11 +494,11 @@ export function Collection({ category = "shop" }) {
             </Empty>
           )}
           {pages > 1 && (
-            <nav className="pagination" aria-label="Product pages">
+            <nav className="pagination" aria-label={t("Product pages")}>
               {page > 1 ? (
                 <a
                   className="icon-button"
-                  aria-label="Previous page"
+                  aria-label={t("Previous page")}
                   href={
                     requestPath.split("?")[0] +
                     collectionQuery({ ...filters, page: page - 1 })
@@ -509,13 +522,13 @@ export function Collection({ category = "shop" }) {
                   className={page === index + 1 ? "active" : ""}
                   aria-current={page === index + 1 ? "page" : undefined}
                 >
-                  {index + 1}
+                  {formatNumber(index + 1)}
                 </a>
               ))}
               {page < pages ? (
                 <a
                   className="icon-button"
-                  aria-label="Next page"
+                  aria-label={t("Next page")}
                   href={
                     requestPath.split("?")[0] +
                     collectionQuery({ ...filters, page: page + 1 })

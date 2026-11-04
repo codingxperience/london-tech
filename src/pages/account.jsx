@@ -1,3 +1,4 @@
+import { useLocale } from "../lib/locale.jsx"
 import { MessageCentre } from "../components/MessageCentre.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
 import { OrderTracking } from "../components/OrderTracking.jsx"
@@ -50,6 +51,7 @@ import { ProductGrid } from "../components/storefront.jsx"
 export { Auth } from "./auth.jsx"
 
 function GuestWishlist() {
+  const { t } = useLocale()
   const { products, wishlist, openAuth } = useStore()
   const saved = products.filter((product) => wishlist.includes(product.id))
   return (
@@ -66,7 +68,7 @@ function GuestWishlist() {
       <div className="wishlist-sign-in">
         <Heart size={22} />
         <span>
-          <strong>Your favourites, together.</strong>
+          <strong>{t("Your favourites, together.")}</strong>
           <small>
             Saved on this device. Sign in to keep them with your account.
           </small>
@@ -85,7 +87,9 @@ function GuestWishlist() {
           icon={Heart}
           title="Save something you love."
           action={
-            <ActionLink href="/collections/shop/">Explore the store</ActionLink>
+            <ActionLink href="/collections/shop/">
+              {t("Explore the store")}
+            </ActionLink>
           }
         >
           Tap the heart on a product and find it here.
@@ -96,6 +100,7 @@ function GuestWishlist() {
 }
 
 export function Account({ section = "overview", orderId }) {
+  const { t } = useLocale()
   const compactNavigation = useMediaQuery("(max-width: 1100px)")
   const [navigationOpen, setNavigationOpen] = useState(false)
   const {
@@ -203,7 +208,7 @@ export function Account({ section = "overview", orderId }) {
             : []),
         ]}
       />
-      <h1 className="sr-only">My account</h1>
+      <h1 className="sr-only">{t("My account")}</h1>
       <div className="account-layout">
         <aside
           className="account-sidebar"
@@ -231,7 +236,7 @@ export function Account({ section = "overview", orderId }) {
               aria-controls="account-navigation"
               onClick={() => setNavigationOpen((open) => !open)}
             >
-              <span>Account menu</span>
+              <span>{t("Account menu")}</span>
               <strong>
                 {nav.find(([id]) => id === section)?.[1] || "My orders"}
               </strong>
@@ -240,7 +245,7 @@ export function Account({ section = "overview", orderId }) {
           )}
           <nav
             id="account-navigation"
-            aria-label="Account navigation"
+            aria-label={t("Account navigation")}
             hidden={compactNavigation && !navigationOpen}
           >
             {nav.map(([id, label, Icon]) => (
@@ -252,7 +257,7 @@ export function Account({ section = "overview", orderId }) {
                 onClick={() => setNavigationOpen(false)}
               >
                 <Icon size={20} />
-                {label}
+                {t(label)}
                 {id === "messages" && messageAlerts.unread > 0 && (
                   <span
                     className="message-count"
@@ -310,7 +315,7 @@ export function Account({ section = "overview", orderId }) {
                 </a>
               </div>
               <div className="section-heading">
-                <h2>Your latest orders</h2>
+                <h2>{t("Your latest orders")}</h2>
                 <a className="text-link" href="/account/orders/">
                   View all
                   <ArrowRight size={14} />
@@ -337,13 +342,13 @@ export function Account({ section = "overview", orderId }) {
               />
             ) : (
               <>
-                <h2>My orders</h2>
+                <h2>{t("My orders")}</h2>
                 <OrderList orders={orders} loaded={loaded} />
               </>
             )
           ) : section === "wishlist" ? (
             <>
-              <h2>Your saved favourites</h2>
+              <h2>{t("Your saved favourites")}</h2>
               {wishlist.length ? (
                 <ProductGrid
                   products={wishlist
@@ -358,7 +363,7 @@ export function Account({ section = "overview", orderId }) {
             </>
           ) : section === "profile" ? (
             <section className="form-card">
-              <h2>Account details</h2>
+              <h2>{t("Account details")}</h2>
               <p className="muted">
                 Keep your name and contact number up to date.
               </p>
@@ -412,7 +417,7 @@ export function Account({ section = "overview", orderId }) {
             </section>
           ) : section === "security" ? (
             <section className="form-card">
-              <h2>Password & security</h2>
+              <h2>{t("Password & security")}</h2>
               <p className="muted">
                 Changing your password signs out other sessions.
               </p>
@@ -464,7 +469,7 @@ export function Account({ section = "overview", orderId }) {
           ) : (
             <>
               <div className="section-heading">
-                <h2>Saved addresses</h2>
+                <h2>{t("Saved addresses")}</h2>
                 <Button
                   onClick={() => setAddressModal({})}
                   disabled={user.addresses.length >= 5}
@@ -611,6 +616,7 @@ export function Account({ section = "overview", orderId }) {
 }
 
 function OrderList({ orders, loaded }) {
+  const { t } = useLocale()
   if (!loaded) return <p className="loading-line">Loading your orders…</p>
   if (!orders.length)
     return (
@@ -655,6 +661,7 @@ function OrderList({ orders, loaded }) {
 }
 
 function OrderDetail({ order: o, loaded, reload }) {
+  const { t } = useLocale()
   const { settings, notify } = useStore()
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -675,7 +682,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           <ArrowLeft size={15} />
           All orders
         </a>
-        <h2>Track order</h2>
+        <h2>{t("Track order")}</h2>
       </div>
       {error && <Notice type="error">{error}</Notice>}
       {o.status === "quote_requested" && (
@@ -711,7 +718,7 @@ function OrderDetail({ order: o, loaded, reload }) {
       />
       <div className="form-card order-items-card">
         <div className="order-items-heading">
-          <h3>Order items</h3>
+          <h3>{t("Order items")}</h3>
           <time dateTime={o.createdAt}>Placed {dateLabel(o.createdAt)}</time>
         </div>
         {o.items.map((p, i) => (
@@ -730,7 +737,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           </div>
         ))}
         <div className="summary-row">
-          <span>Subtotal</span>
+          <span>{t("Subtotal")}</span>
           <strong>{money(o.subtotal)}</strong>
         </div>
         <div className="summary-row">
@@ -744,7 +751,7 @@ function OrderDetail({ order: o, loaded, reload }) {
       </div>
       <div className="detail-copy-columns">
         <section className="form-card">
-          <h3>Your details</h3>
+          <h3>{t("Your details")}</h3>
           <p>
             {o.customer.name}
             <br />
@@ -764,7 +771,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           </p>
         </section>
         <section className="form-card">
-          <h3>Payment information</h3>
+          <h3>{t("Payment information")}</h3>
           <p>
             <PaymentMethod method={o.paymentMethod} />
           </p>
@@ -775,7 +782,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           {o.cashReceipt?.receipt && <p>Receipt {o.cashReceipt.receipt}</p>}
           {o.notes && (
             <>
-              <h4>Your note</h4>
+              <h4>{t("Your note")}</h4>
               <p>{o.notes}</p>
             </>
           )}

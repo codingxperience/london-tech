@@ -1,0 +1,438 @@
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
+import { readStorage, writeStorage } from "./api.js"
+import { displayNumber, setNumberDisplay } from "./number-format.js"
+import "../locale.css"
+
+const preferenceKey = "lt.locale.v1"
+const arabic = {
+  "Language & currency": "اللغة والعملة",
+  Language: "اللغة",
+  Currency: "العملة",
+  "Number format": "تنسيق الأرقام",
+  "Ugandan shilling": "الشلن الأوغندي",
+  "English numerals": "أرقام إنجليزية",
+  "Arabic numerals": "أرقام عربية",
+  Save: "حفظ",
+  "Shop in Uganda": "تسوق في أوغندا",
+  "All prices and payments are in Ugandan shillings.":
+    "جميع الأسعار والمدفوعات بالشلن الأوغندي.",
+  Close: "إغلاق",
+  Search: "بحث",
+  "Search products": "البحث عن المنتجات",
+  "Search category": "فئة البحث",
+  "Search by image": "البحث بالصورة",
+  "All Categories": "جميع الفئات",
+  "ALL CATEGORIES": "جميع الفئات",
+  "My Cart": "سلتي",
+  "Open shopping cart": "فتح سلة التسوق",
+  Home: "الرئيسية",
+  Smartphones: "الهواتف الذكية",
+  Phones: "الهواتف",
+  Laptops: "الحواسيب المحمولة",
+  Tablets: "الأجهزة اللوحية",
+  Audio: "الصوتيات",
+  "Audio & earbuds": "الصوتيات وسماعات الأذن",
+  Earbuds: "سماعات الأذن",
+  Watches: "الساعات",
+  "Smart Watches": "الساعات الذكية",
+  "Smart watches": "الساعات الذكية",
+  Gaming: "الألعاب",
+  Cameras: "الكاميرات",
+  Accessories: "الملحقات",
+  "Hot Deals": "عروض مميزة",
+  Menu: "القائمة",
+  Welcome: "مرحباً",
+  Hello: "مرحباً",
+  "My account": "حسابي",
+  "Open my account menu": "فتح قائمة حسابي",
+  "Sign in or register": "تسجيل الدخول أو إنشاء حساب",
+  "Sign in / Register": "تسجيل الدخول / إنشاء حساب",
+  "Sign in": "تسجيل الدخول",
+  Register: "إنشاء حساب",
+  "Create an account": "إنشاء حساب",
+  "New here?": "هل أنت جديد هنا؟",
+  "Manage your account": "إدارة حسابك",
+  "Your account": "حسابك",
+  "My orders": "طلباتي",
+  Wishlist: "المفضلة",
+  "Account details": "تفاصيل الحساب",
+  "Help & support": "المساعدة والدعم",
+  "Sign out": "تسجيل الخروج",
+  "We couldn’t sign you out. Please try again.":
+    "تعذر تسجيل الخروج. يرجى المحاولة مرة أخرى.",
+  "Customer care": "خدمة العملاء",
+  "Contact & support": "التواصل والدعم",
+  "Track my order": "تتبع طلبي",
+  "Delivery & collection": "التوصيل والاستلام",
+  "Returns & warranty": "الإرجاع والضمان",
+  "Shopping help": "المساعدة في التسوق",
+  "Shop the collection": "تسوق التشكيلة",
+  "Shop all electronics": "تسوق جميع الإلكترونيات",
+  "About London Tech": "عن لندن تك",
+  "Visit our Kampala store": "زر متجرنا في كمبالا",
+  "Privacy policy": "سياسة الخصوصية",
+  "Terms & conditions": "الشروط والأحكام",
+  "Call to order": "اتصل للطلب",
+  "UPGRADE FOR LESS.": "تقنية أفضل بسعر أقل",
+  "PHONES & LAPTOPS": "هواتف وحواسيب محمولة",
+  "AUDIO & GAMING": "صوتيات وألعاب",
+  "VISIT ARUA PARK": "زرنا في أروا بارك",
+  "SHOP NOW": "تسوق الآن",
+  "UPGRADE TODAY": "طور تقنيتك اليوم",
+  "TECHNOLOGY STORE": "متجر التكنولوجيا",
+  Email: "البريد الإلكتروني",
+  Password: "كلمة المرور",
+  "Full name": "الاسم الكامل",
+  Continue: "متابعة",
+  Back: "رجوع",
+  "Register/Sign in": "إنشاء حساب / تسجيل الدخول",
+  "Your information is protected": "معلوماتك محمية",
+  "Trouble signing in?": "هل تواجه مشكلة في تسجيل الدخول؟",
+  "Or continue with": "أو تابع باستخدام",
+  "Continue with Google": "المتابعة باستخدام Google",
+  "Continue with Facebook": "المتابعة باستخدام Facebook",
+  "Forgot password?": "هل نسيت كلمة المرور؟",
+  "Reset password": "إعادة تعيين كلمة المرور",
+  "Send reset link": "إرسال رابط إعادة التعيين",
+  "New password": "كلمة مرور جديدة",
+  "Confirm password": "تأكيد كلمة المرور",
+  "Create account": "إنشاء حساب",
+  "Show password": "إظهار كلمة المرور",
+  "Hide password": "إخفاء كلمة المرور",
+  "SAVE UP TO {percent}%": "وفر حتى {percent}٪",
+  Overview: "نظرة عامة",
+  Specifications: "المواصفات",
+  Reviews: "التقييمات",
+  Description: "الوصف",
+  Guides: "الأدلة",
+  "Delivery & returns": "التوصيل والإرجاع",
+  Questions: "الأسئلة",
+  "Our store": "متجرنا",
+  "Add to cart": "أضف إلى السلة",
+  "Buy now": "اشتر الآن",
+  "View details": "عرض التفاصيل",
+  Filters: "التصفية",
+  "Filter products": "تصفية المنتجات",
+  Brand: "العلامة التجارية",
+  Price: "السعر",
+  From: "من",
+  To: "إلى",
+  Min: "الحد الأدنى",
+  Max: "الحد الأقصى",
+  "Apply price": "تطبيق السعر",
+  Availability: "التوفر",
+  "Confirmed in stock": "متوفر في المخزون",
+  "Deals & discounts": "العروض والخصومات",
+  "Discounted items": "منتجات مخفضة",
+  "Sort by": "ترتيب حسب",
+  Recommended: "مقترحاتنا",
+  "Shop by brand": "تسوق حسب العلامة التجارية",
+  "Search this collection": "البحث في هذه التشكيلة",
+  "Find a brand": "البحث عن علامة تجارية",
+  Reset: "إعادة تعيين",
+  "Clear all": "مسح الكل",
+  Newest: "الأحدث",
+  "Price: low to high": "السعر من الأقل إلى الأعلى",
+  "Price: high to low": "السعر من الأعلى إلى الأقل",
+  "Your cart.": "سلة التسوق",
+  "Your cart": "سلة التسوق",
+  Product: "المنتج",
+  Quantity: "الكمية",
+  Total: "الإجمالي",
+  Subtotal: "المجموع الفرعي",
+  Delivery: "التوصيل",
+  Checkout: "إتمام الطلب",
+  "Continue shopping": "متابعة التسوق",
+  Remove: "إزالة",
+  "Order summary": "ملخص الطلب",
+  "Continue to checkout": "متابعة إتمام الطلب",
+  "Your details": "بياناتك",
+  "Phone number": "رقم الهاتف",
+  "Delivery or pickup": "التوصيل أو الاستلام",
+  "Store pickup": "الاستلام من المتجر",
+  Free: "مجاني",
+  "By district": "حسب المنطقة",
+  "Payment method": "طريقة الدفع",
+  "Cash on delivery": "الدفع نقداً عند التوصيل",
+  "Cash at pickup": "الدفع نقداً عند الاستلام",
+  "Visa card": "بطاقة Visa",
+  "Continue to payment": "متابعة الدفع",
+  "Place order": "تأكيد الطلب",
+  "Delivery district": "منطقة التوصيل",
+  "Select a district": "اختر المنطقة",
+  "Street, building and delivery directions": "الشارع والمبنى وإرشادات التوصيل",
+  Messages: "الرسائل",
+  Addresses: "العناوين",
+  "Password & security": "كلمة المرور والأمان",
+  "Account menu": "قائمة الحساب",
+  Orders: "الطلبات",
+  "Payment information": "معلومات الدفع",
+  "Your name": "اسمك",
+  "Save changes": "حفظ التغييرات",
+  "Save address": "حفظ العنوان",
+  "Update password": "تحديث كلمة المرور",
+  "Current password": "كلمة المرور الحالية",
+  "Back to shopping": "العودة للتسوق",
+  "See all": "عرض الكل",
+  Compare: "مقارنة",
+  "View your order": "عرض طلبك",
+  "Keep exploring": "تابع التسوق",
+  "Guide price": "سعر إرشادي",
+  "Discount: {percent} percent": "خصم {percent} بالمئة",
+  "Regular price: {price}": "السعر الأصلي {price}",
+  "{count} item left": "تبقت قطعة واحدة",
+  "{count} items left": "تبقت {count} قطع",
+  "Check availability": "تحقق من التوفر",
+  "Stock unconfirmed": "المخزون غير مؤكد",
+  "Out of stock": "غير متوفر",
+  "Account navigation": "التنقل في الحساب",
+  "Active filters": "الفلاتر المفعلة",
+  "Add an order note": "إضافة ملاحظة للطلب",
+  "At a glance": "نظرة سريعة",
+  "At checkout": "عند إتمام الطلب",
+  "Back to London Tech": "العودة إلى لندن تك",
+  "Card and mobile money handled by Flutterwave.":
+    "المدفوعات بالبطاقة والهاتف المحمول عبر Flutterwave.",
+  "Collection products": "منتجات التشكيلة",
+  "Discover products": "اكتشف المنتجات",
+  "Enter an address": "أدخل عنواناً",
+  "Explore categories and brands": "اكتشف الفئات والعلامات التجارية",
+  "Explore products": "اكتشف المنتجات",
+  "Explore the store": "اكتشف المتجر",
+  "Find your next": "اكتشف اختيارك القادم",
+  "Name: A–Z": "الاسم من الألف إلى الياء",
+  "Next page": "الصفحة التالية",
+  "Previous page": "الصفحة السابقة",
+  "No customer reviews yet": "لا توجد تقييمات للعملاء بعد",
+  "No matching brands.": "لا توجد علامات تجارية مطابقة.",
+  Optional: "اختياري",
+  "Order items": "منتجات الطلب",
+  "Product condition": "حالة المنتج",
+  "Product filters": "فلاتر المنتجات",
+  "Product pages": "صفحات المنتجات",
+  "Remove availability filter": "إزالة فلتر التوفر",
+  "Remove price filter": "إزالة فلتر السعر",
+  "Saved addresses": "العناوين المحفوظة",
+  "Search brands": "البحث في العلامات التجارية",
+  "Secure checkout": "إتمام طلب آمن",
+  "Sort products": "ترتيب المنتجات",
+  "THE NEXT STEP": "الخطوة التالية",
+  "Track order": "تتبع الطلب",
+  "Your favourites, together.": "كل مفضلاتك في مكان واحد",
+  "Your latest orders": "أحدث طلباتك",
+  "Your note": "ملاحظتك",
+  "Your order": "طلبك",
+  "Your saved favourites": "مفضلاتك المحفوظة",
+  "privacy information": "معلومات الخصوصية",
+  terms: "الشروط",
+  "Everything in shop.": "كل ما في المتجر",
+  "The Apple collection.": "تشكيلة Apple",
+  "Find your next iPhone.": "اكتشف iPhone القادم",
+  "The Galaxy Ultra collection.": "تشكيلة Galaxy Ultra",
+  "Find the technology that fits your everyday.":
+    "اعثر على التقنية المناسبة لحياتك اليومية.",
+  "Show fewer": "عرض أقل",
+  "View all {count} brands": "عرض جميع العلامات التجارية ({count})",
+  product: "منتج",
+  products: "منتجات",
+  "In stock": "متوفر",
+  "Any price": "أي سعر",
+  "and above": "فأكثر",
+  Items: "المنتجات",
+  "Estimated subtotal": "المجموع الفرعي التقديري",
+  "On request": "عند الطلب",
+  Collection: "الاستلام",
+  "To be confirmed": "يُحدد لاحقاً",
+  "I agree to the": "أوافق على",
+  "and have read the": "وقد قرأت",
+  "Pay on delivery.": "الدفع عند التوصيل.",
+  "Pay at pickup.": "الدفع عند الاستلام.",
+  "Secure payment through Flutterwave.": "دفع آمن عبر Flutterwave.",
+  "Use a saved address": "استخدام عنوان محفوظ",
+  "Email address": "البريد الإلكتروني",
+  "Order note": "ملاحظة الطلب",
+  Spotlight: "مميز",
+  "Add to wishlist": "إضافة إلى المفضلة",
+  "Remove from wishlist": "إزالة من المفضلة",
+  "Save to wishlist": "حفظ في المفضلة",
+  "Compare product": "مقارنة المنتج",
+  "Remove from comparison": "إزالة من المقارنة",
+  "Add {name} to cart": "إضافة {name} إلى السلة",
+  "Preview {name}, photo {number}": "معاينة {name}، الصورة {number}",
+  "See all {number} photos of {name}": "عرض صور {name} ({number})",
+  "{rating} out of 5 from {count} verified reviews":
+    "{rating} من 5 بناءً على {count} تقييمات موثقة",
+  Chat: "محادثة",
+  Added: "تمت الإضافة",
+  Add: "إضافة",
+  "Explore all": "اكتشف الكل",
+  "Find us in Kampala": "موقعنا في كمبالا",
+  "Store details": "تفاصيل المتجر",
+  "Payment options": "خيارات الدفع",
+  "Store admin": "إدارة المتجر",
+  "Kampala, Uganda": "كمبالا، أوغندا",
+  "All rights reserved.": "جميع الحقوق محفوظة.",
+  "Latest Products": "أحدث المنتجات",
+  "More Categories": "المزيد من الفئات",
+  "In focus": "منتج مختار",
+  "DELIVERY & COLLECTION": "التوصيل والاستلام",
+  "Confirm arrangements with the store": "أكد الترتيبات مع المتجر",
+  "ORDER PROTECTION": "حماية الطلب",
+  "Secured information": "معلومات محمية",
+  "GENUINE PRODUCTS": "منتجات أصلية",
+  "Original technology": "تقنية أصلية",
+  "New week.": "أسبوع جديد",
+  "New tech.": "تقنية جديدة",
+  "Your next": "ترقيتك",
+  "upgrade.": "القادمة",
+  "Turn up": "استمتع",
+  "the music.": "بالموسيقى",
+  "Shop now": "تسوق الآن",
+  "Personal audio": "صوتياتك الشخصية",
+  "THE TECH EDIT": "اختيارات تقنية",
+  "Explore the collection": "اكتشف التشكيلة",
+  "Store specials": "عروض المتجر",
+  "Original technology, reliable service": "تقنية أصلية، خدمة موثوقة",
+  "Shop Offers": "تسوق العروض",
+  "Daily Deals": "عروض يومية",
+  "Trending Items": "المنتجات الرائجة",
+  "Everyday essentials.": "أساسيات كل يوم",
+  "Shop accessories": "تسوق الملحقات",
+  "No products in this category yet.": "لا توجد منتجات في هذه الفئة بعد.",
+  "Chat on WhatsApp": "تواصل عبر واتساب",
+  smartphones: "الهواتف الذكية",
+  "laptops & tablets": "الحواسيب والأجهزة اللوحية",
+  "wireless earbuds": "سماعات الأذن اللاسلكية",
+  "smart watches": "الساعات الذكية",
+  "premium accessories": "الملحقات المميزة",
+  "Register / Sign in": "إنشاء حساب / تسجيل الدخول",
+  "Available soon": "متاح قريباً",
+  "Google and Facebook sign-in will be available soon.":
+    "سيتوفر تسجيل الدخول عبر Google وFacebook قريباً.",
+  Location: "الموقع",
+  Edit: "تعديل",
+  "New to London Tech? Create an account": "جديد في لندن تك؟ أنشئ حساباً",
+  "Already have an account? Sign in": "لديك حساب بالفعل؟ سجل الدخول",
+  "Your full name": "اسمك الكامل",
+  "At least 12 characters.": "12 حرفاً على الأقل.",
+  "Create your account": "أنشئ حسابك",
+  "Back to sign in": "العودة إلى تسجيل الدخول",
+  "By continuing, you agree to our": "بالمتابعة، فإنك توافق على",
+  "Terms of use": "شروط الاستخدام",
+  and: "و",
+  "Enter your London Tech password to connect this sign-in option.":
+    "أدخل كلمة مرور لندن تك لربط طريقة تسجيل الدخول هذه.",
+  "All ratings": "جميع التقييمات",
+  "Delivery, collection & returns": "التوصيل والاستلام والإرجاع",
+  "Guides & product support": "الأدلة ودعم المنتج",
+  "Highest rating": "الأعلى تقييماً",
+  "Lowest rating": "الأقل تقييماً",
+  Highlights: "أبرز المزايا",
+  "Manufacturer information & sources": "معلومات الشركة المصنعة والمصادر",
+  "Most recent": "الأحدث",
+  "Product description": "وصف المنتج",
+  "Product details": "تفاصيل المنتج",
+  "Questions & answers": "الأسئلة والإجابات",
+  "Setup & compatibility": "الإعداد والتوافق",
+  "Sold by": "البائع",
+  "Verified purchase": "عملية شراء موثقة",
+  "What’s in the box": "محتويات العلبة",
+  details: "التفاصيل",
+}
+const defaults = { language: "en", numberStyle: "latn" }
+const interpolate = (phrase, values = {}) =>
+  Object.entries(values).reduce(
+    (text, [key, value]) => text.replaceAll("{" + key + "}", String(value)),
+    phrase,
+  )
+function validPreferences(value) {
+  return {
+    language: value?.language === "ar" ? "ar" : "en",
+    numberStyle: value?.numberStyle === "arab" ? "arab" : "latn",
+  }
+}
+const Context = createContext({
+  ...defaults,
+  setPreferences: () => {},
+  t: interpolate,
+  formatNumber: displayNumber,
+})
+
+export function useLocale() {
+  return useContext(Context)
+}
+
+export function LocaleProvider({ children }) {
+  const [adminRoute, setAdminRoute] = useState(
+    () =>
+      typeof location !== "undefined" && location.pathname.startsWith("/admin"),
+  )
+  const [preferences, updatePreferences] = useState(() => {
+    const initial = validPreferences(readStorage(preferenceKey, defaults))
+    setNumberDisplay(
+      typeof location !== "undefined" && location.pathname.startsWith("/admin")
+        ? defaults
+        : initial,
+    )
+    return initial
+  })
+  const setPreferences = useCallback((value) => {
+    const next = validPreferences(value)
+    setNumberDisplay(next)
+    updatePreferences(next)
+    writeStorage(preferenceKey, next)
+  }, [])
+  const effectiveLanguage = adminRoute ? "en" : preferences.language
+  const t = useCallback(
+    (phrase, values = {}) => {
+      const translated =
+        effectiveLanguage === "ar" ? arabic[phrase] || phrase : phrase
+      return interpolate(translated, values)
+    },
+    [effectiveLanguage],
+  )
+  useEffect(() => {
+    const apply = () => {
+      const admin = location.pathname.startsWith("/admin")
+      setAdminRoute(admin)
+      const language = admin ? "en" : preferences.language
+      document.documentElement.lang = language
+      document.documentElement.dir = language === "ar" ? "rtl" : "ltr"
+      setNumberDisplay(admin ? defaults : preferences)
+    }
+    apply()
+    window.addEventListener("popstate", apply)
+    const storage = (event) => {
+      if (event.key === preferenceKey) {
+        const next = validPreferences(readStorage(preferenceKey, defaults))
+        setNumberDisplay(next)
+        updatePreferences(next)
+      }
+    }
+    window.addEventListener("storage", storage)
+    return () => {
+      window.removeEventListener("popstate", apply)
+      window.removeEventListener("storage", storage)
+    }
+  }, [preferences])
+  return (
+    <Context.Provider
+      value={{
+        ...preferences,
+        language: effectiveLanguage,
+        numberStyle: adminRoute ? "latn" : preferences.numberStyle,
+        setPreferences,
+        t,
+        formatNumber: displayNumber,
+      }}
+    >
+      {children}
+    </Context.Provider>
+  )
+}

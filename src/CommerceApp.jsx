@@ -13,6 +13,7 @@ import { Auth, Account } from "./pages/account.jsx"
 import { Info } from "./pages/info.jsx"
 import { Button, Modal } from "./components/ui.jsx"
 import { localReturnPath } from "./lib/navigation.js"
+import { LocaleProvider } from "./lib/locale.jsx"
 import { GitCompareArrows } from "lucide-react"
 import "./commerce.css"
 import "./product-detail.css"
@@ -175,12 +176,7 @@ function RouterContent({ path }) {
       <div className="commerce-surface">
         {authDialog && (
           <Modal
-            title={
-              authDialog.mode === "register"
-                ? "Create your London Tech account"
-                : "Sign in to London Tech"
-            }
-            wide
+            title="Register / Sign in"
             className="auth-dialog"
             onClose={closeAuth}
           >
@@ -222,9 +218,11 @@ export default function CommerceApp({
 } = {}) {
   return (
     <ErrorBoundary>
-      <StoreProvider initialData={initialData} initialPath={initialPath}>
-        <Router />
-      </StoreProvider>
+      <LocaleProvider>
+        <StoreProvider initialData={initialData} initialPath={initialPath}>
+          <Router />
+        </StoreProvider>
+      </LocaleProvider>
     </ErrorBoundary>
   )
 }

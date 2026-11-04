@@ -4,6 +4,7 @@ import catalogueCorrections from "./catalogue-corrections.json" with { type: "js
 import launchOffers from "./launch-offers.json" with { type: "json" }
 
 import { guidePrices } from "./prices.js"
+import { formatShillings } from "../lib/number-format.js"
 
 export const categories = [
   {
@@ -462,10 +463,6 @@ export const storeDefaults = {
 export const categoryName = (id) =>
   categories.find((c) => c.id === id)?.name || "Technology"
 
-export const money = (value) =>
-  value == null
-    ? "Price on request"
-    : "UGX " +
-      new Intl.NumberFormat("en-UG", { maximumFractionDigits: 0 }).format(value)
+export const money = formatShillings
 
 export const productPath = (p) => "/products/" + encodeURIComponent(p.id) + "/"

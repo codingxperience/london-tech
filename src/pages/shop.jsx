@@ -1,3 +1,4 @@
+import { useLocale } from "../lib/locale.jsx"
 import React, { useEffect, useState } from "react"
 
 import {
@@ -46,6 +47,7 @@ import {
 export { Collection } from "./collection.jsx"
 
 export function Product({ id }) {
+  const { t } = useLocale()
   const {
     products,
     addCart,
@@ -145,7 +147,7 @@ export function Product({ id }) {
                 </a>
               </>
             ) : (
-              <a href="#product-reviews">No customer reviews yet</a>
+              <a href="#product-reviews">{t("No customer reviews yet")}</a>
             )}
             <span
               className={"stock-status " + (p.stock > 0 ? "available" : "")}
@@ -276,14 +278,16 @@ export function Product({ id }) {
             <p>
               <ShieldCheck size={18} />
               <span>
-                <strong>Secure checkout</strong>
-                <small>Card and mobile money handled by Flutterwave.</small>
+                <strong>{t("Secure checkout")}</strong>
+                <small>
+                  {t("Card and mobile money handled by Flutterwave.")}
+                </small>
               </span>
             </p>
             <p>
               <Truck size={18} />
               <span>
-                <strong>Delivery & collection</strong>
+                <strong>{t("Delivery & collection")}</strong>
                 <small>
                   {p.delivery ||
                     "Confirm availability and delivery details before paying."}
@@ -293,7 +297,7 @@ export function Product({ id }) {
             <p>
               <PackageCheck size={18} />
               <span>
-                <strong>Product condition</strong>
+                <strong>{t("Product condition")}</strong>
                 <small>
                   {p.condition}.{" "}
                   {p.warranty || "Ask about the warranty for this item."}
@@ -396,6 +400,7 @@ export function Product({ id }) {
 }
 
 export function Wishlist() {
+  const { t } = useLocale()
   const { products, wishlist } = useStore()
   const items = wishlist
     .map((id) => products.find((p) => p.id === id))
@@ -429,6 +434,7 @@ export function Wishlist() {
 }
 
 export function Compare() {
+  const { t } = useLocale()
   const { products, compare, toggleCompare } = useStore()
   const items = compare
     .map((id) => products.find((p) => p.id === id))
@@ -450,7 +456,7 @@ export function Compare() {
           <table className="comparison-table">
             <thead>
               <tr>
-                <th>At a glance</th>
+                <th>{t("At a glance")}</th>
                 {items.map((p) => (
                   <th key={p.id}>
                     <IconButton
@@ -506,12 +512,13 @@ export function Compare() {
 }
 
 export function NotFound() {
+  const { t } = useLocale()
   return (
     <main className="container standard-page">
       <Empty
         icon={Search}
         title="That page has moved on."
-        action={<ActionLink href="/">Back to London Tech</ActionLink>}
+        action={<ActionLink href="/">{t("Back to London Tech")}</ActionLink>}
       >
         The page or product you are looking for could not be found.
       </Empty>

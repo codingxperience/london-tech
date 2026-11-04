@@ -1,3 +1,4 @@
+import { useLocale } from "../lib/locale.jsx"
 import React, { useEffect, useId, useRef, useState } from "react"
 
 const sections = [
@@ -16,6 +17,7 @@ const hashSection = () => {
 }
 
 export function ProductSectionNav({ productId, reviewCount = 0 }) {
+  const { t, formatNumber } = useLocale()
   const [active, setActive] = useState("overview")
   const selectId = useId()
   const nav = useRef(null)
@@ -166,7 +168,7 @@ export function ProductSectionNav({ productId, reviewCount = 0 }) {
 
   useEffect(() => {
     reveal(rail.current?.querySelector(`[href="#product-${active}"]`))
-  }, [active, reviewCount])
+  }, [active, reviewCount, t])
 
   return (
     <nav
@@ -175,7 +177,7 @@ export function ProductSectionNav({ productId, reviewCount = 0 }) {
       aria-label="Explore product information"
     >
       <div className="detail-mobile-nav">
-        <label htmlFor={selectId}>Product details</label>
+        <label htmlFor={selectId}>{t("Product details")}</label>
         <select
           id={selectId}
           value={active}
@@ -196,7 +198,9 @@ export function ProductSectionNav({ productId, reviewCount = 0 }) {
         >
           {sections.map(([id, label]) => (
             <option key={id} value={id}>
-              {id === "reviews" ? `${label} (${reviewCount})` : label}
+              {id === "reviews"
+                ? `${t(label)} (${formatNumber(reviewCount)})`
+                : t(label)}
             </option>
           ))}
         </select>
@@ -252,7 +256,9 @@ export function ProductSectionNav({ productId, reviewCount = 0 }) {
               reveal(event.currentTarget)
             }}
           >
-            {id === "reviews" ? `${label} (${reviewCount})` : label}
+            {id === "reviews"
+              ? `${t(label)} (${formatNumber(reviewCount)})`
+              : t(label)}
           </a>
         ))}
       </div>

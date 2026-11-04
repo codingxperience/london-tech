@@ -1,0 +1,182 @@
+.locale-selector {
+  position: relative;
+  flex-shrink: 0;
+  font-family: Nunito, Arial, sans-serif;
+  color: #10335a;
+}
+.locale-trigger {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 4px 9px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: start;
+}
+.locale-trigger > span {
+  display: grid;
+  gap: 1px;
+  font-size: 12px;
+  line-height: 1.25;
+}
+.locale-trigger small {
+  font-size: 11px;
+  color: #60758f;
+}
+.locale-trigger strong {
+  font-size: 12px;
+  font-weight: 850;
+}
+.locale-panel {
+  position: absolute;
+  inset-block-start: calc(100% + 14px);
+  inset-inline-end: 0;
+  z-index: 90;
+  width: 300px;
+  max-width: calc(100vw - 24px);
+  padding: 20px;
+  border: 1px solid #dbe5f1;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 14px 44px #0a25492b;
+}
+.locale-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 17px;
+  font-size: 15px;
+}
+.locale-panel-heading > button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f4f9;
+  color: inherit;
+  cursor: pointer;
+}
+.locale-panel form {
+  display: grid;
+  gap: 13px;
+}
+.locale-panel label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 750;
+}
+.locale-panel select {
+  min-width: 0;
+  width: 100%;
+  min-height: 43px;
+  padding: 8px 11px;
+  border: 1px solid #cad7e7;
+  border-radius: 7px;
+  background: #fff;
+  color: #10335a;
+  font: inherit;
+  font-size: 14px;
+}
+.locale-panel p {
+  margin: 0;
+  color: #60738b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.locale-save {
+  min-height: 43px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: #0b2b52;
+  color: #fff;
+  font:
+    800 14px Nunito,
+    Arial,
+    sans-serif;
+  cursor: pointer;
+}
+.locale-selector button:focus-visible,
+.locale-selector select:focus-visible {
+  outline: 3px solid #8ea6c9;
+  outline-offset: 2px;
+}
+html[lang="ar"] body {
+  font-family: Tahoma, Arial, sans-serif;
+}
+html[dir="rtl"] .header-search .search-cat {
+  border-right: 0 !important;
+  border-left: 1px solid #dde4ef !important;
+}
+html[dir="rtl"] .account-menu-panel {
+  right: auto;
+  left: 0;
+}
+html[dir="rtl"] .reference-storefront .header-actions {
+  margin-left: 0 !important;
+  margin-right: auto;
+}
+html[dir="rtl"] .reference-storefront .nav-toggle {
+  margin-left: 0 !important;
+  margin-right: auto;
+}
+html[dir="rtl"] .account-menu-panel :is(input, textarea),
+html[dir="rtl"] .locale-panel {
+  direction: rtl;
+}
+html[dir="rtl"]
+  :is(
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    input[name="phone"],
+    .account-identity small,
+    .tracking-reference-row strong,
+    .payment-brand
+  ) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+html[dir="rtl"] .account-menu-trigger > span {
+  text-align: right;
+}
+html[dir="rtl"] .account-menu :is(.lucide-chevron-right, .lucide-arrow-right) {
+  transform: scaleX(-1);
+}
+@media (max-width: 700px) {
+  .locale-trigger {
+    gap: 4px;
+    padding-inline: 5px;
+  }
+  .locale-trigger > svg:first-child {
+    width: 17px;
+  }
+  .locale-trigger > svg:last-child {
+    display: none;
+  }
+  .locale-trigger small {
+    font-size: 10px;
+  }
+  .locale-trigger strong {
+    font-size: 11px;
+  }
+  .locale-panel {
+    position: fixed;
+    inset-inline: 12px;
+    inset-block-start: var(--locale-panel-top, 12px);
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - var(--locale-panel-top, 12px) - 12px);
+    overflow-y: auto;
+  }
+  .reference-storefront .header-actions {
+    gap: 0 !important;
+  }
+}

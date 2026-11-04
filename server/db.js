@@ -103,6 +103,9 @@ async function initialize() {
     `CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, role TEXT NOT NULL DEFAULT 'customer' CHECK (role IN ('customer','admin')), phone TEXT NOT NULL DEFAULT '', addresses JSONB NOT NULL DEFAULT '[]', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
 
     `CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, expires_at TIMESTAMPTZ NOT NULL)`,
+    `CREATE TABLE IF NOT EXISTS oauth_accounts (provider TEXT NOT NULL CHECK(provider IN ('google','facebook')), subject TEXT NOT NULL, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, PRIMARY KEY(provider,subject))`,
+    `CREATE TABLE IF NOT EXISTS oauth_flows (token_hash TEXT PRIMARY KEY, purpose TEXT NOT NULL CHECK(purpose IN ('authorize','link')), payload JSONB NOT NULL, expires_at TIMESTAMPTZ NOT NULL)`,
+    `CREATE INDEX IF NOT EXISTS oauth_flows_expiry_idx ON oauth_flows(expires_at)`,
 
     `CREATE TABLE IF NOT EXISTS products (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
     `CREATE TABLE IF NOT EXISTS catalogue_migrations (version TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
@@ -158,6 +161,8 @@ async function initialize() {
     for (const table of [
       "users",
       "sessions",
+      "oauth_accounts",
+      "oauth_flows",
       "products",
       "catalogue_migrations",
       "settings",

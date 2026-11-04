@@ -1,6 +1,8 @@
 import { BrandWordmark } from "./components/BrandWordmark.jsx"
 import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
+import { LocaleSelector } from "./components/LocaleSelector.jsx"
+import { useLocale } from "./lib/locale.jsx"
 import { StoreFooter } from "./components/StoreFooter.jsx"
 import { ProductOffer } from "./components/ProductOffer.jsx"
 import { productOffer } from "./lib/offer-details.js"
@@ -302,6 +304,7 @@ function cardBadge(p: Product, catalogue: any[]) {
 
 // ── Product Card ──────────────────────────────────────────────────────────────
 function ProductCard({ p }: { p: Product }) {
+  const { t } = useLocale()
   const { products, wishlist, toggleWish, addCart, cart } = useStore()
   const item = products.find(
     (item: { id: string }) => item.id === commerceId(p),
@@ -363,7 +366,7 @@ function ProductCard({ p }: { p: Product }) {
               fontFamily: "Nunito,sans-serif",
             }}
           >
-            {badge}
+            {t(badge)}
           </span>
         )}
         <div
@@ -397,11 +400,11 @@ function ProductCard({ p }: { p: Product }) {
               fontFamily: "Nunito,sans-serif",
             }}
           >
-            {added ? "✓ Added" : "+ Add to Cart"}
+            {added ? "✓ " + t("Added") : "+ " + t("Add to cart")}
           </button>
           <button
             onClick={() => toggleWish(commerceId(p))}
-            aria-label={wished ? "Remove from wishlist" : "Save to wishlist"}
+            aria-label={t(wished ? "Remove from wishlist" : "Save to wishlist")}
             style={{
               background: "none",
               border: "none",
@@ -426,7 +429,7 @@ function ProductCard({ p }: { p: Product }) {
             fontFamily: "Nunito Sans,sans-serif",
           }}
         >
-          {p.category}
+          {t(p.category)}
         </div>
         <div
           style={{
@@ -440,7 +443,7 @@ function ProductCard({ p }: { p: Product }) {
         >
           <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
         </div>
-        <ProductMotionNote category={p.category} />
+        <ProductMotionNote product={item} />
         {p.arabicName && (
           <div
             dir="rtl"
@@ -483,7 +486,7 @@ function ProductCard({ p }: { p: Product }) {
               textDecoration: "none",
             }}
           >
-            <WhatsAppIcon size={15} /> Chat
+            <WhatsAppIcon size={15} /> {t("Chat")}
           </a>
           <button
             disabled={item.stock === 0}
@@ -502,7 +505,7 @@ function ProductCard({ p }: { p: Product }) {
               gap: 4,
             }}
           >
-            <ShoppingCart size={13} /> {added ? "Added" : "Add"}
+            <ShoppingCart size={13} /> {t(added ? "Added" : "Add")}
           </button>
         </div>
       </div>
@@ -520,6 +523,7 @@ function SectionHeader({
   icon: ReactNode
   controls?: ReactNode
 }) {
+  const { t } = useLocale()
   return (
     <div
       style={{
@@ -547,7 +551,7 @@ function SectionHeader({
           gap: 6,
         }}
       >
-        {icon} {label}
+        {icon} {t(label)}
       </span>
       {controls && (
         <div
@@ -572,6 +576,7 @@ interface StorefrontProps {
   quiet?: boolean
 }
 export default function App({ children, quiet = false }: StorefrontProps) {
+  const { t } = useLocale()
   const {
     products: catalogue,
     cart: cartItems,
@@ -731,7 +736,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
             }}
           >
             <select
-              aria-label="Search category"
+              aria-label={t("Search category")}
               value={searchCategory}
               onChange={(e) => setSearchCategory(e.target.value)}
               className="search-cat"
@@ -746,23 +751,25 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 cursor: "pointer",
               }}
             >
-              <option>All Categories</option>
+              <option value="All Categories">{t("All Categories")}</option>
               {CATS.map((c) => (
-                <option key={c.name}>{c.name}</option>
+                <option key={c.name} value={c.name}>
+                  {t(c.name)}
+                </option>
               ))}
             </select>
             <div className="search-field">
               {!q && (
                 <div className="search-suggestion" aria-hidden="true">
-                  Search{" "}
+                  {t("Search")}{" "}
                   <TypewriterText
-                    words={SEARCH_WORDS}
+                    words={SEARCH_WORDS.map((word) => t(word))}
                     active={!searchFocused}
                   />
                 </div>
               )}
               <input
-                aria-label="Search products"
+                aria-label={t("Search products")}
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 value={q}
@@ -775,8 +782,8 @@ export default function App({ children, quiet = false }: StorefrontProps) {
             <button
               type="button"
               className="image-search-trigger"
-              aria-label="Search by image"
-              title="Search by image"
+              aria-label={t("Search by image")}
+              title={t("Search by image")}
               onClick={openImageSearch}
             >
               <ScanSearch size={20} strokeWidth={1.7} />
@@ -790,7 +797,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 padding: "0 14px",
                 cursor: "pointer",
               }}
-              aria-label="Search"
+              aria-label={t("Search")}
             >
               <Search size={16} />
             </button>
@@ -806,10 +813,11 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               marginLeft: "auto",
             }}
           >
+            <LocaleSelector />
             <AccountMenu />
             <button
               onClick={() => setCartOpen(true)}
-              aria-label="Open shopping cart"
+              aria-label={t("Open shopping cart")}
               style={{
                 background: "none",
                 border: "none",
@@ -850,7 +858,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   </span>
                 )}
               </div>
-              My Cart
+              {t("My Cart")}
             </button>
           </div>
         </div>
@@ -887,7 +895,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
             }}
           >
             <LayoutGrid size={15} />{" "}
-            <span className="nav-cat-label">ALL CATEGORIES</span>
+            <span className="nav-cat-label">{t("ALL CATEGORIES")}</span>
           </button>
 
           {/* Desktop links */}
@@ -924,7 +932,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                     (e.currentTarget as HTMLAnchorElement).style.color = "#555"
                 }}
               >
-                {lnk}
+                {t(lnk)}
               </a>
             ))}
           </div>
@@ -940,7 +948,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               cursor: "pointer",
               padding: 8,
             }}
-            aria-label="Menu"
+            aria-label={t("Menu")}
           >
             {navOpen ? (
               <X size={22} color={B_BLUE} />
@@ -973,7 +981,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 fontFamily: "Nunito,sans-serif",
               }}
             >
-              {lnk}
+              {t(lnk)}
               <ChevronRight size={14} color="#ccc" />
             </a>
           ))}
@@ -1034,7 +1042,9 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   >
                     {cat.icon}
                   </span>
-                  <span style={{ flex: 1, fontWeight: 500 }}>{cat.name}</span>
+                  <span style={{ flex: 1, fontWeight: 500 }}>
+                    {t(cat.name)}
+                  </span>
                   <ChevronRight size={12} color="#ccc" />
                 </div>
               ))}
@@ -1055,7 +1065,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   href="/collections/shop/"
                   style={{ display: "flex", alignItems: "center", gap: 6 }}
                 >
-                  <Sparkles size={13} /> More Categories
+                  <Sparkles size={13} /> {t("More Categories")}
                 </a>
               </div>
             </div>
@@ -1067,7 +1077,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 href={"/products/" + featuredPhone.id + "/"}
               >
                 <img src={featuredPhone.image} alt={featuredPhone.name} />
-                <span>In focus</span>
+                <span>{t("In focus")}</span>
                 <h3>{featuredPhone.name}</h3>
                 <ProductOffer product={featuredPhone} compact />
               </a>
@@ -1098,7 +1108,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   gap: 6,
                 }}
               >
-                <Flame size={13} color={B_GOLD} /> Latest Products
+                <Flame size={13} color={B_GOLD} /> {t("Latest Products")}
                 <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
                   <button
                     onClick={() =>
@@ -1247,9 +1257,11 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                         letterSpacing: 0.3,
                       }}
                     >
-                      {b.title}
+                      {t(b.title)}
                     </div>
-                    <div style={{ fontSize: 10.5, color: "#999" }}>{b.sub}</div>
+                    <div style={{ fontSize: 10.5, color: "#999" }}>
+                      {t(b.sub)}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -1278,19 +1290,25 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                     <BrandWordmark width={130} />
                   </div>
                   <h1>
-                    {hero.headline}
+                    {t(hero.headline)}
                     <br />
-                    <span>{hero.hl}</span>
+                    <span>{t(hero.hl)}</span>
                   </h1>
                   <button
                     className="hero-shop"
                     onClick={() => shopCategory(hero.category)}
                   >
-                    Shop now <ArrowUpRight size={16} />
+                    {t("Shop now")} <ArrowUpRight size={16} />
                   </button>
                 </div>
                 <div className="hero-art">
-                  <img key={hero.bg} src={hero.bg} alt={hero.alt} fetchPriority="high" decoding="async" />
+                  <img
+                    key={hero.bg}
+                    src={hero.bg}
+                    alt={hero.alt}
+                    fetchPriority="high"
+                    decoding="async"
+                  />
                 </div>
                 <span className="hero-brand">
                   <BrandWordmark width={112} />
@@ -1366,12 +1384,12 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                         alt={feature.product.name}
                       />
                       <div>
-                        <small>THE TECH EDIT</small>
+                        <small>{t("THE TECH EDIT")}</small>
                         <strong>
-                          {feature.label}
+                          {t(feature.label)}
                           <ArrowUpRight size={16} />
                         </strong>
-                        <span>Explore the collection</span>
+                        <span>{t("Explore the collection")}</span>
                       </div>
                     </a>
                   ))}
@@ -1404,7 +1422,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   flexShrink: 0,
                 }}
               >
-                Store specials
+                {t("Store specials")}
               </strong>
               <span
                 style={{
@@ -1415,13 +1433,13 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                   wordBreak: "break-word",
                 }}
               >
-                Original technology, reliable service ·{" "}
+                {t("Original technology, reliable service")} ·{" "}
                 <strong style={{ color: B_BLUE }}>
                   تقنية أصلية، خدمة موثوقة
                 </strong>
               </span>
               <Btn small onClick={() => shopCategory("All")}>
-                Shop Offers
+                {t("Shop Offers")}
               </Btn>
             </div>
 
@@ -1488,78 +1506,80 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 {catalogueProducts(
                   [...DEALS.slice(dealOffset), ...DEALS.slice(0, dealOffset)],
                   catalogue,
-                ).map((p, i) => (
-                  <div
-                    key={p.id}
-                    className="deal-item"
-                    style={{
-                      padding: "16px 18px",
-                      borderRight: i === 0 ? "1px solid #eee" : "none",
-                      display: "flex",
-                      gap: 14,
-                      alignItems: "flex-start",
-                      flexWrap: "wrap",
-                    }}
-                  >
+                ).map((p, i) => {
+                  const item = catalogue.find(
+                    (product: { id: string }) => product.id === commerceId(p),
+                  )
+                  if (!item) return null
+                  return (
                     <div
-                      className="deal-img-wrap"
-                      style={{ position: "relative", flexShrink: 0 }}
+                      key={p.id}
+                      className="deal-item"
+                      style={{
+                        padding: "16px 18px",
+                        borderRight: i === 0 ? "1px solid #eee" : "none",
+                        display: "flex",
+                        gap: 14,
+                        alignItems: "flex-start",
+                        flexWrap: "wrap",
+                      }}
                     >
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        className="deal-img"
-                        style={{
-                          width: 150,
-                          height: 120,
-                          objectFit: "contain",
-                          padding: 8,
-                          borderRadius: 4,
-                          display: "block",
-                        }}
-                      />
-                      {cardBadge(p, catalogue) && (
-                        <span
+                      <div
+                        className="deal-img-wrap"
+                        style={{ position: "relative", flexShrink: 0 }}
+                      >
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className="deal-img"
                           style={{
-                            position: "absolute",
-                            top: 6,
-                            left: 6,
-                            background: p.badgeColor || B_BLUE,
-                            color: "#fff",
-                            fontSize: 10,
-                            fontWeight: 700,
-                            padding: "2px 6px",
-                            borderRadius: 3,
+                            width: 150,
+                            height: 120,
+                            objectFit: "contain",
+                            padding: 8,
+                            borderRadius: 4,
+                            display: "block",
+                          }}
+                        />
+                        {cardBadge(p, catalogue) && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: 6,
+                              left: 6,
+                              background: p.badgeColor || B_BLUE,
+                              color: "#fff",
+                              fontSize: 10,
+                              fontWeight: 700,
+                              padding: "2px 6px",
+                              borderRadius: 3,
+                              fontFamily: "Nunito,sans-serif",
+                            }}
+                          >
+                            {cardBadge(p, catalogue)}
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 120 }}>
+                        <div
+                          style={{
                             fontFamily: "Nunito,sans-serif",
+                            fontWeight: 700,
+                            fontSize: 13.5,
+                            color: "#333",
+                            marginBottom: 4,
                           }}
                         >
-                          {cardBadge(p, catalogue)}
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 120 }}>
-                      <div
-                        style={{
-                          fontFamily: "Nunito,sans-serif",
-                          fontWeight: 700,
-                          fontSize: 13.5,
-                          color: "#333",
-                          marginBottom: 4,
-                        }}
-                      >
-                        <a href={"/products/" + commerceId(p) + "/"}>
-                          {p.name}
-                        </a>
+                          <a href={"/products/" + commerceId(p) + "/"}>
+                            {p.name}
+                          </a>
+                        </div>
+                        <ProductMotionNote product={item} />
+                        <ProductOffer product={item} />
                       </div>
-                      <ProductMotionNote category={p.category} />
-                      <ProductOffer
-                        product={catalogue.find(
-                          (item: { id: string }) => item.id === commerceId(p),
-                        )}
-                      />
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
 
@@ -1568,12 +1588,12 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 <span className="promo-kicker">
                   <BrandWordmark width={130} />
                 </span>
-                <h2>Everyday essentials.</h2>
+                <h2>{t("Everyday essentials.")}</h2>
                 <button
                   className="hero-shop"
                   onClick={() => shopCategory("Accessories")}
                 >
-                  Shop accessories <ArrowUpRight size={15} />
+                  {t("Shop accessories")} <ArrowUpRight size={15} />
                 </button>
               </div>
               <img
@@ -1613,7 +1633,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                           transition: "all .15s",
                         }}
                       >
-                        {cat}
+                        {t(cat)}
                       </button>
                     ))}
                   </div>
@@ -1633,7 +1653,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                       fontFamily: "Nunito,sans-serif",
                     }}
                   >
-                    No products in this category yet.
+                    {t("No products in this category yet.")}
                   </div>
                 )}
               </div>
@@ -1653,7 +1673,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
           aria-label="Chat with London Tech on WhatsApp"
         >
           <WhatsAppIcon size={23} />
-          <span>Chat on WhatsApp</span>
+          <span>{t("Chat on WhatsApp")}</span>
         </a>
       )}
     </div>

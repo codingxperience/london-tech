@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from "react"
+import { HandCoins, MapPin, MessageCircle, Tag, Truck } from "lucide-react"
+import { productOffer } from "../lib/offer-details.js"
+import { useLocale } from "../lib/locale.jsx"
+import "../product-card-motion.css"
 
 export function useReducedMotion() {
   const [reduced, setReduced] = useState(false)
@@ -24,16 +28,21 @@ export function TypewriterText({
 }) {
   const reduced = useReducedMotion()
   const [frame, setFrame] = useState({ index: 0, count: 0, deleting: false })
+  const wordsContent = JSON.stringify(words)
+  const wordCount = words.length
   const word = words[frame.index % words.length] || "products"
   useEffect(() => {
-    if (reduced || !active || !words.length) return
+    setFrame({ index: 0, count: 0, deleting: false })
+  }, [wordsContent])
+  useEffect(() => {
+    if (reduced || !active || !wordCount) return
     const complete = frame.count === word.length
     const delay = frame.deleting ? 42 : complete ? 1800 : frame.count ? 85 : 380
     const timeout = window.setTimeout(() => {
       setFrame((current) => {
         if (current.deleting && current.count === 0)
           return {
-            index: (current.index + 1) % words.length,
+            index: (current.index + 1) % wordCount,
             count: 0,
             deleting: false,
           }
@@ -45,7 +54,7 @@ export function TypewriterText({
       })
     }, delay)
     return () => window.clearTimeout(timeout)
-  }, [active, frame, reduced, word, words])
+  }, [active, frame, reduced, word, wordCount, wordsContent])
   return (
     <span className={"typewriter-text " + className} aria-hidden="true">
       <strong>
@@ -56,65 +65,74 @@ export function TypewriterText({
   )
 }
 
-const CATEGORY_COPY: Record<string, readonly string[]> = {
-  phones: [
-    "Your day. A little more connected.",
-    "Find your next everyday essential.",
-    "Explore every angle.",
-  ],
-  audio: [
-    "Make room for your music.",
-    "Find your everyday sound.",
-    "A new rhythm for your day.",
-  ],
-  computers: [
-    "Make space for your best work.",
-    "Ideas deserve a bigger canvas.",
-    "Find your everyday workspace.",
-  ],
-  watches: [
-    "Your day, a glance away.",
-    "A little detail. A daily companion.",
-    "Find your everyday style.",
-  ],
-  cameras: [
-    "Keep the moments that matter.",
-    "A new way to tell your story.",
-    "Explore your creative side.",
-  ],
-  gaming: [
-    "Make more time for play.",
-    "Find your next adventure.",
-    "Your setup. Your next level.",
-  ],
-  accessories: [
-    "Small details. Everyday possibilities.",
-    "Bring your setup together.",
-    "Find your finishing touch.",
-  ],
-}
-
-function copyFor(category: string) {
-  if (/phone|mobile/i.test(category)) return CATEGORY_COPY.phones
-  if (/audio|earbud|headphone|speaker/i.test(category))
-    return CATEGORY_COPY.audio
-  if (/laptop|tablet|computer|pc/i.test(category))
-    return CATEGORY_COPY.computers
-  if (/watch/i.test(category)) return CATEGORY_COPY.watches
-  if (/camera/i.test(category)) return CATEGORY_COPY.cameras
-  if (/gaming|game/i.test(category)) return CATEGORY_COPY.gaming
-  return CATEGORY_COPY.accessories
-}
-
-/** Vertical word reveal previously used in the search bar, with static AT copy. */
+/** A short service or offer line. Price and stock remain visible beside it. */
 export function ProductMotionNote({
-  category,
+  product,
   className = "",
 }: {
-  category: string
+  product: {
+    id?: string
+    price?: number | null
+    comparePrice?: number | null
+    priceConfirmed?: boolean
+    stock?: number | null
+  }
   className?: string
 }) {
-  const phrases = copyFor(category)
+  const { language, formatNumber } = useLocale()
+  const arabic = language === "ar"
+  const offer = productOffer(product)
+  const savings =
+    offer.discounted && offer.originalPrice !== null && offer.price !== null
+      ? formatNumber(offer.originalPrice - offer.price)
+      : null
+  const canOrder =
+    product.priceConfirmed &&
+    typeof product.stock === "number" &&
+    product.stock > 0
+  const notes = canOrder
+    ? [
+        ...(savings !== null
+          ? [
+              {
+                text: arabic
+                  ? `وفّر ${savings} شلن أوغندي`
+                  : `Save UGX ${savings}`,
+                icon: Tag,
+                tone: "saving",
+              },
+            ]
+          : []),
+        {
+          text: arabic ? "الدفع عند الاستلام" : "Cash on delivery",
+          icon: HandCoins,
+          tone: "payment",
+        },
+        {
+          text: arabic ? "استلام مجاني من المتجر" : "Free store pickup",
+          icon: MapPin,
+          tone: "pickup",
+        },
+        {
+          text: arabic ? "توصيل في جميع أنحاء أوغندا" : "Uganda-wide delivery",
+          icon: Truck,
+          tone: "delivery",
+        },
+      ]
+    : [
+        {
+          text:
+            product.stock === 0
+              ? arabic
+                ? "اسأل عن توفّر المنتج مجددًا"
+                : "Ask about restocking"
+              : arabic
+                ? "تحقّق من التوفّر مع المتجر"
+                : "Check with the store",
+          icon: MessageCircle,
+          tone: "support",
+        },
+      ]
   const reduced = useReducedMotion()
   const element = useRef<HTMLSpanElement>(null)
   const [visible, setVisible] = useState(false)
@@ -132,11 +150,12 @@ export function ProductMotionNote({
     )
     observer.observe(node)
     return () => observer.disconnect()
-  }, [])
+  }, [product.id])
   useEffect(() => {
     const card =
-      element.current?.closest<HTMLElement>(".pcard, .product-card, article") ||
-      element.current
+      element.current?.closest<HTMLElement>(
+        ".pcard, .product-card, .deal-item, article",
+      ) || element.current
     if (!card) return
     const update = () => setPaused(card.matches(":hover, :focus-within"))
     const blur = (event: FocusEvent) => {
@@ -157,21 +176,31 @@ export function ProductMotionNote({
     }
   }, [])
   useEffect(() => {
-    if (reduced || !visible || paused) return
+    if (reduced || !visible || paused || notes.length < 2) return
     const timer = window.setInterval(() => {
-      if (!document.hidden) setIndex((i) => (i + 1) % phrases.length)
-    }, 7200)
+      if (!document.hidden) setIndex((i) => (i + 1) % notes.length)
+    }, 5200)
     return () => window.clearInterval(timer)
-  }, [reduced, visible, paused, phrases])
+  }, [reduced, visible, paused, notes.length])
+  const note = notes[reduced ? 0 : index % notes.length]
+  const Icon = note.icon
   return (
-    <span ref={element} className={"product-motion-note " + className}>
-      <span className="sr-only">{phrases[0]}</span>
+    <span
+      ref={element}
+      className={"product-motion-note card-service-note " + className}
+      data-tone={note.tone}
+      title={note.text}
+    >
+      <span className="sr-only">
+        {notes.map((item) => item.text).join(" · ")}
+      </span>
       <span
         className="product-motion-line"
         aria-hidden="true"
         key={reduced ? 0 : index}
       >
-        {phrases[reduced ? 0 : index]}
+        <Icon size={14} strokeWidth={2} />
+        <span>{note.text}</span>
       </span>
     </span>
   )

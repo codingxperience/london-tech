@@ -12,6 +12,7 @@ import { products as seed, storeDefaults } from "./data/catalog.js"
 import { api, readStorage, writeStorage, post } from "./lib/api.js"
 import { galleryImages } from "./lib/product-experience.js"
 import { repairCatalogueMedia } from "./lib/catalogue-media.js"
+import { useLocale } from "./lib/locale.jsx"
 
 const presentProduct = (product) => {
   const corrected = repairCatalogueMedia(product)
@@ -97,6 +98,7 @@ const validIds = (value) =>
 export const cartKey = (line) => [line.id, line.option, line.color].join("|")
 
 export function StoreProvider({ children, initialData, initialPath }) {
+  const locale = useLocale()
   const [products, setProducts] = useState(() =>
       (initialData?.products || seed).map(presentProduct),
     ),
@@ -342,6 +344,7 @@ export function StoreProvider({ children, initialData, initialPath }) {
   return (
     <Context.Provider
       value={{
+        locale,
         initialPath,
         initialReviews: initialData?.reviews || {},
         products,

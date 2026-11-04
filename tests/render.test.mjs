@@ -60,7 +60,7 @@ test("storefront and product screens render without runtime exceptions", () => {
     [checkout.Cart, {}, "Your cart"],
     [checkout.Checkout, {}, "Getting your checkout ready"],
 
-    [account.Auth, { mode: "register" }, "Create your account"],
+    [account.Auth, { mode: "register" }, "Register / Sign in"],
     [info.Info, { page: "contact" }, "0788341111"],
     [info.Info, { page: "about" }, "NYUMBA KUBUA"],
 

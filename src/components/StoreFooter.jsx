@@ -6,6 +6,7 @@ import React, { useEffect, useId, useState } from "react"
 import { ArrowUpRight, ChevronDown, MapPin, Phone } from "lucide-react"
 import { useStore } from "../store.jsx"
 import { PaymentMarks } from "./storefront.jsx"
+import { useLocale } from "../lib/locale.jsx"
 import "../store-footer.css"
 
 const sections = [
@@ -47,12 +48,13 @@ const sections = [
 ]
 
 function FooterGroup({ section, compact }) {
+  const { t } = useLocale()
   const id = useId()
   const [open, setOpen] = useState(false)
   return (
     <nav
       className={"footer-group" + (section.columns ? " footer-group-wide" : "")}
-      aria-label={section.title}
+      aria-label={t(section.title)}
     >
       <h3>
         {compact ? (
@@ -65,20 +67,20 @@ function FooterGroup({ section, compact }) {
             {section.title === "London Tech" ? (
               <BrandWordmark inverse width={110} />
             ) : (
-              section.title
+              t(section.title)
             )}
             <ChevronDown size={15} className={open ? "is-open" : ""} />
           </button>
         ) : section.title === "London Tech" ? (
           <BrandWordmark inverse width={110} />
         ) : (
-          section.title
+          t(section.title)
         )}
       </h3>
       <ul id={id} hidden={compact && !open}>
         {section.links.map(([label, href]) => (
           <li key={href}>
-            <a href={href}>{label}</a>
+            <a href={href}>{t(label)}</a>
           </li>
         ))}
       </ul>
@@ -87,6 +89,7 @@ function FooterGroup({ section, compact }) {
 }
 
 export function StoreFooter({ logo, quiet = false }) {
+  const { t } = useLocale()
   const { settings, pages = [] } = useStore()
   const [compact, setCompact] = useState(false)
   useEffect(() => {
@@ -144,7 +147,7 @@ export function StoreFooter({ logo, quiet = false }) {
           />
         ))}
         <section className="footer-contact" aria-label="Visit London Tech">
-          <h3>Find us in Kampala</h3>
+          <h3>{t("Find us in Kampala")}</h3>
           <p>
             <MapPin size={15} />
             <span>{settings.address}</span>
@@ -160,7 +163,7 @@ export function StoreFooter({ logo, quiet = false }) {
           </div>
           {settings.hours && <p className="footer-hours">{settings.hours}</p>}
           <a className="footer-directions" href="/contact/">
-            Store details
+            {t("Store details")}
             <ArrowUpRight size={13} />
           </a>
         </section>
@@ -168,17 +171,17 @@ export function StoreFooter({ logo, quiet = false }) {
       <div className="store-container footer-community-row">
         <SocialLinks profiles={settings.socials} />
         <div className="footer-payments">
-          <h3>Payment options</h3>
+          <h3>{t("Payment options")}</h3>
           <PaymentMarks />
         </div>
       </div>
       <BackToTop />
       <div className="store-container footer-legal-row">
         <span>
-          © {new Date().getFullYear()} London Tech. All rights reserved.
+          © {new Date().getFullYear()} London Tech. {t("All rights reserved.")}
         </span>
         <span>
-          Kampala, Uganda <i /> <a href="/admin/">Store admin</a>
+          {t("Kampala, Uganda")} <i /> <a href="/admin/">{t("Store admin")}</a>
         </span>
       </div>
     </footer>

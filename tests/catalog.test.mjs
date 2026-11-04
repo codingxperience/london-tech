@@ -52,7 +52,7 @@ test("production pages have white-logo metadata, canonical URLs and approved pro
 
     assert.ok(
       html.includes(
-        'property="og:image" content="https://london-tech.vercel.app/assets/london-tech-logo.png"',
+        'property="og:image" content="https://london-tech.vercel.app/assets/london-tech-share-logo.png"',
       ),
     )
 

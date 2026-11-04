@@ -48,6 +48,11 @@ import {
 } from "./order-emails.js"
 import { audienceRoute, audienceSummary } from "./audience.js"
 import {
+  finishSocialLink,
+  socialProviders,
+  socialRoute,
+} from "./social-auth.js"
+import {
   workspaceRoute,
   workspaceSummary,
   publishedPages,
@@ -528,6 +533,9 @@ export default async function handler(req, res) {
         currency: "UGX",
         country: "Uganda",
         paymentMode: paymentMode(),
+        socialProviders: databaseConfigured()
+          ? socialProviders()
+          : { google: false, facebook: false },
       })
 
     if (route === "catalog" && method === "GET") {
@@ -608,6 +616,19 @@ export default async function handler(req, res) {
     if (route === "auth/me" && method === "GET")
       return send(res, { user: publicUser(user) })
 
+    const social = await socialRoute({
+      route,
+      method,
+      body,
+      db,
+      req,
+      res,
+      url,
+      ip,
+    })
+    if (social === true) return
+    if (social) return send(res, social)
+
     if (route === "auth/register" && method === "POST") {
       const input = z
         .object({ name: text(100).min(2), email, password })
@@ -669,6 +690,7 @@ export default async function handler(req, res) {
 
       if (!record || !valid) fail(401, "The email or password is incorrect.")
 
+      await finishSocialLink(db, req, res, record.id)
       await createSession(db, res, record.id)
       return send(res, { user: publicUser(record) })
     }

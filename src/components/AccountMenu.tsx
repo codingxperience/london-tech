@@ -10,8 +10,10 @@ import {
   CircleHelp,
 } from "lucide-react"
 import { useStore, navigate } from "../store.jsx"
+import { useLocale } from "../lib/locale.jsx"
 
 export function AccountMenu() {
+  const { t } = useLocale()
   const { user, wishlist, openAuth, logout, notify } = useStore()
   const [open, setOpen] = useState(false)
   const wrapper = useRef<HTMLDivElement>(null)
@@ -71,7 +73,7 @@ export function AccountMenu() {
         ref={trigger}
         aria-expanded={open}
         aria-controls={id}
-        aria-label={user ? "Open my account menu" : "Sign in or register"}
+        aria-label={t(user ? "Open my account menu" : "Sign in or register")}
         onClick={() => setOpen(!open)}
         onKeyDown={(event) => {
           if (event.key === "ArrowDown") {
@@ -88,9 +90,9 @@ export function AccountMenu() {
         <UserRound size={23} strokeWidth={1.7} />
         <span>
           <small>
-            {user ? `Hello, ${user.name.split(" ")[0]}` : "Welcome"}
+            {user ? `${t("Hello")}, ${user.name.split(" ")[0]}` : t("Welcome")}
           </small>
-          <strong>{user ? "My account" : "Sign in / Register"}</strong>
+          <strong>{t(user ? "My account" : "Sign in / Register")}</strong>
         </span>
         <ChevronDown size={14} className={open ? "is-open" : ""} />
       </button>
@@ -101,7 +103,7 @@ export function AccountMenu() {
               <strong>{user.name}</strong>
               <span>{user.email}</span>
               <button onClick={() => visit("/account/")}>
-                Manage your account
+                {t("Manage your account")}
                 <ChevronRight size={14} />
               </button>
             </div>
@@ -111,37 +113,37 @@ export function AccountMenu() {
                 className="account-sign-in"
                 onClick={() => authenticate("login")}
               >
-                Sign in
+                {t("Sign in")}
               </button>
               <button
                 className="account-register"
                 onClick={() => authenticate("register")}
               >
-                New here? <strong>Create an account</strong>
+                {t("New here?")} <strong>{t("Create an account")}</strong>
               </button>
             </div>
           )}
-          <nav aria-label="Your account">
+          <nav aria-label={t("Your account")}>
             <button onClick={() => visit("/account/orders/")}>
               <Package size={18} />
-              <span>My orders</span>
+              <span>{t("My orders")}</span>
               <ChevronRight size={14} />
             </button>
             <button onClick={() => visit("/account/wishlist/", false)}>
               <Heart size={18} />
-              <span>Wishlist</span>
+              <span>{t("Wishlist")}</span>
               <b>{wishlist.length}</b>
             </button>
             <button onClick={() => visit("/account/profile/")}>
               <Settings size={18} />
-              <span>Account details</span>
+              <span>{t("Account details")}</span>
               <ChevronRight size={14} />
             </button>
           </nav>
           <div className="account-menu-bottom">
             <a href="/help/" onClick={() => setOpen(false)}>
               <CircleHelp size={17} />
-              Help & support
+              {t("Help & support")}
             </a>
             {user && (
               <button
@@ -150,12 +152,12 @@ export function AccountMenu() {
                     await logout()
                     setOpen(false)
                   } catch {
-                    notify("We couldn’t sign you out. Please try again.")
+                    notify(t("We couldn’t sign you out. Please try again."))
                   }
                 }}
               >
                 <LogOut size={17} />
-                Sign out
+                {t("Sign out")}
               </button>
             )}
           </div>

@@ -1,3 +1,4 @@
+import { useLocale } from "../lib/locale.jsx"
 import { PaymentLogo } from "../components/PaymentLogo.jsx"
 import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import React, { useEffect, useState, useMemo } from "react"
@@ -57,6 +58,7 @@ import {
 } from "../components/storefront.jsx"
 
 export function Cart() {
+  const { t, formatNumber } = useLocale()
   const { lines, subtotal, updateCart, removeCart, products } = useStore()
   const hasGuide = lines.some((line) => !line.product?.priceConfirmed)
   return (
@@ -71,9 +73,9 @@ export function Cart() {
         <div className="cart-layout">
           <div>
             <div className="cart-table-heading">
-              <span>Product</span>
-              <span>Quantity</span>
-              <span>Total</span>
+              <span>{t("Product")}</span>
+              <span>{t("Quantity")}</span>
+              <span>{t("Total")}</span>
             </div>
             {lines.map((line) => {
               const p = line.product
@@ -117,7 +119,7 @@ export function Cart() {
                   <strong>
                     {p?.price != null
                       ? money(p.price * line.quantity)
-                      : "On request"}
+                      : t("On request")}
                   </strong>
                   <IconButton
                     label={"Remove " + (p?.name || "item")}
@@ -140,25 +142,30 @@ export function Cart() {
             )}
           </div>
           <aside className="order-summary">
-            <p className="eyebrow">THE NEXT STEP</p>
-            <h2>Order summary</h2>
+            <p className="eyebrow">{t("THE NEXT STEP")}</p>
+            <h2>{t("Order summary")}</h2>
             <div className="summary-row">
-              <span>Items ({lines.reduce((s, p) => s + p.quantity, 0)})</span>
+              <span>
+                {t("Items")} (
+                {formatNumber(lines.reduce((s, p) => s + p.quantity, 0))})
+              </span>
               <strong>{money(subtotal)}</strong>
             </div>
             <div className="summary-row">
-              <span>Delivery</span>
-              <span>At checkout</span>
+              <span>{t("Delivery")}</span>
+              <span>{t("At checkout")}</span>
             </div>
             <div className="summary-total">
-              <span>{hasGuide ? "Estimated subtotal" : "Subtotal"}</span>
+              <span>{t(hasGuide ? "Estimated subtotal" : "Subtotal")}</span>
               <strong>{money(subtotal)}</strong>
             </div>
             <p className="small muted">
               Your final total and delivery arrangements are confirmed before
               you pay.
             </p>
-            <ActionLink href="/checkout/">Continue to checkout</ActionLink>
+            <ActionLink href="/checkout/">
+              {t("Continue to checkout")}
+            </ActionLink>
             <div className="secure-note">
               <LockKeyhole size={14} />
               Cash on receipt or secure online payment.
@@ -170,7 +177,9 @@ export function Cart() {
         <Empty
           title="A little room for possibility."
           action={
-            <ActionLink href="/collections/shop/">Find your next</ActionLink>
+            <ActionLink href="/collections/shop/">
+              {t("Find your next")}
+            </ActionLink>
           }
         >
           Your cart is empty. Explore the collection and add something that fits
@@ -208,6 +217,7 @@ function checkoutKey(cart) {
 }
 
 export function Checkout() {
+  const { t, formatNumber } = useLocale()
   const {
     lines,
     cart,
@@ -352,7 +362,9 @@ export function Checkout() {
         <Empty
           title="Let’s find your next first."
           action={
-            <ActionLink href="/collections/shop/">Explore products</ActionLink>
+            <ActionLink href="/collections/shop/">
+              {t("Explore products")}
+            </ActionLink>
           }
         >
           Add a product to your cart to start checkout.
@@ -448,8 +460,8 @@ export function Checkout() {
           )}
           <section className="form-card">
             <div className="form-section-heading">
-              <span>01</span>
-              <h2>Your details</h2>
+              <span>{formatNumber(1)}</span>
+              <h2>{t("Your details")}</h2>
             </div>
             <div className="form-grid">
               <Field
@@ -474,7 +486,7 @@ export function Checkout() {
                 name="phone"
                 type="tel"
                 autoComplete="tel"
-                placeholder="07XX XXX XXX"
+                placeholder={t("07XX XXX XXX")}
                 defaultValue={saved?.phone || user.phone}
                 key={"phone" + addressIndex}
                 required
@@ -490,13 +502,13 @@ export function Checkout() {
           </section>
           <section className="form-card">
             <div className="form-section-heading">
-              <span>02</span>
-              <h2>Delivery or pickup</h2>
+              <span>{formatNumber(2)}</span>
+              <h2>{t("Delivery or pickup")}</h2>
             </div>
             <div
               className="fulfillment-choices"
               role="group"
-              aria-label="Delivery or pickup"
+              aria-label={t("Delivery or pickup")}
             >
               <label className={fulfillment === "collection" ? "selected" : ""}>
                 <input
@@ -507,8 +519,8 @@ export function Checkout() {
                 />
                 <Store size={22} aria-hidden="true" />
                 <span>
-                  <strong>Store pickup</strong>
-                  <small>Free</small>
+                  <strong>{t("Store pickup")}</strong>
+                  <small>{t("Free")}</small>
                 </span>
               </label>
               <label className={fulfillment === "delivery" ? "selected" : ""}>
@@ -520,10 +532,10 @@ export function Checkout() {
                 />
                 <Truck size={22} aria-hidden="true" />
                 <span>
-                  <strong>Delivery</strong>
+                  <strong>{t("Delivery")}</strong>
                   <small>
                     {fulfillment !== "delivery" || delivery.fee == null
-                      ? "By district"
+                      ? t("By district")
                       : money(delivery.fee)}
                   </small>
                 </span>
@@ -556,7 +568,7 @@ export function Checkout() {
                         )
                       }}
                     >
-                      <option value="">Enter an address</option>
+                      <option value="">{t("Enter an address")}</option>
                       {user.addresses.map((a, i) => (
                         <option value={i} key={i}>
                           {a.label} — {a.district}
@@ -573,7 +585,7 @@ export function Checkout() {
                       onChange={(e) => setDistrict(e.target.value)}
                       required
                     >
-                      <option value="">Select a district</option>
+                      <option value="">{t("Select a district")}</option>
                       {deliveryDistricts.map((d) => (
                         <option key={d.id} value={d.name}>
                           {d.name}
@@ -602,8 +614,8 @@ export function Checkout() {
           </section>
           <section className="form-card">
             <div className="form-section-heading">
-              <span>03</span>
-              <h2>Payment method</h2>
+              <span>{formatNumber(3)}</span>
+              <h2>{t("Payment method")}</h2>
             </div>
             {config.paymentMode === "test" && config.payments && (
               <Notice>
@@ -621,7 +633,7 @@ export function Checkout() {
             <div
               className="payment-options"
               role="group"
-              aria-label="Payment method"
+              aria-label={t("Payment method")}
             >
               {[
                 [
@@ -643,7 +655,7 @@ export function Checkout() {
                     }`}
                   >
                     <PaymentLogo method={id} decorative />
-                    <strong>{title}</strong>
+                    <strong>{t(title)}</strong>
                     <input
                       type="radio"
                       name="paymentMethod"
@@ -687,20 +699,20 @@ export function Checkout() {
           </section>
           <section className="checkout-terms">
             <details>
-              <summary>Add an order note</summary>
+              <summary>{t("Add an order note")}</summary>
               <Field label="Order note">
                 <textarea
                   name="notes"
                   rows={3}
                   maxLength={1000}
-                  placeholder="Optional"
+                  placeholder={t("Optional")}
                 />
               </Field>
             </details>
           </section>
         </div>
         <aside className="order-summary checkout-summary">
-          <h2>Your order</h2>
+          <h2>{t("Your order")}</h2>
           <div className="checkout-items">
             {lines.map((line) => (
               <div key={cartKey(line)}>
@@ -709,38 +721,39 @@ export function Checkout() {
                   <strong>{line.product?.name || "Unavailable product"}</strong>
                   <small>
                     {[line.option, line.color].filter(Boolean).join(" · ")} ×{" "}
-                    {line.quantity}
+                    {formatNumber(line.quantity)}
                   </small>
                 </span>
                 <b>
                   {line.product?.price != null
                     ? money(line.product.price * line.quantity)
-                    : "On request"}
+                    : t("On request")}
                 </b>
               </div>
             ))}
           </div>
           <div className="summary-row">
-            <span>Subtotal</span>
+            <span>{t("Subtotal")}</span>
             <strong>{money(subtotal)}</strong>
           </div>
           <div className="summary-row">
             <span>
-              {fulfillment === "delivery" ? "Delivery" : "Collection"}
+              {t(fulfillment === "delivery" ? "Delivery" : "Collection")}
             </span>
             <span>
-              {deliveryFee == null ? "To be confirmed" : money(deliveryFee)}
+              {deliveryFee == null ? t("To be confirmed") : money(deliveryFee)}
             </span>
           </div>
           <div className="summary-total">
-            <span>Total</span>
+            <span>{t("Total")}</span>
             <strong>{money(total)}</strong>
           </div>
           <label className="checkbox-label terms-check">
             <input type="checkbox" required />
             <span>
-              I agree to the <a href="/terms/">terms</a> and have read the{" "}
-              <a href="/privacy/">privacy information</a>.
+              {t("I agree to the")} <a href="/terms/">{t("terms")}</a>{" "}
+              {t("and have read the")}{" "}
+              <a href="/privacy/">{t("privacy information")}</a>.
             </span>
           </label>
           <Button type="submit" busy={busy} disabled={!payable}>
@@ -750,9 +763,9 @@ export function Checkout() {
           <p className="small muted">
             {method === "cod"
               ? fulfillment === "delivery"
-                ? "Pay on delivery."
-                : "Pay at pickup."
-              : "Secure payment through Flutterwave."}
+                ? t("Pay on delivery.")
+                : t("Pay at pickup.")
+              : t("Secure payment through Flutterwave.")}
           </p>
           <a href="/cart/" className="text-link">
             <ArrowLeft size={14} />
@@ -765,6 +778,7 @@ export function Checkout() {
 }
 
 export function PaymentResult() {
+  const { t } = useLocale()
   const { user, authLoading, setCart } = useStore()
   const [order, setOrder] = useState(null),
     [busy, setBusy] = useState(true),

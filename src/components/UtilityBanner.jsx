@@ -5,11 +5,13 @@ import { useStore } from "../store.jsx"
 import { products as catalogue, storeDefaults } from "../data/catalog.js"
 import { productOffer } from "../lib/offer-details.js"
 import "../utility-banner.css"
+import { useLocale } from "../lib/locale.jsx"
 
 const cycle = 2800
 const opening = 850
 
 export function UtilityBanner() {
+  const { t, formatNumber } = useLocale()
   const store = useStore()
   const products = store?.products || catalogue
   const phone = store?.settings?.phone || storeDefaults.phone
@@ -20,16 +22,18 @@ export function UtilityBanner() {
       .map((p) => productOffer(p).discountPercent),
   )
   const messages = [
-    { text: "UPGRADE FOR LESS.", motion: "rise" },
-    { text: "PHONES & LAPTOPS", motion: "drop" },
+    { text: t("UPGRADE FOR LESS."), motion: "rise" },
+    { text: t("PHONES & LAPTOPS"), motion: "drop" },
     {
-      text: maxSaving ? `SAVE UP TO ${maxSaving}%` : "UPGRADE TODAY",
+      text: maxSaving
+        ? t("SAVE UP TO {percent}%", { percent: formatNumber(maxSaving) })
+        : t("UPGRADE TODAY"),
       motion: "zoom",
       pill: true,
     },
-    { text: "AUDIO & GAMING", motion: "rise" },
-    { text: "VISIT ARUA PARK", motion: "drop" },
-    { text: "SHOP NOW", motion: "zoom" },
+    { text: t("AUDIO & GAMING"), motion: "rise" },
+    { text: t("VISIT ARUA PARK"), motion: "drop" },
+    { text: t("SHOP NOW"), motion: "zoom" },
   ]
   const reduced = useReducedMotion()
   const [frame, setFrame] = useState(0)
@@ -74,7 +78,7 @@ export function UtilityBanner() {
               round % 2 ? "utility-call-return" : "utility-call-arrive",
           }}
         >
-          <span>Call to order</span>
+          <span>{t("Call to order")}</span>
           <strong>{phone}</strong>
         </a>
         <a
@@ -105,7 +109,7 @@ export function UtilityBanner() {
           }}
         >
           <BrandWordmark inverse />
-          <small>TECHNOLOGY STORE</small>
+          <small>{t("TECHNOLOGY STORE")}</small>
         </div>
       </div>
     </div>

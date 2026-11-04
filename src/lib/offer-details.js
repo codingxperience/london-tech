@@ -10,7 +10,7 @@ const validAmount = (value) =>
 const validStock = (value) => Number.isSafeInteger(value) && value >= 0
 
 export const offerMoney = (value) =>
-  validAmount(value) ? `UGX ${englishDigits.format(value)}` : "Price on request"
+  formatShillings(validAmount(value) ? value : null)
 export const arabicMoney = (value) =>
   validAmount(value)
     ? `${arabicDigits.format(value)} شلن أوغندي`
@@ -61,3 +61,4 @@ export function stockAvailability(product) {
     note: "",
   }
 }
+import { formatShillings } from "./number-format.js"

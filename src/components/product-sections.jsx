@@ -1,3 +1,4 @@
+import { useLocale } from "../lib/locale.jsx"
 import { BrandWordmark } from "./BrandWordmark.jsx"
 import React, { useState } from "react"
 import {
@@ -31,6 +32,7 @@ export function ProductSections({
   reviewError,
   onWriteReview,
 }) {
+  const { t, formatNumber } = useLocale()
   const information = productInformation(p)
   const images = galleryImages(p)
   const [expandedSpecs, setExpandedSpecs] = useState(false)
@@ -94,11 +96,11 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="overview-heading"
           >
-            <h2 id="overview-heading">Highlights</h2>
+            <h2 id="overview-heading">{t("Highlights")}</h2>
             <div className="detail-highlight-grid">
               {highlights.slice(0, 6).map(({ title, body }) => (
                 <article key={title}>
-                  <h3>{title}</h3>
+                  <h3>{t(title)}</h3>
                   <p>{body}</p>
                 </article>
               ))}
@@ -112,9 +114,11 @@ export function ProductSections({
           >
             <div className="detail-heading-row">
               <div>
-                <h2 id="specifications-heading">Specifications</h2>
+                <h2 id="specifications-heading">{t("Specifications")}</h2>
               </div>
-              <span className="detail-count">{specs.length} details</span>
+              <span className="detail-count">
+                {formatNumber(specs.length)} {t("details")}
+              </span>
             </div>
             <dl
               className="detail-specifications"
@@ -123,7 +127,7 @@ export function ProductSections({
               {(expandedSpecs ? specs : specs.slice(0, 8)).map(
                 ([label, value], index) => (
                   <div key={`${label}-${index}`}>
-                    <dt>{label}</dt>
+                    <dt>{t(label)}</dt>
                     <dd>{value}</dd>
                   </div>
                 ),
@@ -152,7 +156,7 @@ export function ProductSections({
             </p>
             {information.sources.length > 0 && (
               <details className="detail-source-disclosure">
-                <summary>Manufacturer information & sources</summary>
+                <summary>{t("Manufacturer information & sources")}</summary>
                 <ul>
                   {information.sources.map(({ label, url }) => (
                     <li key={url}>
@@ -260,7 +264,7 @@ export function ProductSections({
                     setReviewLimit(5)
                   }}
                 >
-                  <option value="all">All ratings</option>
+                  <option value="all">{t("All ratings")}</option>
                   {[5, 4, 3, 2, 1].map((rating) => (
                     <option key={rating} value={rating}>
                       {rating} star{rating === 1 ? "" : "s"}
@@ -277,9 +281,9 @@ export function ProductSections({
                     setReviewLimit(5)
                   }}
                 >
-                  <option value="newest">Most recent</option>
-                  <option value="highest">Highest rating</option>
-                  <option value="lowest">Lowest rating</option>
+                  <option value="newest">{t("Most recent")}</option>
+                  <option value="highest">{t("Highest rating")}</option>
+                  <option value="lowest">{t("Lowest rating")}</option>
                 </select>
               </label>
               <span>
@@ -309,7 +313,9 @@ export function ProductSections({
                               {"★".repeat(review.rating)}
                               {"☆".repeat(5 - review.rating)}
                             </span>
-                            <Badge type="success">Verified purchase</Badge>
+                            <Badge type="success">
+                              {t("Verified purchase")}
+                            </Badge>
                           </span>
                         </div>
                         <time dateTime={review.created_at}>
@@ -362,7 +368,7 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="description-heading"
           >
-            <h2 id="description-heading">Product description</h2>
+            <h2 id="description-heading">{t("Product description")}</h2>
             <p className="detail-lead">{information.description}</p>
             {images.length > 1 && (
               <div className="detail-story-gallery">
@@ -380,7 +386,7 @@ export function ProductSections({
               </div>
             )}
             <div className="detail-package-note">
-              <h3>What’s in the box</h3>
+              <h3>{t("What’s in the box")}</h3>
               <p>
                 {p.inTheBox ||
                   "Included accessories vary by configuration. Ask us about the exact bundle before ordering."}
@@ -393,7 +399,7 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="guides-heading"
           >
-            <h2 id="guides-heading">Guides & product support</h2>
+            <h2 id="guides-heading">{t("Guides & product support")}</h2>
             <div className="detail-guide-list">
               {information.guides.map(({ label, url }) => (
                 <a href={url} key={url} target="_blank" rel="noreferrer">
@@ -414,7 +420,7 @@ export function ProductSections({
               >
                 <CircleHelp size={22} />
                 <span>
-                  <strong>Setup & compatibility</strong>
+                  <strong>{t("Setup & compatibility")}</strong>
                   <small>
                     Get help choosing the right guide for this model.
                   </small>
@@ -429,11 +435,11 @@ export function ProductSections({
             className="detail-section"
             aria-labelledby="delivery-heading"
           >
-            <h2 id="delivery-heading">Delivery, collection & returns</h2>
+            <h2 id="delivery-heading">{t("Delivery, collection & returns")}</h2>
             <div className="detail-service-grid">
               <article>
                 <Truck size={25} />
-                <h3>Delivery & collection</h3>
+                <h3>{t("Delivery & collection")}</h3>
                 <p>{p.delivery || settings.delivery}</p>
                 <a href="/delivery/" className="text-link">
                   Delivery information
@@ -442,7 +448,7 @@ export function ProductSections({
               </article>
               <article>
                 <ShieldCheck size={25} />
-                <h3>Returns & warranty</h3>
+                <h3>{t("Returns & warranty")}</h3>
                 <p>{p.warranty || settings.returns}</p>
                 <a href="/returns/" className="text-link">
                   Read the policy
@@ -454,7 +460,7 @@ export function ProductSections({
               <span>
                 <ShieldCheck size={21} />
                 <span>
-                  <strong>Payment options</strong>
+                  <strong>{t("Payment options")}</strong>
                   <small>
                     MTN Mobile Money, Airtel Money or Visa through Flutterwave.
                   </small>
@@ -471,7 +477,7 @@ export function ProductSections({
           >
             <div className="detail-heading-row">
               <div>
-                <h2 id="questions-heading">Questions & answers</h2>
+                <h2 id="questions-heading">{t("Questions & answers")}</h2>
               </div>
               <a
                 href={askLink}
@@ -504,7 +510,7 @@ export function ProductSections({
           >
             <div>
               <h2 id="store-heading" aria-label="Sold by London Tech">
-                <span>Sold by</span> <BrandWordmark width={138} />
+                <span>{t("Sold by")}</span> <BrandWordmark width={138} />
               </h2>
               <p>{settings.address}</p>
             </div>

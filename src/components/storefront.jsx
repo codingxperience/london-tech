@@ -36,6 +36,7 @@ import { ProductMotionNote } from "./MotionText"
 import { galleryImages, productInformation } from "../lib/product-experience.js"
 import { ProductOffer, StockAvailability } from "./ProductOffer.jsx"
 import { productOffer } from "../lib/offer-details.js"
+import { useLocale } from "../lib/locale.jsx"
 
 import {
   categories,
@@ -77,6 +78,7 @@ export function CategoryIcon({ category, size = 22 }) {
 export { PaymentMarks } from "./PaymentMarks.jsx"
 
 export function ProductCard({ product: p, detailed = false }) {
+  const { t } = useLocale()
   const { wishlist, toggleWish, addCart, compare, toggleCompare } = useStore()
   const images = galleryImages(p)
   const [photo, setPhoto] = useState(0)
@@ -100,11 +102,11 @@ export function ProductCard({ product: p, detailed = false }) {
         </a>
         <div className="product-flags">
           {p.stock === 0 ? (
-            <Badge type="muted">Out of stock</Badge>
+            <Badge type="muted">{t("Out of stock")}</Badge>
           ) : offer.discounted ? (
             <Badge>−{offer.discountPercent}%</Badge>
           ) : p.featured ? (
-            <Badge>Spotlight</Badge>
+            <Badge>{t("Spotlight")}</Badge>
           ) : null}
         </div>
         {detailed && images.length > 1 && (
@@ -118,7 +120,10 @@ export function ProductCard({ product: p, detailed = false }) {
                 type="button"
                 key={image.src}
                 className={photo === index ? "selected" : ""}
-                aria-label={`Preview ${p.name}, photo ${index + 1}`}
+                aria-label={t("Preview {name}, photo {number}", {
+                  name: p.name,
+                  number: index + 1,
+                })}
                 aria-pressed={photo === index}
                 onPointerEnter={(event) => {
                   if (event.pointerType !== "touch") setPhoto(index)
@@ -132,7 +137,10 @@ export function ProductCard({ product: p, detailed = false }) {
             {images.length > 4 && (
               <a
                 href={productPath(p)}
-                aria-label={`See all ${images.length} photos of ${p.name}`}
+                aria-label={t("See all {number} photos of {name}", {
+                  number: images.length,
+                  name: p.name,
+                })}
               >
                 +{images.length - 4}
               </a>
@@ -141,18 +149,18 @@ export function ProductCard({ product: p, detailed = false }) {
         )}
         <div className="product-tools">
           <IconButton
-            label={saved ? "Remove from wishlist" : "Add to wishlist"}
+            label={t(saved ? "Remove from wishlist" : "Add to wishlist")}
             onClick={() => toggleWish(p.id)}
             className={saved ? "selected" : ""}
           >
             <Heart size={16} fill={saved ? "currentColor" : "none"} />
           </IconButton>
           <IconButton
-            label={
+            label={t(
               compare.includes(p.id)
                 ? "Remove from comparison"
-                : "Compare product"
-            }
+                : "Compare product",
+            )}
             onClick={() => toggleCompare(p.id)}
             className={compare.includes(p.id) ? "selected" : ""}
           >
@@ -162,22 +170,22 @@ export function ProductCard({ product: p, detailed = false }) {
       </div>
       <div className="product-card-copy">
         <small>
-          {p.brand} <span>·</span> {categoryName(p.category)}
+          {p.brand} <span>·</span> {t(categoryName(p.category))}
         </small>
         <h3>
           <a href={productPath(p)}>{p.name}</a>
         </h3>
-        <ProductMotionNote category={p.category} />
         {detailed && facts.length > 0 && (
           <dl className="card-product-facts">
             {facts.map(([label, value]) => (
               <div key={label}>
-                <dt>{label}</dt>
-                <dd title={value}>{value}</dd>
+                <dt>{t(label)}</dt>
+                <dd title={value}>{t(value)}</dd>
               </div>
             ))}
           </dl>
         )}
+        <ProductMotionNote product={p} />
         <div className="product-card-bottom">
           <ProductOffer
             product={p}
@@ -185,7 +193,7 @@ export function ProductCard({ product: p, detailed = false }) {
             showDiscountBadge={false}
           />
           <IconButton
-            label={"Add " + p.name + " to cart"}
+            label={t("Add {name} to cart", { name: p.name })}
             onClick={() => addCart(p)}
             disabled={p.stock === 0}
           >
@@ -199,7 +207,10 @@ export function ProductCard({ product: p, detailed = false }) {
             <a
               className="card-real-rating"
               href={productPath(p) + "#product-reviews"}
-              aria-label={`${p.rating.toFixed(1)} out of 5 from ${p.reviewCount} verified reviews`}
+              aria-label={t("{rating} out of 5 from {count} verified reviews", {
+                rating: p.rating.toFixed(1),
+                count: p.reviewCount,
+              })}
             >
               <Star size={13} fill="currentColor" />
               <strong>{p.rating.toFixed(1)}</strong>
@@ -211,7 +222,7 @@ export function ProductCard({ product: p, detailed = false }) {
             <small>{p.condition}</small>
           )}
           <a className="card-detail-link" href={productPath(p)}>
-            View details
+            {t("View details")}
             <ArrowRight size={13} />
           </a>
         </div>
@@ -231,15 +242,16 @@ export function ProductGrid({ products, detailed = false }) {
 }
 
 export function SectionHeading({ eyebrow, title, href, link = "Explore all" }) {
+  const { t } = useLocale()
   return (
     <div className="section-heading">
       <div>
-        {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-        <h2>{title}</h2>
+        {eyebrow && <p className="eyebrow">{t(eyebrow)}</p>}
+        <h2>{t(title)}</h2>
       </div>
       {href && (
         <a className="text-link" href={href}>
-          {link}
+          {t(link)}
           <ArrowRight size={15} />
         </a>
       )}

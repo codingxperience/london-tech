@@ -135,12 +135,12 @@ export async function createSession(db, res, userId) {
     [hash(token), userId],
   )
 
-  res.setHeader(
-    "Set-Cookie",
+  res.setHeader("Set-Cookie", [
     `lt_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=1209600${
       process.env.NODE_ENV === "production" ? "; Secure" : ""
     }`,
-  )
+    ...[res.getHeader("Set-Cookie") || []].flat(),
+  ])
 }
 
 export function requireUser(user) {

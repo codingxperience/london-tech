@@ -1,0 +1,208 @@
+.commerce-surface .auth-card.auth-unified {
+  display: block;
+  max-width: 530px;
+  border-radius: 10px;
+}
+.commerce-surface .auth-card.auth-unified .auth-form-panel {
+  padding: 48px clamp(24px, 5vw, 54px) 30px;
+}
+.commerce-surface .auth-card.auth-unified .auth-form-panel h1 {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: clamp(24px, 3vw, 28px);
+  line-height: 1.25;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.commerce-surface .auth-card.auth-unified .auth-security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 0 32px;
+  color: #486175;
+  font-size: 12px;
+}
+.auth-security > svg {
+  color: #11835e;
+}
+.commerce-surface .auth-card.auth-unified .auth-email-form {
+  gap: 17px;
+  margin-top: 25px;
+}
+.commerce-surface .auth-card.auth-unified .field > span {
+  font-size: 14px;
+}
+.commerce-surface .auth-card.auth-unified .field input {
+  min-height: 48px;
+  border-radius: 5px;
+  border-color: #cbd5e1;
+  padding-block: 12px;
+  font-size: 16px;
+}
+.commerce-surface .auth-card.auth-unified .auth-email-form > .button {
+  min-height: 48px;
+  margin: 0;
+  font-size: 16px;
+}
+.commerce-surface .auth-card.auth-unified .auth-email-form > .button:disabled {
+  opacity: 1;
+  background: #d5d9df;
+  color: #4c5868;
+  cursor: default;
+}
+.auth-email-choice {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.auth-email-choice > bdi {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #173653;
+  font-size: 15px;
+}
+.auth-email-choice > button {
+  border: 0;
+  background: transparent;
+  padding: 5px 0 5px 10px;
+  color: #224b76;
+  text-decoration: underline;
+  font-size: 13px;
+  cursor: pointer;
+}
+.commerce-surface .auth-card.auth-unified .auth-forgot {
+  display: block;
+  margin: 15px auto 0;
+  padding: 5px;
+  color: #66768a;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.auth-create-link {
+  display: block;
+  margin: 12px auto 0;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  color: #173a63;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.auth-provider-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 26px 0 19px;
+  color: #708093;
+  font-size: 13px;
+  text-align: center;
+}
+.auth-provider-divider::before,
+.auth-provider-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #d9e1eb;
+}
+.auth-social-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.auth-social-options > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 10px;
+  border: 1px solid #d6dfe9;
+  border-radius: 6px;
+  background: #fff;
+  color: #17334f;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.auth-social-options > button:hover:not(:disabled) {
+  background: #f6f8fb;
+  border-color: #8dabc9;
+}
+.auth-social-options > button:disabled {
+  cursor: default;
+  color: #6b7787;
+}
+.auth-social-options > button > svg {
+  flex: 0 0 24px;
+}
+.commerce-surface .auth-card.auth-unified .auth-provider-status {
+  margin: 12px 0 0;
+  color: #708093;
+  font-size: 12px;
+  text-align: center;
+}
+.commerce-surface .auth-card.auth-unified .auth-country {
+  margin: 26px 0 10px;
+  padding: 0;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7a8c;
+}
+.commerce-surface .auth-card.auth-unified .auth-country strong {
+  font-weight: 700;
+  color: #173653;
+}
+.commerce-surface .auth-card.auth-unified .auth-policy {
+  margin: 0;
+  color: #718093;
+  font-size: 11px;
+  line-height: 1.55;
+  text-align: center;
+}
+.auth-policy a {
+  color: #526d88;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.commerce-surface .auth-card.auth-unified .auth-back {
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+.commerce-surface .auth-card.auth-unified .auth-link-confirmation {
+  margin: 12px 0;
+  color: #5a6e83;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.commerce-surface .modal.auth-dialog:has(.auth-unified) {
+  max-width: 530px !important;
+  border-radius: 10px;
+}
+.auth-unified :is(button, a, input):focus-visible {
+  outline: 3px solid #789cc5;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .commerce-surface .auth-card.auth-unified .auth-form-panel {
+    padding: 45px 24px 25px;
+  }
+  .commerce-surface .auth-card.auth-unified .auth-security {
+    margin-bottom: 25px;
+  }
+  .auth-social-options {
+    gap: 9px;
+  }
+  .auth-social-options > button {
+    gap: 7px;
+    font-size: 13px;
+  }
+}

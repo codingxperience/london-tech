@@ -1292,25 +1292,33 @@ test("collection filters round-trip and apply actual brand, price and stock valu
   assert.equal(readCollectionFilters("?min=-1&max=no").min, "")
 })
 
-test("direct registration and sign-in are focused routes without the store header or footer", async () => {
+test("registration and sign-in share a focused email-first entry without the store header or footer", async () => {
   await openRoute("/register/?next=%2Faccount%2Fwishlist%2F")
   assert.equal(container.querySelector(".site-footer"), null)
   assert.equal(container.querySelector(".header-search"), null)
-  assert.match(
+  assert.equal(
     container.querySelector(".auth-form-panel h1").textContent,
-    /Create your account/,
+    "Register / Sign in",
   )
+  assert.equal(container.querySelector('input[name="password"]'), null)
+  assert.equal(
+    container.querySelector(".auth-social-options button").disabled,
+    true,
+  )
+  await fillInput(
+    container.querySelector('[name="email"]'),
+    "shopper@example.com",
+  )
+  await dispatch(
+    container.querySelector("form"),
+    new dom.Event("submit", { bubbles: true, cancelable: true }),
+  )
+  assert.equal(container.querySelector("h1").textContent, "Sign in")
+  await click(container.querySelector(".auth-create-link"))
   assert.equal(container.querySelector('input[name="password"]').minLength, 12)
   assert.equal(container.querySelector('input[name="terms"]').required, true)
-  await click(
-    [...container.querySelectorAll(".auth-mode-switch button")].find(
-      (button) => button.textContent === "Sign in",
-    ),
-  )
-  assert.equal(dom.location.pathname, "/login/")
-  assert.match(container.querySelector("h1").textContent, /Sign in/)
+  await click(container.querySelector(".auth-create-link"))
   assert.equal(container.querySelector(".auth-welcome"), null)
-  assert.equal(container.querySelector(".auth-intro"), null)
   assert.equal(
     new URLSearchParams(dom.location.search).get("next"),
     "/account/wishlist/",
@@ -1490,14 +1498,15 @@ test("the account dropdown groups wishlist and opens a closable registration dia
     "The underlying product stays in place",
   )
   assert.equal(dom.location.pathname, "/products/iphone-17-pro-max/")
-  assert.equal(dom.document.activeElement.name, "name")
+  assert.equal(dom.document.activeElement.name, "email")
+  await fillInput(dialog.querySelector('[name="email"]'), "shopper@example.com")
+  await dispatch(
+    dialog.querySelector("form"),
+    new dom.Event("submit", { bubbles: true, cancelable: true }),
+  )
   await click(dialog.querySelector('[aria-label="Show password"]'))
   assert.equal(dialog.querySelector('input[name="password"]').type, "text")
-  await click(
-    [...dialog.querySelectorAll(".auth-mode-switch button")].find(
-      (button) => button.textContent === "Sign in",
-    ),
-  )
+  await click(dialog.querySelector(".auth-email-choice button"))
   assert.equal(container.querySelector('input[name="name"]'), null)
   await dispatch(dom, key("Escape"))
   assert.equal(container.querySelector('[role="dialog"]'), null)
@@ -1565,6 +1574,10 @@ test("guest wishlist is available under account and sign-in merges it into the a
     dom.document.documentElement.scrollTop = 600
     const dialog = container.querySelector('[role="dialog"]')
     await fillInput(dialog.querySelector('[name="email"]'), customer.email)
+    await dispatch(
+      dialog.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
     await fillInput(
       dialog.querySelector('[name="password"]'),
       "a-test-only-password",
@@ -1904,6 +1917,10 @@ test("sign-in errors preserve the form and registration submits working credenti
   try {
     await openRoute("/login/?next=%2Faccount%2Fprofile%2F")
     await fillInput(container.querySelector('[name="email"]'), customer.email)
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
     await fillInput(
       container.querySelector('[name="password"]'),
       "incorrect-password",
@@ -1920,14 +1937,9 @@ test("sign-in errors preserve the form and registration submits working credenti
       container.querySelector('[name="email"]').value,
       customer.email,
     )
-    await click(
-      [...container.querySelectorAll(".auth-mode-switch button")].find(
-        (button) => button.textContent === "Register",
-      ),
-    )
+    await click(container.querySelector(".auth-create-link"))
     assert.equal(container.querySelector('[role="alert"]'), null)
     await fillInput(container.querySelector('[name="name"]'), customer.name)
-    await fillInput(container.querySelector('[name="email"]'), customer.email)
     await fillInput(
       container.querySelector('[name="password"]'),
       "a-test-only-password",
