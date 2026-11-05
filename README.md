@@ -27,6 +27,8 @@ Vercel API requests use an explicit wildcard rewrite to `api/router.js`; the sam
 
 ## Included
 
+Email-code account access and branded notifications are described in [email setup](docs/EMAIL_SETUP.md), including the store Gmail activation steps.
+
 - Existing storefront design and source imagery.
 - 12 categories, image-led Recommended / Shop by brand navigation, collapsible filters, price ranges, sorting, pagination and product comparison. Collection filters are retained in the URL.
 - Vertical desktop thumbnails beside the main image, horizontal mobile thumbnails, hover/focus previews, pointer-following zoom and a keyboard-accessible image viewer.

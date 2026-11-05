@@ -155,11 +155,29 @@ async function initialize() {
 
   for (const text of statements) await db.query(text)
 
+  // Several serverless instances can see a new release simultaneously. Keep
+  // this additive migration under one transaction-scoped PostgreSQL lock.
+  await db.transaction(async (tx) => {
+    if (url) await tx.query("SELECT pg_advisory_xact_lock(181956287)")
+    await tx.query(
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified_at TIMESTAMPTZ",
+    )
+    await tx.query(
+      `CREATE TABLE IF NOT EXISTS email_challenges (id TEXT PRIMARY KEY,email TEXT NOT NULL,browser_hash TEXT NOT NULL,code_hash TEXT NOT NULL,state TEXT NOT NULL DEFAULT 'sending' CHECK(state IN ('sending','ready','failed','consumed','expired','locked')),attempts INTEGER NOT NULL DEFAULT 0 CHECK(attempts>=0),expires_at TIMESTAMPTZ NOT NULL,resend_at TIMESTAMPTZ NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(browser_hash,email))`,
+    )
+    if (url)
+      await tx.query("ALTER TABLE email_challenges ENABLE ROW LEVEL SECURITY")
+    await tx.query(
+      "CREATE INDEX IF NOT EXISTS email_challenges_expiry_idx ON email_challenges(expires_at)",
+    )
+  })
+
   // The backend connects as the table owner. Public Supabase Data API roles
   // have no policies, so enabling RLS closes anonymous access to store data.
   if (url)
     for (const table of [
       "users",
+      "email_challenges",
       "sessions",
       "oauth_accounts",
       "oauth_flows",

@@ -192,6 +192,79 @@
   outline: 3px solid #789cc5;
   outline-offset: 3px;
 }
+.auth-code-field {
+  min-width: 0;
+  margin: 5px 0 0;
+  padding: 0;
+  border: 0;
+}
+.auth-code-digits {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(6px, 1.8vw, 11px);
+}
+.commerce-surface .auth-unified .auth-code-digits input {
+  width: 100%;
+  min-width: 0;
+  height: clamp(48px, 10vw, 59px);
+  padding: 4px;
+  border: 1px solid #bac8d8;
+  border-radius: 6px;
+  background: #fff;
+  color: #0a2a50;
+  text-align: center;
+  font-family: inherit;
+  font-size: 25px;
+  font-weight: 800;
+  caret-color: #0a2a50;
+}
+.commerce-surface .auth-unified .auth-code-digits input[aria-invalid="true"] {
+  border-color: #c52b3c;
+}
+.commerce-surface .auth-unified .auth-code-intro {
+  margin: 0 0 9px;
+  color: #5b6b7e;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.auth-code-intro bdi {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #102d50;
+  font-weight: 700;
+}
+.commerce-surface .auth-unified :is(.auth-code-expiry, .auth-code-notice) {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  color: #526377;
+}
+.auth-resend {
+  justify-self: center;
+  padding: 9px 12px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: #163f70;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.auth-resend:disabled {
+  color: #647489;
+  cursor: default;
+  font-weight: 400;
+}
+.commerce-surface .auth-unified .auth-code-notice {
+  color: #10734e;
+}
+.auth-email-form[aria-busy="true"] > .button:disabled {
+  background: #0b2b51 !important;
+  color: #fff !important;
+}
 @media (max-width: 480px) {
   .commerce-surface .auth-card.auth-unified .auth-form-panel {
     padding: 45px 24px 25px;

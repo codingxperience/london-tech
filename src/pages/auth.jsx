@@ -1,5 +1,5 @@
 import "../auth-flow.css"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,6 +13,78 @@ import { useLocale } from "../lib/locale.jsx"
 import { localReturnPath } from "../lib/navigation.js"
 import { api, post } from "../lib/api.js"
 import { Button, Field, IconButton, Notice } from "../components/ui.jsx"
+
+const codeDigits = (value) =>
+  String(value)
+    .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 1632))
+    .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 1776))
+    .replace(/\D/g, "")
+    .slice(0, 6)
+
+function EmailCodeInput({ value, onChange, disabled, invalid }) {
+  const { t } = useLocale()
+  const inputs = useRef([])
+  const write = (index, raw) => {
+    const digits = codeDigits(raw)
+    if (digits.length > 1) {
+      onChange(digits)
+      inputs.current[Math.min(digits.length, 5)]?.focus()
+      return
+    }
+    // Keep the code contiguous: pasting, autofill and keyboard entry agree.
+    const next = value.slice(0, index) + digits + value.slice(index + 1)
+    onChange(next)
+    if (digits) inputs.current[Math.min(index + 1, 5)]?.focus()
+  }
+  return (
+    <fieldset className="auth-code-field" disabled={disabled}>
+      <legend className="sr-only">{t("Verification code")}</legend>
+      <div className="auth-code-digits" dir="ltr">
+        {Array.from({ length: 6 }, (_, index) => (
+          <input
+            key={index}
+            ref={(element) => {
+              inputs.current[index] = element
+            }}
+            aria-label={t("Code digit {number}", { number: index + 1 })}
+            aria-invalid={invalid || undefined}
+            aria-describedby="auth-code-expiry"
+            inputMode="numeric"
+            autoComplete={index === 0 ? "one-time-code" : "off"}
+            type="text"
+            value={value[index] || ""}
+            autoFocus={index === 0}
+            onChange={(event) => write(index, event.target.value)}
+            onFocus={(event) => event.target.select()}
+            onPaste={(event) => {
+              const digits = codeDigits(event.clipboardData.getData("text"))
+              if (!digits) return
+              event.preventDefault()
+              onChange(digits)
+              inputs.current[Math.min(digits.length, 5)]?.focus()
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Backspace" && !value[index] && index > 0) {
+                event.preventDefault()
+                onChange(value.slice(0, index - 1))
+                inputs.current[index - 1]?.focus()
+              }
+              if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
+                event.preventDefault()
+                inputs.current[
+                  Math.max(
+                    0,
+                    Math.min(5, index + (event.key === "ArrowRight" ? 1 : -1)),
+                  )
+                ]?.focus()
+              }
+            }}
+          />
+        ))}
+      </div>
+    </fieldset>
+  )
+}
 
 function ProviderIcon({ provider }) {
   if (provider === "apple")
@@ -65,7 +137,7 @@ export function Auth({
   dialog = false,
 }) {
   const { setUser, config } = useStore()
-  const { t } = useLocale()
+  const { t, formatNumber } = useLocale()
   const [stage, setStage] = useState("email")
   const [email, setEmail] = useState("")
   const [show, setShow] = useState(false)
@@ -73,6 +145,11 @@ export function Auth({
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [linking, setLinking] = useState(false)
+  const [challenge, setChallenge] = useState(null)
+  const [code, setCode] = useState("")
+  const [clock, setClock] = useState(Date.now)
+  const [codeNotice, setCodeNotice] = useState("")
+  const operation = useRef(0)
   const forgot = mode === "forgot",
     reset = mode === "reset"
   const register = stage === "register" && !forgot && !reset
@@ -81,11 +158,13 @@ export function Auth({
     ? "Forgot password?"
     : reset
       ? "Set a new password"
-      : register
-        ? "Create your account"
-        : stage === "password"
-          ? "Sign in"
-          : "Register / Sign in"
+      : stage === "code"
+        ? "Check your email"
+        : register
+          ? "Create your account"
+          : stage === "password"
+            ? "Sign in"
+            : "Register / Sign in"
   useEffect(() => {
     let active = true
     const params = new URLSearchParams(location.search)
@@ -94,6 +173,9 @@ export function Auth({
     setShow(false)
     setStage("email")
     setLinking(false)
+    setChallenge(null)
+    setCode("")
+    setCodeNotice("")
     if (!forgot && !reset && params.get("social") === "link") {
       api("auth/social-link")
         .then(({ link }) => {
@@ -110,8 +192,16 @@ export function Auth({
     }
     return () => {
       active = false
+      operation.current++
     }
   }, [mode])
+  useEffect(() => {
+    if (stage !== "code") return
+    const tick = () => setClock(Date.now())
+    tick()
+    const interval = window.setInterval(tick, 1000)
+    return () => window.clearInterval(interval)
+  }, [stage, challenge])
   const changeMode = (value) => {
     if (onModeChange) onModeChange(value)
     else {
@@ -128,22 +218,75 @@ export function Auth({
     setStage(value)
     setError("")
     setShow(false)
+    setCodeNotice("")
+  }
+
+  const complete = (user) => {
+    setUser(user)
+    if (dialog) onClose?.()
+    const destination = localReturnPath(
+      next,
+      user.role === "admin" ? "/admin/" : "/account/",
+    )
+    if (destination !== location.pathname + location.search)
+      navigate(destination)
+  }
+  async function requestCode() {
+    if (busy) return
+    const request = ++operation.current
+    setBusy(true)
+    setError("")
+    setCodeNotice("")
+    try {
+      const result = await post("auth/email-code", { email: email.trim() })
+      if (request !== operation.current) return
+      if (
+        !result.challengeId ||
+        !Number.isFinite(Date.parse(result.expiresAt)) ||
+        !Number.isFinite(Date.parse(result.resendAt))
+      )
+        throw new Error(t("Sign-in could not start. Please try again."))
+      setEmail(email.trim())
+      setChallenge(result)
+      setCode("")
+      setClock(Date.now())
+      if (stage === "code") setCodeNotice(t("A new code has been sent."))
+      setStage("code")
+    } catch (failure) {
+      if (request === operation.current) setError(failure.message)
+    } finally {
+      if (request === operation.current) setBusy(false)
+    }
   }
 
   async function submit(event) {
     event.preventDefault()
     if (busy) return
     if (!forgot && !reset && stage === "email") {
+      if (config.emailCodes) {
+        await requestCode()
+        return
+      }
       setEmail(email.trim())
       changeStage("password")
       return
     }
     setBusy(true)
     setError("")
+    const request = ++operation.current
     const data = Object.fromEntries(new FormData(event.currentTarget))
     try {
-      if (forgot) {
+      if (stage === "code" && !forgot && !reset) {
+        const result = await post("auth/verify-code", {
+          challengeId: challenge.challengeId,
+          code,
+          terms: true,
+        })
+        if (request !== operation.current) return
+        complete(result.user)
+      } else if (forgot) {
         const result = await post("auth/forgot-password", { email })
+        if (request !== operation.current) return
         setSuccess(result.message)
       } else if (reset) {
         const token = new URLSearchParams(location.search).get("token")
@@ -154,25 +297,20 @@ export function Auth({
             ),
           )
         await post("auth/reset-password", { token, password: data.password })
+        if (request !== operation.current) return
         setSuccess(t("Your password is updated. You can sign in now."))
       } else {
         const result = await post(register ? "auth/register" : "auth/login", {
           ...data,
           email,
         })
-        setUser(result.user)
-        if (dialog) onClose?.()
-        const destination = localReturnPath(
-          next,
-          result.user.role === "admin" ? "/admin/" : "/account/",
-        )
-        if (destination !== location.pathname + location.search)
-          navigate(destination)
+        if (request !== operation.current) return
+        complete(result.user)
       }
     } catch (failure) {
-      setError(failure.message)
+      if (request === operation.current) setError(failure.message)
     } finally {
-      setBusy(false)
+      if (request === operation.current) setBusy(false)
     }
   }
   async function social(provider) {
@@ -194,6 +332,14 @@ export function Auth({
     }
   }
   const initial = !forgot && !reset && stage === "email"
+  const verifying = !forgot && !reset && stage === "code"
+  const resendIn = challenge
+    ? Math.max(0, Math.ceil((Date.parse(challenge.resendAt) - clock) / 1000))
+    : 0
+  const expiresIn = challenge
+    ? Math.max(0, Math.ceil((Date.parse(challenge.expiresAt) - clock) / 1000))
+    : 0
+  const timeRemaining = `${Math.floor(expiresIn / 60)}:${String(expiresIn % 60).padStart(2, "0")}`
   const emailReady = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
   return (
     <div className="auth-card auth-card-simple auth-unified">
@@ -207,18 +353,21 @@ export function Auth({
         </IconButton>
       )}
       <section className="auth-form-panel" aria-labelledby="auth-form-title">
-        {(forgot || reset) && (
+        {(forgot || reset || verifying) && (
           <button
             type="button"
             className="auth-back"
-            onClick={() => changeMode("login")}
+            disabled={busy}
+            onClick={() =>
+              verifying ? changeStage("email") : changeMode("login")
+            }
           >
             <ArrowLeft size={16} />
-            {t("Back to sign in")}
+            {t(verifying ? "Change email" : "Back to sign in")}
           </button>
         )}
         <h1 id="auth-form-title">{t(title)}</h1>
-        {initial && (
+        {(initial || verifying) && (
           <p className="auth-security">
             <ShieldCheck size={14} aria-hidden="true" />
             {t("Your information is protected")}
@@ -245,169 +394,240 @@ export function Auth({
             key={forgot ? "forgot" : reset ? "reset" : stage}
             className="stack-form auth-email-form"
             onSubmit={submit}
+            aria-busy={busy}
           >
-            {!reset &&
-              (initial || forgot ? (
-                <Field
-                  label={t("Email address")}
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder={t("Email")}
-                  value={email}
-                  maxLength={254}
-                  onChange={(event) => setEmail(event.target.value)}
-                  required
-                />
-              ) : (
-                <div className="auth-email-choice">
+            {verifying ? (
+              <>
+                <p className="auth-code-intro">
+                  {t("Enter the 6-digit code sent to")}
                   <bdi>{email}</bdi>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLinking(false)
-                      changeStage("email")
-                    }}
-                  >
-                    {t("Edit")}
-                  </button>
-                  <input
-                    type="hidden"
-                    name="email"
-                    autoComplete="username"
-                    value={email}
-                  />
-                </div>
-              ))}
-            {register && (
-              <Field
-                label={t("Full name")}
-                name="name"
-                autoComplete="name"
-                minLength={2}
-                maxLength={100}
-                placeholder={t("Your full name")}
-                required
-              />
-            )}
-            {!initial && !forgot && (
-              <div className="password-field">
-                <Field
-                  label={t(reset ? "New password" : "Password")}
-                  name="password"
-                  type={show ? "text" : "password"}
-                  autoComplete={
-                    register || reset ? "new-password" : "current-password"
-                  }
-                  minLength={register || reset ? 12 : undefined}
-                  maxLength={128}
-                  hint={
-                    register || reset ? t("At least 12 characters.") : undefined
-                  }
-                  required
+                </p>
+                <EmailCodeInput
+                  value={code}
+                  onChange={(value) => {
+                    setCode(value)
+                    setError("")
+                  }}
+                  disabled={busy}
+                  invalid={Boolean(error)}
                 />
-                <IconButton
-                  label={t(show ? "Hide password" : "Show password")}
+                <p className="auth-code-expiry" id="auth-code-expiry">
+                  {expiresIn > 0
+                    ? t("Code expires in {time}", { time: timeRemaining })
+                    : t("This code has expired. Request a new one.")}
+                </p>
+                <button
+                  className="auth-resend"
                   type="button"
-                  aria-pressed={show}
-                  onClick={() => setShow(!show)}
+                  disabled={busy || resendIn > 0}
+                  onClick={requestCode}
                 >
-                  {show ? <EyeOff size={18} /> : <Eye size={18} />}
-                </IconButton>
-              </div>
-            )}
-            {register && (
-              <label className="auth-terms">
-                <input type="checkbox" name="terms" required />
-                <span>
-                  {t("I agree to the")}{" "}
-                  <a href="/terms/">{t("Terms of use")}</a> {t("and")}{" "}
-                  <a href="/privacy/">{t("Privacy policy")}</a>.
-                </span>
-              </label>
+                  {resendIn > 0
+                    ? t("Resend code in {seconds}s", {
+                        seconds: formatNumber(resendIn),
+                      })
+                    : t("Resend code")}
+                </button>
+                {codeNotice && (
+                  <p className="auth-code-notice" role="status">
+                    {codeNotice}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                {!reset &&
+                  (initial || forgot ? (
+                    <Field
+                      label={t("Email address")}
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      placeholder={t("Email")}
+                      value={email}
+                      maxLength={254}
+                      onChange={(event) => setEmail(event.target.value)}
+                      required
+                    />
+                  ) : (
+                    <div className="auth-email-choice">
+                      <bdi>{email}</bdi>
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() => {
+                          setLinking(false)
+                          changeStage("email")
+                        }}
+                      >
+                        {t("Edit")}
+                      </button>
+                      <input
+                        type="hidden"
+                        name="email"
+                        autoComplete="username"
+                        value={email}
+                      />
+                    </div>
+                  ))}
+                {register && (
+                  <Field
+                    label={t("Full name")}
+                    name="name"
+                    autoComplete="name"
+                    minLength={2}
+                    maxLength={100}
+                    placeholder={t("Your full name")}
+                    required
+                  />
+                )}
+                {!initial && !forgot && (
+                  <div className="password-field">
+                    <Field
+                      label={t(reset ? "New password" : "Password")}
+                      name="password"
+                      type={show ? "text" : "password"}
+                      autoComplete={
+                        register || reset ? "new-password" : "current-password"
+                      }
+                      minLength={register || reset ? 12 : undefined}
+                      maxLength={128}
+                      hint={
+                        register || reset
+                          ? t("At least 12 characters.")
+                          : undefined
+                      }
+                      required
+                    />
+                    <IconButton
+                      label={t(show ? "Hide password" : "Show password")}
+                      type="button"
+                      aria-pressed={show}
+                      onClick={() => setShow(!show)}
+                    >
+                      {show ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </IconButton>
+                  </div>
+                )}
+                {register && (
+                  <label className="auth-terms">
+                    <input type="checkbox" name="terms" required />
+                    <span>
+                      {t("I agree to the")}{" "}
+                      <a href="/terms/">{t("Terms of use")}</a> {t("and")}{" "}
+                      <a href="/privacy/">{t("Privacy policy")}</a>.
+                    </span>
+                  </label>
+                )}
+              </>
             )}
             <Button
               type="submit"
               busy={busy}
-              disabled={(initial || forgot) && !emailReady}
+              disabled={
+                verifying
+                  ? code.length !== 6 || expiresIn === 0
+                  : (initial || forgot) && !emailReady
+              }
             >
               {t(
-                forgot
-                  ? "Send reset link"
-                  : reset
-                    ? "Update password"
-                    : register
-                      ? "Create your account"
-                      : initial
-                        ? "Continue"
-                        : "Sign in",
+                verifying
+                  ? "Verify & continue"
+                  : forgot
+                    ? "Send reset link"
+                    : reset
+                      ? "Update password"
+                      : register
+                        ? "Create your account"
+                        : initial
+                          ? "Continue"
+                          : "Sign in",
               )}
             </Button>
           </form>
         )}
         {!forgot && !reset && !success && (
           <>
-            <button
-              type="button"
-              className="auth-forgot"
-              onClick={() => changeMode("forgot")}
-            >
-              {t("Trouble signing in?")}
-            </button>
-            {stage === "password" && !linking && (
-              <button
-                type="button"
-                className="auth-create-link"
-                onClick={() => changeStage("register")}
-              >
-                {t("New to London Tech? Create an account")}
-              </button>
-            )}
-            {register && (
-              <button
-                type="button"
-                className="auth-create-link"
-                onClick={() => changeStage("password")}
-              >
-                {t("Already have an account? Sign in")}
-              </button>
-            )}
-            <div className="auth-provider-divider">
-              <span>{t("Or continue with")}</span>
-            </div>
-            <div className="auth-social-options">
-              {[
-                ["google", "Google"],
-                ["facebook", "Facebook"],
-                ["apple", "Apple"],
-              ].map(([provider, name]) => {
-                const available =
-                  provider !== "apple" &&
-                  config.socialProviders?.[provider] === true
-                return (
+            {!verifying && (
+              <>
+                <button
+                  type="button"
+                  className="auth-forgot"
+                  onClick={() => changeMode("forgot")}
+                >
+                  {t("Trouble signing in?")}
+                </button>
+                {stage === "password" && !linking && (
                   <button
                     type="button"
-                    key={provider}
-                    disabled={!available || busy}
-                    onClick={() => social(provider)}
-                    aria-label={t("Continue with " + name)}
-                    title={!available ? t("Available soon") : undefined}
+                    className="auth-create-link"
+                    disabled={busy}
+                    onClick={() =>
+                      config.emailCodes
+                        ? requestCode()
+                        : changeStage("register")
+                    }
                   >
-                    <ProviderIcon provider={provider} />
-                    <span>{name}</span>
+                    {t("New to London Tech? Create an account")}
                   </button>
-                )
-              })}
-            </div>
-            {!config.socialProviders?.google &&
-              !config.socialProviders?.facebook && (
-                <p className="auth-provider-status">
-                  {t("Social sign-in will be available soon.")}
+                )}
+                {register && (
+                  <button
+                    type="button"
+                    className="auth-create-link"
+                    onClick={() => changeStage("password")}
+                  >
+                    {t("Already have an account? Sign in")}
+                  </button>
+                )}
+                {config.emailCodes && initial && (
+                  <button
+                    type="button"
+                    className="auth-create-link"
+                    disabled={!emailReady || busy}
+                    onClick={() => changeStage("password")}
+                  >
+                    {t("Sign in with password")}
+                  </button>
+                )}
+                <div className="auth-provider-divider">
+                  <span>{t("Or continue with")}</span>
+                </div>
+                <div className="auth-social-options">
+                  {[
+                    ["google", "Google"],
+                    ["facebook", "Facebook"],
+                    ["apple", "Apple"],
+                  ].map(([provider, name]) => {
+                    const available =
+                      provider !== "apple" &&
+                      config.socialProviders?.[provider] === true
+                    return (
+                      <button
+                        type="button"
+                        key={provider}
+                        disabled={!available || busy}
+                        onClick={() => social(provider)}
+                        aria-label={t("Continue with " + name)}
+                        title={!available ? t("Available soon") : undefined}
+                      >
+                        <ProviderIcon provider={provider} />
+                        <span>{name}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                {!config.socialProviders?.google &&
+                  !config.socialProviders?.facebook && (
+                    <p className="auth-provider-status">
+                      {t("Social sign-in will be available soon.")}
+                    </p>
+                  )}
+                <p className="auth-country">
+                  {t("Location")} <strong>{t("Uganda")}</strong>
                 </p>
-              )}
-            <p className="auth-country">
-              {t("Location")} <strong>{t("Uganda")}</strong>
-            </p>
+              </>
+            )}
             <p className="auth-policy">
               {t("By continuing, you agree to our")}{" "}
               <a href="/terms/">{t("Terms of use")}</a> {t("and")}{" "}

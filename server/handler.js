@@ -52,6 +52,10 @@ import {
   socialProviders,
   socialRoute,
 } from "./social-auth.js"
+import { emailAuthRoute } from "./email-auth.js"
+import { emailReady, sendEmail } from "./email.js"
+import { passwordResetEmail } from "./email-templates.js"
+import { retryOrderEmails } from "./email-dispatch.js"
 import {
   workspaceRoute,
   workspaceSummary,
@@ -522,11 +526,19 @@ export default async function handler(req, res) {
 
     if (!paymentHook) checkOrigin(req)
 
+    if (route === "internal/email-dispatch" && method === "GET") {
+      const secret = process.env.CRON_SECRET
+      if (!secret || !safeEqual(req.headers.authorization, "Bearer " + secret))
+        fail(401, "Unauthorized.")
+      return send(res, await retryOrderEmails(await getDatabase()))
+    }
+
     if (route === "config" && method === "GET")
       return send(res, {
         accounts: databaseConfigured(),
         payments: databaseConfigured() && onlinePaymentsReady(),
         orderEmails: databaseConfigured() && orderEmailReady(),
+        emailCodes: databaseConfigured() && emailReady(),
         analytics: databaseConfigured(),
         newsletter: databaseConfigured(),
         cashOnDelivery: databaseConfigured(),
@@ -616,6 +628,17 @@ export default async function handler(req, res) {
     if (route === "auth/me" && method === "GET")
       return send(res, { user: publicUser(user) })
 
+    const emailAuth = await emailAuthRoute({
+      route,
+      method,
+      body,
+      db,
+      req,
+      res,
+      ip,
+    })
+    if (emailAuth) return send(res, emailAuth.body, emailAuth.status || 200)
+
     const social = await socialRoute({
       route,
       method,
@@ -630,6 +653,8 @@ export default async function handler(req, res) {
     if (social) return send(res, social)
 
     if (route === "auth/register" && method === "POST") {
+      if (emailReady())
+        fail(409, "Please verify your email with a code to create an account.")
       const input = z
         .object({ name: text(100).min(2), email, password })
         .parse(body)
@@ -717,7 +742,7 @@ export default async function handler(req, res) {
     }
 
     if (route === "auth/forgot-password" && method === "POST") {
-      if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM)
+      if (!emailReady())
         fail(
           503,
           "Password reset email is not available yet. Please contact the store for help.",
@@ -740,29 +765,20 @@ export default async function handler(req, res) {
 
         const link = currentOrigin(req) + "/reset-password/?token=" + token
 
-        const mail = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          signal: AbortSignal.timeout(10000),
-          headers: {
-            Authorization: "Bearer " + process.env.RESEND_API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            from: process.env.EMAIL_FROM,
+        try {
+          await sendEmail({
             to: input.email,
-            subject: "Reset your London Tech password",
-            text:
-              "Reset your password: " +
-              link +
-              "\nThis link expires in 30 minutes. If you did not request it, ignore this email.",
-          }),
-        })
-
-        if (!mail.ok)
-          fail(
-            503,
-            "Password reset email could not be sent. Please try again later.",
-          )
+            ...passwordResetEmail({ url: link, expiresMinutes: 30 }),
+            idempotencyKey: "london-tech/password-reset/" + hash(token),
+          })
+        } catch {
+          await db.query("DELETE FROM reset_tokens WHERE token_hash=$1", [
+            hash(token),
+          ])
+          // Keep the same response for registered and unknown addresses.
+          // Delivery failures remain observable without revealing membership.
+          console.error("Password reset email was not accepted by the sender")
+        }
       }
 
       return send(res, {
@@ -1348,8 +1364,24 @@ export default async function handler(req, res) {
           if (!orderEmailReady())
             fail(503, "Connect the order email sender first.")
           await rateLimit(db, "order-email:" + user.id, 15, 15)
-          const input = z.object({ id: text(120).min(1) }).parse(body)
-          await deliverOrderEmail(db, input.id, orderEmails[1])
+          const input = z
+            .object({
+              id: text(120).min(1),
+              confirmResend: z.boolean().default(false),
+            })
+            .parse(body)
+          const job = (await listOrderEmails(db, orderEmails[1])).find(
+            (entry) => entry.id === input.id,
+          )
+          if (!job) fail(404, "Email was not found.")
+          if (job.state === "uncertain" && !input.confirmResend)
+            fail(
+              409,
+              "Check the sender’s Sent folder before sending this email again.",
+            )
+          await deliverOrderEmail(db, input.id, orderEmails[1], {
+            allowUncertainRetry: input.confirmResend,
+          })
         }
         return send(res, {
           configured: orderEmailReady(),
@@ -1464,7 +1496,7 @@ export default async function handler(req, res) {
             )
           return queueOrderEmail(
             tx,
-            { ...row, details },
+            { ...row, status: input.status, details },
             randomUUID(),
             statusChanged
               ? orderUpdateTitle(input.status, details.fulfillment)
@@ -1551,11 +1583,20 @@ export default async function handler(req, res) {
             [row.id, amount, JSON.stringify(details)],
           )
 
-          return (await tx.query("SELECT * FROM orders WHERE id=$1", [row.id]))
-            .rows[0]
+          const updated = (
+            await tx.query("SELECT * FROM orders WHERE id=$1", [row.id])
+          ).rows[0]
+          const notification = await queueOrderEmail(
+            tx,
+            updated,
+            "quote-" + randomUUID(),
+            "Quote ready",
+          )
+          return { order: updated, notification }
         })
+        await deliverOrderEmail(db, result.notification, result.order.id)
         await audit(db, user.id, "order.quoted", { id: quoteRoute[1] })
-        return send(res, { order: publicOrder(result) })
+        return send(res, { order: publicOrder(result.order) })
       }
 
       if (route === "admin/settings" && method === "PUT") {

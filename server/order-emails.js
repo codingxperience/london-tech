@@ -1,7 +1,7 @@
-import { money } from "../src/data/catalog.js"
+import { emailProvider, emailReady, sendEmail } from "./email.js"
+import { orderEmail } from "./email-templates.js"
 
-export const orderEmailReady = () =>
-  Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM)
+export const orderEmailReady = emailReady
 
 export function orderUpdateTitle(status, fulfillment) {
   if (status === "ready")
@@ -27,13 +27,27 @@ export async function queueOrderEmail(tx, order, event, title) {
   const details = order.details
   const payload = {
     to: details.customer.email,
+    name: details.customer.name,
     title: details.paymentMode === "test" ? "Test order · " + title : title,
     test: details.paymentMode === "test",
+    status: order.status,
     amount: order.amount == null ? null : Number(order.amount),
+    subtotal: details.subtotal,
+    deliveryFee: details.deliveryFee,
     payment: order.payment_status,
     fulfillment: details.fulfillment,
+    items: details.items,
+    district: details.customer.district,
+    address: {
+      district: details.customer.district,
+      address: details.customer.address,
+    },
+    tracking: details.tracking,
     receipt: details.cashReceipt?.receipt,
   }
+  // Store the rendered message with the event. Retries must use the same
+  // contents even after a product, order, or email template changes.
+  payload.message = orderEmail({ orderId: order.id, payload })
   await tx.query(
     `INSERT INTO order_emails(id,order_id,payload) VALUES($1,$2,$3::jsonb) ON CONFLICT(id) DO NOTHING`,
     [id, order.id, JSON.stringify(payload)],
@@ -41,83 +55,77 @@ export async function queueOrderEmail(tx, order, event, title) {
   return id
 }
 
-const escapeHtml = (value) =>
-  String(value).replace(
-    /[&<>"']/g,
-    (char) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
-        char
-      ],
-  )
-
-export async function deliverOrderEmail(db, id, orderId) {
-  if (!id || !orderEmailReady()) return
+export async function deliverOrderEmail(
+  db,
+  id,
+  orderId,
+  { allowUncertainRetry = false, automatic = false } = {},
+) {
+  if (!id || !orderEmailReady()) return { claimed: false }
+  const provider = emailProvider()
+  let job
   try {
     // Claim outside the order transaction so a mail provider outage cannot undo an order.
-    const {
-      rows: [job],
-    } = await db.query(
-      `UPDATE order_emails SET state='sending',attempts=attempts+1,updated_at=NOW() WHERE id=$1 AND order_id=$2 AND (state IN ('pending','failed') OR (state='sending' AND updated_at<NOW()-INTERVAL '2 minutes')) RETURNING *`,
-      [id, orderId],
+    const { rows } = await db.query(
+      `UPDATE order_emails SET state='sending',attempts=attempts+1,payload=jsonb_set(payload,'{deliveryProvider}',to_jsonb($3::text)),updated_at=NOW()
+       WHERE id=$1 AND order_id=$2 AND attempts<8
+         AND (NOT $5::boolean OR attempts=0 OR updated_at<=NOW()-LEAST(60.0,POWER(2.0,GREATEST(attempts-1,0)))*INTERVAL '1 minute')
+         AND (state IN ('pending','failed') OR (state='uncertain' AND $4::boolean) OR (state='sending' AND updated_at<NOW()-INTERVAL '2 minutes' AND ($4::boolean OR ($3='resend' AND payload->>'deliveryProvider'='resend' AND created_at>NOW()-INTERVAL '23 hours'))))
+         AND ($4::boolean OR COALESCE(payload->>'deliveryUncertain','false')<>'true' OR ($3='resend' AND payload->>'deliveryProvider'='resend' AND created_at>NOW()-INTERVAL '23 hours'))
+       RETURNING *`,
+      [id, orderId, provider, allowUncertainRetry === true, automatic === true],
     )
-    if (!job) return
+    job = rows[0]
+    if (!job) return { claimed: false }
     const p = job.payload
-    const origin = new URL(
-      process.env.PUBLIC_SITE_URL || "https://london-tech.vercel.app",
-    ).origin
-    const url = `${origin}/account/orders/${encodeURIComponent(job.order_id)}/`
-    const lines = [
-      `Order ${job.order_id}`,
-      p.test
-        ? "This order uses a simulated payment. No money was collected."
-        : "",
-      p.amount == null ? "" : `Total ${money(p.amount)}`,
-      p.payment === "cash_due" && !/cancelled/i.test(p.title)
-        ? `Pay in cash ${
-            p.fulfillment === "delivery" ? "on delivery" : "at pickup"
-          }.`
-        : "",
-      p.receipt ? `Cash receipt ${p.receipt}` : "",
-    ].filter(Boolean)
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      signal: AbortSignal.timeout(4000),
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-        "Idempotency-Key": `london-tech/${job.id}`,
-      },
-      body: JSON.stringify({
-        from: process.env.EMAIL_FROM,
-        to: [p.to],
-        subject: `${p.title} · ${job.order_id}`,
-        text: `${p.title}\n\n${lines.join("\n")}\n\nView your order: ${url}\n\nLondon Tech`,
-        html: `<div style="background:#f1f4f8;padding:28px 14px;font-family:Arial,sans-serif;color:#102943"><div style="max-width:520px;margin:auto;background:#fff;border:1px solid #dfe7f1;border-radius:14px;padding:28px"><p style="font-weight:bold;letter-spacing:.1em;color:#b71d35">LONDON TECH</p><h1 style="font-size:26px">${escapeHtml(p.title)}</h1>${lines.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}<p style="margin-top:28px"><a style="display:inline-block;background:#102943;color:#fff;padding:12px 20px;border-radius:7px;text-decoration:none" href="${escapeHtml(url)}">View order</a></p></div></div>`,
-      }),
+    const result = await sendEmail({
+      to: p.to,
+      ...(p.message || orderEmail({ orderId: job.order_id, payload: p })),
+      idempotencyKey: `london-tech/${job.id}`,
     })
-    const result = await response.json().catch(() => ({}))
     await db.query(
       `UPDATE order_emails SET state=$2,provider_id=$3,updated_at=NOW() WHERE id=$1 AND attempts=$4`,
-      [
-        id,
-        response.ok && result.id ? "sent" : "failed",
-        response.ok ? result.id || null : null,
-        job.attempts,
-      ],
+      [id, "sent", result.id, job.attempts],
     )
+    return { claimed: true, state: "sent" }
   } catch (error) {
-    // Release a claimed job only through its lease if the delivery result is uncertain.
+    const uncertain =
+      error.deliveryUncertain !== false ||
+      job?.payload?.deliveryUncertain === true
+    if (job)
+      await db
+        .query(
+          `UPDATE order_emails SET state=$3,payload=CASE WHEN $4 THEN jsonb_set(payload,'{deliveryUncertain}','true'::jsonb) ELSE payload END,updated_at=NOW() WHERE id=$1 AND state='sending' AND attempts=$2`,
+          [
+            id,
+            job.attempts,
+            uncertain
+              ? provider === "gmail"
+                ? "uncertain"
+                : "sending"
+              : "failed",
+            uncertain,
+          ],
+        )
+        .catch(() => {})
+    // Keep an uncertain claim until its lease expires; a retry reuses the key.
     console.error(
       "Order email could not be confirmed",
       error.code || error.name,
     )
+    return job
+      ? {
+          claimed: true,
+          state: uncertain ? "uncertain" : "failed",
+        }
+      : { claimed: false }
   }
 }
 
 export async function listOrderEmails(db, orderId) {
   const { rows } = await db.query(
-    `SELECT id,payload->>'title' AS title,CASE WHEN state='sending' AND updated_at<NOW()-INTERVAL '2 minutes' THEN 'failed' ELSE state END AS state,attempts,created_at AS "createdAt" FROM order_emails WHERE order_id=$1 ORDER BY created_at DESC LIMIT 30`,
-    [orderId],
+    `SELECT id,payload->>'title' AS title,COALESCE(payload->>'deliveryProvider',$2) AS provider,CASE WHEN state='sending' AND updated_at<NOW()-INTERVAL '2 minutes' THEN 'uncertain' ELSE state END AS state,attempts,created_at AS "createdAt" FROM order_emails WHERE order_id=$1 ORDER BY created_at DESC LIMIT 30`,
+    [orderId, emailProvider()],
   )
   return rows
 }

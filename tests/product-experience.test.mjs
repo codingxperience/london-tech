@@ -1165,7 +1165,7 @@ test("a fresh complete CommerceApp mount opens a product route with its own prov
     assert.equal(container.querySelector("h1")?.textContent, product.name)
     assert.equal(
       dom.document.title,
-      product.name + " in Uganda | London Tech Kampala",
+      product.name + " in Uganda | London Tech Stores Kampala",
     )
     assert.ok(container.querySelector(".product-main-image img"))
     assert.ok(
@@ -1956,6 +1956,171 @@ test("sign-in errors preserve the form and registration submits working credenti
     assert.match(
       container.querySelector(".account-content").textContent,
       /Account details/,
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("email code sign-in waits for delivery, accepts pasted codes, keeps errors visible and returns to the requested page", async () => {
+  const originalFetch = globalThis.fetch
+  const customer = {
+    id: "email-code-ui",
+    role: "customer",
+    name: "Code Shopper",
+    email: "shopper-with-a-long-email-address@example.com",
+    phone: "",
+    addresses: [],
+  }
+  let finishSend,
+    starts = 0,
+    verifies = 0,
+    submitted
+  globalThis.fetch = async (url, options = {}) => {
+    const path = String(url)
+    if (path.endsWith("/api/config"))
+      return {
+        ok: true,
+        json: async () => ({
+          accounts: true,
+          emailCodes: true,
+          socialProviders: {},
+        }),
+      }
+    if (path.endsWith("/auth/email-code")) {
+      starts++
+      return new Promise((resolve) => {
+        finishSend = () =>
+          resolve({
+            ok: true,
+            json: async () => ({
+              challengeId: "11111111-1111-4111-8111-111111111111",
+              expiresAt: new Date(Date.now() + 600000).toISOString(),
+              resendAt: new Date(Date.now() + 60000).toISOString(),
+              codeLength: 6,
+            }),
+          })
+      })
+    }
+    if (path.endsWith("/auth/verify-code")) {
+      verifies++
+      submitted = JSON.parse(options.body)
+      return verifies === 1
+        ? {
+            ok: false,
+            status: 400,
+            json: async () => ({
+              error: "This code is incorrect or expired. Please try again.",
+            }),
+          }
+        : { ok: true, json: async () => ({ user: customer }) }
+    }
+    return originalFetch(url, options)
+  }
+  try {
+    await openRoute("/login/?next=%2Faccount%2Fprofile%2F")
+    await fillInput(container.querySelector('[name="email"]'), customer.email)
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    assert.equal(
+      container.querySelector("form").getAttribute("aria-busy"),
+      "true",
+    )
+    assert.ok(container.querySelector(".button .spin"))
+    assert.equal(
+      container.querySelector(".auth-code-digits"),
+      null,
+      "Do not claim delivery before the provider accepts it",
+    )
+    await act(async () => finishSend())
+    assert.equal(starts, 1)
+    assert.equal(
+      container.querySelectorAll(".auth-code-digits input").length,
+      6,
+    )
+    assert.equal(container.querySelector(".auth-resend").disabled, true)
+    assert.equal(
+      container.querySelector('button[type="submit"]').disabled,
+      true,
+    )
+    const paste = async () => {
+      const event = new dom.Event("paste", { bubbles: true, cancelable: true })
+      Object.defineProperty(event, "clipboardData", {
+        value: { getData: () => "١٢٣٤٥٦" },
+      })
+      await dispatch(container.querySelector(".auth-code-digits input"), event)
+    }
+    await paste()
+    assert.equal(
+      [...container.querySelectorAll(".auth-code-digits input")]
+        .map((input) => input.value)
+        .join(""),
+      "123456",
+    )
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    assert.match(
+      container.querySelector('[role="alert"]').textContent,
+      /incorrect or expired/,
+    )
+    assert.ok(container.querySelector(".auth-code-digits"))
+    await paste()
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    assert.equal(submitted.code, "123456")
+    assert.equal(submitted.terms, true)
+    assert.equal(dom.location.pathname, "/account/profile/")
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("email delivery errors keep the shopper on the editable email step", async () => {
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async (url, options) => {
+    if (String(url).endsWith("/api/config"))
+      return {
+        ok: true,
+        json: async () => ({ accounts: true, emailCodes: true }),
+      }
+    if (String(url).endsWith("/auth/email-code"))
+      return {
+        ok: false,
+        status: 503,
+        json: async () => ({
+          error: "The code could not be sent. Please try again.",
+        }),
+      }
+    return originalFetch(url, options)
+  }
+  try {
+    await openRoute("/register/")
+    await fillInput(
+      container.querySelector('[name="email"]'),
+      "shopper@example.com",
+    )
+    await dispatch(
+      container.querySelector("form"),
+      new dom.Event("submit", { bubbles: true, cancelable: true }),
+    )
+    assert.match(
+      container.querySelector('[role="alert"]').textContent,
+      /could not be sent/,
+    )
+    assert.equal(
+      container.querySelector('[name="email"]').value,
+      "shopper@example.com",
+    )
+    assert.equal(container.querySelector(".auth-code-digits"), null)
+    assert.equal(
+      container.querySelector('button[type="submit"]').disabled,
+      false,
     )
   } finally {
     globalThis.fetch = originalFetch

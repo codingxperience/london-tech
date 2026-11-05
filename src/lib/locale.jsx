@@ -315,6 +315,29 @@ const arabic = {
   "smart watches": "الساعات الذكية",
   "premium accessories": "الملحقات المميزة",
   "Register / Sign in": "إنشاء حساب / تسجيل الدخول",
+  "Check your email": "تحقق من بريدك الإلكتروني",
+  "Change email": "تغيير البريد الإلكتروني",
+  "Enter the 6-digit code sent to": "أدخل الرمز المكون من 6 أرقام المرسل إلى",
+  "Verification code": "رمز التحقق",
+  "Code digit {number}": "الرقم {number} من رمز التحقق",
+  "Code expires in {time}": "تنتهي صلاحية الرمز خلال {time}",
+  "Resend code in {seconds}s": "إعادة إرسال الرمز بعد {seconds} ثانية",
+  "Resend code": "إعادة إرسال الرمز",
+  "Verify & continue": "تحقق وتابع",
+  "A new code has been sent.": "تم إرسال رمز جديد.",
+  "This code has expired. Request a new one.":
+    "انتهت صلاحية الرمز. اطلب رمزاً جديداً.",
+  "Sign in with password": "تسجيل الدخول بكلمة المرور",
+  "This code is incorrect or expired. Please try again.":
+    "الرمز غير صحيح أو انتهت صلاحيته. حاول مرة أخرى.",
+  "The code could not be sent. Please try again.":
+    "تعذر إرسال الرمز. حاول مرة أخرى.",
+  "Please wait 60 seconds before requesting another code.":
+    "يرجى الانتظار 60 ثانية قبل طلب رمز آخر.",
+  "Too many incorrect codes. Please wait 15 minutes and try again.":
+    "محاولات غير صحيحة كثيرة. انتظر 15 دقيقة ثم حاول مرة أخرى.",
+  "Email sign-in is not available yet. Please sign in with your password.":
+    "الدخول برمز البريد غير متاح حالياً. استخدم كلمة المرور.",
   "Available soon": "متاح قريباً",
   "Google and Facebook sign-in will be available soon.":
     "سيتوفر تسجيل الدخول عبر Google وFacebook قريباً.",

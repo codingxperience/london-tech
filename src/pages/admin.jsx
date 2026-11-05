@@ -2119,11 +2119,18 @@ function OrderEmailLog({ orderId }) {
   const [error, setError] = useState("")
   const [busy, setBusy] = useState(false)
   const path = `admin/orders/${encodeURIComponent(orderId)}/emails`
-  async function load(id) {
+  async function load(id, confirmResend = false) {
+    if (
+      confirmResend &&
+      !window.confirm(
+        "Delivery is unconfirmed. Check the store mailbox’s Sent folder first. Send this email again?",
+      )
+    )
+      return
     setBusy(true)
     setError("")
     try {
-      setData(await (id ? post(path, { id }) : api(path)))
+      setData(await (id ? post(path, { id, confirmResend }) : api(path)))
     } catch (failure) {
       setError(failure.message)
     } finally {
@@ -2159,24 +2166,31 @@ function OrderEmailLog({ orderId }) {
                     type={
                       email.state === "sent"
                         ? "success"
-                        : email.state === "failed"
+                        : ["failed", "uncertain"].includes(email.state)
                           ? "warning"
                           : ""
                     }
                   >
                     {email.state === "sent"
-                      ? "Accepted by Resend"
-                      : statusLabel(email.state)}
+                      ? "Accepted for delivery"
+                      : email.state === "uncertain"
+                        ? "Delivery unconfirmed"
+                        : statusLabel(email.state)}
                   </Badge>
                   {data.configured &&
-                    ["pending", "failed"].includes(email.state) && (
+                    ["pending", "failed", "uncertain"].includes(email.state) &&
+                    email.attempts < 8 && (
                       <Button
                         type="button"
                         variant="secondary"
                         disabled={busy}
-                        onClick={() => load(email.id)}
+                        onClick={() =>
+                          load(email.id, email.state === "uncertain")
+                        }
                       >
-                        Retry email
+                        {email.state === "uncertain"
+                          ? "Review & resend"
+                          : "Retry email"}
                       </Button>
                     )}
                 </li>

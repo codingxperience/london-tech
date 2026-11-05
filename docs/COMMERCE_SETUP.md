@@ -25,6 +25,10 @@ Set the following in Vercel → Project → Settings → Environment Variables. 
 | `ADMIN_PASSWORD` | Initial administrator password, at least 12 characters. |
 | `FLW_SECRET_KEY` | Flutterwave v3 server secret. Start with a test secret. |
 | `FLW_SECRET_HASH` | A long random webhook secret that exactly matches the hash configured in Flutterwave. |
+| `EMAIL_PROVIDER` | `gmail` for the selected sender, or `resend` for a verified-domain sender. |
+| `GMAIL_USER` | The Gmail sender address you control. |
+| `GMAIL_APP_PASSWORD` | Secret: a Google App Password for that account, never its regular password. |
+| `CRON_SECRET` | Secret: authenticates the daily email retry worker. |
 | `RESEND_API_KEY` | Optional server key for password resets and order updates. |
 | `EMAIL_FROM` | Optional: a sender address on your verified Resend domain. |
 
@@ -55,7 +59,7 @@ Open **Admin → Orders → an order → Update fulfillment**. Save a status, a 
 
 Order placement, verified payment, fulfillment changes and cancellation create separate email records. The record is saved with the order change, and the application attempts delivery after the change commits. **Customer emails** in the order editor shows the send state and lets staff retry an unsent email. Accepted by Resend means the provider accepted the request. After an uncertain send, allow two minutes for its claim to expire before reopening the log and retrying. Resend deduplicates retries with the same key within its [24-hour window](https://resend.com/docs/dashboard/emails/idempotency-keys).
 
-To activate delivery, [verify a domain you own in Resend](https://resend.com/docs/dashboard/domains/introduction), create a sending key, and set `RESEND_API_KEY` and `EMAIL_FROM` in Vercel Production. Use a sender on the verified domain, such as `London Tech <orders@your-domain.example>`, and redeploy. The storefront can keep its Vercel address. New events send automatically once configured. Earlier pending records remain available for staff review and individual retry.
+Set `EMAIL_PROVIDER=gmail`, `GMAIL_USER` to the sender address you control and the private `GMAIL_APP_PASSWORD` in Vercel Production, then redeploy. A verified-domain Resend sender remains supported. See [email setup](EMAIL_SETUP.md) for activation, codes, retries and delivery states.
 
 ## Prices, stock and checkout
 
@@ -63,7 +67,7 @@ The owner approved the proposed UGX prices, regular prices and opening quantitie
 
 In admin → Products, maintain each product's configuration, selling price, regular price, condition, warranty and remaining stock. New products start with unconfirmed prices and inventory: check **This price is confirmed by the store**, enter a stock quantity and save when ready. Unconfirmed guide prices are excluded from structured-data offers and cannot be ordered until the store confirms them. Checkout orders directly at published, confirmed prices. Nationwide district delivery rates and overrides are editable in Settings; collection at the supplied store address is free. See [delivery and checkout](DELIVERY_AND_CHECKOUT.md) for the launch formula and operating instructions.
 
-New checkout does not automatically turn an order into a quote request. Existing historical requests and quotes remain manageable in Admin → Orders. Those quotes retain their 24-hour validity and reserve stock for 30 minutes when online payment starts; the application does not claim to email a quote automatically.
+New checkout does not automatically turn an order into a quote request. Historical requests and quotes remain manageable in Admin → Orders. Quotes retain their 24-hour validity and reserve stock for 30 minutes when payment starts. Saving a quote queues an email notification.
 
 Payment status is server-controlled. Cash orders deduct stock immediately and can be prepared before payment; an administrator must explicitly record receipt of the full cash amount before completion. Online orders require provider verification. Paid orders cannot be manually marked unpaid or cancelled; refunds require review and the appropriate cash or provider process. Admin → Checkout follow-up lists failed and unfinished authenticated checkouts for customer follow-up.
 
