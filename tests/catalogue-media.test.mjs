@@ -7,7 +7,59 @@ import {
   galleryImages,
   productInformation,
 } from "../src/lib/product-experience.js"
-import { repairSeedCatalogue } from "../server/catalogue-migration.js"
+import {
+  adoptReferencePrices,
+  repairSeedCatalogue,
+  retireReferenceListings,
+} from "../server/catalogue-migration.js"
+
+test("reference prices replace old quotes once and preserve merchant figures and stock", async () => {
+  const db = new PGlite()
+  try {
+    await db.exec(`CREATE TABLE products (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ DEFAULT NOW());
+      CREATE TABLE catalogue_migrations (version TEXT PRIMARY KEY)`)
+    const quoted = products.find((product) => product.id === "oraimo-hypergan-65")
+    const adjusted = products.find((product) => product.id === "oraimo-powerhub-2")
+    const merchant = { ...adjusted, price: 62000, priceConfirmed: false, stock: 2 }
+    const old = { ...quoted, price: null, priceConfirmed: false, stock: 7 }
+    await db.query("INSERT INTO products(id,data) VALUES($1,$2),($3,$4)", [
+      old.id, JSON.stringify(old), merchant.id, JSON.stringify(merchant),
+    ])
+
+    assert.equal(await adoptReferencePrices(db), 1)
+    assert.equal(await adoptReferencePrices(db), 0)
+    const { rows } = await db.query("SELECT data FROM products ORDER BY id")
+    assert.deepEqual(rows.map(({ data }) => data), [
+      { ...old, price: 159315, priceConfirmed: true },
+      merchant,
+    ])
+  } finally {
+    await db.close()
+  }
+})
+
+test("retired reference listings are hidden without deleting stored products", async () => {
+  const db = new PGlite()
+  try {
+    await db.exec(
+      "CREATE TABLE products (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ DEFAULT NOW())",
+    )
+    const retired = { sku: "LT-ACC-003", active: true, stock: 4 }
+    const merchant = { sku: "SHOP-42", active: true, stock: 8 }
+    await db.query("INSERT INTO products(id,data) VALUES($1,$2),($3,$4)", [
+      "phone-chargers-by-brand",
+      JSON.stringify(retired),
+      "feature-phone-batteries",
+      JSON.stringify(merchant),
+    ])
+    assert.equal(await retireReferenceListings(db), 1)
+    assert.equal(await retireReferenceListings(db), 0)
+    const { rows } = await db.query("SELECT id,data FROM products ORDER BY id")
+    assert.deepEqual(rows.map((row) => row.data), [merchant, { ...retired, active: false }])
+  } finally {
+    await db.close()
+  }
+})
 
 test("known mismatched seed media is repaired without changing price, stock or selected configuration", () => {
   for (const id of [

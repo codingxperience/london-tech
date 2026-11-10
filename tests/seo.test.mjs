@@ -46,7 +46,7 @@ test("SEO metadata matches live catalogue truth, location and published review d
     resolveSeo("/products/" + changed.id + "/", {
       ...data,
       products: [{ ...changed, priceConfirmed: false }],
-    }).schemas.find((s) => s["@type"] === "Product").offers,
+    }).schemas.find((s) => s["@type"] === "Product"),
     undefined,
   )
 })
@@ -182,6 +182,23 @@ test("production HTML contains crawlable product and category content before Jav
   )
   assert.ok(product.includes("<h1>" + products[0].name + "</h1>"))
   assert.ok(product.includes('"@type":"Product"'))
+  const productSchema = [
+    ...product.matchAll(
+      /<script[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs,
+    ),
+  ]
+  assert.equal(productSchema.length, 1)
+  assert.ok(productSchema[0][0].includes("data-server-product"))
+  const graph = JSON.parse(productSchema[0][1])["@graph"]
+  const nodes = graph.filter(
+    (node) => node["@type"] === "Product",
+  )
+  assert.equal(nodes.length, 1)
+  assert.equal(nodes[0].brand["@id"], nodes[0].url + "#brand")
+  assert.equal(nodes[0].offers["@id"], nodes[0].url + "#offer")
+  assert.deepEqual(graph.find((node) => node["@type"] === "WebPage").mainEntity, {
+    "@id": nodes[0]["@id"],
+  })
   const category = await readFile("dist/collections/shop/index.html", "utf8")
   assert.ok(category.includes("/products/" + products[0].id + "/"))
   assert.ok(category.includes("?page=2"))
@@ -205,6 +222,9 @@ test("production HTML contains crawlable product and category content before Jav
   assert.ok(website.alternateName.includes("London Tech"))
   for (const [path, label] of [
     ["/collections/shop/", "Shop all electronics"],
+    ["/collections/apple-products-london/", "Apple Products"],
+    ["/collections/iphones-london/", "iPhones"],
+    ["/collections/samsung-galaxy-ultra-london/", "Samsung Galaxy Ultra"],
     ["/about/", "About London Tech"],
     ["/contact/", "Visit our Kampala store"],
   ]) {

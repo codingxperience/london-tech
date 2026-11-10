@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useStore } from "../store.jsx"
-import { defaultOrigin, resolveSeo } from "../lib/seo.js"
+import { defaultOrigin, jsonForHtml, resolveSeo } from "../lib/seo.js"
 
 export function SeoMetadata({ path }) {
   const { products, settings, pages, initialReviews } = useStore()
@@ -58,16 +58,24 @@ export function SeoMetadata({ path }) {
         link.href = value
       }
       let schema = document.getElementById("seo-structured-data")
+      // Keep the product graph Google received in the original HTML until navigation.
+      if (
+        existing === seo.canonical &&
+        schema?.hasAttribute("data-server-product")
+      )
+        return
       if (!schema) {
         schema = document.createElement("script")
         schema.type = "application/ld+json"
         schema.id = "seo-structured-data"
         document.head.append(schema)
       }
-      schema.textContent = JSON.stringify({
+      schema.removeAttribute("data-server-product")
+      const markup = jsonForHtml({
         "@context": "https://schema.org",
         "@graph": seo.schemas,
       })
+      if (schema.textContent !== markup) schema.textContent = markup
     }
     update()
     window.addEventListener("lt:location-meta", update)

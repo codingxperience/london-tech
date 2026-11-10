@@ -1,0 +1,3295 @@
+[
+  {
+    "id": "oraimo-hypergan-65",
+    "sku": "LT-MODEL-OCW-7652E",
+    "name": "Oraimo HyperGaN 65 65W GaN Charger Kit",
+    "category": "accessories",
+    "brand": "oraimo",
+    "price": 159315,
+    "description": "Compact three-port GaN charger kit with a USB-C cable. Confirm the plug type and included cable with the shop.",
+    "specifications": [
+      [
+        "Model",
+        "OCW-7652E"
+      ],
+      [
+        "Output",
+        "65W GaN"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-powerhub-2",
+    "sku": "LT-MODEL-OWS-U342",
+    "name": "Oraimo PowerHub 2 6-in-1 Power Cube",
+    "category": "accessories",
+    "brand": "oraimo",
+    "price": 55000,
+    "description": "White power cube with AC outlets and USB charging ports. Confirm the plug and socket type before ordering.",
+    "specifications": [
+      [
+        "Model",
+        "OWS-U342"
+      ],
+      [
+        "Design",
+        "6-in-1 power cube"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-magcable-60w",
+    "sku": "LT-MODEL-OCD-710CC",
+    "name": "Oraimo MagCable 60W USB-C Cable",
+    "category": "accessories",
+    "brand": "oraimo",
+    "price": 27000,
+    "description": "Black magnetic USB-C to USB-C cable with a braided jacket and a one-metre length.",
+    "specifications": [
+      [
+        "Model",
+        "OCD-710CC"
+      ],
+      [
+        "Cable",
+        "1 m USB-C to USB-C"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-spacebuds-2",
+    "sku": "LT-MODEL-OTW-631",
+    "name": "Oraimo SpaceBuds 2 Wireless Earbuds",
+    "category": "audio",
+    "brand": "oraimo",
+    "price": 170000,
+    "description": "Space Grey true wireless earbuds with a matching charging case and hybrid noise cancellation.",
+    "specifications": [
+      [
+        "Model",
+        "OTW-631"
+      ],
+      [
+        "Noise control",
+        "Hybrid ANC"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-spacebuds-air-2",
+    "sku": "LT-MODEL-OTW-325S",
+    "name": "Oraimo SpaceBuds Air 2 Wireless Earbuds",
+    "category": "audio",
+    "brand": "oraimo",
+    "price": 69000,
+    "description": "Half-in-ear wireless earbuds in the black charging case shown in the Jumia listing.",
+    "specifications": [
+      [
+        "Model",
+        "OTW-325S"
+      ],
+      [
+        "Fit",
+        "Half-in-ear"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-spacebuds-neo-plus",
+    "sku": "LT-MODEL-OTW-323P",
+    "name": "Oraimo SpaceBuds Neo+ Wireless Earbuds",
+    "category": "audio",
+    "brand": "oraimo",
+    "price": 99000,
+    "description": "True wireless earbuds with active noise cancellation and a metallic-finish charging case.",
+    "specifications": [
+      [
+        "Model",
+        "OTW-323P"
+      ],
+      [
+        "Noise control",
+        "Active noise cancellation"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-opensnap",
+    "sku": "LT-MODEL-OPN-373",
+    "name": "Oraimo OpenSnap Open-Ear Earbuds",
+    "category": "audio",
+    "brand": "oraimo",
+    "price": 127500,
+    "description": "Clip-on, open-ear wireless earbuds shown in black with the matching charging case.",
+    "specifications": [
+      [
+        "Model",
+        "OPN-373"
+      ],
+      [
+        "Fit",
+        "Open-ear clip"
+      ]
+    ]
+  },
+  {
+    "id": "anker-737-power-bank",
+    "sku": "LT-MODEL-A1289",
+    "name": "Anker 737 Power Bank 24K 140W",
+    "category": "accessories",
+    "brand": "Anker",
+    "price": 530000,
+    "description": "24,000 mAh portable power bank with a digital display, USB-C and USB-A ports.",
+    "specifications": [
+      [
+        "Model",
+        "A1289"
+      ],
+      [
+        "Capacity",
+        "24,000 mAh"
+      ]
+    ]
+  },
+  {
+    "id": "anker-prime-power-bank-300w",
+    "sku": "LT-MODEL-A110A",
+    "name": "Anker Prime Power Bank 26,250 mAh 300W",
+    "category": "accessories",
+    "brand": "Anker",
+    "price": 708600,
+    "description": "26,250 mAh three-port power bank with a display and up to 300W total output.",
+    "specifications": [
+      [
+        "Model",
+        "A110A"
+      ],
+      [
+        "Output",
+        "Up to 300W total"
+      ]
+    ]
+  },
+  {
+    "id": "anker-nano-car-charger-167w",
+    "sku": "LT-MODEL-A2737",
+    "name": "Anker Nano Car Charger 167.5W",
+    "category": "accessories",
+    "brand": "Anker",
+    "price": 299000,
+    "description": "Three-port charger for a compatible vehicle power socket, with USB-C and USB-A outputs.",
+    "specifications": [
+      [
+        "Model",
+        "A2737"
+      ],
+      [
+        "Ports",
+        "3 USB ports"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-life-q30",
+    "sku": "LT-MODEL-A3028",
+    "name": "Anker Soundcore Life Q30 Headphones",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 228000,
+    "description": "Black over-ear Bluetooth headphones with hybrid active noise cancellation.",
+    "specifications": [
+      [
+        "Model",
+        "A3028"
+      ],
+      [
+        "Noise control",
+        "Hybrid ANC"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-r50i",
+    "sku": "LT-MODEL-A3949",
+    "name": "Anker Soundcore R50i Wireless Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 79000,
+    "description": "True wireless in-ear earbuds with a compact charging case. This model is also sold as the Soundcore P20i in some regions.",
+    "specifications": [
+      [
+        "Model",
+        "A3949"
+      ],
+      [
+        "Fit",
+        "True wireless in-ear"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-r50i-nc",
+    "sku": "LT-MODEL-A3959",
+    "name": "Anker Soundcore R50i NC Wireless Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 106250,
+    "description": "Black true wireless earbuds with active noise cancellation. This model is also sold as the Soundcore P30i in some regions.",
+    "specifications": [
+      [
+        "Model",
+        "A3959"
+      ],
+      [
+        "Noise control",
+        "Active noise cancellation"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-a30i",
+    "sku": "LT-MODEL-A3958",
+    "name": "Anker Soundcore A30i Wireless Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 140000,
+    "description": "Black noise-cancelling earbuds with a slim, lipstick-style charging case.",
+    "specifications": [
+      [
+        "Model",
+        "A3958"
+      ],
+      [
+        "Case",
+        "Slim lipstick-style"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-liberty-4-nc",
+    "sku": "LT-MODEL-A3947",
+    "name": "Anker Soundcore Liberty 4 NC Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 245000,
+    "description": "Black in-ear Bluetooth earbuds with adaptive noise cancellation and a charging case.",
+    "specifications": [
+      [
+        "Model",
+        "A3947"
+      ],
+      [
+        "Noise control",
+        "Adaptive ANC"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-sport-x20",
+    "sku": "LT-MODEL-A3968",
+    "name": "Anker Soundcore Sport X20 Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 430000,
+    "description": "Wireless workout earbuds with adjustable ear hooks and a charging case.",
+    "specifications": [
+      [
+        "Model",
+        "A3968"
+      ],
+      [
+        "Fit",
+        "Adjustable ear hooks"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-space-one-pro",
+    "sku": "LT-MODEL-A3062",
+    "name": "Anker Soundcore Space One Pro Headphones",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 545000,
+    "description": "Cream over-ear wireless headphones with adaptive noise cancellation and a foldable design.",
+    "specifications": [
+      [
+        "Model",
+        "A3062"
+      ],
+      [
+        "Design",
+        "Foldable over-ear"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-space-a40",
+    "sku": "LT-MODEL-A3936",
+    "name": "Anker Soundcore Space A40 Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 395000,
+    "description": "Navy true wireless earbuds with adaptive noise cancellation and a matching charging case.",
+    "specifications": [
+      [
+        "Model",
+        "A3936"
+      ],
+      [
+        "Colour",
+        "Navy"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-p40i",
+    "sku": "LT-MODEL-A3955",
+    "name": "Anker Soundcore P40i Wireless Earbuds",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 180600,
+    "description": "Black wireless earbuds with adaptive noise cancellation and a charging case that doubles as a phone stand.",
+    "specifications": [
+      [
+        "Model",
+        "A3955"
+      ],
+      [
+        "Case",
+        "Built-in phone stand"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-life-u2",
+    "sku": "LT-MODEL-A3212",
+    "name": "Anker Soundcore Life U2 Neckband Headphones",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 150000,
+    "description": "Black Bluetooth in-ear headphones with a flexible neckband.",
+    "specifications": [
+      [
+        "Model",
+        "A3212"
+      ],
+      [
+        "Fit",
+        "Flexible neckband"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-motion-100",
+    "sku": "LT-MODEL-A3133",
+    "name": "Anker Soundcore Motion 100 Speaker",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 300000,
+    "description": "Compact Bluetooth speaker with a carry strap and USB-C charging.",
+    "specifications": [
+      [
+        "Model",
+        "A3133"
+      ],
+      [
+        "Charging",
+        "USB-C"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-select-2s",
+    "sku": "LT-MODEL-A3171",
+    "name": "Anker Soundcore Select 2S Speaker",
+    "category": "audio",
+    "brand": "Anker Soundcore",
+    "price": 590000,
+    "description": "Portable Bluetooth speaker with a wide grille and USB-C charging.",
+    "specifications": [
+      [
+        "Model",
+        "A3171"
+      ],
+      [
+        "Charging",
+        "USB-C"
+      ]
+    ]
+  },
+  {
+    "id": "itel-bl-5c-battery",
+    "sku": "LT-MODEL-ITEL-BL-5C",
+    "name": "itel BL-5C Feature Phone Battery",
+    "category": "accessories",
+    "brand": "itel",
+    "price": 17500,
+    "description": "Red replacement battery for compatible feature phones. Match the BL-5C marking and contact layout to your old battery.",
+    "specifications": [
+      [
+        "Battery model",
+        "BL-5C"
+      ],
+      [
+        "Type",
+        "Feature phone battery"
+      ]
+    ]
+  },
+  {
+    "id": "tecno-bl-5c-battery",
+    "sku": "LT-MODEL-TECNO-BL-5C",
+    "name": "TECNO BL-5C Feature Phone Battery",
+    "category": "accessories",
+    "brand": "tecno",
+    "price": 11000,
+    "description": "Black replacement battery for compatible feature phones, shown in blue packaging. Match the markings and contact layout to your old battery.",
+    "specifications": [
+      [
+        "Battery model",
+        "BL-5C"
+      ],
+      [
+        "Type",
+        "Feature phone battery"
+      ]
+    ]
+  },
+  {
+    "id": "itel-bl-25bi-battery",
+    "sku": "LT-MODEL-ITEL-BL-25BI",
+    "name": "itel BL-25BI Battery for IT-5600",
+    "category": "accessories",
+    "brand": "itel",
+    "price": 28000,
+    "description": "Red replacement battery for the itel IT-5600. Check that the battery label on your phone says BL-25BI.",
+    "specifications": [
+      [
+        "Battery model",
+        "BL-25BI"
+      ],
+      [
+        "Phone model",
+        "itel IT-5600"
+      ]
+    ]
+  },
+  {
+    "id": "tecno-camon-30-case",
+    "sku": "LT-MODEL-TECNO-CAMON30-CASE",
+    "name": "TECNO Camon 30 / 30 Pro Soft Case — Black",
+    "category": "accessories",
+    "brand": "tecno",
+    "price": 25175,
+    "description": "Soft black phone case. Confirm whether you need the Camon 30 or Camon 30 Pro fit before ordering.",
+    "specifications": [
+      [
+        "Fit",
+        "TECNO Camon 30 or Camon 30 Pro"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ],
+    "options": [
+      "TECNO Camon 30",
+      "TECNO Camon 30 Pro"
+    ]
+  },
+  {
+    "id": "excellent-flash-power-bank-30000",
+    "sku": "LT-MODEL-EXCELLENT-FLASH-30000",
+    "name": "Excellent Flash 30,000 mAh Power Bank",
+    "category": "accessories",
+    "brand": "excellent",
+    "price": 118750,
+    "description": "Portable power bank with built-in leads and a charge display. Check the included connector types against your device.",
+    "specifications": [
+      [
+        "Rated capacity",
+        "30,000 mAh"
+      ],
+      [
+        "Design",
+        "Built-in cables"
+      ]
+    ]
+  },
+  {
+    "id": "ruioo-21a-charger-kit",
+    "sku": "LT-MODEL-RUIOO-21A-3IN1",
+    "name": "Ruioo 2.1A Wall Charger with 3-in-1 Cable",
+    "category": "accessories",
+    "brand": "ruioo",
+    "price": 7800,
+    "description": "UK-style wall adapter with a braided cable for USB-C, Micro-USB and Lightning devices.",
+    "specifications": [
+      [
+        "Plug",
+        "UK three-pin"
+      ],
+      [
+        "Cable ends",
+        "USB-C, Micro-USB and Lightning"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-65w-three-port-charger",
+    "sku": "LT-MODEL-GALAXY-65W-TRIO",
+    "name": "65W Three-Port USB Charger for Samsung Galaxy",
+    "category": "accessories",
+    "brand": "",
+    "price": 23000,
+    "description": "Black three-port wall charger for compatible USB devices. The available power per port changes when you connect multiple devices.",
+    "specifications": [
+      [
+        "Ports",
+        "Two USB-C, one USB-A"
+      ],
+      [
+        "Listed output",
+        "Up to 65W"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-45w-usbc-charger",
+    "sku": "LT-MODEL-GALAXY-45W-KIT",
+    "name": "45W USB-C Wall Charger for Samsung Galaxy",
+    "category": "accessories",
+    "brand": "",
+    "price": 18500,
+    "description": "Black USB-C wall charger for compatible Samsung Galaxy devices. Confirm the cable and plug supplied with the kit.",
+    "specifications": [
+      [
+        "Listed output",
+        "Up to 45W"
+      ],
+      [
+        "Connector",
+        "USB-C"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-25w-usbc-charger",
+    "sku": "LT-MODEL-GALAXY-25W-KIT",
+    "name": "25W USB-C Wall Charger Kit for Samsung Galaxy",
+    "category": "accessories",
+    "brand": "",
+    "price": 14534,
+    "description": "Black USB-C adapter kit with a USB-C to USB-C cable for compatible Galaxy phones.",
+    "specifications": [
+      [
+        "Listed output",
+        "Up to 25W"
+      ],
+      [
+        "Cable",
+        "USB-C to USB-C"
+      ]
+    ]
+  },
+  {
+    "id": "iphone-lightning-charger-kit",
+    "sku": "LT-MODEL-IPHONE-LIGHTNING-KIT",
+    "name": "USB-C Wall Charger Kit for Lightning iPhones — White",
+    "category": "accessories",
+    "brand": "",
+    "price": 17500,
+    "description": "White three-pin adapter and a Lightning cable for compatible iPhones. Check which connector your iPhone uses before ordering.",
+    "specifications": [
+      [
+        "Phone connector",
+        "Lightning"
+      ],
+      [
+        "Plug",
+        "UK three-pin"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-microusb-charger-kit",
+    "sku": "LT-MODEL-ORAIMO-MICROUSB-KIT",
+    "name": "Oraimo Wall Charger with Micro-USB Cable",
+    "category": "accessories",
+    "brand": "oraimo",
+    "price": 11000,
+    "description": "Black USB wall adapter with a Micro-USB cable for compatible devices. Check the connector before ordering.",
+    "specifications": [
+      [
+        "Cable",
+        "USB-A to Micro-USB"
+      ],
+      [
+        "Type",
+        "USB wall adapter"
+      ]
+    ]
+  },
+  {
+    "id": "eydu-ed04-wall-charger",
+    "sku": "LT-MODEL-EYDU-ED04",
+    "name": "EYDU ED04 USB Wall Charger",
+    "category": "accessories",
+    "brand": "eydu",
+    "price": 7900,
+    "description": "White USB wall adapter. Confirm plug type, rated output and cable compatibility before ordering.",
+    "specifications": [
+      [
+        "Model",
+        "ED04"
+      ],
+      [
+        "Type",
+        "USB wall adapter"
+      ]
+    ]
+  },
+  {
+    "id": "five-port-usb-wall-charger",
+    "sku": "LT-MODEL-5PORT-USB-20W-PD",
+    "name": "5-Port USB Wall Charger — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 15000,
+    "description": "Multi-port adapter with USB-C and USB-A outputs. The retailer lists a 20W USB-C PD port. Confirm the plug style and supported output before ordering.",
+    "specifications": [
+      [
+        "USB-C PD",
+        "20W listed"
+      ],
+      [
+        "Ports",
+        "5"
+      ]
+    ]
+  },
+  {
+    "id": "usb-c-lightning-35w-wall-kit",
+    "sku": "LT-MODEL-USB-C-LIGHTNING-35W-KIT",
+    "name": "35W USB-C Wall Charger Kit for Lightning iPhones",
+    "category": "accessories",
+    "brand": "",
+    "price": 19750,
+    "description": "White wall adapter with USB-C to Lightning cable. Check your device connector and supported charging rate before ordering.",
+    "specifications": [
+      [
+        "Phone connector",
+        "Lightning"
+      ],
+      [
+        "Listed output",
+        "Up to 35W"
+      ]
+    ]
+  },
+  {
+    "id": "redmi-note-11-pro-silicone-blue",
+    "sku": "LT-CASE-REDMI-NOTE-11-PRO-SILICONE-BLUE",
+    "name": "Redmi Note 11 Pro Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Blue silicone case for Redmi Note 11 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Redmi Note 11 Pro"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a-series-car-case",
+    "sku": "LT-CASE-GALAXY-A-SERIES-CAR-CASE",
+    "name": "Galaxy A-Series Car Print Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 19200,
+    "description": "Car print with snap buckle case for Galaxy A05 / A05s / A15 / A06 / A16. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A05 / A05s / A15 / A06 / A16"
+      ],
+      [
+        "Finish",
+        "Car print with snap buckle"
+      ]
+    ],
+    "options": [
+      "Galaxy A05",
+      "Galaxy A05s",
+      "Galaxy A15",
+      "Galaxy A06",
+      "Galaxy A16"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "infinix-smart-8-carbon-case",
+    "sku": "LT-CASE-INFINIX-SMART-8-CARBON-CASE",
+    "name": "Infinix Smart 8 Carbon Pattern Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 23305,
+    "description": "Black carbon pattern case for Infinix Smart 8. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Infinix Smart 8"
+      ],
+      [
+        "Finish",
+        "Black carbon pattern"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-8-pro-silicone-black",
+    "sku": "LT-CASE-PIXEL-8-PRO-SILICONE-BLACK",
+    "name": "Google Pixel 8 Pro Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 29000,
+    "description": "Black silicone case for Google Pixel 8 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 8 Pro"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "redmi-a3-graffiti-case",
+    "sku": "LT-CASE-REDMI-A3-GRAFFITI-CASE",
+    "name": "Redmi A3 / A3x / A3 Pro / 14C Graffiti Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 14500,
+    "description": "Printed TPU case for Redmi A3 / A3x / A3 Pro / 14C. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Redmi A3 / A3x / A3 Pro / 14C"
+      ],
+      [
+        "Finish",
+        "Printed TPU"
+      ]
+    ],
+    "options": [
+      "Redmi A3",
+      "Redmi A3x",
+      "Redmi A3 Pro",
+      "Redmi 14C"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a20e-a10e-card-case",
+    "sku": "LT-CASE-GALAXY-A20E-A10E-CARD-CASE",
+    "name": "Galaxy A20e / A10e Card-Slot Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 20435,
+    "description": "Black wallet style case for Galaxy A20e / A10e. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A20e / A10e"
+      ],
+      [
+        "Finish",
+        "Black wallet style"
+      ]
+    ],
+    "options": [
+      "Galaxy A20e",
+      "Galaxy A10e"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "infinix-smart-10-plus-carbon-case",
+    "sku": "LT-CASE-INFINIX-SMART-10-PLUS-CARBON-CASE",
+    "name": "Infinix Smart 10 Plus Carbon Pattern Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 23305,
+    "description": "Black carbon pattern case for Infinix Smart 10 Plus. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Infinix Smart 10 Plus"
+      ],
+      [
+        "Finish",
+        "Black carbon pattern"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "itel-power-70-magnetic-case",
+    "sku": "LT-CASE-ITEL-POWER-70-MAGNETIC-CASE",
+    "name": "itel Power 70 Clear Magnetic Ring Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 19750,
+    "description": "Clear with black trim case for itel Power 70. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "itel Power 70"
+      ],
+      [
+        "Finish",
+        "Clear with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-5-brushed-case",
+    "sku": "LT-CASE-PIXEL-5-BRUSHED-CASE",
+    "name": "Google Pixel 5 Brushed TPU Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 22000,
+    "description": "Black brushed TPU case for Google Pixel 5. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 5"
+      ],
+      [
+        "Finish",
+        "Black brushed TPU"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "itel-a70-magnetic-cooling-case",
+    "sku": "LT-CASE-ITEL-A70-MAGNETIC-COOLING-CASE",
+    "name": "itel A70 Clear Magnetic Cooling Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 21725,
+    "description": "Clear with black trim case for itel A70. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "itel A70"
+      ],
+      [
+        "Finish",
+        "Clear with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "honor-magic-vs2-hinge-case",
+    "sku": "LT-CASE-HONOR-MAGIC-VS2-HINGE-CASE",
+    "name": "HONOR Magic Vs2 Clear Hinge Case with Stand",
+    "category": "accessories",
+    "brand": "",
+    "price": 149448,
+    "description": "Clear shell with stand case for HONOR Magic Vs2. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "HONOR Magic Vs2"
+      ],
+      [
+        "Finish",
+        "Clear shell with stand"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-8a-case-and-glass",
+    "sku": "LT-CASE-PIXEL-8A-CASE-AND-GLASS",
+    "name": "Google Pixel 8a Silicone Case with Screen Glass",
+    "category": "accessories",
+    "brand": "",
+    "price": 31000,
+    "description": "Black case and screen glass case for Google Pixel 8a. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 8a"
+      ],
+      [
+        "Finish",
+        "Black case and screen glass"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-pop-7-case-and-guard",
+    "sku": "LT-CASE-TECNO-POP-7-CASE-AND-GUARD",
+    "name": "TECNO Pop 7 Kickstand Case with Screen Guard",
+    "category": "accessories",
+    "brand": "",
+    "price": 30000,
+    "description": "Blue case with ring stand case for TECNO Pop 7. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Pop 7"
+      ],
+      [
+        "Finish",
+        "Blue case with ring stand"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "itel-a70-magnetic-case",
+    "sku": "LT-CASE-ITEL-A70-MAGNETIC-CASE",
+    "name": "itel A70 Clear Magnetic Ring Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 19750,
+    "description": "Clear with black trim case for itel A70. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "itel A70"
+      ],
+      [
+        "Finish",
+        "Clear with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s24-x-level-case",
+    "sku": "LT-CASE-GALAXY-S24-X-LEVEL-CASE",
+    "name": "X-Level Slim Matte Case for Galaxy S24 Ultra / S24+",
+    "category": "accessories",
+    "brand": "x-level",
+    "price": 65740,
+    "description": "Dark matte finish case for Galaxy S24 Ultra / S24+. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S24 Ultra / S24+"
+      ],
+      [
+        "Finish",
+        "Dark matte finish"
+      ]
+    ],
+    "options": [
+      "Galaxy S24 Ultra",
+      "Galaxy S24+"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "redmi-10c-10-power-case",
+    "sku": "LT-CASE-REDMI-10C-10-POWER-CASE",
+    "name": "Redmi 10C / 10 Power Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 23715,
+    "description": "Black shell case for Redmi 10C / Redmi 10 Power. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Redmi 10C / Redmi 10 Power"
+      ],
+      [
+        "Finish",
+        "Black shell"
+      ]
+    ],
+    "options": [
+      "Redmi 10C",
+      "Redmi 10 Power"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "itel-power-70-magnetic-cooling-case",
+    "sku": "LT-CASE-ITEL-POWER-70-MAGNETIC-COOLING-CASE",
+    "name": "itel Power 70 Clear Magnetic Cooling Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 21725,
+    "description": "Clear with black trim case for itel Power 70. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "itel Power 70"
+      ],
+      [
+        "Finish",
+        "Clear with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "infinix-hot-40-case-and-guard",
+    "sku": "LT-CASE-INFINIX-HOT-40-CASE-AND-GUARD",
+    "name": "Infinix Hot 40 Kickstand Case with Screen Guard",
+    "category": "accessories",
+    "brand": "",
+    "price": 30000,
+    "description": "Blue case with ring stand case for Infinix Hot 40. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Infinix Hot 40"
+      ],
+      [
+        "Finish",
+        "Blue case with ring stand"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-7a-textured-case",
+    "sku": "LT-CASE-PIXEL-7A-TEXTURED-CASE",
+    "name": "Google Pixel 7a Textured Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 21000,
+    "description": "Grey with black trim case for Google Pixel 7a. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 7a"
+      ],
+      [
+        "Finish",
+        "Grey with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "itel-a80-magnetic-cooling-case",
+    "sku": "LT-CASE-ITEL-A80-MAGNETIC-COOLING-CASE",
+    "name": "itel A80 4G Clear Magnetic Cooling Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 21450,
+    "description": "Clear with black trim case for itel A80 4G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "itel A80 4G"
+      ],
+      [
+        "Finish",
+        "Clear with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "itel-p65-magnetic-case",
+    "sku": "LT-CASE-ITEL-P65-MAGNETIC-CASE",
+    "name": "itel P65 4G Clear Magnetic Ring Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 19500,
+    "description": "Clear with black trim case for itel P65 4G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "itel P65 4G"
+      ],
+      [
+        "Finish",
+        "Clear with black trim"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a06-silicone-blue",
+    "sku": "LT-CASE-GALAXY-A06-SILICONE-BLUE",
+    "name": "Galaxy A06 Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 17100,
+    "description": "Blue silicone case for Galaxy A06. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A06"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-phantom-v-flip-2-card-case-black",
+    "sku": "LT-CASE-TECNO-PHANTOM-V-FLIP-2-CARD-CASE-BLACK",
+    "name": "TECNO Phantom V Flip2 Card Holder Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 26910,
+    "description": "Black pebbled finish case for TECNO Phantom V Flip2 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Phantom V Flip2 5G"
+      ],
+      [
+        "Finish",
+        "Black pebbled finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-phantom-v-flip-2-card-case-grey",
+    "sku": "LT-CASE-TECNO-PHANTOM-V-FLIP-2-CARD-CASE-GREY",
+    "name": "TECNO Phantom V Flip2 Card Holder Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 26910,
+    "description": "Grey pebbled finish case for TECNO Phantom V Flip2 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Phantom V Flip2 5G"
+      ],
+      [
+        "Finish",
+        "Grey pebbled finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s24-ultra-case-and-glass",
+    "sku": "LT-CASE-GALAXY-S24-ULTRA-CASE-AND-GLASS",
+    "name": "Galaxy S24 Ultra Silicone Case with Screen Glass",
+    "category": "accessories",
+    "brand": "",
+    "price": 22950,
+    "description": "Blue case and screen glass case for Galaxy S24 Ultra. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S24 Ultra"
+      ],
+      [
+        "Finish",
+        "Blue case and screen glass"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-phantom-v-flip-2-card-case-blue",
+    "sku": "LT-CASE-TECNO-PHANTOM-V-FLIP-2-CARD-CASE-BLUE",
+    "name": "TECNO Phantom V Flip2 Card Holder Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 26910,
+    "description": "Blue pebbled finish case for TECNO Phantom V Flip2 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Phantom V Flip2 5G"
+      ],
+      [
+        "Finish",
+        "Blue pebbled finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s7-s10-series-silicone-black",
+    "sku": "LT-CASE-GALAXY-S7-S10-SERIES-SILICONE-BLACK",
+    "name": "Galaxy S7–S10 Series Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 21250,
+    "description": "Black silicone case for Galaxy S7 / S8 / S8+ / S9 / S9+ / S10e / S10 / S10+ / S10 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S7 / S8 / S8+ / S9 / S9+ / S10e / S10 / S10+ / S10 5G"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy S7",
+      "Galaxy S8",
+      "Galaxy S8+",
+      "Galaxy S9",
+      "Galaxy S9+",
+      "Galaxy S10e",
+      "Galaxy S10",
+      "Galaxy S10+",
+      "Galaxy S10 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-silicone-purple",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-SILICONE-PURPLE",
+    "name": "iPhone Pro Max / XS Max Silicone Case — Purple",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Purple silicone case for iPhone 11–15 Pro Max / iPhone X / XS Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max / iPhone X / XS Max"
+      ],
+      [
+        "Finish",
+        "Purple silicone"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max",
+      "iPhone X",
+      "iPhone XS Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-silicone-white",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-SILICONE-WHITE",
+    "name": "iPhone 11–15 Pro Max Silicone Case — White",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "White silicone case for iPhone 11–15 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max"
+      ],
+      [
+        "Finish",
+        "White silicone"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-transformer-orange",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-TRANSFORMER-ORANGE",
+    "name": "iPhone Pro Max Transformer Frame Case — Orange",
+    "category": "accessories",
+    "brand": "",
+    "price": 45000,
+    "description": "Orange frame and back case for iPhone 12–17 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 12–17 Pro Max"
+      ],
+      [
+        "Finish",
+        "Orange frame and back"
+      ]
+    ],
+    "options": [
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max",
+      "iPhone 16 Pro Max",
+      "iPhone 17 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s10-family-silicone-navy",
+    "sku": "LT-CASE-GALAXY-S10-FAMILY-SILICONE-NAVY",
+    "name": "Galaxy S10 Series Silicone Case — Navy",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Navy silicone case for Galaxy S10e / S10 / S10+ / S10 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S10e / S10 / S10+ / S10 5G"
+      ],
+      [
+        "Finish",
+        "Navy silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy S10e",
+      "Galaxy S10",
+      "Galaxy S10+",
+      "Galaxy S10 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-series-magnetic-black",
+    "sku": "LT-CASE-IPHONE-PRO-SERIES-MAGNETIC-BLACK",
+    "name": "iPhone Pro / Pro Max Magnetic Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 18700,
+    "description": "Black silicone case for iPhone 11 / 12 / 13 / 14 / 16 Pro and Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11 / 12 / 13 / 14 / 16 Pro and Pro Max"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro",
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro",
+      "iPhone 14 Pro Max",
+      "iPhone 16 Pro",
+      "iPhone 16 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-note-10-plus-silicone-black",
+    "sku": "LT-CASE-GALAXY-NOTE-10-PLUS-SILICONE-BLACK",
+    "name": "Galaxy Note10+ Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 20000,
+    "description": "Black silicone case for Galaxy Note10+. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy Note10+"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-spark-50-wallet-blue",
+    "sku": "LT-CASE-TECNO-SPARK-50-WALLET-BLUE",
+    "name": "TECNO Spark 50 Wallet Flip Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 26100,
+    "description": "Blue wallet cover case for TECNO Spark 50. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Spark 50"
+      ],
+      [
+        "Finish",
+        "Blue wallet cover"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a24-silicone-black",
+    "sku": "LT-CASE-GALAXY-A24-SILICONE-BLACK",
+    "name": "Galaxy A24 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 19550,
+    "description": "Black silicone case for Galaxy A24. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A24"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a05-silicone-black",
+    "sku": "LT-CASE-GALAXY-A05-SILICONE-BLACK",
+    "name": "Galaxy A05 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 18750,
+    "description": "Black silicone case for Galaxy A05. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A05"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "infinix-note-60-matte-case",
+    "sku": "LT-CASE-INFINIX-NOTE-60-MATTE-CASE",
+    "name": "Infinix Note 60 Matte Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Black matte finish case for Infinix Note 60. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Infinix Note 60"
+      ],
+      [
+        "Finish",
+        "Black matte finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-orange-frame-case",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-ORANGE-FRAME-CASE",
+    "name": "iPhone Pro Max Metallic Frame Case — Orange",
+    "category": "accessories",
+    "brand": "",
+    "price": 55250,
+    "description": "Orange frame case for iPhone 14 / 15 / 16 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 14 / 15 / 16 Pro Max"
+      ],
+      [
+        "Finish",
+        "Orange frame"
+      ]
+    ],
+    "options": [
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max",
+      "iPhone 16 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s26-ultra-clear-magnetic",
+    "sku": "LT-CASE-GALAXY-S26-ULTRA-CLEAR-MAGNETIC",
+    "name": "Galaxy S26 Ultra Clear Magnetic Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 32000,
+    "description": "Clear with magnetic ring case for Galaxy S26 Ultra. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S26 Ultra"
+      ],
+      [
+        "Finish",
+        "Clear with magnetic ring"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-silicone-taupe",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-SILICONE-TAUPE",
+    "name": "iPhone Pro Max / XS Max Silicone Case — Taupe",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Taupe silicone case for iPhone 11–15 Pro Max / iPhone X / XS Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max / iPhone X / XS Max"
+      ],
+      [
+        "Finish",
+        "Taupe silicone"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max",
+      "iPhone X",
+      "iPhone XS Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a17-silicone-grey",
+    "sku": "LT-CASE-GALAXY-A17-SILICONE-GREY",
+    "name": "Galaxy A17 Soft-Touch Silicone Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 20000,
+    "description": "Grey silicone case for Galaxy A17. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A17"
+      ],
+      [
+        "Finish",
+        "Grey silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-woven-magnetic-blue",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-WOVEN-MAGNETIC-BLUE",
+    "name": "iPhone Pro Max Woven Magnetic Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 50000,
+    "description": "Blue woven finish case for iPhone 15 / 16 / 17 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 15 / 16 / 17 Pro Max"
+      ],
+      [
+        "Finish",
+        "Blue woven finish"
+      ]
+    ],
+    "options": [
+      "iPhone 15 Pro Max",
+      "iPhone 16 Pro Max",
+      "iPhone 17 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a14-silicone-black",
+    "sku": "LT-CASE-GALAXY-A14-SILICONE-BLACK",
+    "name": "Galaxy A14 4G / 5G Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 19550,
+    "description": "Black silicone case for Galaxy A14 4G / 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A14 4G / 5G"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy A14 4G",
+      "Galaxy A14 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-13-silicone-black",
+    "sku": "LT-CASE-IPHONE-13-SILICONE-BLACK",
+    "name": "iPhone 13 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 19950,
+    "description": "Black silicone case for iPhone 13. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 13"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-6-family-silicone-blue",
+    "sku": "LT-CASE-PIXEL-6-FAMILY-SILICONE-BLUE",
+    "name": "Google Pixel 6 Series Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 19950,
+    "description": "Blue soft-touch finish case for Google Pixel 6a / 6 / 6 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 6a / 6 / 6 Pro"
+      ],
+      [
+        "Finish",
+        "Blue soft-touch finish"
+      ]
+    ],
+    "options": [
+      "Google Pixel 6a",
+      "Google Pixel 6",
+      "Google Pixel 6 Pro"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-camon-20-premier-case",
+    "sku": "LT-CASE-TECNO-CAMON-20-PREMIER-CASE",
+    "name": "TECNO Camon 20 Premier Soft-Touch Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 28475,
+    "priceConfirmed": false,
+    "description": "Black silicone case for TECNO Camon 20 Premier. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Camon 20 Premier"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s-ultra-clear-ring-case",
+    "sku": "LT-CASE-GALAXY-S-ULTRA-CLEAR-RING-CASE",
+    "name": "Galaxy S Ultra Series Clear Magnetic Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 28900,
+    "description": "Clear with magnetic ring case for Galaxy S21 / S22 / S23 / S24 / S25 Ultra. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S21 / S22 / S23 / S24 / S25 Ultra"
+      ],
+      [
+        "Finish",
+        "Clear with magnetic ring"
+      ]
+    ],
+    "options": [
+      "Galaxy S21 Ultra",
+      "Galaxy S22 Ultra",
+      "Galaxy S23 Ultra",
+      "Galaxy S24 Ultra",
+      "Galaxy S25 Ultra"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-7-silicone-black",
+    "sku": "LT-CASE-PIXEL-7-SILICONE-BLACK",
+    "name": "Google Pixel 7 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 20900,
+    "description": "Black silicone case for Google Pixel 7. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 7"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-16-pro-max-silicone-black",
+    "sku": "LT-CASE-IPHONE-16-PRO-MAX-SILICONE-BLACK",
+    "name": "iPhone 16 Pro Max Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 17850,
+    "description": "Black silicone case for iPhone 16 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 16 Pro Max"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s10-family-silicone-plum",
+    "sku": "LT-CASE-GALAXY-S10-FAMILY-SILICONE-PLUM",
+    "name": "Galaxy S10 Series Silicone Case — Plum",
+    "category": "accessories",
+    "brand": "",
+    "price": 23800,
+    "priceConfirmed": false,
+    "description": "Plum silicone case for Galaxy S10e / S10 / S10+ / S10 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S10e / S10 / S10+ / S10 5G"
+      ],
+      [
+        "Finish",
+        "Plum silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy S10e",
+      "Galaxy S10",
+      "Galaxy S10+",
+      "Galaxy S10 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a-series-silicone-ice-blue",
+    "sku": "LT-CASE-GALAXY-A-SERIES-SILICONE-ICE-BLUE",
+    "name": "Galaxy A-Series Silicone Case — Ice Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 23800,
+    "priceConfirmed": false,
+    "description": "Ice blue silicone case for Galaxy A10 / A12 / A13 / A14 / A15 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A10 / A12 / A13 / A14 / A15 5G"
+      ],
+      [
+        "Finish",
+        "Ice blue silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy A10",
+      "Galaxy A12",
+      "Galaxy A13",
+      "Galaxy A14",
+      "Galaxy A15 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-17-pro-max-soft-touch-black",
+    "sku": "LT-CASE-IPHONE-17-PRO-MAX-SOFT-TOUCH-BLACK",
+    "name": "iPhone 17 Pro Max Soft-Touch Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 25175,
+    "description": "Black soft-touch finish case for iPhone 17 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 17 Pro Max"
+      ],
+      [
+        "Finish",
+        "Black soft-touch finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-17-18-pro-max-clear-magnetic",
+    "sku": "LT-CASE-IPHONE-17-18-PRO-MAX-CLEAR-MAGNETIC",
+    "name": "iPhone 17 / 18 Pro Max Clear Magnetic Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 55000,
+    "description": "Clear with magnetic ring case for iPhone 17 Pro Max / iPhone 18 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 17 Pro Max / iPhone 18 Pro Max"
+      ],
+      [
+        "Finish",
+        "Clear with magnetic ring"
+      ]
+    ],
+    "options": [
+      "iPhone 17 Pro Max",
+      "iPhone 18 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a06-soft-touch-grey",
+    "sku": "LT-CASE-GALAXY-A06-SOFT-TOUCH-GREY",
+    "name": "Galaxy A06 Soft-Touch Silicone Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 24300,
+    "description": "Grey silicone case for Galaxy A06. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A06"
+      ],
+      [
+        "Finish",
+        "Grey silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-dual-layer-green",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-DUAL-LAYER-GREEN",
+    "name": "iPhone 11–15 Pro Max Dual-Layer Kickstand Case — Green",
+    "category": "accessories",
+    "brand": "",
+    "price": 42500,
+    "description": "Green dual-layer shell case for iPhone 11–15 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max"
+      ],
+      [
+        "Finish",
+        "Green dual-layer shell"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a16-silicone-blue",
+    "sku": "LT-CASE-GALAXY-A16-SILICONE-BLUE",
+    "name": "Galaxy A16 4G / 5G Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 18700,
+    "description": "Blue silicone case for Galaxy A16 4G / 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A16 4G / 5G"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy A16 4G",
+      "Galaxy A16 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-12-pro-silicone-blue",
+    "sku": "LT-CASE-IPHONE-12-PRO-SILICONE-BLUE",
+    "name": "iPhone 12 Pro Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 19950,
+    "description": "Blue silicone case for iPhone 12 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 12 Pro"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-belt-clip-case",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-BELT-CLIP-CASE",
+    "name": "iPhone 11–15 Pro Max Kickstand and Belt Clip Case",
+    "category": "accessories",
+    "brand": "",
+    "price": 42500,
+    "description": "Black rugged shell case for iPhone 11–15 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max"
+      ],
+      [
+        "Finish",
+        "Black rugged shell"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-soft-touch-pink",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-SOFT-TOUCH-PINK",
+    "name": "iPhone 11–15 Pro Max Protective Case — Pink",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Pink soft-touch finish case for iPhone 11–15 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max"
+      ],
+      [
+        "Finish",
+        "Pink soft-touch finish"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-camon-50-series-matte-black",
+    "sku": "LT-CASE-TECNO-CAMON-50-SERIES-MATTE-BLACK",
+    "name": "TECNO Camon 50 / 50 Pro Matte Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 23400,
+    "description": "Black rubber case for TECNO Camon 50 / Camon 50 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Camon 50 / Camon 50 Pro"
+      ],
+      [
+        "Finish",
+        "Black rubber"
+      ]
+    ],
+    "options": [
+      "TECNO Camon 50",
+      "TECNO Camon 50 Pro"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-18-pro-max-silicone-burgundy",
+    "sku": "LT-CASE-IPHONE-18-PRO-MAX-SILICONE-BURGUNDY",
+    "name": "iPhone 18 Pro Max Silicone Case — Burgundy",
+    "category": "accessories",
+    "brand": "",
+    "price": 42500,
+    "description": "Burgundy silicone case for iPhone 18 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 18 Pro Max"
+      ],
+      [
+        "Finish",
+        "Burgundy silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a06-armor-green",
+    "sku": "LT-CASE-GALAXY-A06-ARMOR-GREEN",
+    "name": "Galaxy A06 Ring-Stand Armor Case — Green",
+    "category": "accessories",
+    "brand": "",
+    "price": 25075,
+    "description": "Green rugged shell case for Galaxy A06. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A06"
+      ],
+      [
+        "Finish",
+        "Green rugged shell"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-16-pro-max-magnetic-smoke",
+    "sku": "LT-CASE-IPHONE-16-PRO-MAX-MAGNETIC-SMOKE",
+    "name": "iPhone 16 Pro Max Magnetic Case — Smoke",
+    "category": "accessories",
+    "brand": "",
+    "price": 34000,
+    "description": "Smoky magnetic back case for iPhone 16 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 16 Pro Max"
+      ],
+      [
+        "Finish",
+        "Smoky magnetic back"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-13-mini-silicone-blue",
+    "sku": "LT-CASE-IPHONE-13-MINI-SILICONE-BLUE",
+    "name": "iPhone 13 mini Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Blue silicone case for iPhone 13 mini. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 13 mini"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-7-pro-case-black",
+    "sku": "LT-CASE-PIXEL-7-PRO-CASE-BLACK",
+    "name": "Google Pixel 7 Pro Back Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 25200,
+    "description": "Black shell case for Google Pixel 7 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 7 Pro"
+      ],
+      [
+        "Finish",
+        "Black shell"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a56-silicone-black",
+    "sku": "LT-CASE-GALAXY-A56-SILICONE-BLACK",
+    "name": "Galaxy A56 5G Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 18700,
+    "description": "Black silicone case for Galaxy A56 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A56 5G"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a14-wallet-black",
+    "sku": "LT-CASE-GALAXY-A14-WALLET-BLACK",
+    "name": "Galaxy A14 Wallet Flip Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 26100,
+    "description": "Black magnetic wallet cover case for Galaxy A14. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A14"
+      ],
+      [
+        "Finish",
+        "Black magnetic wallet cover"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-spark-slim-silicone-black",
+    "sku": "LT-CASE-TECNO-SPARK-SLIM-SILICONE-BLACK",
+    "name": "TECNO Spark Slim Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 24650,
+    "description": "Black soft-touch finish case for TECNO Spark Slim. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Spark Slim"
+      ],
+      [
+        "Finish",
+        "Black soft-touch finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-18-pro-max-silicone-black",
+    "sku": "LT-CASE-IPHONE-18-PRO-MAX-SILICONE-BLACK",
+    "name": "iPhone 18 Pro Max Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 30600,
+    "description": "Black silicone case for iPhone 18 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 18 Pro Max"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a16-soft-touch-grey",
+    "sku": "LT-CASE-GALAXY-A16-SOFT-TOUCH-GREY",
+    "name": "Galaxy A16 Soft-Touch Silicone Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 24300,
+    "description": "Grey silicone case for Galaxy A16. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A16"
+      ],
+      [
+        "Finish",
+        "Grey silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-6-family-silicone-black",
+    "sku": "LT-CASE-PIXEL-6-FAMILY-SILICONE-BLACK",
+    "name": "Google Pixel 6 Series Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 20900,
+    "description": "Black silicone case for Google Pixel 6a / 6 / 6 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 6a / 6 / 6 Pro"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "options": [
+      "Google Pixel 6a",
+      "Google Pixel 6",
+      "Google Pixel 6 Pro"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-air-slim-black",
+    "sku": "LT-CASE-IPHONE-AIR-SLIM-BLACK",
+    "name": "iPhone Air Slim Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 23750,
+    "description": "Black slim shell case for iPhone Air. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone Air"
+      ],
+      [
+        "Finish",
+        "Black slim shell"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a06-ring-case-blue",
+    "sku": "LT-CASE-GALAXY-A06-RING-CASE-BLUE",
+    "name": "Galaxy A06 Ring-Stand Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 20700,
+    "description": "Blue rugged shell case for Galaxy A06. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A06"
+      ],
+      [
+        "Finish",
+        "Blue rugged shell"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-z-fold5-s-pen-case",
+    "sku": "LT-CASE-GALAXY-Z-FOLD5-S-PEN-CASE",
+    "name": "Galaxy Z Fold5 S Pen Case — Icy Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 100000,
+    "description": "Icy blue with pen holder case for Galaxy Z Fold5. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy Z Fold5"
+      ],
+      [
+        "Finish",
+        "Icy blue with pen holder"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a34-silicone-blue",
+    "sku": "LT-CASE-GALAXY-A34-SILICONE-BLUE",
+    "name": "Galaxy A34 5G Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 20400,
+    "description": "Blue silicone case for Galaxy A34 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A34 5G"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "supfine-iphone-16-pro-max-magnetic",
+    "sku": "LT-CASE-SUPFINE-IPHONE-16-PRO-MAX-MAGNETIC",
+    "name": "SUPFINE Magnetic Case for iPhone 16 Pro Max",
+    "category": "accessories",
+    "brand": "supfine",
+    "price": 35000,
+    "description": "Dark magnetic back case for iPhone 16 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 16 Pro Max"
+      ],
+      [
+        "Finish",
+        "Dark magnetic back"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-silicone-red",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-SILICONE-RED",
+    "name": "iPhone Pro Max / XS Max Silicone Case — Red",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Red silicone case for iPhone 11–15 Pro Max / iPhone X / XS Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–15 Pro Max / iPhone X / XS Max"
+      ],
+      [
+        "Finish",
+        "Red silicone"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max",
+      "iPhone 15 Pro Max",
+      "iPhone X",
+      "iPhone XS Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s24-ultra-rugged-case",
+    "sku": "LT-CASE-GALAXY-S24-ULTRA-RUGGED-CASE",
+    "name": "Galaxy S24 Ultra Heavy-Duty Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 70000,
+    "description": "Black rugged shell case for Galaxy S24 Ultra. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S24 Ultra"
+      ],
+      [
+        "Finish",
+        "Black rugged shell"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "redmi-note-12-silicone-black",
+    "sku": "LT-CASE-REDMI-NOTE-12-SILICONE-BLACK",
+    "name": "Redmi Note 12 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Black silicone case for Redmi Note 12. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Redmi Note 12"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "infinix-smart-20-wallet-black",
+    "sku": "LT-CASE-INFINIX-SMART-20-WALLET-BLACK",
+    "name": "Infinix Smart 20 Wallet Flip Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 25200,
+    "description": "Black magnetic wallet cover case for Infinix Smart 20. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Infinix Smart 20"
+      ],
+      [
+        "Finish",
+        "Black magnetic wallet cover"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-z-flip3-ring-wallet-black",
+    "sku": "LT-CASE-GALAXY-Z-FLIP3-RING-WALLET-BLACK",
+    "name": "Galaxy Z Flip3 Ring Wallet Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 70000,
+    "description": "Black leather-style finish case for Galaxy Z Flip3. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy Z Flip3"
+      ],
+      [
+        "Finish",
+        "Black leather-style finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s10-family-silicone-pink",
+    "sku": "LT-CASE-GALAXY-S10-FAMILY-SILICONE-PINK",
+    "name": "Galaxy S10 Series Silicone Case — Pink",
+    "category": "accessories",
+    "brand": "",
+    "price": 23800,
+    "priceConfirmed": false,
+    "description": "Pink silicone case for Galaxy S10e / S10 / S10+ / S10 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S10e / S10 / S10+ / S10 5G"
+      ],
+      [
+        "Finish",
+        "Pink silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy S10e",
+      "Galaxy S10",
+      "Galaxy S10+",
+      "Galaxy S10 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-note20-silicone-green",
+    "sku": "LT-CASE-GALAXY-NOTE20-SILICONE-GREEN",
+    "name": "Galaxy Note20 / Note20 Ultra Silicone Case — Green",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Green silicone case for Galaxy Note20 / Note20 Ultra 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy Note20 / Note20 Ultra 5G"
+      ],
+      [
+        "Finish",
+        "Green silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy Note20",
+      "Galaxy Note20 Ultra 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "infinix-smart-10-plus-soft-green",
+    "sku": "LT-CASE-INFINIX-SMART-10-PLUS-SOFT-GREEN",
+    "name": "Infinix Smart 10 Plus Soft-Touch Case — Green",
+    "category": "accessories",
+    "brand": "",
+    "price": 12750,
+    "description": "Green soft-touch finish case for Infinix Smart 10 Plus. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Infinix Smart 10 Plus"
+      ],
+      [
+        "Finish",
+        "Green soft-touch finish"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-spark-slim-silicone-lavender",
+    "sku": "LT-CASE-TECNO-SPARK-SLIM-SILICONE-LAVENDER",
+    "name": "TECNO Spark Slim Silicone Case — Lavender",
+    "category": "accessories",
+    "brand": "",
+    "price": 25200,
+    "description": "Lavender silicone case for TECNO Spark Slim. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Spark Slim"
+      ],
+      [
+        "Finish",
+        "Lavender silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a03-core-silicone-black",
+    "sku": "LT-CASE-GALAXY-A03-CORE-SILICONE-BLACK",
+    "name": "Galaxy A03 Core Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 25200,
+    "description": "Black silicone case for Galaxy A03 Core. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A03 Core"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-camon-40-series-matte-blue",
+    "sku": "LT-CASE-TECNO-CAMON-40-SERIES-MATTE-BLUE",
+    "name": "TECNO Camon 40 / 40 Pro Matte Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 23400,
+    "description": "Blue matte silicone case for TECNO Camon 40 / Camon 40 Pro. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Camon 40 / Camon 40 Pro"
+      ],
+      [
+        "Finish",
+        "Blue matte silicone"
+      ]
+    ],
+    "options": [
+      "TECNO Camon 40",
+      "TECNO Camon 40 Pro"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a54-soft-touch-grey",
+    "sku": "LT-CASE-GALAXY-A54-SOFT-TOUCH-GREY",
+    "name": "Galaxy A54 Soft-Touch Silicone Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 24300,
+    "description": "Grey silicone case for Galaxy A54. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A54"
+      ],
+      [
+        "Finish",
+        "Grey silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a32-silicone-black",
+    "sku": "LT-CASE-GALAXY-A32-SILICONE-BLACK",
+    "name": "Galaxy A32 4G Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 18700,
+    "description": "Black silicone case for Galaxy A32 4G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A32 4G"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-s23-plus-silicone-black",
+    "sku": "LT-CASE-GALAXY-S23-PLUS-SILICONE-BLACK",
+    "name": "Galaxy S23+ Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 19000,
+    "description": "Black silicone case for Galaxy S23+. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy S23+"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "pixel-7a-silicone-black",
+    "sku": "LT-CASE-PIXEL-7A-SILICONE-BLACK",
+    "name": "Google Pixel 7a Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 20900,
+    "description": "Black silicone case for Google Pixel 7a. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Google Pixel 7a"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a24-silicone-blue",
+    "sku": "LT-CASE-GALAXY-A24-SILICONE-BLUE",
+    "name": "Galaxy A24 Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 19800,
+    "description": "Blue silicone case for Galaxy A24. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A24"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "tecno-spark-slim-wallet-black",
+    "sku": "LT-CASE-TECNO-SPARK-SLIM-WALLET-BLACK",
+    "name": "TECNO Spark Slim Wallet Flip Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 25200,
+    "description": "Black magnetic wallet cover case for TECNO Spark Slim. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "TECNO Spark Slim"
+      ],
+      [
+        "Finish",
+        "Black magnetic wallet cover"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a36-case-and-glass",
+    "sku": "LT-CASE-GALAXY-A36-CASE-AND-GLASS",
+    "name": "Galaxy A36 Silicone Case with Screen Glass",
+    "category": "accessories",
+    "brand": "",
+    "price": 19550,
+    "description": "Black case and screen glass case for Galaxy A36. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A36"
+      ],
+      [
+        "Finish",
+        "Black case and screen glass"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-z-fold6-silicone-black",
+    "sku": "LT-CASE-GALAXY-Z-FOLD6-SILICONE-BLACK",
+    "name": "Galaxy Z Fold6 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 80750,
+    "description": "Black silicone case for Galaxy Z Fold6. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy Z Fold6"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a50-a54-silicone-blue",
+    "sku": "LT-CASE-GALAXY-A50-A54-SILICONE-BLUE",
+    "name": "Galaxy A50–A54 Series Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 23800,
+    "description": "Blue silicone case for Galaxy A50 / A51 / A52 / A53 / A54 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A50 / A51 / A52 / A53 / A54 5G"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy A50",
+      "Galaxy A51",
+      "Galaxy A52",
+      "Galaxy A53",
+      "Galaxy A54 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "sharp-aquos-sense5g-case",
+    "sku": "LT-CASE-SHARP-AQUOS-SENSE5G-CASE",
+    "name": "Sharp AQUOS Sense5G TPU Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 29750,
+    "description": "Black TPU case for Sharp AQUOS Sense5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Sharp AQUOS Sense5G"
+      ],
+      [
+        "Finish",
+        "Black TPU"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-pro-max-butterfly-pink",
+    "sku": "LT-CASE-IPHONE-PRO-MAX-BUTTERFLY-PINK",
+    "name": "iPhone 11–14 Pro Max Glitter Butterfly Case — Pink",
+    "category": "accessories",
+    "brand": "",
+    "price": 42500,
+    "description": "Pink butterfly design case for iPhone 11–14 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 11–14 Pro Max"
+      ],
+      [
+        "Finish",
+        "Pink butterfly design"
+      ]
+    ],
+    "options": [
+      "iPhone 11 Pro Max",
+      "iPhone 12 Pro Max",
+      "iPhone 13 Pro Max",
+      "iPhone 14 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a32-silicone-blue",
+    "sku": "LT-CASE-GALAXY-A32-SILICONE-BLUE",
+    "name": "Galaxy A32 4G Silicone Case — Blue",
+    "category": "accessories",
+    "brand": "",
+    "price": 19000,
+    "description": "Blue silicone case for Galaxy A32 4G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A32 4G"
+      ],
+      [
+        "Finish",
+        "Blue silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a27-soft-touch-grey",
+    "sku": "LT-CASE-GALAXY-A27-SOFT-TOUCH-GREY",
+    "name": "Galaxy A27 Soft-Touch Silicone Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 24300,
+    "description": "Grey silicone case for Galaxy A27. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A27"
+      ],
+      [
+        "Finish",
+        "Grey silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a14-slim-case-black",
+    "sku": "LT-CASE-GALAXY-A14-SLIM-CASE-BLACK",
+    "name": "Galaxy A14 4G / 5G Slim Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 19000,
+    "description": "Black slim silicone case for Galaxy A14 4G / 5G. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A14 4G / 5G"
+      ],
+      [
+        "Finish",
+        "Black slim silicone"
+      ]
+    ],
+    "options": [
+      "Galaxy A14 4G",
+      "Galaxy A14 5G"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a04s-soft-touch-grey",
+    "sku": "LT-CASE-GALAXY-A04S-SOFT-TOUCH-GREY",
+    "name": "Galaxy A04s Soft-Touch Silicone Case — Grey",
+    "category": "accessories",
+    "brand": "",
+    "price": 24300,
+    "description": "Grey silicone case for Galaxy A04s. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A04s"
+      ],
+      [
+        "Finish",
+        "Grey silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "iphone-15-series-magnetic-black",
+    "sku": "LT-CASE-IPHONE-15-SERIES-MAGNETIC-BLACK",
+    "name": "iPhone 15 Series Magnetic Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 21250,
+    "description": "Black magnetic silicone case for iPhone 15 / 15 Pro / 15 Pro Max. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "iPhone 15 / 15 Pro / 15 Pro Max"
+      ],
+      [
+        "Finish",
+        "Black magnetic silicone"
+      ]
+    ],
+    "options": [
+      "iPhone 15",
+      "iPhone 15 Pro",
+      "iPhone 15 Pro Max"
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  },
+  {
+    "id": "galaxy-a25-silicone-black",
+    "sku": "LT-CASE-GALAXY-A25-SILICONE-BLACK",
+    "name": "Galaxy A25 Silicone Case — Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 25200,
+    "description": "Black silicone case for Galaxy A25. Match the exact phone model and camera cutout before ordering.",
+    "specifications": [
+      [
+        "Phone fit",
+        "Galaxy A25"
+      ],
+      [
+        "Finish",
+        "Black silicone"
+      ]
+    ],
+    "tags": [
+      "phone case",
+      "phone cover"
+    ]
+  }
+]

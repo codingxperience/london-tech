@@ -2,6 +2,7 @@ import originalCatalog from "./legacy-catalog.json" with { type: "json" }
 import productMedia from "./product-media.json" with { type: "json" }
 import catalogueCorrections from "./catalogue-corrections.json" with { type: "json" }
 import launchOffers from "./launch-offers.json" with { type: "json" }
+import { referenceProducts } from "./reference-catalogue.js"
 
 import { guidePrices } from "./prices.js"
 import { formatShillings } from "../lib/number-format.js"
@@ -414,7 +415,7 @@ export const legacyProducts = [
   }
 })
 
-export const products = legacyProducts.map((product) => {
+const approvedProducts = legacyProducts.map((product) => {
   const media = productMedia[product.id] || []
   return {
     ...product,
@@ -428,6 +429,8 @@ export const products = legacyProducts.map((product) => {
       : {}),
   }
 })
+
+export const products = [...approvedProducts, ...referenceProducts]
 
 export const storeDefaults = {
   name: "London Tech",

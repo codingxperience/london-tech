@@ -31,7 +31,7 @@ import {
   Star,
 } from "lucide-react"
 
-import { useStore, cartKey } from "../store.jsx"
+import { useStore, cartKey, navigate } from "../store.jsx"
 import { ProductMotionNote } from "./MotionText"
 import { galleryImages, productInformation } from "../lib/product-experience.js"
 import { ProductOffer, StockAvailability } from "./ProductOffer.jsx"
@@ -86,6 +86,7 @@ export function ProductCard({ product: p, detailed = false }) {
   const facts = productInformation(p).specifications.slice(0, 2)
   const saved = wishlist.includes(p.id)
   const offer = productOffer(p)
+  const chooseOptions = p.stock !== 0 && (p.options?.length > 0 || p.colors?.length > 0)
 
   return (
     <article
@@ -170,7 +171,7 @@ export function ProductCard({ product: p, detailed = false }) {
       </div>
       <div className="product-card-copy">
         <small>
-          {p.brand} <span>·</span> {t(categoryName(p.category))}
+          {p.brand && <>{p.brand} <span>·</span>{" "}</>}{t(categoryName(p.category))}
         </small>
         <h3>
           <a href={productPath(p)}>{p.name}</a>
@@ -193,8 +194,8 @@ export function ProductCard({ product: p, detailed = false }) {
             showDiscountBadge={false}
           />
           <IconButton
-            label={t("Add {name} to cart", { name: p.name })}
-            onClick={() => addCart(p)}
+            label={t(chooseOptions ? "Choose options for {name}" : "Add {name} to cart", { name: p.name })}
+            onClick={() => chooseOptions ? navigate(productPath(p)) : addCart(p)}
             disabled={p.stock === 0}
           >
             <Plus size={18} />
@@ -203,7 +204,7 @@ export function ProductCard({ product: p, detailed = false }) {
       </div>
       {detailed && (
         <div className="card-product-meta">
-          {p.reviewCount > 0 && Number.isFinite(p.rating) && (
+          {p.reviewCount > 0 && Number.isFinite(p.rating) ? (
             <a
               className="card-real-rating"
               href={productPath(p) + "#product-reviews"}
@@ -216,6 +217,8 @@ export function ProductCard({ product: p, detailed = false }) {
               <strong>{p.rating.toFixed(1)}</strong>
               <span>({p.reviewCount})</span>
             </a>
+          ) : (
+            <small>{t("No customer reviews yet")}</small>
           )}
           <StockAvailability product={p} className="card-availability" />
           {p.condition && !/^confirm with store\.?$/i.test(p.condition) && (

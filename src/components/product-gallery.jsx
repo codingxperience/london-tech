@@ -195,6 +195,18 @@ export function ProductGallery({ product }) {
       <p className="gallery-note">
         {product.mediaNote ||
           "Images show the product design. Confirm your colour, configuration and included accessories with the store."}
+        {current.src.startsWith("/assets/catalogue-references/") && (
+          <>
+            {" "}
+            <a
+              href="/assets/catalogue-references/credits.txt"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Photo credits
+            </a>
+          </>
+        )}
       </p>
       {enlarged && (
         <Modal

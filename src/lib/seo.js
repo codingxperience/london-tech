@@ -170,7 +170,15 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
         sku: p.sku,
         description: productInformation(p).description,
         image: galleryImages(p).map((i) => new URL(i.src, origin).href),
-        ...(p.brand ? { brand: { "@type": "Brand", name: p.brand } } : {}),
+        ...(p.brand
+          ? {
+              brand: {
+                "@type": "Brand",
+                "@id": result.canonical + "#brand",
+                name: p.brand,
+              },
+            }
+          : {}),
         ...(p.priceConfirmed &&
         Number.isFinite(p.price) &&
         p.price > 0 &&
@@ -179,6 +187,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
           ? {
               offers: {
                 "@type": "Offer",
+                "@id": result.canonical + "#offer",
                 price: p.price,
                 priceCurrency: "UGX",
                 availability:
@@ -199,7 +208,9 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
             reviews.reduce((n, r) => n + Number(r.rating), 0) / reviews.length,
           reviewCount: reviews.length,
         }
-      result.schemas.push(main)
+      // Quote-only pages without reviews are not eligible for product rich results.
+      if (main.offers || main.aggregateRating) result.schemas.push(main)
+      else main = undefined
     }
   } else if (pathname.startsWith("/collections/")) {
     const id = pathname.split("/")[2],
@@ -309,7 +320,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
     inLanguage: "en-UG",
     isPartOf: { "@id": origin + "/#website" },
     about: { "@id": store["@id"] },
-    ...(main ? { mainEntity: main } : {}),
+    ...(main ? { mainEntity: main["@id"] ? { "@id": main["@id"] } : main } : {}),
   })
   if (crumbs.length > 1)
     result.schemas.push({
@@ -328,6 +339,11 @@ export function seoHead(seo) {
     `<meta ${
       property ? "property" : "name"
     }="${key}" content="${escapeHtml(value)}">`
+  const serverProduct = seo.schemas.some((node) => node["@type"] === "Product")
+  const schema = jsonForHtml({
+    "@context": "https://schema.org",
+    "@graph": seo.schemas,
+  })
   return (
     `<title>${escapeHtml(seo.title)}</title>` +
     meta("description", seo.description) +
@@ -347,7 +363,7 @@ export function seoHead(seo) {
       ? `<link rel="prev" href="${escapeHtml(seo.previous)}">`
       : "") +
     (seo.next ? `<link rel="next" href="${escapeHtml(seo.next)}">` : "") +
-    `<script id="seo-structured-data" type="application/ld+json">${jsonForHtml({ "@context": "https://schema.org", "@graph": seo.schemas })}</script>`
+    `<script id="seo-structured-data" type="application/ld+json"${serverProduct ? " data-server-product" : ""}>${schema}</script>`
   )
 }
 export function documentHtml(shell, seo, body, data) {

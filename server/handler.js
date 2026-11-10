@@ -5,6 +5,8 @@ import { z } from "zod"
 import { products, storeDefaults } from "../src/data/catalog.js"
 
 import { databaseConfigured, getDatabase } from "./db.js"
+import { saveProductPhoto, serveProductPhoto, uploadedPhotoUrl } from "./product-photos.js"
+import { productHistory } from "../src/lib/product-history.js"
 
 import {
   audit,
@@ -288,9 +290,10 @@ async function userOrder(db, id, user) {
 }
 
 function validateImages(p) {
-  for (const url of p.gallery)
+  for (const url of [p.image, ...p.gallery])
     if (
       !/^\/assets\/[a-zA-Z0-9%_.\-/@]+$/.test(url) &&
+      !uploadedPhotoUrl.test(url) &&
       !/^https:\/\//.test(url)
     )
       fail(400, "Use a store asset or an HTTPS image URL.")
@@ -592,6 +595,9 @@ export default async function handler(req, res) {
       fail(503, "Subscriptions are being connected. Please try again later.")
 
     const db = await getDatabase()
+
+    if (route.startsWith("product-photos/") && await serveProductPhoto(db, route, method, res))
+      return
 
     const user = await getUser(db, req)
 
@@ -1264,6 +1270,9 @@ export default async function handler(req, res) {
     if (route.startsWith("admin/")) {
       requireAdmin(user)
 
+      if (route === "admin/product-photos" && method === "POST")
+        return send(res, await saveProductPhoto(db, body), 201)
+
       if (route === "admin/overview" && method === "GET") {
         const [orders, customers, catalog, events] = await Promise.all([
           db.query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 500"),
@@ -1274,7 +1283,9 @@ export default async function handler(req, res) {
 
           db.query("SELECT data FROM products ORDER BY updated_at DESC"),
           db.query(
-            "SELECT id,action,details,created_at FROM audit_events ORDER BY created_at DESC LIMIT 500",
+            `SELECT e.id,e.action,e.details,e.created_at,u.name AS actor_name
+             FROM audit_events e LEFT JOIN users u ON u.id=e.actor_id
+             ORDER BY e.created_at DESC LIMIT 500`,
           ),
         ])
 
@@ -1312,13 +1323,15 @@ export default async function handler(req, res) {
             .rows.length
         )
           fail(400, "Choose an existing vendor.")
-        const inserted = await db.query(
-          "INSERT INTO products(id,data,vendor_id) VALUES($1,$2::jsonb,$3) ON CONFLICT(id) DO NOTHING RETURNING id",
-          [p.id, JSON.stringify(p), p.vendorId || null],
-        )
-        if (!inserted.rows.length)
-          fail(409, "A product already uses this URL identifier.")
-        await audit(db, user.id, "product.created", { id: p.id })
+        await db.transaction(async (tx) => {
+          const inserted = await tx.query(
+            "INSERT INTO products(id,data,vendor_id) VALUES($1,$2::jsonb,$3) ON CONFLICT(id) DO NOTHING RETURNING id",
+            [p.id, JSON.stringify(p), p.vendorId || null],
+          )
+          if (!inserted.rows.length)
+            fail(409, "A product already uses this URL identifier.")
+          await audit(tx, user.id, "product.created", productHistory(null, p))
+        })
         return send(res, { product: p }, 201)
       }
 
@@ -1342,12 +1355,16 @@ export default async function handler(req, res) {
             .rows.length
         )
           fail(400, "Choose an existing vendor.")
-        const result = await db.query(
-          "UPDATE products SET data=$2::jsonb,vendor_id=$3,updated_at=NOW() WHERE id=$1 RETURNING id",
-          [p.id, JSON.stringify(p), p.vendorId || null],
-        )
-        if (!result.rows.length) fail(404, "Product was not found.")
-        await audit(db, user.id, "product.updated", { id: p.id })
+        await db.transaction(async (tx) => {
+          const { rows } = await tx.query("SELECT data FROM products WHERE id=$1 FOR UPDATE", [p.id])
+          if (!rows.length) fail(404, "Product was not found.")
+          const details = productHistory(rows[0].data, p)
+          await tx.query(
+            "UPDATE products SET data=$2::jsonb,vendor_id=$3,updated_at=NOW() WHERE id=$1",
+            [p.id, JSON.stringify(p), p.vendorId || null],
+          )
+          if (details.changes.length) await audit(tx, user.id, "product.updated", details)
+        })
         return send(res, { product: p })
       }
 

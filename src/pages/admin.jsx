@@ -1,6 +1,9 @@
 import { BrandWordmark } from "../components/BrandWordmark.jsx"
 import { Overview } from "../admin/Overview.jsx"
 import { WorkspaceSection } from "../admin/Sections.jsx"
+import { ProductPhotoEditor, encodedPhotoPrefix } from "../admin/ProductPhotoEditor.jsx"
+import { galleryImages } from "../lib/product-experience.js"
+import { productHistory } from "../lib/product-history.js"
 import { CheckoutRecovery } from "../admin/CheckoutRecovery.jsx"
 import { DeliverySettings } from "../admin/DeliverySettings.jsx"
 import {
@@ -11,10 +14,11 @@ import {
 import "../admin-workspace.css"
 import "../admin-navigation.css"
 import "../admin-theme.css"
+import "../admin-records.css"
 import { PaymentMarks } from "../components/PaymentMarks.jsx"
 import { PaymentMethod } from "../components/PaymentLogo.jsx"
 import { useMessageAlerts } from "../lib/message-alerts.js"
-import React, { useCallback, useEffect, useState, useRef } from "react"
+import React, { useCallback, useEffect, useMemo, useState, useRef } from "react"
 
 import {
   Activity,
@@ -64,7 +68,6 @@ import { useMediaQuery } from "../lib/use-media-query.js"
 import {
   categories,
   money,
-  products as seed,
   categoryName,
 } from "../data/catalog.js"
 
@@ -172,18 +175,19 @@ export default function Admin({
   }
   const [notifications, setNotifications] = useState(false)
   const sidebar = useRef(null)
-  const [data, setData] = useState(() =>
-      preview
-        ? readStorage(previewKey, null)?.version === 4
-          ? {
-              ...readStorage(previewKey, null),
-              analytics:
-                readStorage(previewKey, null).analytics ||
-                previewData().analytics,
-            }
-          : previewData()
-        : null,
-    ),
+  const [data, setData] = useState(() => {
+      if (!preview) return null
+      const seed = previewData()
+      const saved = readStorage(previewKey, null)
+      if (saved?.version !== seed.version || !Array.isArray(saved.products))
+        return seed
+      const ids = new Set(saved.products.map(({ id }) => id))
+      return {
+        ...saved,
+        analytics: saved.analytics || seed.analytics,
+        products: [...saved.products, ...seed.products.filter(({ id }) => !ids.has(id))],
+      }
+    }),
     [error, setError] = useState(""),
     [query, setQuery] = useState(""),
     [menu, setMenu] = useState(false),
@@ -239,6 +243,7 @@ export default function Admin({
           id: crypto.randomUUID(),
           action,
           details,
+          actor_name: "Preview administrator",
           created_at: new Date().toISOString(),
         },
         ...current.events,
@@ -1229,6 +1234,7 @@ export default function Admin({
       {editor && (
         <ProductEditor
           product={editor}
+          libraryProducts={catalog}
           vendors={data.vendors || []}
           preview={preview}
           existing={catalog.some((p) => p.id === editor.id)}
@@ -1240,22 +1246,48 @@ export default function Admin({
                 "This product URL identifier is already in use. Choose a different one.",
               )
             if (preview) {
-              previewChange("product.saved", { id: p.id }, (current) => ({
+              const change = (current) => ({
                 ...current,
                 products: current.products.some((v) => v.id === p.id)
                   ? current.products.map((v) => (v.id === p.id ? p : v))
                   : [...current.products, p],
-              }))
+              })
+              if (p.gallery.some((src) => src.startsWith(encodedPhotoPrefix))) {
+                try {
+                  localStorage.setItem(previewKey, JSON.stringify(change(data)))
+                } catch {
+                  throw new Error("This preview has run out of browser storage. Remove some preview photos and try again.")
+                }
+              }
+              previewChange(
+                editingExisting ? "product.updated" : "product.created",
+                productHistory(editingExisting ? editor : null, p),
+                change,
+              )
               setEditor(null)
               return
             }
             setSaving(true)
             try {
+              const gallery = []
+              let image = p.image
+              for (const src of p.gallery) {
+                if (!src.startsWith(encodedPhotoPrefix)) {
+                  gallery.push(src)
+                  continue
+                }
+                const uploaded = await api("admin/product-photos", {
+                  method: "POST",
+                  body: { image: src.slice(encodedPhotoPrefix.length) },
+                })
+                gallery.push(uploaded.url)
+                if (src === p.image) image = uploaded.url
+              }
               await api(
                 "admin/products" + (editingExisting ? "/" + p.id : ""),
                 {
                   method: editingExisting ? "PUT" : "POST",
-                  body: p,
+                  body: { ...p, gallery, image },
                 },
               )
               await load()
@@ -1527,6 +1559,7 @@ function newProduct() {
 
 export function ProductEditor({
   vendors = [],
+  libraryProducts = [],
   product,
   preview,
   existing,
@@ -1539,21 +1572,48 @@ export function ProductEditor({
     [error, setError] = useState(""),
     [optionsText, setOptionsText] = useState(product.options.join(", ")),
     [colorsText, setColorsText] = useState(product.colors.join(", ")),
-    [gallery, setGallery] = useState(product.gallery.join("\n")),
+    [gallery, setGallery] = useState(() =>
+      existing ? galleryImages(product).map(({ src }) => src).slice(0, 10) : [],
+    ),
+    [preparingPhotos, setPreparingPhotos] = useState(false),
     [specs, setSpecs] = useState(
       product.specifications.map(([k, v]) => k + ": " + v).join("\n"),
     )
 
+  const closingDisabled = useRef(false)
+  useEffect(() => {
+    closingDisabled.current = preparingPhotos || saving
+  }, [preparingPhotos, saving])
+  const library = useMemo(
+    () => [...new Map(libraryProducts.flatMap((product) =>
+      galleryImages(product).map(({ src }) => [src, { src, name: product.name }]),
+    )).values()],
+    [libraryProducts],
+  )
   const field = (key, value) => setP((old) => ({ ...old, [key]: value }))
   const number = (value) => (value === "" ? null : Number(value))
 
   const submit = async (e) => {
     e.preventDefault()
+    if (preparingPhotos || saving) return
     setError("")
-    const images = gallery
-      .split("\n")
-      .map((v) => v.trim())
-      .filter(Boolean)
+    if (p.name.trim().length < 2 || !/^[a-z0-9-]+$/.test(p.id) ||
+        !p.sku.trim() || p.description.trim().length < 10) {
+      setTab("general")
+      setError("Enter a product name, URL identifier, SKU and a description of at least 10 characters.")
+      return
+    }
+    if (!gallery.length && p.active) {
+      setTab("images")
+      setError("Add a cover photo before publishing this product.")
+      return
+    }
+    const photosChanged = JSON.stringify(gallery) !== JSON.stringify(
+      existing ? galleryImages(product).map(({ src }) => src).slice(0, 10) : [],
+    )
+    const images = existing && !photosChanged && gallery.length
+      ? product.gallery
+      : gallery.length ? gallery : ["/assets/london-tech-logo.png"]
     const details = specs
       .split("\n")
       .filter((v) => v.trim())
@@ -1567,7 +1627,7 @@ export function ProductEditor({
       await onSave({
         ...p,
         gallery: images,
-        image: images[0],
+        image: existing && !photosChanged && gallery.length ? product.image : images[0],
         specifications: details,
         options: optionsText
           .split(",")
@@ -1586,7 +1646,7 @@ export function ProductEditor({
   return (
     <Modal
       title={existing ? "Edit product" : "Add a product"}
-      onClose={onClose}
+      onClose={() => { if (!closingDisabled.current) onClose() }}
       wide
       className="admin-editor"
     >
@@ -1607,6 +1667,7 @@ export function ProductEditor({
             <button
               type="button"
               key={id}
+              disabled={preparingPhotos || saving}
               className={tab === id ? "active" : ""}
               onClick={() => setTab(id)}
             >
@@ -1827,65 +1888,23 @@ export function ProductEditor({
               </Field>
             </>
           ) : (
-            <>
-              <Field
-                label="Gallery image URLs"
-                hint="One image URL per line. The first is the main product image. Use /assets/ paths or HTTPS images."
-              >
-                <textarea
-                  rows={6}
-                  value={gallery}
-                  onChange={(e) => setGallery(e.target.value)}
-                  required
-                />
-              </Field>
-              <Field
-                label="Photo or reference note"
-                hint="Clarify when a photo shows a product family or a different reference finish. Update this when adding photos of the actual item."
-              >
-                <textarea
-                  rows={2}
-                  maxLength={500}
-                  value={p.mediaNote || ""}
-                  onChange={(e) => field("mediaNote", e.target.value)}
-                />
-              </Field>
-              <div className="editor-gallery-preview">
-                {gallery
-                  .split("\n")
-                  .filter(Boolean)
-                  .slice(0, 10)
-                  .map((src, i) => (
-                    <img key={i} src={src} alt={"Gallery preview " + (i + 1)} />
-                  ))}
-              </div>
-              <h3>Choose from the product library</h3>
-              <p className="admin-muted small">
-                Click an image to add it to the gallery.
-              </p>
-              <div className="editor-asset-library">
-                {[...new Set(seed.flatMap((p) => p.gallery))].map((src) => (
-                  <button
-                    type="button"
-                    key={src}
-                    onClick={() =>
-                      setGallery((old) =>
-                        old.split("\n").includes(src) ? old : old + "\n" + src,
-                      )
-                    }
-                  >
-                    <img src={src} alt="Product library image" loading="lazy" />
-                  </button>
-                ))}
-              </div>
-            </>
+            <ProductPhotoEditor
+              photos={gallery}
+              setPhotos={setGallery}
+              mediaNote={p.mediaNote}
+              onNote={(note) => field("mediaNote", note)}
+              library={library}
+              preview={preview}
+              busy={preparingPhotos || saving}
+              onBusy={setPreparingPhotos}
+            />
           )}
         </div>
         <div className="editor-footer">
-          <Button variant="secondary" type="button" onClick={onClose}>
+          <Button variant="secondary" type="button" disabled={preparingPhotos || saving} onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" busy={saving}>
+          <Button type="submit" busy={saving} disabled={preparingPhotos}>
             {preview ? "Save preview product" : "Save product"}
             <Check size={16} />
           </Button>

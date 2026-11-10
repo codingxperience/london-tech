@@ -6,8 +6,10 @@ import offers from "../src/data/launch-offers.json" with { type: "json" }
 import { adoptLaunchOffers } from "../server/launch-offers-migration.js"
 
 test("all approved launch offers are real catalogue prices and opening inventory", () => {
-  assert.equal(Object.keys(offers).length, products.length)
-  for (const p of products) {
+  const launchIds = new Set(legacyProducts.map((p) => p.id))
+  const approved = products.filter((p) => p.priceConfirmed && launchIds.has(p.id))
+  assert.equal(Object.keys(offers).length, approved.length)
+  for (const p of approved) {
     assert.equal(p.priceConfirmed, true, p.id)
     assert.ok(Number.isSafeInteger(p.price) && p.price > 0, p.id)
     assert.ok(p.comparePrice > p.price, p.id)

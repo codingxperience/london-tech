@@ -132,6 +132,18 @@ export function ProductMotionNote({
           icon: MessageCircle,
           tone: "support",
         },
+        ...(product.stock === 0 ? [] : [
+          {
+            text: arabic ? "اسأل عن الاستلام من المتجر" : "Ask about store pickup",
+            icon: MapPin,
+            tone: "pickup",
+          },
+          {
+            text: arabic ? "اسأل عن خيارات التوصيل" : "Ask about delivery",
+            icon: Truck,
+            tone: "delivery",
+          },
+        ]),
       ]
   const reduced = useReducedMotion()
   const element = useRef<HTMLSpanElement>(null)

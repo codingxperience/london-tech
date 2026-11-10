@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
 import {
+  Activity,
+  ArrowRight,
   Download,
   Edit3,
   ExternalLink,
@@ -798,36 +800,57 @@ function Invoices({ data, query }) {
   )
 }
 
+const historyTime = new Intl.DateTimeFormat("en-UG", {
+  dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Kampala",
+})
+
+const historyDay = new Intl.DateTimeFormat("en-CA", {
+  year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Africa/Kampala",
+})
+
+function eventValues(details) {
+  return Object.entries(details).filter(([key, value]) =>
+    !["id", "name", "changes"].includes(key) && value != null && typeof value !== "object",
+  )
+}
+
 function History({ data, query }) {
   const [action, setAction] = useState("all"),
     [from, setFrom] = useState(""),
     [to, setTo] = useState(""),
     [page, setPage] = useState(1)
+  const productNames = new Map(data.products.map((p) => [p.id, p.name]))
+  const recordName = (event) => event.details?.name ||
+    (event.action.startsWith("product.") && productNames.get(event.details?.id)) ||
+    event.details?.id || statusLabel(event.action.split(".")[0])
   const rows = data.events.filter(
     (e) =>
       (action === "all" || e.action.split(".")[0] === action) &&
-      (!from || e.created_at.slice(0, 10) >= from) &&
-      (!to || e.created_at.slice(0, 10) <= to) &&
-      JSON.stringify(e).toLowerCase().includes(query.toLowerCase()),
+      (!from || historyDay.format(new Date(e.created_at)) >= from) &&
+      (!to || historyDay.format(new Date(e.created_at)) <= to) &&
+      (recordName(e) + " " + JSON.stringify(e)).toLowerCase().includes(query.trim().toLowerCase()),
   )
+  const totalPages = Math.max(1, Math.ceil(rows.length / 20))
+  const currentPage = Math.min(page, totalPages)
   return (
-    <section className="admin-panel">
+    <section className="admin-panel history-panel">
       <div className="admin-panel-heading">
         <div>
           <h2>History & audit trail</h2>
           <p>
-            The most recent 500 recorded events. Historical records are
-            read-only.
+            Review product edits and store activity. Times are shown in Kampala time.
           </p>
         </div>
         <Button
           variant="secondary"
           onClick={() =>
             downloadCsv("london-tech-history.csv", [
-              ["Time", "Action", "Details"],
+              ["Time", "Action", "Record", "Changed by", "Details"],
               ...rows.map((e) => [
                 e.created_at,
                 e.action,
+                recordName(e),
+                e.actor_name,
                 JSON.stringify(e.details),
               ]),
             ])
@@ -882,28 +905,53 @@ function History({ data, query }) {
         </label>
       </div>
       {rows.length ? (
-        <div className="admin-table-scroll">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Event</th>
-                <th>Record / change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.slice((page - 1) * 20, page * 20).map((e, i) => (
-                <tr key={e.id || i}>
-                  <td>{new Date(e.created_at).toLocaleString("en-UG")}</td>
-                  <td>{statusLabel(e.action.replaceAll(".", " "))}</td>
-                  <td>
-                    <code>{JSON.stringify(e.details)}</code>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ol className="history-list">
+          {rows.slice((currentPage - 1) * 20, currentPage * 20).map((event) => {
+            const details = event.details || {}
+            const changes = Array.isArray(details.changes) ? details.changes : []
+            const values = eventValues(details)
+            return (
+              <li key={event.id} className="history-event">
+                <div className="history-event-header">
+                  <span className="history-event-icon"><Activity size={17} aria-hidden="true" /></span>
+                  <div className="history-event-title">
+                    <span>{statusLabel(event.action.replaceAll(".", " "))}</span>
+                    <h3>{recordName(event)}</h3>
+                    {details.id && details.id !== recordName(event) && <small>{details.id}</small>}
+                  </div>
+                  <div className="history-event-time">
+                    <time dateTime={event.created_at}>{historyTime.format(new Date(event.created_at))}</time>
+                    {event.actor_name && <span>{event.actor_name}</span>}
+                  </div>
+                </div>
+                {changes.length > 0 && (
+                  <details className="history-changes" open={currentPage === 1 && event === rows[0] ? true : undefined}>
+                    <summary>{changes.length} {changes.length === 1 ? "change" : "changes"}</summary>
+                    <dl>
+                      {changes.map(({ field, before, after }) => (
+                        <div key={field} className="history-change">
+                          <dt>{field}</dt>
+                          <dd>
+                            <span className="history-before"><span className="photo-sr-only">Before </span>{before}</span>
+                            <ArrowRight size={14} aria-hidden="true" />
+                            <span className="history-after"><span className="photo-sr-only">After </span>{after}</span>
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
+                )}
+                {values.length > 0 && (
+                  <dl className="history-values">
+                    {values.map(([key, value]) => (
+                      <div key={key}><dt>{statusLabel(key.replace(/([a-z])([A-Z])/g, "$1 $2"))}</dt><dd>{typeof value === "boolean" ? (value ? "Yes" : "No") : String(value)}</dd></div>
+                    ))}
+                  </dl>
+                )}
+              </li>
+            )
+          })}
+        </ol>
       ) : (
         <p className="admin-empty-copy">No events match these filters.</p>
       )}
@@ -911,16 +959,16 @@ function History({ data, query }) {
         <span>{rows.length} events</span>
         <Button
           variant="secondary"
-          disabled={page === 1}
-          onClick={() => setPage(page - 1)}
+          disabled={currentPage === 1}
+          onClick={() => setPage(currentPage - 1)}
         >
           Previous
         </Button>
-        <span>{page}</span>
+        <span>{currentPage} / {totalPages}</span>
         <Button
           variant="secondary"
-          disabled={page * 20 >= rows.length}
-          onClick={() => setPage(page + 1)}
+          disabled={currentPage >= totalPages}
+          onClick={() => setPage(currentPage + 1)}
         >
           Next
         </Button>
