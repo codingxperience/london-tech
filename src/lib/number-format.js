@@ -3,6 +3,18 @@ const arabic = new Intl.NumberFormat("ar-UG", {
   maximumFractionDigits: 0,
   numberingSystem: "arab",
 })
+const dollarDigits = {
+  latn: new Intl.NumberFormat("en-UG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }),
+  arab: new Intl.NumberFormat("ar-UG-u-nu-arab", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }),
+}
+// Rounded display rate for 11 November 2026. Checkout is priced in UGX.
+const shillingsPerDollar = 4100
 let display = { language: "en", numberStyle: "latn" }
 
 export function setNumberDisplay(preferences) {
@@ -23,4 +35,11 @@ export function formatShillings(value) {
       ? "السعر عند الطلب"
       : "Price on request"
   return "UGX " + displayNumber(value)
+}
+
+export function formatEstimatedDollars(shillings) {
+  const style = typeof window !== "undefined" && display.numberStyle === "arab"
+    ? "arab"
+    : "latn"
+  return "≈ USD " + dollarDigits[style].format(shillings / shillingsPerDollar)
 }

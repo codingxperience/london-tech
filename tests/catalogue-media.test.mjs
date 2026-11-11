@@ -1,7 +1,7 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import { PGlite } from "@electric-sql/pglite"
-import { products, legacyProducts } from "../src/data/catalog.js"
+import { products, approvedProducts, legacyProducts } from "../src/data/catalog.js"
 import { repairCatalogueMedia } from "../src/lib/catalogue-media.js"
 import {
   galleryImages,
@@ -9,9 +9,41 @@ import {
 } from "../src/lib/product-experience.js"
 import {
   adoptReferencePrices,
+  adoptStockedPhones,
   repairSeedCatalogue,
   retireReferenceListings,
 } from "../server/catalogue-migration.js"
+
+test("phone reconciliation archives old inventory and preserves merchant edits", async () => {
+  const db = new PGlite()
+  try {
+    await db.exec(`CREATE TABLE products (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ DEFAULT NOW());
+      CREATE TABLE catalogue_migrations (version TEXT PRIMARY KEY)`)
+    const originals = new Map(approvedProducts.map((product) => [product.id, product]))
+    const archived = originals.get("galaxy-z-fold8-ultra")
+    const retained = { ...originals.get("galaxy-z-fold8"), price: 6200000, stock: 3 }
+    const edited = { ...originals.get("iphone-air"), image: "/owner.jpg", gallery: ["/owner.jpg"] }
+    for (const product of [archived, retained, edited])
+      await db.query("INSERT INTO products(id,data) VALUES($1,$2)", [product.id, JSON.stringify(product)])
+    await adoptStockedPhones(db)
+    const { rows } = await db.query("SELECT id,data FROM products")
+    const saved = new Map(rows.map(({ id, data }) => [id, data]))
+    assert.deepEqual(saved.get(archived.id), { ...archived, active: false })
+    const fold = saved.get(retained.id)
+    assert.equal(fold.active, true)
+    assert.equal(fold.name, "Samsung Galaxy Z Fold8")
+    assert.equal(fold.stock, 3)
+    assert.equal(fold.price, 6200000)
+    assert.deepEqual(fold.gallery, products.find(({ id }) => id === fold.id).gallery)
+    assert.equal(saved.get(edited.id).image, "/owner.jpg")
+    await db.query("UPDATE products SET data=jsonb_set(data, '{active}', 'true'::jsonb) WHERE id=$1", [archived.id])
+    await adoptStockedPhones(db)
+    const reactivated = await db.query("SELECT data FROM products WHERE id=$1", [archived.id])
+    assert.equal(reactivated.rows[0].data.active, true)
+  } finally {
+    await db.close()
+  }
+})
 
 test("reference prices replace old quotes once and preserve merchant figures and stock", async () => {
   const db = new PGlite()

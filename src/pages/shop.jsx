@@ -63,7 +63,7 @@ export function Product({ id }) {
     openAuth,
     initialReviews,
   } = useStore()
-  const p = products.find((p) => p.id === id)
+  const p = products.find((p) => p.id === id && p.active !== false)
 
   const [quantity, setQuantity] = useState(1),
     [option, setOption] = useState(""),
@@ -81,6 +81,7 @@ export function Product({ id }) {
     setReviewError(false)
     api("products/" + id + "/reviews")
       .then((r) => {
+        if (!Array.isArray(r.reviews)) throw new Error("Reviews are unavailable")
         if (active) setReviews(r.reviews)
       })
       .catch(() => {

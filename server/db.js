@@ -8,6 +8,7 @@ import { products, storeDefaults } from "../src/data/catalog.js"
 import {
   adoptReferenceDetails,
   adoptReferencePrices,
+  adoptStockedPhones,
   repairSeedCatalogue,
   retireReferenceListings,
 } from "./catalogue-migration.js"
@@ -220,6 +221,7 @@ async function initialize() {
   await retireReferenceListings(db)
   await adoptReferencePrices(db)
   await adoptReferenceDetails(db)
+  await adoptStockedPhones(db)
 
   await db.query(
     `INSERT INTO settings(id,data) VALUES('store',$1::jsonb) ON CONFLICT(id) DO NOTHING`,

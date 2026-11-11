@@ -1,9 +1,13 @@
 import productMedia from "../data/product-media.json" with { type: "json" }
 import productDetails from "../data/product-details.json" with { type: "json" }
 import { products } from "../data/catalog.js"
+import { stockedPhoneDetails } from "../data/phone-stock.js"
 
 const defaults = new Map(products.map((product) => [product.id, product]))
 const changed = (a, b) => JSON.stringify(a) !== JSON.stringify(b)
+const headlinePhoneSpecs = new Set([
+  "Display", "Main display", "Chip", "Main camera", "Rear camera", "Rear cameras", "Battery",
+])
 
 export function galleryImages(product) {
   const baseline = defaults.get(product.id)
@@ -12,7 +16,9 @@ export function galleryImages(product) {
     (product.name !== baseline.name ||
       product.image !== baseline.image ||
       changed(product.gallery, baseline.gallery))
-  const researched = edited ? [] : productMedia[product.id] || []
+  const researched = edited
+    ? []
+    : stockedPhoneDetails.get(product.id)?.views || productMedia[product.id] || []
   const existing = [product.image, ...(product.gallery || [])]
     .filter(Boolean)
     // A generic stock photo is not an extra view of a specific device.
@@ -29,6 +35,21 @@ export function galleryImages(product) {
 
 export function productInformation(product) {
   const baseline = defaults.get(product.id)
+  const phone = stockedPhoneDetails.get(product.id)
+  if (phone && product.name === phone.name) {
+    const specifications = product.specifications || []
+    return {
+      description: product.description,
+      highlights: specifications
+        .filter(([label]) => headlinePhoneSpecs.has(label))
+        .map(([title, body]) => ({ title, body })),
+      specifications,
+      sources: [{ label: `${phone.brand} product specifications`, url: phone.source }],
+      guides: phone.guide ? [{ label: "iPhone user guide", url: phone.guide }] : [],
+      promotion: phone.promotion,
+      video: phone.video,
+    }
+  }
   const researched =
     baseline && product.name !== baseline.name
       ? {}

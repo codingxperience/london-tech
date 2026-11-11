@@ -1,11 +1,17 @@
 import { repairCatalogueMedia } from "../src/lib/catalogue-media.js"
-import { legacyProducts } from "../src/data/catalog.js"
+import {
+  approvedProducts,
+  legacyProducts,
+  phoneProducts,
+  retiredPhoneSkus,
+} from "../src/data/catalog.js"
 import {
   referenceProducts,
   retiredReferenceSkus,
 } from "../src/data/reference-catalogue.js"
 
 const referencePriceVersion = "2026-11-10-reference-listing-prices"
+const phoneVersion = "2026-11-11-stocked-phone-catalogue"
 const referencePrices = referenceProducts
   .filter(({ priceConfirmed }) => priceConfirmed)
   .map(({ id, sku, price }) => ({ id, sku, price }))
@@ -84,6 +90,51 @@ export async function retireReferenceListings(db) {
     [JSON.stringify(retiredReferenceSkus)],
   )
   return result.affectedRows ?? result.rowCount
+}
+
+export async function adoptStockedPhones(db) {
+  const previous = new Map(approvedProducts.map((product) => [product.id, product]))
+  const nextPhones = new Map(phoneProducts.map((product) => [product.id, product]))
+  const ids = [
+    ...Object.keys(retiredPhoneSkus),
+    ...phoneProducts.filter(({ id }) => previous.has(id)).map(({ id }) => id),
+  ]
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      "INSERT INTO catalogue_migrations(version) VALUES($1) ON CONFLICT DO NOTHING RETURNING version",
+      [phoneVersion],
+    )
+    if (!marker.rows.length) return
+
+    const { rows } = await tx.query(
+      "SELECT id,data FROM products WHERE id=ANY($1::text[]) FOR UPDATE",
+      [ids],
+    )
+    for (const { id, data } of rows) {
+      const before = previous.get(id)
+      if (data.sku !== before.sku || data.category !== "mobiles") continue
+      const phone = nextPhones.get(id)
+      const updates = {}
+      if (!phone) {
+        updates.active = false
+      } else if (data.name === before.name || data.name === phone.name) {
+        for (const field of ["name", "brand", "description", "specifications", "inTheBox", "mediaNote"]) {
+          if (same(data[field] ?? "", before[field] ?? "")) updates[field] = phone[field]
+        }
+        if (data.image === before.image && same(data.gallery, before.gallery)) {
+          updates.image = phone.image
+          updates.gallery = phone.gallery
+        }
+      }
+      if (Object.keys(updates).some((field) => !same(updates[field], data[field])))
+        await tx.query(
+          "UPDATE products SET data=data || $2::jsonb,updated_at=NOW() WHERE id=$1",
+          [id, JSON.stringify(updates)],
+        )
+    }
+  })
 }
 
 /** Repair known old seed photos without overwriting concurrent merchant changes. */

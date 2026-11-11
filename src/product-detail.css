@@ -216,3 +216,33 @@
 .product-motion-note .product-motion-line{color:#a72c3e;font-weight:700}
 @media(max-width:1100px){.commerce-surface .product-page .detail-section-rail{display:none}.commerce-surface .product-page .detail-mobile-nav{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:20px;min-width:0;padding:10px 12px;min-height:56px}.commerce-surface .product-page .detail-mobile-nav label{font:700 12px/1.4 "Nunito Sans",sans-serif;color:#64748b}.commerce-surface .product-page .detail-mobile-nav select{display:block;min-width:0;width:100%;max-width:100%;min-height:36px;padding:6px 25px 6px 8px;border:0;border-radius:3px;background-color:#f4f7fb;color:#082a52;font:800 14px/1.4 Nunito,sans-serif;text-overflow:ellipsis}.commerce-surface .product-page .detail-more .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.commerce-surface .product-page .detail-highlight-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.commerce-surface .product-page .detail-section{padding-block:27px}.commerce-surface .product-page .detail-section-nav{margin-top:25px}.commerce-surface .product-page .detail-mobile-nav{gap:12px;padding-inline:4px}.commerce-surface .product-page .detail-store-summary{align-items:start;flex-direction:column;gap:12px}.commerce-surface .product-page .detail-story-gallery{gap:12px}.commerce-surface .product-page .detail-story-gallery figcaption{font-size:11px}}
+.detail-campaign {
+  margin: 22px 0;
+  border: 1px solid #e0e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.detail-campaign img {
+  display: block;
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  background: #f5f7f9;
+}
+.detail-campaign figcaption {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #082a52;
+}
+.detail-campaign figcaption a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+.detail-campaign figcaption a:hover { text-decoration: underline; }

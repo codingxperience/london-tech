@@ -4,12 +4,11 @@ import {
   LoaderCircle,
   ScanSearch,
   ShieldCheck,
-  ArrowRight,
 } from "lucide-react"
 import { Modal, Button } from "./ui.jsx"
 import { useStore } from "../store.jsx"
-import { productPath, categoryName } from "../data/catalog.js"
-import { ProductOffer } from "./ProductOffer.jsx"
+import { productPath } from "../data/catalog.js"
+import { CardPrices } from "./CardPrices.jsx"
 import {
   createVisualSearchClient,
   validateSearchPhoto,
@@ -225,13 +224,8 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
                           <span>
                             <img src={product.image} alt="" loading="lazy" />
                           </span>
-                          <small>{categoryName(product.category)}</small>
                           <h4>{product.name}</h4>
-                          <ProductOffer product={product} compact />
-                          <span className="visual-match-open">
-                            View item
-                            <ArrowRight size={13} />
-                          </span>
+                          <CardPrices product={product} />
                         </a>
                       ))}
                     </div>

@@ -13,7 +13,7 @@ export async function publicCatalog() {
   const db = await getDatabase()
   const [catalog, settings, pages, reviews] = await Promise.all([
     db.query(
-      "SELECT data FROM products WHERE data->>'active'='true' ORDER BY data->>'name'",
+      "SELECT data,updated_at FROM products WHERE data->>'active'='true' ORDER BY data->>'name'",
     ),
     db.query("SELECT data FROM settings WHERE id='store'"),
     db.query(
@@ -36,7 +36,10 @@ export async function publicCatalog() {
     })
   const stored = settings.rows[0]?.data || {}
   return {
-    products: catalog.rows.map((r) => r.data),
+    products: catalog.rows.map(({ data, updated_at }) => ({
+      ...data,
+      updatedAt: updated_at,
+    })),
     settings: {
       ...storeDefaults,
       ...stored,

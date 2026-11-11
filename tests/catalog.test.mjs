@@ -4,7 +4,7 @@ import assert from "node:assert/strict"
 
 import { access, readFile } from "node:fs/promises"
 
-import { products, categories, storeDefaults } from "../src/data/catalog.js"
+import { products, categories, phoneProducts, storeDefaults } from "../src/data/catalog.js"
 import { referenceProducts } from "../src/data/reference-catalogue.js"
 
 test("catalogue images exist, identifiers are unique and every category resolves", async () => {
@@ -16,7 +16,11 @@ test("catalogue images exist, identifiers are unique and every category resolves
       product.id + " has a category",
     )
 
-    if (referenceProducts.some((entry) => entry.id === product.id)) {
+    if (phoneProducts.includes(product) && product.stock == null) {
+      assert.equal(product.price, null)
+      assert.equal(product.priceConfirmed, false)
+      assert.equal(product.comparePrice, null)
+    } else if (referenceProducts.some((entry) => entry.id === product.id)) {
       if (product.price != null) {
         assert.ok(Number.isSafeInteger(product.price) && product.price > 0)
       }

@@ -49,12 +49,11 @@ test("photo validation accepts supported images and rejects empty, oversized and
 })
 
 test("the shipped image index covers the actual catalogue and cannot match removed or replaced products", async () => {
-  assert.equal(manifest.indexedProducts, products.length)
-  assert.equal(
-    new Set(index.entries.map((entry) => entry.id)).size,
-    products.length,
-  )
-  assert.ok(index.entries.length > products.length)
+  const indexed = new Set(index.entries.map((entry) => entry.id))
+  const active = new Set(products.filter((product) => product.active).map(({ id }) => id))
+  assert.equal(manifest.indexedProducts, active.size)
+  assert.deepEqual(indexed, active)
+  assert.ok(index.entries.length > active.size)
   for (const entry of index.entries) {
     assert.equal(entry.vector.length, 512)
     assert.ok(Math.abs(Math.hypot(...entry.vector) - 1) < 0.00001)

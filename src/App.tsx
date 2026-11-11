@@ -4,10 +4,9 @@ import { AccountMenu } from "./components/AccountMenu"
 import { LocaleSelector } from "./components/LocaleSelector.jsx"
 import { useLocale } from "./lib/locale.jsx"
 import { StoreFooter } from "./components/StoreFooter.jsx"
-import { ProductOffer } from "./components/ProductOffer.jsx"
-import { productOffer } from "./lib/offer-details.js"
+import { CardPrices } from "./components/CardPrices.jsx"
 import { UtilityBanner } from "./components/UtilityBanner.jsx"
-import { ProductMotionNote, TypewriterText } from "./components/MotionText"
+import { TypewriterText } from "./components/MotionText"
 import { useState, useEffect, type ReactNode } from "react"
 import logoImg from "@/imports/london/london-tech-logo.png"
 import {
@@ -108,11 +107,6 @@ interface Product {
   available?: number
 }
 // ── Helpers ───────────────────────────────────────────────────────────────────
-const ugx = (n: number | null) =>
-  n == null ? "Price on request" : "UGX " + n.toLocaleString("en-UG")
-const whatsapp = (p: Product) =>
-  `https://wa.me/256788341111?text=${encodeURIComponent(`Hello London Tech, I am interested in ${p.name} (guide price ${ugx(p.price)}). Please confirm the configuration and availability.`)}`
-
 function Btn({
   children,
   small,
@@ -217,10 +211,10 @@ const HERO_SLIDES = [
 const COMMERCE_IDS: Record<number, string> = {
   1: "iphone-18-pro-max",
   2: "iphone-18-pro-max-burgundy",
-  3: "galaxy-s25-ultra",
-  4: "galaxy-z-fold8",
-  5: "honor-x9b",
-  6: "infinix-smart-10-plus",
+  3: "galaxy-s26-ultra",
+  4: "galaxy-a57-5g",
+  5: "honor-x9d-5g",
+  6: "galaxy-a17",
   7: "samsung-galaxy-tablet",
   8: "apple-ipad-pro",
   9: "soundcore-wireless-earbuds",
@@ -228,10 +222,10 @@ const COMMERCE_IDS: Record<number, string> = {
   11: "dji-pocket-camera",
   12: "apple-watch-series",
   101: "iphone-18-pro-max",
-  102: "galaxy-z-fold8",
+  102: "galaxy-a57-5g",
   103: "apple-ipad-pro",
   104: "dji-pocket-camera",
-  201: "galaxy-s25-ultra",
+  201: "galaxy-s26-ultra",
   202: "soundcore-wireless-earbuds",
 }
 const commerceId = (p: Product) => COMMERCE_IDS[p.id] || String(p.id)
@@ -296,220 +290,24 @@ function catalogueProducts(
     return product ? [product] : []
   })
 }
-function cardBadge(p: Product, catalogue: any[]) {
-  const product = catalogue.find((item) => item.id === commerceId(p))
-  const offer = product && productOffer(product)
-  return offer?.discounted ? "−" + offer.discountPercent + "%" : p.badge
-}
-
-// ── Product Card ──────────────────────────────────────────────────────────────
 function ProductCard({ p }: { p: Product }) {
-  const { t } = useLocale()
-  const { products, wishlist, toggleWish, addCart, cart } = useStore()
-  const item = products.find(
-    (item: { id: string }) => item.id === commerceId(p),
-  )
-  const wished = wishlist.includes(commerceId(p))
-  const added = cart.some((line: { id: string }) => line.id === commerceId(p))
-  const badge = cardBadge(p, products)
+  const { products } = useStore()
+  const id = commerceId(p)
+  const item = products.find((product: { id: string }) => product.id === id)
   if (!item) return null
+
   return (
-    <div
-      className="pcard"
-      onClick={(e) => {
-        if (!(e.target as HTMLElement).closest("button,a"))
-          navigate("/products/" + commerceId(p) + "/")
-      }}
-      style={{
-        background: "#fff",
-        border: "1px solid #eee",
-        borderRadius: 4,
-        overflow: "hidden",
-        cursor: "pointer",
-        position: "relative",
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          background: "#f9f9f9",
-          height: 170,
-        }}
-      >
-        <img
-          src={p.image}
-          loading="lazy"
-          decoding="async"
-          alt={p.name}
-          className="pimg"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            padding: 10,
-            transition: "transform .3s",
-          }}
-        />
-        {badge && (
-          <span
-            style={{
-              position: "absolute",
-              top: 8,
-              left: 8,
-              background: p.badgeColor || B_BLUE,
-              color: "#fff",
-              fontSize: 12,
-              fontWeight: 800,
-              padding: "2px 7px",
-              borderRadius: 3,
-              fontFamily: "Nunito,sans-serif",
-            }}
-          >
-            {t(badge)}
-          </span>
-        )}
-        <div
-          className="pover"
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(8,42,82,.04)",
-            opacity: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            paddingBottom: 12,
-            gap: 6,
-            transition: "opacity .2s",
-          }}
-        >
-          <button
-            disabled={item.stock === 0}
-            onClick={() => addCart(item)}
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              padding: "5px 14px",
-              borderRadius: 3,
-              border: `1.5px solid ${added ? B_BLUE : "#ddd"}`,
-              background: added ? B_BLUE : "#fff",
-              color: added ? "#fff" : "#333",
-              cursor: "pointer",
-              fontFamily: "Nunito,sans-serif",
-            }}
-          >
-            {added ? "✓ " + t("Added") : "+ " + t("Add to cart")}
-          </button>
-          <button
-            onClick={() => toggleWish(commerceId(p))}
-            aria-label={t(wished ? "Remove from wishlist" : "Save to wishlist")}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              lineHeight: 0,
-            }}
-          >
-            <Heart
-              size={16}
-              fill={wished ? B_BLUE : "none"}
-              stroke={wished ? B_BLUE : "#aaa"}
-            />
-          </button>
+    <article className="pcard home-product-card">
+      <a className="home-product-link" href={"/products/" + id + "/"}>
+        <div className="home-product-image">
+          <img src={item.image} loading="lazy" decoding="async" alt="" />
         </div>
-      </div>
-      <div style={{ padding: "10px 12px" }}>
-        <div
-          style={{
-            fontSize: 12,
-            color: "#64748b",
-            marginBottom: 2,
-            fontFamily: "Nunito Sans,sans-serif",
-          }}
-        >
-          {t(p.category)}
+        <div className="home-product-copy">
+          <h3>{item.name}</h3>
+          <CardPrices product={item} />
         </div>
-        <div
-          style={{
-            fontSize: 15,
-            fontWeight: 700,
-            color: "#333",
-            marginBottom: 4,
-            lineHeight: 1.3,
-            fontFamily: "Nunito,sans-serif",
-          }}
-        >
-          <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
-        </div>
-        <ProductMotionNote product={item} />
-        {p.arabicName && (
-          <div
-            dir="rtl"
-            lang="ar"
-            style={{
-              fontSize: 12,
-              color: "#64748b",
-              marginBottom: 4,
-              textAlign: "left",
-            }}
-          >
-            {p.arabicName}
-          </div>
-        )}
-        <ProductOffer product={item} showDiscountBadge={false} />
-        <div
-          className="product-actions"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            marginTop: 9,
-          }}
-        >
-          <a
-            className="whatsapp-cta"
-            href={whatsapp(p)}
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              color: "#fff",
-              borderRadius: 3,
-              padding: "6px 4px",
-              fontSize: 12,
-              fontWeight: 800,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 4,
-              textDecoration: "none",
-            }}
-          >
-            <WhatsAppIcon size={15} /> {t("Chat")}
-          </a>
-          <button
-            disabled={item.stock === 0}
-            onClick={() => addCart(item)}
-            style={{
-              background: added ? B_GOLD : B_BLUE,
-              color: "#fff",
-              border: 0,
-              borderRadius: 3,
-              padding: "6px 4px",
-              fontSize: 12,
-              fontWeight: 800,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 4,
-            }}
-          >
-            <ShoppingCart size={13} /> {t(added ? "Added" : "Add")}
-          </button>
-        </div>
-      </div>
-    </div>
+      </a>
+    </article>
   )
 }
 
@@ -642,9 +440,6 @@ export default function App({ children, quiet = false }: StorefrontProps) {
     >
       {/* ── Responsive styles ──────────────────────────────────────────────── */}
       <style>{`
-        .pcard:hover .pover { opacity:1 !important; }
-        .pcard:hover .pimg { transform:scale(1.05); }
-
         /* Nav */
         .nav-desktop { display:flex !important; }
         .nav-toggle  { display:none  !important; }
@@ -1079,7 +874,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                 <img src={featuredPhone.image} alt={featuredPhone.name} />
                 <span>{t("In focus")}</span>
                 <h3>{featuredPhone.name}</h3>
-                <ProductOffer product={featuredPhone} compact />
+                <CardPrices product={featuredPhone} />
               </a>
             )}
 
@@ -1198,11 +993,10 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                     >
                       <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
                     </div>
-                    <ProductOffer
+                    <CardPrices
                       product={catalogue.find(
                         (item: { id: string }) => item.id === commerceId(p),
                       )}
-                      compact
                     />
                   </div>
                 </div>
@@ -1541,24 +1335,6 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                             display: "block",
                           }}
                         />
-                        {cardBadge(p, catalogue) && (
-                          <span
-                            style={{
-                              position: "absolute",
-                              top: 6,
-                              left: 6,
-                              background: p.badgeColor || B_BLUE,
-                              color: "#fff",
-                              fontSize: 10,
-                              fontWeight: 700,
-                              padding: "2px 6px",
-                              borderRadius: 3,
-                              fontFamily: "Nunito,sans-serif",
-                            }}
-                          >
-                            {cardBadge(p, catalogue)}
-                          </span>
-                        )}
                       </div>
                       <div style={{ flex: 1, minWidth: 120 }}>
                         <div
@@ -1574,8 +1350,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                             {p.name}
                           </a>
                         </div>
-                        <ProductMotionNote product={item} />
-                        <ProductOffer product={item} />
+                        <CardPrices product={item} />
                       </div>
                     </div>
                   )

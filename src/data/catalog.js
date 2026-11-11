@@ -3,6 +3,7 @@ import productMedia from "./product-media.json" with { type: "json" }
 import catalogueCorrections from "./catalogue-corrections.json" with { type: "json" }
 import launchOffers from "./launch-offers.json" with { type: "json" }
 import { referenceProducts } from "./reference-catalogue.js"
+import { stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
 
 import { guidePrices } from "./prices.js"
 import { formatShillings } from "../lib/number-format.js"
@@ -415,7 +416,7 @@ export const legacyProducts = [
   }
 })
 
-const approvedProducts = legacyProducts.map((product) => {
+export const approvedProducts = legacyProducts.map((product) => {
   const media = productMedia[product.id] || []
   return {
     ...product,
@@ -430,7 +431,71 @@ const approvedProducts = legacyProducts.map((product) => {
   }
 })
 
-export const products = [...approvedProducts, ...referenceProducts]
+const previousPhones = new Map(
+  approvedProducts.filter(({ category }) => category === "mobiles").map((p) => [p.id, p]),
+)
+export const retiredPhoneSkus = Object.fromEntries(
+  [...previousPhones.values()]
+    .filter(({ id }) => !stockedPhoneDetails.has(id))
+    .map(({ id, sku }) => [id, sku]),
+)
+
+const phoneSkus = {
+  "iphone-17-pro-max-cosmic-orange-512gb": "LT-PHONE-001",
+  "iphone-16-pro-max-desert-titanium-512gb": "LT-PHONE-002",
+  "iphone-15-pro-max-natural-titanium-256gb": "LT-PHONE-003",
+  "galaxy-a57-5g": "LT-PHONE-004",
+  "samsung-galaxy-a16": "LT-PHONE-005",
+  "galaxy-a17": "LT-PHONE-006",
+  "galaxy-a07": "LT-PHONE-007",
+  "honor-x9d-5g": "LT-PHONE-008",
+  "honor-x9c-5g": "LT-PHONE-009",
+  "honor-600-lite-5g": "LT-PHONE-010",
+}
+
+export const phoneProducts = stockedPhones.map(({ id }) => {
+  const { brand, name, description, specifications, mediaNote, inTheBox, views } =
+    stockedPhoneDetails.get(id)
+  const previous = previousPhones.get(id)
+  return {
+    price: null,
+    priceConfirmed: false,
+    comparePrice: null,
+    stock: null,
+    featured: false,
+    condition: "Confirm with store",
+    warranty: "",
+    delivery: "",
+    options: [],
+    colors: [],
+    tags: [],
+    createdAt: "2026-11-11T00:00:00Z",
+    sku: phoneSkus[id],
+    ...previous,
+    id,
+    brand,
+    name,
+    description,
+    specifications,
+    category: "mobiles",
+    updatedAt: "2026-11-11T00:00:00Z",
+    mediaNote: mediaNote || "",
+    inTheBox: inTheBox || "",
+    active: true,
+    image: views[0].src,
+    gallery: views.map(({ src }) => src),
+  }
+})
+
+export const products = [
+  ...phoneProducts,
+  ...approvedProducts
+    .filter(({ id }) => !stockedPhoneDetails.has(id))
+    .map((product) =>
+      retiredPhoneSkus[product.id] ? { ...product, active: false } : product,
+    ),
+  ...referenceProducts,
+]
 
 export const storeDefaults = {
   name: "London Tech",

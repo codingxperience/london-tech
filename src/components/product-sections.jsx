@@ -8,6 +8,7 @@ import {
   ChevronDown,
   CircleHelp,
   MessageCircle,
+  PlayCircle,
   ShieldCheck,
   Star,
   Truck,
@@ -370,7 +371,26 @@ export function ProductSections({
           >
             <h2 id="description-heading">{t("Product description")}</h2>
             <p className="detail-lead">{information.description}</p>
-            {images.length > 1 && (
+            {information.promotion ? (
+              <figure className="detail-campaign">
+                <img
+                  src={information.promotion.src}
+                  alt={information.promotion.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  <a href={information.promotion.source} target="_blank" rel="noreferrer">
+                    {p.brand} {t("campaign image")} <ArrowUpRight size={14} />
+                  </a>
+                  {information.video && (
+                    <a href={information.video.url} target="_blank" rel="noreferrer">
+                      <PlayCircle size={17} /> {information.video.label}
+                    </a>
+                  )}
+                </figcaption>
+              </figure>
+            ) : images.length > 1 && (
               <div className="detail-story-gallery">
                 {images.slice(1, 4).map((image) => (
                   <figure key={image.src}>

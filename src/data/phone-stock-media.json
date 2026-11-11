@@ -1,0 +1,560 @@
+{
+  "iphone-air": {
+    "views": [
+      {
+        "src": "/assets/product-gallery/iphone-air-f754489a52.jpg",
+        "alt": "iPhone Air — Front and rear finish lineup",
+        "source": "https://www.apple.com/newsroom/2025/09/introducing-iphone-air-a-powerful-new-iphone-with-a-breakthrough-design/"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-2.webp",
+        "alt": "iPhone Air — Front display",
+        "source": "https://images.apple.com/v/iphone-air/k/images/overview/product-viewer/pro_display__cys2dk10h926_large.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-3.webp",
+        "alt": "iPhone Air — Rear camera plateau",
+        "source": "https://images.apple.com/v/iphone-air/k/images/overview/product-viewer/plateau__fkenhllruiy6_large.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-4.webp",
+        "alt": "iPhone Air — Titanium side profile",
+        "source": "https://www.apple.com/newsroom/images/2025/09/introducing-iphone-air-a-powerful-new-iphone-with-a-breakthrough-design/article/Apple-iPhone-Air-profile-250909_big.jpg.large.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-5.webp",
+        "alt": "iPhone Air — Sky Blue finish",
+        "source": "https://images.apple.com/v/iphone-air/k/images/overview/product-viewer/color_static_ultramarine__cgfuoct82biu_large.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-6.webp",
+        "alt": "iPhone Air — Light Gold finish",
+        "source": "https://www.apple.com/v/iphone-air/k/images/overview/product-viewer/color_static_gold__d1p7qgdkczo2_large.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-7.webp",
+        "alt": "iPhone Air — Cloud White finish",
+        "source": "https://images.apple.com/v/iphone-air/k/images/overview/product-viewer/color_static_white__bsqapwl67oj6_large.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-air-8.webp",
+        "alt": "iPhone Air — Space Black finish",
+        "source": "https://images.apple.com/v/iphone-air/k/images/overview/product-viewer/color_static_black__bavqefsedg82_large.jpg"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-air-campaign.webp",
+      "alt": "iPhone Air campaign image",
+      "source": "https://www.apple.com/newsroom/2025/09/introducing-iphone-air-a-powerful-new-iphone-with-a-breakthrough-design/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-air-plateau/large_2x.mp4",
+      "label": "Watch Apple’s iPhone Air design video"
+    }
+  },
+  "galaxy-z-fold8": {
+    "views": [
+      {
+        "src": "/assets/official-samsung-fold8-lavender.jpg",
+        "alt": "Samsung Galaxy Z Fold8 — Lavender front and rear",
+        "source": "https://www.samsung.com/us/smartphones/galaxy-z-fold8/"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-z-fold8-2.webp",
+        "alt": "Samsung Galaxy Z Fold8 — Folded cover display",
+        "source": "https://images.samsung.com/us/smartphones/galaxy-z-fold8/images/galaxy-z-fold8-features-design-intro-start.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-z-fold8-3.webp",
+        "alt": "Samsung Galaxy Z Fold8 — Side and hinge close-up",
+        "source": "https://images.samsung.com/us/smartphones/galaxy-z-fold8/images/galaxy-z-fold8-features-colors-seamless-unfolding-start.jpg"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-z-fold8-4.webp",
+        "alt": "Samsung Galaxy Z Fold8 — Three-quarter cover display",
+        "source": "https://images.samsung.com/us/smartphones/galaxy-z-fold8/images/galaxy-z-fold8-features-colors-glass-and-hinge-start.jpg"
+      },
+      {
+        "src": "/assets/official-samsung-fold8-graphite.jpg",
+        "alt": "Samsung Galaxy Z Fold8 — Graphite finish",
+        "source": "https://www.samsung.com/us/smartphones/galaxy-z-fold8/"
+      },
+      {
+        "src": "/assets/official-samsung-fold8-cream.jpg",
+        "alt": "Samsung Galaxy Z Fold8 — Cream finish",
+        "source": "https://www.samsung.com/us/smartphones/galaxy-z-fold8/"
+      },
+      {
+        "src": "/assets/official-samsung-fold8-pistachio.jpg",
+        "alt": "Samsung Galaxy Z Fold8 — Pistachio finish",
+        "source": "https://www.samsung.com/us/smartphones/galaxy-z-fold8/"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/official-samsung-fold8-hero.jpg",
+      "alt": "Samsung Galaxy Z Fold8 campaign image",
+      "source": "https://www.samsung.com/us/smartphones/galaxy-z-fold8/"
+    },
+    "video": {
+      "url": "https://images.samsung.com/us/smartphones/galaxy-z-fold8/videos/galaxy-z-fold8-features-design-intro.mp4",
+      "label": "Watch Samsung’s Galaxy Z Fold8 design video"
+    }
+  },
+  "iphone-18-pro-max": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-18-pro-max-1.webp",
+        "alt": "iPhone 18 Pro Max in Glacier — Front and rear",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-18-pro-max-finish-select-glacier-202609"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-18-pro-max-2.webp",
+        "alt": "iPhone 18 Pro Max in Glacier — Rear camera detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-18-pro-max-finish-select-glacier-202609_AV2"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-18-pro-max-3.webp",
+        "alt": "iPhone 18 Pro Max in Glacier — Camera and display detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-18-pro-max-finish-select-glacier-202609_AV3"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-18-pro-max-campaign.webp",
+      "alt": "iPhone 18 Pro Max campaign image",
+      "source": "https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/2026/autoplay/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/apple-iphone-18-pro-camera-close-up/large_2x.mp4",
+      "label": "Watch Apple’s camera close-up"
+    }
+  },
+  "iphone-18-pro-max-burgundy": {
+    "views": [
+      {
+        "src": "/assets/product-gallery/iphone-18-pro-max-burgundy-1b150e11de.jpg",
+        "alt": "iPhone 18 Pro Max in Burgundy — Three-quarter view",
+        "source": "https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-18-pro-max-burgundy-2.webp",
+        "alt": "iPhone 18 Pro Max in Burgundy — Rear camera detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-18-pro-max-finish-select-burgundy-202609_AV2"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-18-pro-max-burgundy-3.webp",
+        "alt": "iPhone 18 Pro Max in Burgundy — Camera and display detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-18-pro-max-finish-select-burgundy-202609_AV3"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-18-pro-max-campaign.webp",
+      "alt": "iPhone 18 Pro Max campaign image",
+      "source": "https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/2026/autoplay/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/apple-iphone-18-pro-camera-close-up/large_2x.mp4",
+      "label": "Watch Apple’s camera close-up"
+    }
+  },
+  "iphone-17-pro-max": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-17-pro-max-1.webp",
+        "alt": "iPhone 17 Pro Max in Silver — Front and rear",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-silver-202509"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-17-pro-max-2.webp",
+        "alt": "iPhone 17 Pro Max in Silver — Rear camera detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-silver-202509_AV2"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-17-pro-max-3.webp",
+        "alt": "iPhone 17 Pro Max in Silver — Camera and display detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-silver-202509_AV3"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-17-pro-max-campaign.webp",
+      "alt": "iPhone 17 Pro Max campaign image",
+      "source": "https://www.apple.com/uk/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-the-most-powerful-and-advanced-pro-models-ever/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-17-pro-forged-plateau/large_2x.mp4",
+      "label": "Watch Apple’s design video"
+    }
+  },
+  "iphone-17-pro-max-cosmic-orange-512gb": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-17-pro-max-cosmic-orange-512gb-1.webp",
+        "alt": "iPhone 17 Pro Max in Cosmic Orange — Front and rear",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-cosmicorange-202509"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-17-pro-max-cosmic-orange-512gb-2.webp",
+        "alt": "iPhone 17 Pro Max in Cosmic Orange — Rear camera detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-cosmicorange-202509_AV2"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-17-pro-max-cosmic-orange-512gb-3.webp",
+        "alt": "iPhone 17 Pro Max in Cosmic Orange — Camera and display detail",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-cosmicorange-202509_AV3"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-17-pro-max-cosmic-orange-512gb-campaign.webp",
+      "alt": "iPhone 17 Pro Max campaign image",
+      "source": "https://www.apple.com/uk/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-the-most-powerful-and-advanced-pro-models-ever/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-17-pro-forged-plateau/large_2x.mp4",
+      "label": "Watch Apple’s design video"
+    }
+  },
+  "iphone-16-pro-max-desert-titanium-512gb": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-16-pro-max-desert-titanium-512gb-1.webp",
+        "alt": "iPhone 16 Pro Max in Desert Titanium — Front and rear",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_ade3a4ab-62fd-4451-98de-0cfac33b0520"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-16-pro-max-desert-titanium-512gb-2.webp",
+        "alt": "iPhone 16 Pro Max in Desert Titanium — Front three-quarter view",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_a402381c-4ff4-42aa-9fe0-4a372ebc915d"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-16-pro-max-desert-titanium-512gb-3.webp",
+        "alt": "iPhone 16 Pro Max in Desert Titanium — Rear three-quarter view",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_d20674ca-b2c9-447a-b9d6-22acf5c8b52d"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-16-pro-max-desert-titanium-512gb-4.webp",
+        "alt": "iPhone 16 Pro Max in Desert Titanium — Front edge and Camera Control",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_866fbfad-07b2-464f-b395-a1946934f1b8"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-16-pro-max-desert-titanium-512gb-5.webp",
+        "alt": "iPhone 16 Pro Max in Desert Titanium — Rear edge detail",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_1b6b408d-c2e4-4605-8d9b-5032ee71f455"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-16-pro-max-desert-titanium-512gb-campaign.webp",
+      "alt": "iPhone 16 Pro Max campaign image",
+      "source": "https://www.apple.com/uk/newsroom/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/videos-2024/autoplay/2024/09/apple-iphone-16-pro-light-and-durable-upgraded-design/large_2x.mp4",
+      "label": "Watch Apple’s titanium design video"
+    }
+  },
+  "iphone-15-pro-max-natural-titanium-256gb": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-15-pro-max-natural-titanium-256gb-1.webp",
+        "alt": "iPhone 15 Pro Max in Natural Titanium — Front and rear",
+        "source": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/refurb-iphone-15-pro-max-naturaltitanium-202412"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-15-pro-max-natural-titanium-256gb-2.webp",
+        "alt": "iPhone 15 Pro Max in Natural Titanium — Front controls diagram",
+        "source": "https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/111828-iphone-15-pro-max-portimage-1.png"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-15-pro-max-natural-titanium-256gb-3.webp",
+        "alt": "iPhone 15 Pro Max in Natural Titanium — Rear camera diagram",
+        "source": "https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/111828-iphone-15-pro-max-portimage-2.png"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-15-pro-max-natural-titanium-256gb-campaign.webp",
+      "alt": "iPhone 15 Pro Max campaign image",
+      "source": "https://www.apple.com/uk/newsroom/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/iphone-15-pro-camera-optical-zoom/large_2x.mp4",
+      "label": "Watch Apple’s optical zoom video"
+    }
+  },
+  "iphone-13-pro-max": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-13-pro-max-1.webp",
+        "alt": "iPhone 13 Pro Max in Graphite — Front and rear",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_4489630b-a59a-4bd3-9762-98e26b2ceb29"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-13-pro-max-2.webp",
+        "alt": "iPhone 13 Pro Max in Graphite — Rear camera detail",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_821ada32-bc45-46ae-8adc-ae9d03401220"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-13-pro-max-3.webp",
+        "alt": "iPhone 13 Pro Max in Graphite — Side profile",
+        "source": "https://target.scene7.com/is/image/Target/GUEST_bfb876d4-5c90-49a5-a1f8-81886de27cc2"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/iphone-13-pro-max-campaign.webp",
+      "alt": "iPhone 13 Pro Max campaign image",
+      "source": "https://www.apple.com/newsroom/2021/09/apple-unveils-iphone-13-pro-and-iphone-13-pro-max-more-pro-than-ever-before/"
+    },
+    "video": {
+      "url": "https://www.apple.com/newsroom/videos/iphone-13-pro-promotion/large_2x.mp4",
+      "label": "Watch Apple’s ProMotion video"
+    }
+  },
+  "galaxy-s26-ultra": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/galaxy-s26-ultra-1.webp",
+        "alt": "Galaxy S26 Ultra in Sky Blue — Front",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415148"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s26-ultra-2.webp",
+        "alt": "Galaxy S26 Ultra in Sky Blue — Rear three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415146"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s26-ultra-3.webp",
+        "alt": "Galaxy S26 Ultra in Sky Blue — Front three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415149"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s26-ultra-4.webp",
+        "alt": "Galaxy S26 Ultra in Sky Blue — Rear with S Pen",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415151"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/official-samsung-galaxy-s26-ultra-key-visual.jpg",
+      "alt": "Galaxy S26 Ultra campaign image",
+      "source": "https://www.samsung.com/africa_en/smartphones/galaxy-s26-ultra/"
+    },
+    "video": {
+      "url": "https://images.samsung.com/africa_en/smartphones/galaxy-s26-ultra/videos/galaxy-s26-ultra-features-intro-overview.mp4",
+      "label": "Watch Samsung’s Galaxy S26 Ultra overview"
+    }
+  },
+  "galaxy-a57-5g": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/galaxy-a57-5g-1.webp",
+        "alt": "Galaxy A57 5G in Awesome Navy — Front and rear",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/my/sm-a576bdbuxme/gallery/my-galaxy-a57-5g-sm-a576-sm-a576bdbuxme-551558750"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a57-5g-2.webp",
+        "alt": "Galaxy A57 5G in Awesome Navy — Rear camera and side profile",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/id/feature/167029456/id-feature-awesome-navy-551656352"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/galaxy-a57-5g-campaign.webp",
+      "alt": "Galaxy A57 5G campaign image",
+      "source": "https://www.samsung.com/id/smartphones/galaxy-a/galaxy-a57-5g-awesome-navy-256gb-sm-a576bdbsxid/"
+    },
+    "video": {
+      "url": "https://images.samsung.com/is/content/samsung/p6pim/id/feature/167029494/id-feature---x20-551656412.mp4",
+      "label": "Watch Samsung’s Galaxy A57 5G video"
+    }
+  },
+  "samsung-galaxy-a16": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/samsung-galaxy-a16-1.webp",
+        "alt": "Galaxy A16 LTE in Black — Front",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-a165fzkiafb/gallery/africa-en-galaxy-a16-sm-a165-sm-a165fzkiafb-544252041"
+      },
+      {
+        "src": "/assets/stocked-phones/samsung-galaxy-a16-2.webp",
+        "alt": "Galaxy A16 LTE in Black — Rear",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-a165fzkiafb/gallery/africa-en-galaxy-a16-sm-a165-sm-a165fzkiafb-544252044"
+      },
+      {
+        "src": "/assets/stocked-phones/samsung-galaxy-a16-3.webp",
+        "alt": "Galaxy A16 LTE in Black — Front three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-a165fzkiafb/gallery/africa-en-galaxy-a16-sm-a165-sm-a165fzkiafb-544252042"
+      },
+      {
+        "src": "/assets/stocked-phones/samsung-galaxy-a16-4.webp",
+        "alt": "Galaxy A16 LTE in Black — Rear three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-a165fzkiafb/gallery/africa-en-galaxy-a16-sm-a165-sm-a165fzkiafb-544252045"
+      },
+      {
+        "src": "/assets/stocked-phones/samsung-galaxy-a16-5.webp",
+        "alt": "Galaxy A16 LTE in Black — Side profile",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-a165fzkiafb/gallery/africa-en-galaxy-a16-sm-a165-sm-a165fzkiafb-544252047"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/samsung-galaxy-a16-campaign.webp",
+      "alt": "Galaxy A16 LTE campaign image",
+      "source": "https://www.samsung.com/africa_en/smartphones/galaxy-a/galaxy-a16-black-256gb-sm-a165fzkiafb/"
+    }
+  },
+  "galaxy-a17": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/galaxy-a17-1.webp",
+        "alt": "Galaxy A17 LTE in Light Blue — Front",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_fr/sm-a175flboafb/gallery/africa-fr-galaxy-a17-sm-a175-sm-a175flboafb-549083610"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a17-2.webp",
+        "alt": "Galaxy A17 LTE in Light Blue — Rear",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_fr/sm-a175flboafb/gallery/africa-fr-galaxy-a17-sm-a175-sm-a175flboafb-549083609"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a17-3.webp",
+        "alt": "Galaxy A17 LTE in Light Blue — Front three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_fr/sm-a175flboafb/gallery/africa-fr-galaxy-a17-sm-a175-sm-a175flboafb-549083611"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a17-4.webp",
+        "alt": "Galaxy A17 LTE in Light Blue — Rear three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_fr/sm-a175flboafb/gallery/africa-fr-galaxy-a17-sm-a175-sm-a175flboafb-549083607"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a17-5.webp",
+        "alt": "Galaxy A17 LTE in Light Blue — Side profile",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_fr/sm-a175flboafb/gallery/africa-fr-galaxy-a17-sm-a175-sm-a175flboafb-549083613"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/galaxy-a17-campaign.webp",
+      "alt": "Galaxy A17 LTE campaign image",
+      "source": "https://www.samsung.com/africa_fr/smartphones/galaxy-a/galaxy-a17-light-blue-256gb-sm-a175flboafb/"
+    }
+  },
+  "galaxy-a07": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/galaxy-a07-1.webp",
+        "alt": "Galaxy A07 in Black — Front",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/za/sm-a075fzkgafa/gallery/za-galaxy-a07-sm-a075-sm-a075fzkgafa-548575328"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a07-2.webp",
+        "alt": "Galaxy A07 in Black — Rear",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/za/sm-a075fzkgafa/gallery/za-galaxy-a07-sm-a075-sm-a075fzkgafa-548575325"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a07-3.webp",
+        "alt": "Galaxy A07 in Black — Front three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/za/sm-a075fzkgafa/gallery/za-galaxy-a07-sm-a075-sm-a075fzkgafa-548575329"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-a07-4.webp",
+        "alt": "Galaxy A07 in Black — Rear three-quarter view",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/za/sm-a075fzkgafa/gallery/za-galaxy-a07-sm-a075-sm-a075fzkgafa-548575326"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/galaxy-a07-campaign.webp",
+      "alt": "Galaxy A07 campaign image",
+      "source": "https://www.samsung.com/za/smartphones/galaxy-a/galaxy-a07-black-128gb-sm-a075fzkgafa/"
+    },
+    "video": {
+      "url": "https://www.youtube.com/watch?v=T4Ea0MRBb7s",
+      "label": "Watch Samsung’s Galaxy A07 introduction"
+    }
+  },
+  "honor-x9d-5g": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/honor-x9d-5g-1.webp",
+        "alt": "HONOR X9d 5G in Reddish Brown — Front and rear",
+        "source": "https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-x9d/honor-x9d-red-list.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9d-5g-2.webp",
+        "alt": "HONOR X9d 5G in Reddish Brown — Rear",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-x9d/honor-x9d-red-back.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9d-5g-3.webp",
+        "alt": "HONOR X9d 5G in Reddish Brown — Front",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-x9d/honor-x9d-red-front.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9d-5g-4.webp",
+        "alt": "HONOR X9d 5G in Reddish Brown — Rear three-quarter view",
+        "source": "https://www.honor.com/content/dam/honor/common/products/smartphone/honor-x9d/product/imgs/section-cmf/honorx9d-cmf-item-brown.webp"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/honor-x9d-5g-campaign.webp",
+      "alt": "HONOR X9d 5G campaign image",
+      "source": "https://www.honor.com/global/phones/honor-x9d/"
+    },
+    "video": {
+      "url": "https://www.youtube.com/watch?v=60gMtCuXPNc",
+      "label": "Watch the HONOR X9d introduction"
+    }
+  },
+  "honor-x9c-5g": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/honor-x9c-5g-1.webp",
+        "alt": "HONOR X9c 5G in Titanium Purple — Front and rear",
+        "source": "https://www.honor.com/content/dam/honor/ae-en/product-list/smartphone/honor-x9c/honor-x9c-purple.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9c-5g-2.webp",
+        "alt": "HONOR X9c 5G in Titanium Purple — Rear",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-x9c/honor-x9c-purple-back.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9c-5g-3.webp",
+        "alt": "HONOR X9c 5G in Titanium Purple — Front",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-x9c/honor-x9c-purple-front.png"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/honor-x9c-5g-campaign.webp",
+      "alt": "HONOR X9c 5G campaign image",
+      "source": "https://www.honor.com/ae-en/phones/honor-x9c/"
+    },
+    "video": {
+      "url": "https://www.itweb.co.za/office/honor/videos/8OKdWqDXwXOqbznQ",
+      "label": "Watch the HONOR X9c unboxing"
+    }
+  },
+  "honor-600-lite-5g": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/honor-600-lite-5g-1.webp",
+        "alt": "HONOR 600 Lite 5G in green — Front and rear",
+        "source": "https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-600-lite/honor-600-lite-green.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-600-lite-5g-2.webp",
+        "alt": "HONOR 600 Lite 5G in green — Rear",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-600-lite/honor-600-lite-id-green-back.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-600-lite-5g-3.webp",
+        "alt": "HONOR 600 Lite 5G in green — Front",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-600-lite/honor-600-lite-id-green-front.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-600-lite-5g-4.webp",
+        "alt": "HONOR 600 Lite 5G in green — Three-quarter view",
+        "source": "https://www.honor.com/content/dam/honor/common/products/honor-600-lite/imgs/green/section-kv/kv.webp"
+      }
+    ],
+    "promotion": {
+      "src": "/assets/stocked-phones/honor-600-lite-5g-campaign.webp",
+      "alt": "HONOR 600 Lite 5G campaign image",
+      "source": "https://www.honor.com/global/phones/honor-600-lite/"
+    },
+    "video": {
+      "url": "https://www.youtube.com/watch?v=opiGSpkuCOM",
+      "label": "Watch the HONOR 600 Lite introduction"
+    }
+  }
+}

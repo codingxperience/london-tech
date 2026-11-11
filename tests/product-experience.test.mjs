@@ -442,7 +442,7 @@ test("known models gain sourced details while unknown models keep their own info
   assert.ok(information.highlights.length >= 3)
   assert.ok(
     information.specifications.some(
-      ([label, value]) => label === "Processor" && value === "A15 Bionic",
+      ([label, value]) => label === "Chip" && value === "Apple A15 Bionic",
     ),
   )
   assert.equal(
@@ -1033,21 +1033,19 @@ test("footer groups collapse on small screens and retain support, store contacts
   assert.equal(container.querySelector(".footer-group button"), null)
 })
 
-test("ordinary homepage and collection routes show approved offers without demo controls", async () => {
+test("homepage and collection cards show UGX and estimated USD with no offer clutter", async () => {
   await openRoute("/")
-  assert.equal(container.querySelector(".offer-preview-banner"), null)
-  assert.ok(container.querySelectorAll(".pcard").length > 0)
-  for (const card of container.querySelectorAll(".pcard")) {
-    assert.ok(card.querySelector('.offer-arabic[lang="ar"][dir="rtl"]'))
-    assert.match(card.querySelector(".offer-stock").textContent, /items? left/)
-    assert.ok(card.querySelector("del"))
+  const cards = [...container.querySelectorAll(".pcard")]
+  assert.ok(cards.length > 0)
+  assert.ok(cards.some((card) => /UGX.+USD/s.test(card.textContent)))
+  for (const card of cards) {
+    assert.ok(card.querySelector("h3"))
+    assert.equal(card.querySelector(".offer-stock, del, .product-motion-note, button"), null)
   }
   await click(container.querySelector('a[href="/collections/mobiles/"]'))
   const first = container.querySelector(".product-card")
-  assert.match(first.querySelector(".offer-stock").textContent, /items? left/)
-  assert.ok(first.querySelector(".offer-previous-price"))
-  assert.equal(container.querySelector(".offer-demo-label"), null)
-  assert.equal(container.querySelector("[data-demo]"), null)
+  assert.match(first.querySelector(".product-card-prices").textContent, /UGX.+USD/s)
+  assert.equal(first.querySelector(".offer-stock, del, .product-motion-note"), null)
 })
 
 test("long-form product sections expand real specifications and filter, sort and paginate reviews", async () => {
@@ -1717,61 +1715,20 @@ test("discovery has one next arrow and scrolls only its contained rail, then dis
   )
 })
 
-test("detailed collection cards show model facts, real reviews, stock and distinct preview photos", async () => {
-  reducedMotion = true
-  const product = {
-    ...products.find((product) => product.id === "iphone-13-pro-max"),
-    stock: 0,
-    reviewCount: 2,
-    rating: 4.5,
-  }
-  await render(
-    React.createElement(
-      StoreProvider,
-      null,
-      React.createElement(ProductCard, { product, detailed: true }),
-    ),
+test("collection cards link to the product and display only the name and prices", async () => {
+  const product = products.find((entry) => entry.id === "iphone-13-pro-max")
+  const card = (entry) => React.createElement(
+    StoreProvider,
+    null,
+    React.createElement(ProductCard, { product: entry, detailed: true }),
   )
-  assert.match(
-    container.querySelector(".card-product-facts").textContent,
-    /Display|Chip/,
-  )
-  assert.match(
-    container.querySelector(".card-product-bottom, .product-card-bottom")
-      .textContent,
-    /UGX/,
-  )
-  assert.match(container.querySelector(".card-real-rating").textContent, /4.5/)
-  assert.match(
-    container.querySelector(".card-availability").textContent,
-    /Out of stock/,
-  )
-  assert.equal(
-    container.querySelector('[aria-label^="Add iPhone"]').disabled,
-    true,
-  )
-  const photos = [...container.querySelectorAll(".card-photo-options button")]
-  assert.ok(photos.length > 1)
-  const image = container.querySelector(".product-card-media img")
-  const first = image.getAttribute("src")
-  await dispatch(photos[1], pointer("pointerover"))
-  assert.notEqual(image.getAttribute("src"), first)
-  assert.equal(photos[1].getAttribute("aria-pressed"), "true")
-  await render(
-    React.createElement(
-      StoreProvider,
-      null,
-      React.createElement(ProductCard, {
-        product: { ...product, stock: null, reviewCount: 0, rating: null },
-        detailed: true,
-      }),
-    ),
-  )
-  assert.equal(container.querySelector(".card-real-rating"), null)
-  assert.match(
-    container.querySelector(".card-availability").textContent,
-    /Check availability/,
-  )
+  await render(card(product))
+  assert.equal(container.querySelector("h3 a").textContent, product.name)
+  assert.equal(container.querySelector("h3 a").getAttribute("href"), "/products/iphone-13-pro-max/")
+  assert.match(container.querySelector(".product-card-prices").textContent, /UGX.+≈ USD/s)
+  assert.equal(container.querySelector(".card-product-facts, .card-real-rating, .card-photo-options, .card-availability, button"), null)
+  await render(card({ ...product, price: null }))
+  assert.equal(container.querySelector(".product-card-prices").textContent, "Price on request")
 })
 
 test("image search handles invalid files, dropped photos, stale results and matching links without uploading", async () => {
@@ -2385,7 +2342,7 @@ test("a new product can be created in the preview without overwriting the live c
   )
   assert.ok(
     saved.events.some(
-      (e) => e.action === "product.saved" && e.details.id === product.id,
+      (e) => e.action === "product.created" && e.details.id === product.id,
     ),
   )
 })

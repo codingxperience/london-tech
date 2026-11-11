@@ -1,4 +1,4 @@
-import { categories, storeDefaults } from "../data/catalog.js"
+import { categories, productPath, storeDefaults } from "../data/catalog.js"
 import { galleryImages, productInformation } from "./product-experience.js"
 import {
   readCollectionFilters,
@@ -151,9 +151,11 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
       p = products.find((p) => p.id === id)
     if (!p || pathname.split("/").length !== 3) result.status = 404
     else {
+      const information = productInformation(p)
+      const specs = new Map(information.specifications)
       result.title = `${p.name} in Uganda | London Tech Stores Kampala`
       result.description = summary(
-        `${p.name}. ${productInformation(p).description} Explore prices in UGX at London Tech Stores, Kampala.`,
+        `${information.description} Shop at London Tech Stores in Kampala.`,
       )
       crumbs.push(
         {
@@ -168,8 +170,13 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
         name: p.name,
         url: result.canonical,
         sku: p.sku,
-        description: productInformation(p).description,
+        description: information.description,
         image: galleryImages(p).map((i) => new URL(i.src, origin).href),
+        ...(specs.get("Finish") ? { color: specs.get("Finish") } : {}),
+        ...(specs.get("Model number") ? { model: specs.get("Model number") } : {}),
+        ...(specs.get("Storage")
+          ? { additionalProperty: { "@type": "PropertyValue", name: "Storage", value: specs.get("Storage") } }
+          : {}),
         ...(p.brand
           ? {
               brand: {
@@ -397,7 +404,7 @@ export function sitemapPages(data) {
     ...Object.keys(info).map((s) => "/" + s + "/"),
     ...data.products
       .filter((p) => p.active !== false)
-      .map((p) => "/products/" + p.id + "/"),
+      .map(productPath),
     ...(data.pages || [])
       .filter((p) => p.body && !info[p.slug])
       .map((p) => "/pages/" + p.slug + "/"),
@@ -416,10 +423,25 @@ export function sitemapPages(data) {
   return [...new Set(paths)]
 }
 export function sitemapXml(data, origin) {
+  const products = new Map(
+    data.products.filter((product) => product.active !== false)
+      .map((product) => [productPath(product), product]),
+  )
   return (
-    '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+    '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' +
     sitemapPages(data)
-      .map((p) => "<url><loc>" + escapeHtml(origin + p) + "</loc></url>")
+      .map((path) => {
+        const product = products.get(path)
+        const date = product ? Date.parse(product.updatedAt || product.createdAt) : NaN
+        const lastmod = Number.isFinite(date)
+          ? `<lastmod>${new Date(date).toISOString()}</lastmod>`
+          : ""
+        const images = product ? galleryImages(product).filter(({ src }) => src.startsWith("/assets/")) : []
+        const imageEntries = images.map(({ src }) =>
+          `<image:image><image:loc>${escapeHtml(new URL(src, origin).href)}</image:loc></image:image>`,
+        ).join("")
+        return `<url><loc>${escapeHtml(origin + path)}</loc>${lastmod}${imageEntries}</url>`
+      })
       .join("") +
     "</urlset>"
   )

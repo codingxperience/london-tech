@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
 import {
   Search,
   UserRound,
-  Heart,
   ShoppingBag,
   Menu,
   X,
@@ -22,20 +21,15 @@ import {
   Backpack,
   Luggage,
   Sparkles,
-  GitCompareArrows,
   ShieldCheck,
   PackageCheck,
   MapPin,
-  Plus,
   Trash2,
-  Star,
 } from "lucide-react"
 
-import { useStore, cartKey, navigate } from "../store.jsx"
-import { ProductMotionNote } from "./MotionText"
-import { galleryImages, productInformation } from "../lib/product-experience.js"
-import { ProductOffer, StockAvailability } from "./ProductOffer.jsx"
-import { productOffer } from "../lib/offer-details.js"
+import { useStore, cartKey } from "../store.jsx"
+import { galleryImages } from "../lib/product-experience.js"
+import { CardPrices } from "./CardPrices.jsx"
 import { useLocale } from "../lib/locale.jsx"
 
 import {
@@ -52,7 +46,6 @@ import {
   Modal,
   Quantity,
   Empty,
-  Badge,
 } from "./ui.jsx"
 
 const icons = {
@@ -78,158 +71,22 @@ export function CategoryIcon({ category, size = 22 }) {
 export { PaymentMarks } from "./PaymentMarks.jsx"
 
 export function ProductCard({ product: p, detailed = false }) {
-  const { t } = useLocale()
-  const { wishlist, toggleWish, addCart, compare, toggleCompare } = useStore()
-  const images = galleryImages(p)
-  const [photo, setPhoto] = useState(0)
-  useEffect(() => setPhoto(0), [p.id, images.length])
-  const facts = productInformation(p).specifications.slice(0, 2)
-  const saved = wishlist.includes(p.id)
-  const offer = productOffer(p)
-  const chooseOptions = p.stock !== 0 && (p.options?.length > 0 || p.colors?.length > 0)
+  const image = galleryImages(p)[0]?.src || p.image
+  const href = productPath(p)
 
   return (
-    <article
-      className={"product-card" + (detailed ? " detailed-product-card" : "")}
-    >
+    <article className={"product-card" + (detailed ? " detailed-product-card" : "")}>
       <div className="product-card-media">
-        <a href={productPath(p)} tabIndex={-1} aria-hidden="true">
-          <img
-            src={images[photo]?.src || p.image}
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
+        <a href={href} tabIndex={-1} aria-hidden="true">
+          <img src={image} alt="" loading="lazy" decoding="async" />
         </a>
-        <div className="product-flags">
-          {p.stock === 0 ? (
-            <Badge type="muted">{t("Out of stock")}</Badge>
-          ) : offer.discounted ? (
-            <Badge>−{offer.discountPercent}%</Badge>
-          ) : p.featured ? (
-            <Badge>{t("Spotlight")}</Badge>
-          ) : null}
-        </div>
-        {detailed && images.length > 1 && (
-          <div
-            className="card-photo-options"
-            role="group"
-            aria-label={p.name + " photos"}
-          >
-            {images.slice(0, 4).map((image, index) => (
-              <button
-                type="button"
-                key={image.src}
-                className={photo === index ? "selected" : ""}
-                aria-label={t("Preview {name}, photo {number}", {
-                  name: p.name,
-                  number: index + 1,
-                })}
-                aria-pressed={photo === index}
-                onPointerEnter={(event) => {
-                  if (event.pointerType !== "touch") setPhoto(index)
-                }}
-                onFocus={() => setPhoto(index)}
-                onClick={() => setPhoto(index)}
-              >
-                <span />
-              </button>
-            ))}
-            {images.length > 4 && (
-              <a
-                href={productPath(p)}
-                aria-label={t("See all {number} photos of {name}", {
-                  number: images.length,
-                  name: p.name,
-                })}
-              >
-                +{images.length - 4}
-              </a>
-            )}
-          </div>
-        )}
-        <div className="product-tools">
-          <IconButton
-            label={t(saved ? "Remove from wishlist" : "Add to wishlist")}
-            onClick={() => toggleWish(p.id)}
-            className={saved ? "selected" : ""}
-          >
-            <Heart size={16} fill={saved ? "currentColor" : "none"} />
-          </IconButton>
-          <IconButton
-            label={t(
-              compare.includes(p.id)
-                ? "Remove from comparison"
-                : "Compare product",
-            )}
-            onClick={() => toggleCompare(p.id)}
-            className={compare.includes(p.id) ? "selected" : ""}
-          >
-            <GitCompareArrows size={16} />
-          </IconButton>
-        </div>
       </div>
       <div className="product-card-copy">
-        <small>
-          {p.brand && <>{p.brand} <span>·</span>{" "}</>}{t(categoryName(p.category))}
-        </small>
-        <h3>
-          <a href={productPath(p)}>{p.name}</a>
-        </h3>
-        {detailed && facts.length > 0 && (
-          <dl className="card-product-facts">
-            {facts.map(([label, value]) => (
-              <div key={label}>
-                <dt>{t(label)}</dt>
-                <dd title={value}>{t(value)}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
-        <ProductMotionNote product={p} />
+        <h3><a href={href}>{p.name}</a></h3>
         <div className="product-card-bottom">
-          <ProductOffer
-            product={p}
-            showStock={!detailed}
-            showDiscountBadge={false}
-          />
-          <IconButton
-            label={t(chooseOptions ? "Choose options for {name}" : "Add {name} to cart", { name: p.name })}
-            onClick={() => chooseOptions ? navigate(productPath(p)) : addCart(p)}
-            disabled={p.stock === 0}
-          >
-            <Plus size={18} />
-          </IconButton>
+          <CardPrices product={p} />
         </div>
       </div>
-      {detailed && (
-        <div className="card-product-meta">
-          {p.reviewCount > 0 && Number.isFinite(p.rating) ? (
-            <a
-              className="card-real-rating"
-              href={productPath(p) + "#product-reviews"}
-              aria-label={t("{rating} out of 5 from {count} verified reviews", {
-                rating: p.rating.toFixed(1),
-                count: p.reviewCount,
-              })}
-            >
-              <Star size={13} fill="currentColor" />
-              <strong>{p.rating.toFixed(1)}</strong>
-              <span>({p.reviewCount})</span>
-            </a>
-          ) : (
-            <small>{t("No customer reviews yet")}</small>
-          )}
-          <StockAvailability product={p} className="card-availability" />
-          {p.condition && !/^confirm with store\.?$/i.test(p.condition) && (
-            <small>{p.condition}</small>
-          )}
-          <a className="card-detail-link" href={productPath(p)}>
-            {t("View details")}
-            <ArrowRight size={13} />
-          </a>
-        </div>
-      )}
     </article>
   )
 }
@@ -301,7 +158,7 @@ export function SearchDialog() {
               <small>{p.brand}</small>
               <strong>{p.name}</strong>
             </span>
-            <b>{money(p.price)}</b>
+            <CardPrices product={p} />
             <ArrowRight size={15} />
           </a>
         ))}

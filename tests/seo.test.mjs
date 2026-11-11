@@ -1,7 +1,7 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import { readFile, readdir } from "node:fs/promises"
-import { products, storeDefaults } from "../src/data/catalog.js"
+import { phoneProducts, products, retiredPhoneSkus, storeDefaults } from "../src/data/catalog.js"
 import {
   defaultOrigin,
   resolveSeo,
@@ -13,6 +13,34 @@ import { pathToRegexp } from "path-to-regexp"
 import { postgresConfig } from "../server/postgres-config.js"
 
 const data = { products, settings: storeDefaults, pages: [], reviews: {} }
+test("verified phones and their crawlable images appear on canonical product pages and the sitemap", async () => {
+  const xml = sitemapXml(data, defaultOrigin)
+  assert.ok(xml.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'))
+  assert.equal(phoneProducts.length, 17)
+  for (const product of phoneProducts) {
+    const path = "/products/" + product.id + "/"
+    const seo = resolveSeo(path, data)
+    assert.equal(seo.status, 200, product.id)
+    assert.equal(seo.noindex, false, product.id)
+    assert.equal(seo.canonical, defaultOrigin + path)
+    assert.ok(xml.includes("<loc>" + seo.canonical + "</loc><lastmod>"), product.id)
+    const html = await readFile("dist" + path + "index.html", "utf8")
+    assert.ok(html.includes('<link rel="canonical" href="' + seo.canonical + '">'), product.id)
+    assert.ok(html.includes("<h1>" + product.name + "</h1>"), product.id)
+    for (const src of product.gallery) {
+      assert.ok(xml.includes("<image:loc>" + defaultOrigin + src + "</image:loc>"), src)
+      assert.ok(html.includes(src), src)
+    }
+    if (product.id === "iphone-air" || product.id === "galaxy-z-fold8")
+      assert.ok(new Set(product.gallery).size >= 4, product.id)
+  }
+  for (const id of Object.keys(retiredPhoneSkus)) {
+    const path = "/products/" + id + "/"
+    assert.equal(resolveSeo(path, data).status, 404, id)
+    assert.ok(!xml.includes("<loc>" + defaultOrigin + path + "</loc>"), id)
+  }
+})
+
 test("SEO metadata matches live catalogue truth, location and published review data without invented claims", () => {
   const changed = { ...products[0], price: 123456, stock: 0 }
   const seo = resolveSeo("/products/" + changed.id + "/", {

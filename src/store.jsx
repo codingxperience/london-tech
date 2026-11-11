@@ -100,7 +100,9 @@ export const cartKey = (line) => [line.id, line.option, line.color].join("|")
 export function StoreProvider({ children, initialData, initialPath }) {
   const locale = useLocale()
   const [products, setProducts] = useState(() =>
-      (initialData?.products || seed).map(presentProduct),
+      (initialData?.products || seed)
+        .filter((product) => product.active !== false)
+        .map(presentProduct),
     ),
     [settings, setSettings] = useState(initialData?.settings || storeDefaults),
     [pages, setPages] = useState(initialData?.pages || []),
