@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react"
 import { ChevronRight } from "lucide-react"
+import { useLocale } from "../lib/locale.jsx"
 
 export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
+  const { t } = useLocale()
   const rail = useRef(null)
   const [canAdvance, setCanAdvance] = useState(false)
   const count = React.Children.count(children)
@@ -9,10 +11,15 @@ export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
     const element = rail.current
     if (!element) return
     element.scrollLeft = 0
-    const measure = () =>
+    const measure = () => {
+      const rtl = getComputedStyle(element).direction === "rtl"
+      const items = [...element.children]
+      const edge = items.at(-1)?.getBoundingClientRect()
+      const bounds = element.getBoundingClientRect()
       setCanAdvance(
-        element.scrollWidth - element.clientWidth - element.scrollLeft > 2,
+        rtl ? Boolean(edge && edge.left < bounds.left - 2) : Boolean(edge && edge.right > bounds.right + 2),
       )
+    }
     measure()
     const observer =
       typeof ResizeObserver === "function" ? new ResizeObserver(measure) : null
@@ -28,8 +35,9 @@ export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
   const move = (direction = 1) => {
     const element = rail.current
     if (!element) return
+    const rtl = getComputedStyle(element).direction === "rtl"
     element.scrollBy({
-      left: direction * Math.max(150, element.clientWidth * 0.8),
+      left: direction * (rtl ? -1 : 1) * Math.max(150, element.clientWidth * 0.8),
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"
         : "smooth",
@@ -62,7 +70,7 @@ export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
       <button
         type="button"
         className="discovery-next"
-        aria-label="See more categories or brands"
+        aria-label={t("See more categories or brands")}
         disabled={!canAdvance}
         aria-controls={id}
         onClick={() => move()}

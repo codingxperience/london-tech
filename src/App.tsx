@@ -3,6 +3,7 @@ import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
 import { LocaleSelector } from "./components/LocaleSelector.jsx"
 import { useLocale } from "./lib/locale.jsx"
+import { WhatsAppIcon } from "./components/WhatsAppIcon.jsx"
 import { productImagePlaceholder, showProductImageFallback } from "./lib/product-image.js"
 import { ProductPhotoPlaceholder } from "./components/ProductPhotoPlaceholder.jsx"
 import { StoreFooter } from "./components/StoreFooter.jsx"
@@ -65,20 +66,6 @@ const SEARCH_WORDS = [
   "premium accessories",
   "perfumes",
 ]
-
-function WhatsAppIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M20.52 3.48A11.86 11.86 0 0 0 12.05 0C5.47 0 .12 5.35.12 11.93c0 2.1.55 4.16 1.6 5.97L.02 24l6.25-1.64a11.9 11.9 0 0 0 5.78 1.48h.01C18.64 23.84 24 18.49 24 11.91c0-3.19-1.24-6.18-3.48-8.43ZM12.06 21.83a9.87 9.87 0 0 1-5.04-1.38l-.36-.21-3.71.97.99-3.62-.24-.37a9.87 9.87 0 0 1-1.51-5.29c0-5.47 4.45-9.92 9.92-9.92a9.85 9.85 0 0 1 7.02 2.91 9.86 9.86 0 0 1 2.9 7.02c0 5.47-4.45 9.92-9.97 9.92Zm5.44-7.43c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.21 3.09c.15.2 2.1 3.21 5.09 4.5.71.3 1.26.48 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35Z" />
-    </svg>
-  )
-}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface ProductReference {
@@ -967,7 +954,7 @@ export default function App({
                         (i) => (i + LATEST.length - 1) % LATEST.length,
                       )
                     }
-                    aria-label="Previous latest products"
+                    aria-label={t("Previous latest products")}
                     style={{
                       background: "#345888",
                       border: "none",
@@ -987,7 +974,7 @@ export default function App({
                     onClick={() =>
                       setLatestOffset((i) => (i + 1) % LATEST.length)
                     }
-                    aria-label="Next latest products"
+                    aria-label={t("Next latest products")}
                     style={{
                       background: B_GOLD,
                       border: "none",
@@ -1126,7 +1113,7 @@ export default function App({
               <section
                 className="hero-stage"
                 aria-roledescription="carousel"
-                aria-label="London Tech promotions"
+                aria-label={t("London Tech promotions")}
                 onMouseEnter={() => setHeroHovered(true)}
                 onMouseLeave={() => setHeroHovered(false)}
                 onFocusCapture={() => setHeroHovered(true)}
@@ -1174,7 +1161,7 @@ export default function App({
                     {HERO_SLIDES.map((_, i) => (
                       <button
                         key={i}
-                        aria-label={`Go to promotion ${i + 1}`}
+                        aria-label={t("Go to promotion {number}", { number: i + 1 })}
                         aria-pressed={slide === i}
                         className={slide === i ? "active" : ""}
                         onClick={() => setSlide(i)}
@@ -1182,7 +1169,7 @@ export default function App({
                     ))}
                   </div>
                   <button
-                    aria-label="Previous promotion"
+                    aria-label={t("Previous promotion")}
                     onClick={() =>
                       setSlide(
                         (s) =>
@@ -1193,7 +1180,7 @@ export default function App({
                     <ChevronLeft size={15} />
                   </button>
                   <button
-                    aria-label="Next promotion"
+                    aria-label={t("Next promotion")}
                     onClick={() =>
                       setSlide((s) => (s + 1) % HERO_SLIDES.length)
                     }
@@ -1317,7 +1304,7 @@ export default function App({
                               (i + dealProducts.length - 1) % dealProducts.length,
                             )
                           }
-                          aria-label="Previous hot deals"
+                          aria-label={t("Previous hot deals")}
                           style={{
                             background: "#f5f5f5",
                             border: "1px solid #ddd",
@@ -1337,7 +1324,7 @@ export default function App({
                           onClick={() =>
                             setDealOffset((i) => (i + 1) % dealProducts.length)
                           }
-                          aria-label="Next hot deals"
+                          aria-label={t("Next hot deals")}
                           style={{
                             background: B_BLUE,
                             border: "none",
@@ -1495,7 +1482,7 @@ export default function App({
           href="https://wa.me/256788341111"
           target="_blank"
           rel="noreferrer"
-          aria-label="Chat with London Tech on WhatsApp"
+          aria-label={t("Chat with London Tech on WhatsApp")}
         >
           <WhatsAppIcon size={23} />
           <span>{t("Chat on WhatsApp")}</span>

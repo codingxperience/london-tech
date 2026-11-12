@@ -17,6 +17,7 @@ import {
 import { useStore } from "../store.jsx"
 import { categories } from "../data/catalog.js"
 import { BrandWordmark } from "./BrandWordmark.jsx"
+import { useLocale } from "../lib/locale.jsx"
 import { Breadcrumb } from "./ui.jsx"
 import "../about-page.css"
 
@@ -62,6 +63,7 @@ const films = [
 ]
 
 function StoreFilms() {
+  const { t } = useLocale()
   const [film, setFilm] = useState(films[0]),
     video = useRef(null)
   return (
@@ -74,20 +76,20 @@ function StoreFilms() {
           playsInline
           preload="none"
           poster={"/assets/about/" + film.poster}
-          aria-label={film.title}
+          aria-label={t(film.title)}
           aria-describedby="about-film-description"
         >
           <source src={"/assets/about/" + film.id + ".mp4"} type="video/mp4" />
-          Your browser does not support embedded video.{" "}
-          <a href={"/assets/about/" + film.id + ".mp4"}>Open the film</a>.
+          {t("Your browser does not support embedded video.")}{" "}
+          <a href={"/assets/about/" + film.id + ".mp4"}>{t("Open the film")}</a>.
         </video>
-        <span>From London Tech</span>
+        <span>{t("From London Tech")}</span>
       </div>
       <div className="about-film-copy">
-        <p className="about-kicker">IN OUR OWN PICTURES</p>
-        <h2>A closer look, before you visit.</h2>
-        <p id="about-film-description">{film.description}</p>
-        <div className="about-film-list" aria-label="Choose a London Tech film">
+        <p className="about-kicker">{t("IN OUR OWN PICTURES")}</p>
+        <h2>{t("A closer look, before you visit.")}</h2>
+        <p id="about-film-description">{t(film.description)}</p>
+        <div className="about-film-list" aria-label={t("Choose a London Tech film")}>
           {films.map((item) => (
             <button
               key={item.id}
@@ -105,10 +107,10 @@ function StoreFilms() {
                 />
               </span>
               <span>
-                <strong>{item.title}</strong>
+                <strong>{t(item.title)}</strong>
                 <small>
                   {item.duration} ·{" "}
-                  {item.id === film.id ? "Selected" : "Select film"}
+                  {t(item.id === film.id ? "Selected" : "Select film")}
                 </small>
               </span>
               <ArrowUpRight size={16} />
@@ -116,7 +118,7 @@ function StoreFilms() {
           ))}
         </div>
         <p className="about-video-note">
-          Select a film, then press play. Sound is available in the player.
+          {t("Select a film, then press play. Sound is available in the player.")}
         </p>
       </div>
     </div>
@@ -124,6 +126,7 @@ function StoreFilms() {
 }
 
 export function AboutPage() {
+  const { t } = useLocale()
   const { settings, products } = useStore(),
     [active, setActive] = useState("our-vision")
   const available = products.filter((p) => p.active !== false),
@@ -150,13 +153,13 @@ export function AboutPage() {
   const phone = settings.phone.replace(/[^\d+]/g, "").replace(/^0/, "+256")
   return (
     <main className="container about-page">
-      <Breadcrumb items={[{ label: "About us" }]} />
+      <Breadcrumb items={[{ label: t("About us") }]} />
       <header className="about-intro">
         <BrandWordmark width={190} />
-        <h1>Your local technology store.</h1>
-        <p>Explore online. See it in person. Find us in Arua Park, Kampala.</p>
+        <h1>{t("Your local technology store.")}</h1>
+        <p>{t("Explore online. See it in person. Find us in Arua Park, Kampala.")}</p>
       </header>
-      <nav className="about-section-nav" aria-label="About London Tech">
+      <nav className="about-section-nav" aria-label={t("About London Tech")}>
         {sections.map(([id, label]) => (
           <a
             key={id}
@@ -165,20 +168,20 @@ export function AboutPage() {
             aria-current={active === id ? "location" : undefined}
             onClick={() => setActive(id)}
           >
-            {label}
+            {t(label)}
           </a>
         ))}
       </nav>
       <section id="our-vision" className="about-vision">
         <div>
-          <p className="about-kicker">OUR VISION</p>
+          <p className="about-kicker">{t("OUR VISION")}</p>
           <h2>
-            Great technology.
-            <br />A personal connection.
+            {t("Great technology.")}
+            <br />{t("A personal connection.")}
           </h2>
-          <p>{settings.about}</p>
+          <p>{t(settings.about)}</p>
           <a className="about-cta" href="/collections/shop/">
-            Explore the collection <ArrowRight size={18} />
+            {t("Explore the collection")} <ArrowRight size={18} />
           </a>
           <span className="about-brand-promise">
             Quality and trust{" "}
@@ -190,17 +193,17 @@ export function AboutPage() {
         <figure>
           <img
             src="/assets/about/store-interior.webp"
-            alt="Inside London Tech: a wood-lined shop with glass phone and accessory displays"
+            alt={t("Inside London Tech: a wood-lined shop with glass phone and accessory displays")}
             width="720"
             height="960"
             fetchPriority="high"
           />
           <figcaption>
-            <MapPin size={15} /> Our shop in Arua Park
+            <MapPin size={15} /> {t("Our shop in Arua Park")}
           </figcaption>
         </figure>
       </section>
-      <section className="about-promises" aria-label="What to expect">
+      <section className="about-promises" aria-label={t("What to expect")}>
         {[
           [
             CheckCircle2,
@@ -227,19 +230,19 @@ export function AboutPage() {
             <span>
               <Icon size={25} strokeWidth={1.5} />
             </span>
-            <h3>{title}</h3>
-            <p>{copy}</p>
+            <h3>{t(title)}</h3>
+            <p>{t(copy)}</p>
           </article>
         ))}
       </section>
       <section id="inside-the-store" className="about-store-section">
         <div className="about-section-title">
           <div>
-            <p className="about-kicker">INSIDE THE STORE</p>
-            <h2>For work, play and everything between.</h2>
+            <p className="about-kicker">{t("INSIDE THE STORE")}</p>
+            <h2>{t("For work, play and everything between.")}</h2>
           </div>
           <a href="/collections/shop/">
-            Shop all <ArrowUpRight size={16} />
+            {t("Shop all")} <ArrowUpRight size={16} />
           </a>
         </div>
         <div className="about-collection-links">
@@ -252,7 +255,7 @@ export function AboutPage() {
           ].map(([id, label, Icon]) => (
             <a key={id} href={"/collections/" + id + "/"}>
               <Icon size={25} strokeWidth={1.4} />
-              <span>{label}</span>
+              <span>{t(label)}</span>
               <ArrowUpRight size={14} />
             </a>
           ))}
@@ -261,15 +264,15 @@ export function AboutPage() {
         <div className="about-store-facts">
           <div>
             <strong>{available.length}</strong>
-            <span>products to explore online</span>
+            <span>{t("products to explore online")}</span>
           </div>
           <div>
             <strong>{collectionCount}</strong>
-            <span>collections, in one place</span>
+            <span>{t("collections, in one place")}</span>
           </div>
           <div>
             <strong>FN:19</strong>
-            <span>your destination in Arua Park</span>
+            <span>{t("your destination in Arua Park")}</span>
           </div>
         </div>
       </section>
@@ -277,28 +280,25 @@ export function AboutPage() {
         <figure>
           <img
             src="/assets/about/community-team.webp"
-            alt="Football players wearing London Tech jerseys pose together at a community event"
+            alt={t("Football players wearing London Tech jerseys pose together at a community event")}
             width="1100"
             height="620"
             loading="lazy"
           />
-          <figcaption>A shared moment on the pitch.</figcaption>
+          <figcaption>{t("A shared moment on the pitch.")}</figcaption>
         </figure>
         <div>
-          <p className="about-kicker">OUR COMMUNITY</p>
+          <p className="about-kicker">{t("OUR COMMUNITY")}</p>
           <h2>
-            Part of the everyday.
+            {t("Part of the everyday.")}
             <br />
-            Part of the community.
+            {t("Part of the community.")}
           </h2>
           <p>
-            Our story goes beyond the display cabinet. These moments from the
-            football pitch show the people, team spirit and shared celebrations
-            around London Tech.
+            {t("Our story goes beyond the display cabinet. These moments from the football pitch show the people, team spirit and shared celebrations around London Tech.")}
           </p>
           <p>
-            From a visit to the shop to a day with the team, connection is at
-            the heart of it.
+            {t("From a visit to the shop to a day with the team, connection is at the heart of it.")}
           </p>
           {settings.socials?.tiktok && (
             <a
@@ -307,28 +307,28 @@ export function AboutPage() {
               target="_blank"
               rel="noreferrer"
             >
-              See more on TikTok <ArrowUpRight size={16} />
+              {t("See more on TikTok")} <ArrowUpRight size={16} />
             </a>
           )}
         </div>
       </section>
       <section id="visit-us" className="about-visit">
         <div>
-          <p className="about-kicker">COME SAY HELLO</p>
-          <h2>Make your next visit count.</h2>
+          <p className="about-kicker">{t("COME SAY HELLO")}</p>
+          <h2>{t("Make your next visit count.")}</h2>
           <p>{settings.address}, Kampala, Uganda.</p>
           <div>
             <a className="about-cta" href="/contact/">
-              Plan your visit <ArrowRight size={17} />
+              {t("Plan your visit")} <ArrowRight size={17} />
             </a>
             <a href={"tel:" + phone}>Call {settings.phone}</a>
           </div>
         </div>
         <div className="about-visit-marker">
           <MapPin size={32} strokeWidth={1.5} />
-          <strong>Arua Park</strong>
-          <span>Second floor · Shop FN:19</span>
-          <span>NYUMBA KUBUA building</span>
+          <strong>{t("Arua Park")}</strong>
+          <span>{t("Second floor · Shop FN:19")}</span>
+          <span>{t("NYUMBA KUBUA building")}</span>
         </div>
       </section>
     </main>

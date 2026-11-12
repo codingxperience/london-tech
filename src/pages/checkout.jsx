@@ -63,11 +63,11 @@ export function Cart() {
   const hasGuide = lines.some((line) => !line.product?.priceConfirmed)
   return (
     <main className="container standard-page">
-      <Breadcrumb items={[{ label: "Your cart" }]} />
-      <PageHeading eyebrow="A FEW GOOD CHOICES" title="Your cart.">
+      <Breadcrumb items={[{ label: t("Your cart") }]} />
+      <PageHeading eyebrow={t("A FEW GOOD CHOICES")} title={t("Your cart.")}>
         {lines.length
-          ? "A little closer to your everyday upgrade. Review your choices below."
-          : "Good things start with a little exploring."}
+          ? t("A little closer to your everyday upgrade. Review your choices below.")
+          : t("Good things start with a little exploring.")}
       </PageHeading>
       {lines.length ? (
         <div className="cart-layout">
@@ -92,16 +92,16 @@ export function Cart() {
                       <small>{p?.brand}</small>
                       <h2>
                         <a href={p ? productPath(p) : "/collections/shop/"}>
-                          {p?.name || "Unavailable product"}
+                          {p?.name || t("Unavailable product")}
                         </a>
                       </h2>
                       <p>
                         {[line.option, line.color]
                           .filter(Boolean)
-                          .join(" · ") || "Standard configuration"}
+                          .join(" · ") || t("Standard configuration")}
                       </p>
                       <span>
-                        {p?.priceConfirmed ? "" : "Guide price · "}
+                        {p?.priceConfirmed ? "" : t("Guide price") + " · "}
                         {money(p?.price)}
                       </span>
                       {!p && (
@@ -122,7 +122,7 @@ export function Cart() {
                       : t("On request")}
                   </strong>
                   <IconButton
-                    label={"Remove " + (p?.name || "item")}
+                    label={t("Remove {name}", { name: p?.name || t("item") })}
                     onClick={() => removeCart(cartKey(line))}
                   >
                     <Trash2 size={16} />
@@ -132,12 +132,11 @@ export function Cart() {
             })}
             <a href="/collections/shop/" className="text-link cart-continue">
               <ArrowLeft size={15} />
-              Keep exploring
+              {t("Keep exploring")}
             </a>
             {hasGuide && (
               <Notice>
-                Guide prices are estimates. The store will confirm the exact
-                configuration, price and availability before payment.
+                {t("Guide prices are estimates. The store will confirm the exact configuration, price and availability before payment.")}
               </Notice>
             )}
           </div>
@@ -160,35 +159,33 @@ export function Cart() {
               <strong>{money(subtotal)}</strong>
             </div>
             <p className="small muted">
-              Your final total and delivery arrangements are confirmed before
-              you pay.
+              {t("Your final total and delivery arrangements are confirmed before you pay.")}
             </p>
             <ActionLink href="/checkout/">
               {t("Continue to checkout")}
             </ActionLink>
             <div className="secure-note">
               <LockKeyhole size={14} />
-              Cash on receipt or secure online payment.
+              {t("Cash on receipt or secure online payment.")}
             </div>
             <PaymentMarks />
           </aside>
         </div>
       ) : (
         <Empty
-          title="A little room for possibility."
+          title={t("A little room for possibility.")}
           action={
             <ActionLink href="/collections/shop/">
               {t("Find your next")}
             </ActionLink>
           }
         >
-          Your cart is empty. Explore the collection and add something that fits
-          your life.
+          {t("Your cart is empty. Explore the collection and add something that fits your life.")}
         </Empty>
       )}
       <section className="section">
         <SectionHeading
-          title="A few more possibilities."
+          title={t("A few more possibilities.")}
           href="/collections/shop/"
         />
         <ProductGrid
@@ -287,7 +284,7 @@ export function Checkout() {
     try {
       if (!payable)
         throw new Error(
-          "Review your items, delivery details and payment method before placing the order.",
+          t("Review your items, delivery details and payment method before placing the order."),
         )
       await track(fd)
       const data = await post("orders", {
@@ -310,11 +307,11 @@ export function Checkout() {
       setPendingOrder(data.order)
       if (data.order.status === "cancelled")
         throw new Error(
-          "This order was cancelled. Start again below to place a new order.",
+          t("This order was cancelled. Start again below to place a new order."),
         )
       if (data.order.paymentMethod !== method)
         throw new Error(
-          "This checkout already has an order. Open it below, or cancel it before choosing another payment method.",
+          t("This checkout already has an order. Open it below, or cancel it before choosing another payment method."),
         )
       if (data.order.paymentMethod === "cod") {
         writeStorage("lt.checkout-key", null)
@@ -334,8 +331,8 @@ export function Checkout() {
         navigate("/account/orders/" + data.order.id + "/")
         notify(
           fulfillment === "delivery"
-            ? "Order placed. Pay when it is delivered."
-            : "Order placed. Pay when you collect it.",
+            ? t("Order placed. Pay when it is delivered.")
+            : t("Order placed. Pay when you collect it."),
         )
         return
       }
@@ -352,7 +349,7 @@ export function Checkout() {
   if (authLoading)
     return (
       <main className="container standard-page">
-        <p className="loading-line">Getting your checkout ready…</p>
+        <p className="loading-line">{t("Getting your checkout ready…")}</p>
       </main>
     )
 
@@ -360,14 +357,14 @@ export function Checkout() {
     return (
       <main className="container standard-page">
         <Empty
-          title="Let’s find your next first."
+          title={t("Let’s find your next first.")}
           action={
             <ActionLink href="/collections/shop/">
               {t("Explore products")}
             </ActionLink>
           }
         >
-          Add a product to your cart to start checkout.
+          {t("Add a product to your cart to start checkout.")}
         </Empty>
       </main>
     )
@@ -376,25 +373,24 @@ export function Checkout() {
     return (
       <main className="container standard-page">
         <Breadcrumb
-          items={[{ label: "Cart", href: "/cart/" }, { label: "Checkout" }]}
+          items={[{ label: t("Cart"), href: "/cart/" }, { label: t("Checkout") }]}
         />
         <Empty
           icon={LockKeyhole}
-          title="A familiar place for your orders."
+          title={t("A familiar place for your orders.")}
           action={
             <>
               <ActionLink href="/login/?next=/checkout/">
-                Sign in to continue
+                {t("Sign in to continue")}
               </ActionLink>
               <a className="text-link" href="/register/?next=/checkout/">
-                Create an account
+                {t("Create an account")}
                 <ArrowRight size={15} />
               </a>
             </>
           }
         >
-          Sign in or create an account to keep your order information and
-          payment status together. Your cart is saved.
+          {t("Sign in or create an account to keep your order information and payment status together. Your cart is saved.")}
         </Empty>
       </main>
     )
@@ -405,13 +401,13 @@ export function Checkout() {
   return (
     <main className="container standard-page">
       <Breadcrumb
-        items={[{ label: "Cart", href: "/cart/" }, { label: "Checkout" }]}
+        items={[{ label: t("Cart"), href: "/cart/" }, { label: t("Checkout") }]}
       />
       <div className="checkout-heading">
-        <PageHeading title="Checkout" />
+        <PageHeading title={t("Checkout")} />
         <span>
           <LockKeyhole size={15} />
-          Secure checkout
+          {t("Secure checkout")}
         </span>
       </div>
       <form
@@ -424,7 +420,7 @@ export function Checkout() {
           {pendingOrder && (
             <Notice>
               <a href={"/account/orders/" + pendingOrder.id + "/"}>
-                Open order {pendingOrder.id}
+                {t("Open order {id}", { id: pendingOrder.id })}
               </a>
               {pendingOrder.paymentStatus !== "paid" &&
                 (["pending_payment", "quoted", "cancelled"].includes(
@@ -444,7 +440,7 @@ export function Checkout() {
                         writeStorage("lt.checkout-key", null)
                         setPendingOrder(null)
                         setError("")
-                        notify("Checkout reset. You can place a new order.")
+                        notify(t("Checkout reset. You can place a new order."))
                         navigate("/checkout/?retry=" + Date.now())
                       } catch (e) {
                         setError(e.message)
@@ -453,7 +449,7 @@ export function Checkout() {
                       }
                     }}
                   >
-                    Cancel previous order and start again
+                    {t("Cancel previous order and start again")}
                   </button>
                 )}
             </Notice>
@@ -465,7 +461,7 @@ export function Checkout() {
             </div>
             <div className="form-grid">
               <Field
-                label="Full name"
+                label={t("Full name")}
                 name="name"
                 autoComplete="name"
                 defaultValue={user.name}
@@ -474,7 +470,7 @@ export function Checkout() {
                 maxLength={100}
               />
               <Field
-                label="Email address"
+                label={t("Email address")}
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -482,7 +478,7 @@ export function Checkout() {
                 required
               />
               <Field
-                label="Phone number"
+                label={t("Phone number")}
                 name="phone"
                 type="tel"
                 autoComplete="tel"
@@ -496,7 +492,7 @@ export function Checkout() {
             </div>
             {config.orderEmails && (
               <p className="checkout-contact-note">
-                Order updates go to this email.
+                {t("Order updates go to this email.")}
               </p>
             )}
           </section>
@@ -546,14 +542,14 @@ export function Checkout() {
                 <MapPin size={18} />
                 <p>
                   {settings.address ||
-                    "Collection details will be confirmed by the store."}
+                    t("Collection details will be confirmed by the store.")}
                   {settings.hours && <small>{settings.hours}</small>}
                 </p>
               </div>
             ) : (
               <>
                 {user.addresses?.length > 0 && (
-                  <Field label="Use a saved address">
+                  <Field label={t("Use a saved address")}>
                     <select
                       value={addressIndex}
                       onChange={(e) => {
@@ -578,7 +574,7 @@ export function Checkout() {
                   </Field>
                 )}
                 <div className="form-grid">
-                  <Field label="Delivery district">
+                  <Field label={t("Delivery district")}>
                     <select
                       name="district"
                       value={district}
@@ -594,7 +590,7 @@ export function Checkout() {
                     </select>
                   </Field>
                   <Field
-                    label="Street, building and delivery directions"
+                    label={t("Street, building and delivery directions")}
                     name="address"
                     autoComplete="street-address"
                     defaultValue={saved?.address || ""}
@@ -606,7 +602,7 @@ export function Checkout() {
                 </div>
                 {delivery.distanceKm != null && (
                   <p className="checkout-distance">
-                    Estimated district distance · {delivery.distanceKm} km
+                    {t("Estimated district distance · {distance} km", { distance: delivery.distanceKm })}
                   </p>
                 )}
               </>
@@ -619,15 +615,15 @@ export function Checkout() {
             </div>
             {config.paymentMode === "test" && config.payments && (
               <Notice>
-                Online payments use Flutterwave Test Mode. Use{" "}
+                {t("Online payments use Flutterwave Test Mode. Use")}{" "}
                 <a
                   href="https://developer.flutterwave.com/docs/testing"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Flutterwave test details
+                  {t("Flutterwave test details")}
                 </a>{" "}
-                for a simulated payment. Cash orders use regular checkout.
+                {t("for a simulated payment. Cash orders use regular checkout.")}
               </Notice>
             )}
             <div
@@ -670,18 +666,18 @@ export function Checkout() {
             </div>
             {!config.payments && (
               <p className="checkout-distance">
-                Online payment is currently unavailable.
+                {t("Online payment is currently unavailable.")}
               </p>
             )}
             {method !== "cod" && (
               <p className="checkout-distance">
-                Choose your{" "}
+                {t("Choose your")}{" "}
                 {method === "visa"
-                  ? "card"
+                  ? t("card")
                   : method === "mtn"
-                    ? "MTN number"
-                    : "Airtel number"}{" "}
-                on Flutterwave.
+                    ? t("MTN number")
+                    : t("Airtel number")}{" "}
+                {t("on Flutterwave.")}
               </p>
             )}
             {!payable &&
@@ -692,15 +688,14 @@ export function Checkout() {
                   l.product.stock < l.quantity,
               ) && (
                 <Notice>
-                  An item is unavailable for checkout. Review your cart before
-                  placing the order.
+                  {t("An item is unavailable for checkout. Review your cart before placing the order.")}
                 </Notice>
               )}
           </section>
           <section className="checkout-terms">
             <details>
               <summary>{t("Add an order note")}</summary>
-              <Field label="Order note">
+              <Field label={t("Order note")}>
                 <textarea
                   name="notes"
                   rows={3}
@@ -718,7 +713,7 @@ export function Checkout() {
               <div key={cartKey(line)}>
                 <img src={line.product?.image} alt="" />
                 <span>
-                  <strong>{line.product?.name || "Unavailable product"}</strong>
+                  <strong>{line.product?.name || t("Unavailable product")}</strong>
                   <small>
                     {[line.option, line.color].filter(Boolean).join(" · ")} ×{" "}
                     {formatNumber(line.quantity)}
@@ -757,7 +752,7 @@ export function Checkout() {
             </span>
           </label>
           <Button type="submit" busy={busy} disabled={!payable}>
-            {method === "cod" ? "Place order" : "Continue to payment"}
+            {t(method === "cod" ? "Place order" : "Continue to payment")}
             <ArrowRight size={17} />
           </Button>
           <p className="small muted">
@@ -769,7 +764,7 @@ export function Checkout() {
           </p>
           <a href="/cart/" className="text-link">
             <ArrowLeft size={14} />
-            Back to cart
+            {t("Back to cart")}
           </a>
         </aside>
       </form>
@@ -832,7 +827,7 @@ export function PaymentResult() {
       <main className="container standard-page">
         <Empty
           icon={LockKeyhole}
-          title="Sign in to see your payment status."
+          title={t("Sign in to see your payment status.")}
           action={
             <ActionLink
               href={
@@ -840,11 +835,11 @@ export function PaymentResult() {
                 encodeURIComponent(location.pathname + location.search)
               }
             >
-              Sign in
+              {t("Sign in")}
             </ActionLink>
           }
         >
-          Your payment is verified by the server before the order is confirmed.
+          {t("Your payment is verified by the server before the order is confirmed.")}
         </Empty>
       </main>
     )
@@ -867,45 +862,45 @@ export function PaymentResult() {
         <p className="eyebrow">{id || <BrandWordmark width={142} />}</p>
         <h1>
           {busy
-            ? "Checking your payment…"
+            ? t("Checking your payment…")
             : paid
               ? testPayment
-                ? "Test payment confirmed."
-                : "Thank you. It’s confirmed."
-              : "Let’s check your payment."}
+                ? t("Test payment confirmed.")
+                : t("Thank you. It’s confirmed.")
+              : t("Let’s check your payment.")}
         </h1>
         <p>
           {paid
             ? testPayment
-              ? "Flutterwave verified your test payment. You can follow this order in your account."
-              : "Your payment has been verified. You can follow the order and see the next steps in your account."
-            : "Your order is only marked paid after confirmation from Flutterwave. A pending or cancelled payment is not a completed order."}
+              ? t("Flutterwave verified your test payment. You can follow this order in your account.")
+              : t("Your payment has been verified. You can follow the order and see the next steps in your account.")
+            : t("Your order is only marked paid after confirmation from Flutterwave. A pending or cancelled payment is not a completed order.")}
         </p>
         {error && <Notice type="error">{error}</Notice>}
         {order && (
           <div className="result-details">
             <span>
-              Order <b>{order.id}</b>
+              {t("Order")} <b>{order.id}</b>
             </span>
             <span>
-              Payment{" "}
+              {t("Payment")}{" "}
               <Badge type={paid ? "success" : ""}>
                 {testPayment ? "Test · " : ""}
                 {statusLabel(order.paymentStatus)}
               </Badge>
             </span>
             <span>
-              Total <b>{money(order.amount)}</b>
+              {t("Total")} <b>{money(order.amount)}</b>
             </span>
           </div>
         )}
         <ActionLink
           href={id ? "/account/orders/" + id + "/" : "/account/orders/"}
         >
-          View your order
+          {t("View your order")}
         </ActionLink>
         <a href="/collections/shop/" className="text-link">
-          Keep exploring
+          {t("Keep exploring")}
           <ArrowRight size={15} />
         </a>
       </div>

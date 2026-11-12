@@ -123,7 +123,7 @@ export function Empty({ icon: Icon = ShoppingBag, title, children, action }) {
 export function Breadcrumb({ items = [] }) {
   const { t } = useLocale()
   return (
-    <nav className="breadcrumb" aria-label="Breadcrumb">
+    <nav className="breadcrumb" aria-label={t("Breadcrumb") }>
       <a href="/">{t("Home")}</a>
       {items.map((it, i) => (
         <React.Fragment key={i}>

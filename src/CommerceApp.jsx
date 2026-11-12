@@ -13,7 +13,7 @@ import { Auth, Account } from "./pages/account.jsx"
 import { Info } from "./pages/info.jsx"
 import { Button, Modal } from "./components/ui.jsx"
 import { localReturnPath } from "./lib/navigation.js"
-import { LocaleProvider } from "./lib/locale.jsx"
+import { LocaleProvider, useLocale } from "./lib/locale.jsx"
 import { GitCompareArrows } from "lucide-react"
 import "./commerce.css"
 import "./product-detail.css"
@@ -22,6 +22,20 @@ import "./offer-details.css"
 import "./account-experience.css"
 import "./order-experience.css"
 const Admin = React.lazy(() => import("./pages/admin.jsx"))
+function ErrorFallback() {
+  const { t } = useLocale()
+  return (
+    <div className="commerce-surface">
+      <main className="container standard-page">
+        <div className="empty-state">
+          <h1>{t("Let’s get you back to the store.")}</h1>
+          <p>{t("This view could not be opened. Your cart is saved on this device.")}</p>
+          <Button onClick={() => location.assign("/")}>{t("Open London Tech")}</Button>
+        </div>
+      </main>
+    </div>
+  )
+}
 class ErrorBoundary extends React.Component {
   state = { failed: false }
   static getDerivedStateFromError() {
@@ -32,19 +46,7 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     return this.state.failed ? (
-      <div className="commerce-surface">
-        <main className="container standard-page">
-          <div className="empty-state">
-            <h1>Let’s get you back to the store.</h1>
-            <p>
-              This view could not be opened. Your cart is saved on this device.
-            </p>
-            <Button onClick={() => location.assign("/")}>
-              Open London Tech
-            </Button>
-          </div>
-        </main>
-      </div>
+      <ErrorFallback />
     ) : (
       this.props.children
     )
@@ -64,6 +66,7 @@ function RouterContent({ path }) {
     closeAuth,
     config,
   } = useStore()
+  const { t } = useLocale()
   const admin = /^\/admin(?:\/|$)/.test(normalized)
   useEffect(() => {
     recordStoreVisit({ path: normalized, enabled: config.analytics === true })
@@ -104,7 +107,7 @@ function RouterContent({ path }) {
         <React.Suspense
           fallback={
             <div className="admin-gate">
-              <p>Opening the store console…</p>
+              <p>{t("Opening the store console…")}</p>
             </div>
           }
         >
@@ -194,9 +197,9 @@ function RouterContent({ path }) {
         {imageSearchOpen && <ImageSearchDialog />}
         {cartOpen && <CartDrawer />}
         {compare.length > 0 && (
-          <a className="compare-float" href="/compare/">
+          <a className="compare-float" href="/compare/" aria-label={t("Compare {count} products", { count: compare.length })}>
             <GitCompareArrows size={16} />
-            Compare<b>{compare.length}</b>
+            {t("Compare")}<b>{compare.length}</b>
           </a>
         )}
       </div>

@@ -1,8 +1,10 @@
 import React, { useId, useState } from "react"
 import { ArrowRight, Check, Mail } from "lucide-react"
 import { api } from "../lib/api.js"
+import { useLocale } from "../lib/locale.jsx"
 
 export function NewsletterSignup() {
+  const { t } = useLocale()
   const emailId = useId()
   const consentId = useId()
   const messageId = useId()
@@ -13,10 +15,10 @@ export function NewsletterSignup() {
   const [success, setSuccess] = useState(null)
 
   return (
-    <section className="footer-newsletter" aria-label="Store newsletter">
+    <section className="footer-newsletter" aria-label={t("Store newsletter")}>
       <div className="footer-newsletter-copy">
-        <h2>Your next upgrade, first.</h2>
-        <p>New arrivals, store offers and tech worth knowing.</p>
+        <h2>{t("Your next upgrade, first.")}</h2>
+        <p>{t("New arrivals, store offers and tech worth knowing.")}</p>
       </div>
       <form
         className="footer-newsletter-form"
@@ -27,7 +29,7 @@ export function NewsletterSignup() {
           setSuccess(null)
           if (!consent) {
             setError(
-              "Please agree to receive the newsletter before subscribing.",
+              t("Please agree to receive the newsletter before subscribing."),
             )
             return
           }
@@ -39,7 +41,7 @@ export function NewsletterSignup() {
             })
             if (!result.subscribed)
               throw new Error(
-                "Your subscription could not be saved. Please try again.",
+                t("Your subscription could not be saved. Please try again."),
               )
             setSuccess(result)
           } catch (failure) {
@@ -53,13 +55,13 @@ export function NewsletterSignup() {
           <div className="footer-newsletter-success" role="status">
             <Check size={21} aria-hidden="true" />
             <div>
-              <strong>You’re on the list.</strong>
+              <strong>{t("You’re on the list.")}</strong>
               <span>
-                Your subscription is saved. You can unsubscribe at any time.
+                {t("Your subscription is saved. You can unsubscribe at any time.")}
               </span>
               {typeof success.unsubscribeUrl === "string" &&
                 success.unsubscribeUrl.startsWith("/unsubscribe/?") && (
-                  <a href={success.unsubscribeUrl}>Manage subscription</a>
+                  <a href={success.unsubscribeUrl}>{t("Manage subscription")}</a>
                 )}
             </div>
             <button
@@ -70,7 +72,7 @@ export function NewsletterSignup() {
                 setConsent(false)
               }}
             >
-              Use another email
+              {t("Use another email")}
             </button>
           </div>
         ) : (
@@ -79,7 +81,7 @@ export function NewsletterSignup() {
               <label className="footer-email-field" htmlFor={emailId}>
                 <Mail size={19} aria-hidden="true" />
                 <span className="sr-only">
-                  Email address for the newsletter
+                  {t("Email address for the newsletter")}
                 </span>
                 <input
                   id={emailId}
@@ -89,7 +91,7 @@ export function NewsletterSignup() {
                   autoComplete="email"
                   maxLength={254}
                   required
-                  placeholder="Your email address"
+                  placeholder={t("Your email address")}
                   value={email}
                   disabled={busy}
                   aria-describedby={error ? messageId : undefined}
@@ -101,7 +103,7 @@ export function NewsletterSignup() {
                 type="submit"
                 disabled={busy}
               >
-                {busy ? "Subscribing…" : "Subscribe"}
+                {busy ? t("Subscribing…") : t("Subscribe")}
                 {!busy && <ArrowRight size={17} aria-hidden="true" />}
               </button>
             </div>
@@ -115,15 +117,15 @@ export function NewsletterSignup() {
                 onChange={(event) => setConsent(event.target.checked)}
               />
               <span>
-                I agree to receive store news and offers. Read our{" "}
-                <a href="/privacy/">Privacy policy</a>. Unsubscribe anytime.
+                {t("I agree to receive store news and offers. Read our")}{" "}
+                <a href="/privacy/">{t("Privacy policy")}</a>. {t("Unsubscribe anytime.")}
               </span>
             </label>
           </>
         )}
         {error && (
           <p className="footer-newsletter-error" id={messageId} role="alert">
-            {error}
+            {t(error)}
           </p>
         )}
       </form>

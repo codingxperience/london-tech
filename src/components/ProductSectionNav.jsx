@@ -174,7 +174,7 @@ export function ProductSectionNav({ productId, reviewCount = 0 }) {
     <nav
       className="detail-section-nav"
       ref={nav}
-      aria-label="Explore product information"
+      aria-label={t("Explore product information")}
     >
       <div className="detail-mobile-nav">
         <label htmlFor={selectId}>{t("Product details")}</label>

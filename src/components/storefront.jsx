@@ -25,13 +25,16 @@ import {
   PackageCheck,
   MapPin,
   Trash2,
+  Heart,
+  ShoppingCart,
 } from "lucide-react"
 
-import { useStore, cartKey } from "../store.jsx"
+import { useStore, cartKey, navigate } from "../store.jsx"
 import { galleryImages } from "../lib/product-experience.js"
 import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
 import { ProductPhotoPlaceholder } from "./ProductPhotoPlaceholder.jsx"
 import { CardPrices } from "./CardPrices.jsx"
+import { WhatsAppIcon } from "./WhatsAppIcon.jsx"
 import { useLocale } from "../lib/locale.jsx"
 
 import {
@@ -74,13 +77,27 @@ export { PaymentMarks } from "./PaymentMarks.jsx"
 
 export function ProductCard({ product: p, detailed = false }) {
   const { t } = useLocale()
+  const { wishlist, toggleWish, addCart, cart } = useStore()
   const image = galleryImages(p)[0]?.src || p.image
   const href = productPath(p)
+  const wished = wishlist.includes(p.id)
+  const added = cart.some((line) => line.id === p.id)
+  const hasVariants = Boolean(p.options?.length || p.colors?.length)
+  const message = encodeURIComponent(`Hello London Tech, I’m interested in ${p.name}.`)
 
   return (
-    <article className={"product-card" + (detailed ? " detailed-product-card" : "")}>
-      <div className="product-card-media">
-        <a href={href} tabIndex={-1} aria-hidden="true">
+    <article className={"product-card pcard home-product-card" + (detailed ? " detailed-product-card" : "")}>
+      <button
+        className={`home-product-wishlist${wished ? " selected" : ""}`}
+        type="button"
+        aria-pressed={wished}
+        aria-label={t(wished ? "Remove {name} from wishlist" : "Save {name} to wishlist", { name: p.name })}
+        onClick={() => toggleWish(p.id)}
+      >
+        <Heart size={17} fill={wished ? "currentColor" : "none"} aria-hidden="true" />
+      </button>
+      <div className="product-card-media home-product-image">
+        <a href={href} className="home-product-media-link" tabIndex={-1} aria-hidden="true">
           {image === productImagePlaceholder ? (
             <ProductPhotoPlaceholder category={p.category} />
           ) : (
@@ -88,15 +105,33 @@ export function ProductCard({ product: p, detailed = false }) {
           )}
         </a>
       </div>
-      <div className="product-card-copy">
+      <div className="product-card-copy home-product-copy">
         <h3><a href={href}>{p.name}</a></h3>
         <div className="product-card-bottom">
           <CardPrices product={p} />
         </div>
-        <a className="product-card-cta" href={href}>
-          {t("View details")}
-          <ArrowRight size={15} aria-hidden="true" />
+      </div>
+      <div className="home-product-actions">
+        <a
+          className="home-product-chat"
+          href={`https://wa.me/256788341111?text=${message}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("Ask about {name} on WhatsApp", { name: p.name })}
+        >
+          <WhatsAppIcon size={16} />
+          <span>{t("Chat")}</span>
         </a>
+        <button
+          className="home-product-add"
+          type="button"
+          disabled={p.stock === 0}
+          onClick={() => hasVariants ? navigate(href) : addCart(p)}
+          aria-label={t(p.stock === 0 ? "{name} is out of stock" : hasVariants ? "Choose options for {name}" : added ? "Add another {name} to cart" : "Add {name} to cart", { name: p.name })}
+        >
+          <ShoppingCart size={15} aria-hidden="true" />
+          <span>{p.stock === 0 ? t("Out of stock") : hasVariants ? t("Choose options") : added ? t("Added") : t("Add to cart")}</span>
+        </button>
       </div>
     </article>
   )
@@ -132,6 +167,7 @@ export function SectionHeading({ eyebrow, title, href, link = "Explore all" }) {
 
 export function SearchDialog() {
   const { products, setSearchOpen } = useStore()
+  const { t } = useLocale()
   const [query, setQuery] = useState("")
   const results = query.trim()
     ? products
@@ -143,24 +179,24 @@ export function SearchDialog() {
         .slice(0, 8)
     : products.filter((p) => p.featured).slice(0, 5)
   return (
-    <Modal title="Find your next." onClose={() => setSearchOpen(false)} wide>
+    <Modal title={t("Find your next.")} onClose={() => setSearchOpen(false)} wide>
       <div className="search-box">
         <Search size={21} />
         <input
-          aria-label="Search products"
-          placeholder="Try iPhone, headphones or a laptop…"
+          aria-label={t("Search products")}
+          placeholder={t("Try iPhone, headphones or a laptop…")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           autoFocus
         />
-        <span>{results.length} results</span>
+        <span>{t("{count} results", { count: results.length })}</span>
       </div>
       <div
         className="search-results"
         onClick={(e) => e.target.closest("a") && setSearchOpen(false)}
       >
         <p className="eyebrow">
-          {query ? "Matching products" : "A few favourites to start with"}
+          {t(query ? "Matching products" : "A few favourites to start with")}
         </p>
         {results.map((p) => (
           <a href={productPath(p)} key={p.id}>
@@ -174,8 +210,8 @@ export function SearchDialog() {
           </a>
         ))}
         {!results.length && (
-          <Empty icon={Search} title="Nothing here yet.">
-            Try a different model, brand or product category.
+          <Empty icon={Search} title={t("Nothing here yet.")}>
+            {t("Try a different model, brand or product category.")}
           </Empty>
         )}
       </div>
@@ -185,28 +221,29 @@ export function SearchDialog() {
 
 export function CartDrawer() {
   const { lines, subtotal, setCartOpen, updateCart, removeCart } = useStore()
+  const { t } = useLocale()
   return (
-    <Modal title="Your cart" drawer onClose={() => setCartOpen(false)}>
+    <Modal title={t("Your cart")} drawer onClose={() => setCartOpen(false)}>
       <div className="cart-drawer-body">
         {!lines.length ? (
           <Empty
-            title="A little room for possibility."
+            title={t("A little room for possibility.")}
             action={
               <ActionLink
                 href="/collections/shop/"
                 onClick={() => setCartOpen(false)}
               >
-                Explore the collection
+                {t("Explore the collection")}
               </ActionLink>
             }
           >
-            Your next favourite is waiting in the collection.
+            {t("Your next favourite is waiting in the collection.")}
           </Empty>
         ) : (
           <>
             <p className="muted small">
               {lines.reduce((sum, p) => sum + p.quantity, 0)} items,
-              thoughtfully chosen.
+              {t("thoughtfully chosen.")}
             </p>
             {lines.map((line) => {
               const p = line.product
@@ -222,7 +259,7 @@ export function CartDrawer() {
                     />
                   </a>
                   <div>
-                    <h3>{p?.name || "Unavailable product"}</h3>
+                    <h3>{p?.name || t("Unavailable product")}</h3>
                     <p>
                       {[line.option, line.color].filter(Boolean).join(" · ")}
                     </p>
@@ -234,7 +271,7 @@ export function CartDrawer() {
                     />
                   </div>
                   <IconButton
-                    label="Remove item"
+                    label={t("Remove item")}
                     onClick={() => removeCart(cartKey(line))}
                   >
                     <X size={15} />
@@ -248,21 +285,21 @@ export function CartDrawer() {
       {lines.length > 0 && (
         <div className="drawer-cart-footer">
           <div>
-            <span>Subtotal</span>
+            <span>{t("Subtotal")}</span>
             <strong>
               {subtotal == null ? "To be confirmed" : money(subtotal)}
             </strong>
           </div>
-          <p>Delivery and any unlisted prices are confirmed before payment.</p>
+          <p>{t("Delivery and any unlisted prices are confirmed before payment.")}</p>
           <ActionLink href="/cart/" onClick={() => setCartOpen(false)}>
-            Review your cart
+            {t("Review your cart")}
           </ActionLink>
           <a
             href="/checkout/"
             onClick={() => setCartOpen(false)}
             className="text-link"
           >
-            Continue to checkout
+            {t("Continue to checkout")}
             <ArrowRight size={14} />
           </a>
         </div>

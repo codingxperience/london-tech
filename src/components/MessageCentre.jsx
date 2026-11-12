@@ -12,18 +12,8 @@ import {
   VolumeX,
 } from "lucide-react"
 import { api } from "../lib/api.js"
+import { useLocale } from "../lib/locale.jsx"
 import { Button, Empty, Field, Modal, Notice } from "./ui.jsx"
-
-const shortDate = new Intl.DateTimeFormat("en-UG", {
-  month: "short",
-  day: "numeric",
-  timeZone: "Africa/Kampala",
-})
-const messageTime = new Intl.DateTimeFormat("en-UG", {
-  dateStyle: "medium",
-  timeStyle: "short",
-  timeZone: "Africa/Kampala",
-})
 
 function ConversationAvatar({ admin, name }) {
   return (
@@ -47,6 +37,17 @@ export function MessageCentre({
   alerts,
   workspaceQuery = "",
 }) {
+  const { t, language } = useLocale()
+  const shortDate = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    month: "short",
+    day: "numeric",
+    timeZone: "Africa/Kampala",
+  })
+  const messageTime = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Africa/Kampala",
+  })
   const [threads, setThreads] = useState(supplied || []),
     [selected, setSelected] = useState(null)
   const [compose, setCompose] = useState(false),
@@ -379,23 +380,23 @@ export function MessageCentre({
   }
   return (
     <section className="admin-panel message-centre">
-      {error && !compose && <Notice type="error">{error}</Notice>}
+      {error && !compose && <Notice type="error">{t(error)}</Notice>}
       <div className={`message-layout${thread ? " has-conversation" : ""}`}>
-        <aside className="message-inbox" aria-label="Inbox">
+        <aside className="message-inbox" aria-label={t("Inbox")}>
           <div className="message-inbox-head">
             <div>
-              <h2>{admin ? "Customer messages" : "Messages"}</h2>
+              <h2>{t(admin ? "Customer messages" : "Messages")}</h2>
               {preview ? (
-                <a className="message-live-link" href="/admin/messages/">
-                  Open live inbox
+                  <a className="message-live-link" href="/admin/messages/">
+                  {t("Open live inbox")}
                 </a>
               ) : connection !== "connected" ? (
                 <span className="message-connection" role="status">
                   {connection === "signed-out"
-                    ? "Sign in to reconnect"
+                    ? t("Sign in to reconnect")
                     : connection === "retrying"
-                      ? "Reconnecting…"
-                      : "Connecting…"}
+                      ? t("Reconnecting…")
+                      : t("Connecting…")}
                 </span>
               ) : null}
             </div>
@@ -404,12 +405,12 @@ export function MessageCentre({
                 <button
                   type="button"
                   className="message-refresh"
-                  aria-label="Message sound"
+                  aria-label={t("Message sound")}
                   aria-pressed={alerts.enabled}
                   title={
                     alerts.enabled
-                      ? "Mute message sound"
-                      : "Enable message sound"
+                      ? t("Mute message sound")
+                      : t("Enable message sound")
                   }
                   onClick={alerts.toggle}
                 >
@@ -424,8 +425,8 @@ export function MessageCentre({
                 <button
                   type="button"
                   className="message-refresh"
-                  aria-label="Refresh inbox"
-                  title="Refresh inbox"
+                  aria-label={t("Refresh inbox")}
+                  title={t("Refresh inbox")}
                   disabled={busy}
                   onClick={() => refreshInbox.current?.()}
                 >
@@ -437,8 +438,8 @@ export function MessageCentre({
                   setError("")
                   setCompose(true)
                 }}
-                aria-label="New message"
-                title="New message"
+                aria-label={t("New message")}
+                title={t("New message")}
               >
                 <Plus size={19} aria-hidden="true" />
               </Button>
@@ -450,64 +451,64 @@ export function MessageCentre({
               <input
                 ref={inboxSearch}
                 type="search"
-                aria-label="Search conversations"
-                placeholder="Search conversations"
+                aria-label={t("Search conversations")}
+                placeholder={t("Search conversations")}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
             </label>
             <select
-              aria-label="Filter conversations"
+              aria-label={t("Filter conversations")}
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             >
-              <option value="all">All conversations</option>
-              {!preview && <option value="unread">Unread</option>}
+              <option value="all">{t("All conversations")}</option>
+              {!preview && <option value="unread">{t("Unread")}</option>}
               {admin && !preview && (
-                <option value="waiting">Waiting for reply</option>
+                <option value="waiting">{t("Waiting for reply")}</option>
               )}
-              <option value="open">Open</option>
-              <option value="resolved">Resolved</option>
+              <option value="open">{t("Open")}</option>
+              <option value="resolved">{t("Resolved")}</option>
             </select>
           </div>
           <div className="message-list">
             {shown.length ? (
-              shown.map((t) => {
-                const last = t.messages.at(-1)
+              shown.map((entry) => {
+                const last = entry.messages.at(-1)
                 return (
                   <button
                     type="button"
-                    key={t.id}
-                    className={t.id === selected ? "selected" : ""}
-                    aria-current={t.id === selected ? "true" : undefined}
+                    key={entry.id}
+                    className={entry.id === selected ? "selected" : ""}
+                    aria-current={entry.id === selected ? "true" : undefined}
                     disabled={busy}
-                    onClick={() => openThread(t.id)}
+                    onClick={() => openThread(entry.id)}
                   >
-                    <ConversationAvatar admin={admin} name={counterpart(t)} />
+                    <ConversationAvatar admin={admin} name={counterpart(entry)} />
                     <span className="message-row-copy">
-                      <strong>{t.subject}</strong>
+                      <strong>{entry.subject}</strong>
                       <span>
-                        {counterpart(t)}
-                        {t.status === "resolved" && " · Resolved"}
-                        {admin && t.queueAhead != null && " · Waiting"}
+                        {counterpart(entry)}
+                        {entry.status === "resolved" && " · " + t("Resolved")}
+                        {admin && entry.queueAhead != null && " · " + t("Waiting")}
                       </span>
                       {last && (
                         <small>
-                          {last.role === ownRole ? "You: " : ""}
+                          {last.role === ownRole ? t("You:") + " " : ""}
                           {last.body}
                         </small>
                       )}
                     </span>
                     <span className="message-row-meta">
-                      <time dateTime={t.updated_at}>
-                        {shortDate.format(new Date(t.updated_at))}
+                      <time dateTime={entry.updated_at}>
+                        {shortDate.format(new Date(entry.updated_at))}
                       </time>
-                      {t.unreadCount > 0 && (
+                      {entry.unreadCount > 0 && (
                         <span
                           className="message-count"
-                          aria-label={`${t.unreadCount} unread messages`}
+                          aria-label={t("{count} unread messages", { count: entry.unreadCount })}
                         >
-                          {t.unreadCount > 99 ? "99+" : t.unreadCount}
+                          {entry.unreadCount > 99 ? "99+" : entry.unreadCount}
                         </span>
                       )}
                     </span>
@@ -517,14 +518,14 @@ export function MessageCentre({
             ) : (
               <p className="message-list-empty" role="status">
                 {!preview && connection === "connecting"
-                  ? "Loading conversations…"
+                  ? t("Loading conversations…")
                   : !preview && connection === "signed-out"
-                    ? "Sign in again to open your conversations."
+                    ? t("Sign in again to open your conversations.")
                     : !preview && connection === "retrying" && !threads.length
-                      ? "Inbox temporarily unavailable. Reconnecting…"
+                      ? t("Inbox temporarily unavailable. Reconnecting…")
                       : terms.length || filter !== "all"
-                        ? "No matching conversations."
-                        : "No conversations yet."}
+                        ? t("No matching conversations.")
+                        : t("No conversations yet.")}
               </p>
             )}
           </div>
@@ -536,7 +537,7 @@ export function MessageCentre({
                 <button
                   type="button"
                   className="message-back"
-                  aria-label="Back to inbox"
+                  aria-label={t("Back to inbox")}
                   onClick={() => {
                     stopTyping()
                     setSelected(null)
@@ -561,9 +562,9 @@ export function MessageCentre({
                     }
                   >
                     {thread.otherTyping
-                      ? `${counterpart(thread)} is typing…`
+                      ? t("{name} is typing…", { name: counterpart(thread) })
                       : `${counterpart(thread)} · ${
-                          thread.status === "resolved" ? "Resolved" : "Open"
+                          t(thread.status === "resolved" ? "Resolved" : "Open")
                         }`}
                   </p>
                 </div>
@@ -580,19 +581,15 @@ export function MessageCentre({
                     {thread.status === "open" && (
                       <CheckCheck size={16} aria-hidden="true" />
                     )}
-                    {thread.status === "open" ? "Resolve" : "Reopen"}
+                    {t(thread.status === "open" ? "Resolve" : "Reopen")}
                   </Button>
                 )}
               </header>
               {!admin && thread.queueAhead != null && (
                 <p className="message-queue" role="status">
                   {thread.queueAhead === 0
-                    ? "You’re next in the support queue."
-                    : `${thread.queueAhead} ${
-                        thread.queueAhead === 1
-                          ? "conversation"
-                          : "conversations"
-                      } ahead of you.`}
+                    ? t("You’re next in the support queue.")
+                    : t(thread.queueAhead === 1 ? "{count} conversation ahead of you." : "{count} conversations ahead of you.", { count: thread.queueAhead })}
                 </p>
               )}
               <div
@@ -606,7 +603,7 @@ export function MessageCentre({
                   setAtLatest(followingLatest.current)
                 }}
                 role="log"
-                aria-label="Conversation messages"
+                aria-label={t("Conversation messages")}
                 tabIndex={0}
               >
                 {thread.messages.map((m) => (
@@ -616,7 +613,7 @@ export function MessageCentre({
                   >
                     <strong>
                       {m.role === ownRole
-                        ? "You"
+                        ? t("You")
                         : m.role === "admin"
                           ? "London Tech"
                           : m.name}
@@ -641,8 +638,8 @@ export function MessageCentre({
                   required
                   minLength={2}
                   maxLength={4000}
-                  aria-label="Your reply"
-                  placeholder="Write a reply…"
+                  aria-label={t("Your reply")}
+                  placeholder={t("Write a reply…")}
                   value={reply}
                   onBlur={stopTyping}
                   onChange={(e) => {
@@ -654,8 +651,8 @@ export function MessageCentre({
                   busy={busy}
                   disabled={reply.trim().length < 2}
                   type="submit"
-                  aria-label="Send reply"
-                  title="Send reply"
+                  aria-label={t("Send reply")}
+                  title={t("Send reply")}
                 >
                   <Send size={18} aria-hidden="true" />
                 </Button>
@@ -664,7 +661,7 @@ export function MessageCentre({
           ) : (
             <Empty
               icon={MessageSquare}
-              title="Choose a conversation"
+              title={t("Choose a conversation")}
               action={
                 <Button
                   onClick={() => {
@@ -672,17 +669,17 @@ export function MessageCentre({
                     setCompose(true)
                   }}
                 >
-                  New message
+                  {t("New message")}
                 </Button>
               }
             >
-              Open a conversation from your inbox or start a new one.
+              {t("Open a conversation from your inbox or start a new one.")}
             </Empty>
           )}
         </div>
       </div>
       {compose && (
-        <Modal title="New message" onClose={() => setCompose(false)}>
+        <Modal title={t("New message")} onClose={() => setCompose(false)}>
           <form
             className="stack-form"
             onSubmit={(e) => {
@@ -691,7 +688,7 @@ export function MessageCentre({
             }}
           >
             {admin && (
-              <Field label="Customer">
+              <Field label={t("Customer")}>
                 <select
                   required
                   value={draft.customerId}
@@ -699,7 +696,7 @@ export function MessageCentre({
                     setDraft({ ...draft, customerId: e.target.value })
                   }
                 >
-                  <option value="">Choose a customer</option>
+                  <option value="">{t("Choose a customer")}</option>
                   {customers.map((c) => (
                     <option value={c.id} key={c.id}>
                       {c.name} · {c.email}
@@ -709,14 +706,14 @@ export function MessageCentre({
               </Field>
             )}
             <Field
-              label="Subject"
+              label={t("Subject")}
               required
               minLength={3}
               maxLength={160}
               value={draft.subject}
               onChange={(e) => setDraft({ ...draft, subject: e.target.value })}
             />
-            <Field label="Message">
+            <Field label={t("Message")}>
               <textarea
                 required
                 rows={6}
@@ -728,10 +725,10 @@ export function MessageCentre({
             </Field>
             {error && <Notice type="error">{error}</Notice>}
             <p className="admin-muted">
-              This is an in-app message. No email or SMS is sent.
+              {t("This is an in-app message. No email or SMS is sent.")}
             </p>
             <Button busy={busy} type="submit">
-              Send message <Send size={16} />
+              {t("Send message")} <Send size={16} />
             </Button>
           </form>
         </Modal>

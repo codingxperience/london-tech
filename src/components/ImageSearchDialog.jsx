@@ -7,6 +7,7 @@ import {
 } from "lucide-react"
 import { Modal, Button } from "./ui.jsx"
 import { useStore } from "../store.jsx"
+import { useLocale } from "../lib/locale.jsx"
 import { productPath } from "../data/catalog.js"
 import { CardPrices } from "./CardPrices.jsx"
 import {
@@ -16,6 +17,7 @@ import {
 
 export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
   const { products, setImageSearchOpen } = useStore()
+  const { t } = useLocale()
   const [state, setState] = useState({
     phase: "idle",
     preview: "",
@@ -49,7 +51,7 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
       setState((previous) => ({
         ...previous,
         phase: "error",
-        message: error.message,
+        message: t(error.message),
         matches: [],
       }))
       return
@@ -60,7 +62,7 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
       phase: "loading",
       preview: preview.current,
       matches: [],
-      message: "Opening your photo…",
+      message: t("Opening your photo…"),
     })
     try {
       const matches = await client.current.search(
@@ -85,8 +87,7 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
           phase: "error",
           matches: [],
           message:
-            error.message ||
-            "This photo could not be searched. Please try another image.",
+            t(error.message || "This photo could not be searched. Please try another image."),
         }))
     }
   }
@@ -112,19 +113,19 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
 
   return (
     <Modal
-      title="Search by image"
+      title={t("Search by image")}
       onClose={close}
       wide
       className="image-search-dialog"
     >
       <p className="image-search-intro">
-        See something you like? Find similar items at London Tech.
+        {t("See something you like? Find similar items at London Tech.")}
       </p>
       <input
         ref={picker}
         type="file"
         accept="image/jpeg,image/png,image/webp"
-        aria-label="Choose a product photo"
+        aria-label={t("Choose a product photo")}
         className="image-search-input"
         hidden
         tabIndex={-1}
@@ -157,7 +158,7 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
           {state.preview ? (
             <img
               src={state.preview}
-              alt="Your search photo"
+              alt={t("Your search photo")}
               className="image-search-preview"
             />
           ) : (
@@ -168,17 +169,17 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
               </span>
             </span>
           )}
-          <h3>{state.preview ? "Your photo" : "Start with a product photo"}</h3>
+          <h3>{t(state.preview ? "Your photo" : "Start with a product photo")}</h3>
           <p>
             {state.preview
-              ? "A clear image of one item works best."
-              : "Drop an image here, paste a copied photo, or choose one from your device."}
+              ? t("A clear image of one item works best.")
+              : t("Drop an image here, paste a copied photo, or choose one from your device.")}
           </p>
           <Button data-modal-autofocus onClick={() => picker.current?.click()}>
             <ImagePlus size={17} />
-            {state.preview ? "Choose another photo" : "Choose a photo"}
+            {t(state.preview ? "Choose another photo" : "Choose a photo")}
           </Button>
-          <small>JPG, PNG or WebP · Up to 10 MB</small>
+          <small>{t("JPG, PNG or WebP · Up to 10 MB")}</small>
         </div>
         {state.preview && (
           <div
@@ -188,9 +189,9 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
             {state.phase === "loading" && (
               <div className="image-search-progress" role="status">
                 <LoaderCircle className="spin" size={30} strokeWidth={1.5} />
-                <h3>Finding similar items</h3>
-                <p>{state.message}</p>
-                <small>The first search may take a little longer.</small>
+                <h3>{t("Finding similar items")}</h3>
+                <p>{t(state.message)}</p>
+                <small>{t("The first search may take a little longer.")}</small>
               </div>
             )}
             {state.phase === "done" && (
@@ -198,20 +199,19 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
                 <div className="image-search-results-heading">
                   <h3>
                     {state.matches.length
-                      ? "Similar items"
-                      : "No close matches yet"}
+                      ? t("Similar items")
+                      : t("No close matches yet")}
                   </h3>
                   <span>
                     {state.matches.length
-                      ? `${state.matches.length} suggestions`
-                      : "Try another photo"}
+                      ? t("{count} suggestions", { count: state.matches.length })
+                      : t("Try another photo")}
                   </span>
                 </div>
                 {state.matches.length ? (
                   <>
                     <p className="image-match-note">
-                      Matched by appearance. Check the model and specifications
-                      before ordering.
+                      {t("Matched by appearance. Check the model and specifications before ordering.")}
                     </p>
                     <div className="visual-match-grid">
                       {state.matches.map(({ product }) => (
@@ -232,21 +232,20 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
                   </>
                 ) : (
                   <p className="image-match-note">
-                    Use a clear, centred photo with a simple background. Our
-                    current catalogue may not contain a similar item.
+                    {t("Use a clear, centred photo with a simple background. Our current catalogue may not contain a similar item.")}
                   </p>
                 )}
               </>
             )}
             {state.phase === "error" && (
               <div className="image-search-error" role="alert">
-                <h3>Let’s try that again</h3>
-                <p>{state.message}</p>
+                <h3>{t("Let’s try that again")}</h3>
+                <p>{t(state.message)}</p>
                 <Button
                   variant="secondary"
                   onClick={() => picker.current?.click()}
                 >
-                  Choose another photo
+                  {t("Choose another photo")}
                 </Button>
               </div>
             )}
@@ -255,13 +254,13 @@ export function ImageSearchDialog({ createClient = createVisualSearchClient }) {
       </div>
       {state.phase === "error" && !state.preview && (
         <p className="image-search-validation" role="alert">
-          {state.message}
+          {t(state.message)}
         </p>
       )}
       <div className="image-search-privacy">
         <ShieldCheck size={15} />
         <span>
-          Your photo stays on this device. Image matching runs in your browser.
+          {t("Your photo stays on this device. Image matching runs in your browser.")}
         </span>
       </div>
     </Modal>

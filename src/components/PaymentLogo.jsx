@@ -1,4 +1,5 @@
 import React from "react"
+import { useLocale } from "../lib/locale.jsx"
 import "../payment-logos.css"
 
 const methods = {
@@ -8,12 +9,13 @@ const methods = {
 }
 
 export function PaymentLogo({ method, decorative = false }) {
+  const { t } = useLocale()
   if (method === "cod")
     return (
       <span
         className="payment-brand payment-brand-cod"
         role={decorative ? undefined : "img"}
-        aria-label={decorative ? undefined : "Cash on delivery"}
+        aria-label={decorative ? undefined : t("Cash on delivery")}
       >
         <svg
           className="cash-on-delivery-icon"
@@ -49,7 +51,7 @@ export function PaymentLogo({ method, decorative = false }) {
     <span className={`payment-brand payment-brand-${method}`}>
       <img
         src={`/assets/payments/${brand.image}`}
-        alt={decorative ? "" : brand.name}
+        alt={decorative ? "" : t(brand.name)}
         width="80"
         height="36"
       />
@@ -58,6 +60,7 @@ export function PaymentLogo({ method, decorative = false }) {
 }
 
 export function PaymentMethod({ method }) {
+  const { t } = useLocale()
   const brand =
     method === "cod"
       ? { name: "Cash on delivery / collection" }
@@ -65,7 +68,7 @@ export function PaymentMethod({ method }) {
   return brand ? (
     <span className="payment-method-name">
       <PaymentLogo method={method} decorative />
-      <span>{brand.name}</span>
+      <span>{t(brand.name)}</span>
     </span>
   ) : null
 }

@@ -22,7 +22,6 @@ import {
   galleryImages,
   productInformation,
 } from "../lib/product-experience.js"
-import { dateLabel } from "../lib/api.js"
 import { ProductSectionNav } from "./ProductSectionNav.jsx"
 
 export function ProductSections({
@@ -33,7 +32,11 @@ export function ProductSections({
   reviewError,
   onWriteReview,
 }) {
-  const { t, formatNumber } = useLocale()
+  const { t, formatNumber, language } = useLocale()
+  const reviewDate = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    dateStyle: "medium",
+    timeZone: "Africa/Kampala",
+  })
   const information = productInformation(p)
   const images = galleryImages(p)
   const [expandedSpecs, setExpandedSpecs] = useState(false)
@@ -102,7 +105,7 @@ export function ProductSections({
               {highlights.slice(0, 6).map(({ title, body }) => (
                 <article key={title}>
                   <h3>{t(title)}</h3>
-                  <p>{body}</p>
+                  <p>{t(body)}</p>
                 </article>
               ))}
             </div>
@@ -129,7 +132,7 @@ export function ProductSections({
                 ([label, value], index) => (
                   <div key={`${label}-${index}`}>
                     <dt>{t(label)}</dt>
-                    <dd>{value}</dd>
+                    <dd>{t(value)}</dd>
                   </div>
                 ),
               )}
@@ -142,8 +145,8 @@ export function ProductSections({
                 onClick={() => setExpandedSpecs(!expandedSpecs)}
               >
                 {expandedSpecs
-                  ? "Show fewer specifications"
-                  : `View all ${specs.length} specifications`}
+                  ? t("Show fewer specifications")
+                  : t("View all {count} specifications", { count: specs.length })}
                 <ChevronDown
                   size={16}
                   className={expandedSpecs ? "is-open" : ""}
@@ -151,9 +154,7 @@ export function ProductSections({
               </Button>
             )}
             <p className="detail-footnote">
-              Specifications describe the listed model or product family.
-              Features and accessories may vary by region, generation and
-              configuration.
+              {t("Specifications describe the listed model or product family. Features and accessories may vary by region, generation and configuration.")}
             </p>
             {information.sources.length > 0 && (
               <details className="detail-source-disclosure">
@@ -180,18 +181,17 @@ export function ProductSections({
             <div className="detail-heading-row">
               <div>
                 <h2 id="reviews-heading">
-                  Reviews{" "}
+                  {t("Reviews")}{" "}
                   <span className="detail-title-count">({reviews.length})</span>
                 </h2>
               </div>
               <Button variant="secondary" onClick={onWriteReview}>
-                Write a review
+                {t("Write a review")}
               </Button>
             </div>
             {reviewError && (
               <p className="detail-inline-note" role="status">
-                Reviews could not be loaded. Please refresh this page to try
-                again.
+                {t("Reviews could not be loaded. Please refresh this page to try again.")}
               </p>
             )}
             <div className="detail-review-summary">
@@ -203,7 +203,7 @@ export function ProductSections({
                 <span
                   className="review-stars"
                   aria-label={
-                    average ? `${average} out of 5 stars` : "No ratings yet"
+                    average ? t("{rating} out of 5 stars", { rating: average }) : t("No ratings yet")
                   }
                 >
                   {average
@@ -213,10 +213,8 @@ export function ProductSections({
                 </span>
                 <span>
                   {reviews.length
-                    ? `${reviews.length} verified purchase${
-                        reviews.length === 1 ? "" : "s"
-                      }`
-                    : "Be the first to share your experience"}
+                    ? t(reviews.length === 1 ? "{count} verified purchase" : "{count} verified purchases", { count: reviews.length })
+                    : t("Be the first to share your experience")}
                 </span>
               </div>
               <div className="detail-rating-bars">
@@ -227,7 +225,7 @@ export function ProductSections({
                   return (
                     <button
                       key={rating}
-                      aria-label={`Show ${rating}-star reviews, ${count} reviews`}
+                      aria-label={t("Show {rating}-star reviews, {count} reviews", { rating, count })}
                       aria-pressed={reviewRating === String(rating)}
                       onClick={() => {
                         setReviewRating(String(rating))
@@ -257,7 +255,7 @@ export function ProductSections({
             </div>
             <div className="detail-review-toolbar">
               <label>
-                Rating
+                {t("Rating")}
                 <select
                   value={reviewRating}
                   onChange={(e) => {
@@ -268,13 +266,13 @@ export function ProductSections({
                   <option value="all">{t("All ratings")}</option>
                   {[5, 4, 3, 2, 1].map((rating) => (
                     <option key={rating} value={rating}>
-                      {rating} star{rating === 1 ? "" : "s"}
+                      {t(rating === 1 ? "{count} star" : "{count} stars", { count: rating })}
                     </option>
                   ))}
                 </select>
               </label>
               <label>
-                Sort by
+                {t("Sort by")}
                 <select
                   value={reviewSort}
                   onChange={(e) => {
@@ -289,7 +287,7 @@ export function ProductSections({
               </label>
               <span>
                 <ShieldCheck size={15} />
-                Verified purchases only
+                {t("Verified purchases only")}
               </span>
             </div>
             {filtered.length > 0 ? (
@@ -302,10 +300,10 @@ export function ProductSections({
                           className="detail-review-avatar"
                           aria-hidden="true"
                         >
-                          {(review.name || "Customer").charAt(0).toUpperCase()}
+                          {(review.name || t("Customer")).charAt(0).toUpperCase()}
                         </span>
                         <div>
-                          <strong>{review.name || "Customer"}</strong>
+                          <strong>{review.name || t("Customer")}</strong>
                           <span>
                             <span
                               className="review-stars"
@@ -320,7 +318,7 @@ export function ProductSections({
                           </span>
                         </div>
                         <time dateTime={review.created_at}>
-                          {dateLabel(review.created_at)}
+                          {reviewDate.format(new Date(review.created_at))}
                         </time>
                       </div>
                       <h3>{review.title}</h3>
@@ -333,7 +331,7 @@ export function ProductSections({
                     variant="secondary detail-expand"
                     onClick={() => setReviewLimit(reviewLimit + 5)}
                   >
-                    View more reviews
+                    {t("View more reviews")}
                     <ChevronDown size={16} />
                   </Button>
                 )}
@@ -343,20 +341,20 @@ export function ProductSections({
                 <MessageCircle size={28} strokeWidth={1.4} />
                 <h3>
                   {reviews.length
-                    ? "No reviews with this rating yet."
-                    : "Your experience can help someone choose."}
+                    ? t("No reviews with this rating yet.")
+                    : t("Your experience can help someone choose.")}
                 </h3>
                 <p>
                   {reviews.length
-                    ? "Choose another rating to see more customer experiences."
-                    : "Reviews appear here after a verified purchase. Share what you liked and what other shoppers should know."}
+                    ? t("Choose another rating to see more customer experiences.")
+                    : t("Reviews appear here after a verified purchase. Share what you liked and what other shoppers should know.")}
                 </p>
                 {reviewRating !== "all" && (
                   <button
                     className="text-link"
                     onClick={() => setReviewRating("all")}
                   >
-                    Show all reviews
+                    {t("Show all reviews")}
                     <ArrowRight size={15} />
                   </button>
                 )}
@@ -370,7 +368,7 @@ export function ProductSections({
             aria-labelledby="description-heading"
           >
             <h2 id="description-heading">{t("Product description")}</h2>
-            <p className="detail-lead">{information.description}</p>
+            <p className="detail-lead">{t(information.description)}</p>
             {information.promotion ? (
               <figure className="detail-campaign">
                 <img
@@ -408,8 +406,9 @@ export function ProductSections({
             <div className="detail-package-note">
               <h3>{t("What’s in the box")}</h3>
               <p>
-                {p.inTheBox ||
-                  "Included accessories vary by configuration. Ask us about the exact bundle before ordering."}
+                {p.inTheBox
+                  ? t(p.inTheBox)
+                  : t("Included accessories vary by configuration. Ask us about the exact bundle before ordering.")}
               </p>
             </div>
           </section>
@@ -452,7 +451,7 @@ export function ProductSections({
                   <span>
                     <strong>{label}</strong>
                     <small>
-                      Official manufacturer support · opens in a new tab
+                      {t("Official manufacturer support · opens in a new tab")}
                     </small>
                   </span>
                   <ArrowUpRight size={18} />
@@ -467,7 +466,7 @@ export function ProductSections({
                 <span>
                   <strong>{t("Setup & compatibility")}</strong>
                   <small>
-                    Get help choosing the right guide for this model.
+                    {t("Get help choosing the right guide for this model.")}
                   </small>
                 </span>
                 <ArrowUpRight size={18} />
@@ -485,18 +484,18 @@ export function ProductSections({
               <article>
                 <Truck size={25} />
                 <h3>{t("Delivery & collection")}</h3>
-                <p>{p.delivery || settings.delivery}</p>
+                <p>{t(p.delivery || settings.delivery)}</p>
                 <a href="/delivery/" className="text-link">
-                  Delivery information
+                  {t("Delivery information")}
                   <ArrowRight size={15} />
                 </a>
               </article>
               <article>
                 <ShieldCheck size={25} />
                 <h3>{t("Returns & warranty")}</h3>
-                <p>{p.warranty || settings.returns}</p>
+                <p>{t(p.warranty || settings.returns)}</p>
                 <a href="/returns/" className="text-link">
-                  Read the policy
+                  {t("Read the policy")}
                   <ArrowRight size={15} />
                 </a>
               </article>
@@ -507,7 +506,7 @@ export function ProductSections({
                 <span>
                   <strong>{t("Payment options")}</strong>
                   <small>
-                    MTN Mobile Money, Airtel Money or Visa through Flutterwave.
+                    {t("MTN Mobile Money, Airtel Money or Visa through Flutterwave.")}
                   </small>
                 </span>
               </span>
@@ -530,7 +529,7 @@ export function ProductSections({
                 rel="noreferrer"
                 className="text-link"
               >
-                Ask about this item
+                {t("Ask about this item")}
                 <MessageCircle size={16} />
               </a>
             </div>
@@ -539,10 +538,10 @@ export function ProductSections({
                 <details key={question}>
                   <summary>
                     <CircleHelp size={18} />
-                    {question}
+                    {t(question)}
                     <ChevronDown size={17} />
                   </summary>
-                  <p>{answer}</p>
+                  <p>{t(answer)}</p>
                 </details>
               ))}
             </div>
@@ -554,13 +553,13 @@ export function ProductSections({
             aria-labelledby="store-heading"
           >
             <div>
-              <h2 id="store-heading" aria-label="Sold by London Tech">
+              <h2 id="store-heading" aria-label={t("Sold by London Tech")}>
                 <span>{t("Sold by")}</span> <BrandWordmark width={138} />
               </h2>
               <p>{settings.address}</p>
             </div>
             <a href="/contact/" className="text-link">
-              Store information <ArrowUpRight size={15} />
+              {t("Store information")} <ArrowUpRight size={15} />
             </a>
           </section>
         </div>
@@ -568,9 +567,9 @@ export function ProductSections({
       {more.length > 0 && (
         <section className="section detail-more">
           <SectionHeading
-            title="You may also like"
+            title={t("You may also like")}
             href={`/collections/${p.category}/`}
-            link="Explore the store"
+            link={t("Explore the store")}
           />
           <ProductGrid
             products={[...related.slice(0, 2), ...more.slice(0, 2)]}

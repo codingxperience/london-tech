@@ -122,7 +122,7 @@ export function Collection({ category = "shop" }) {
         draftMax !== "" &&
         Number(draftMin) > Number(draftMax))
     ) {
-      setPriceError("Enter a price range with the minimum below the maximum.")
+      setPriceError(t("Enter a price range with the minimum below the maximum."))
       return
     }
     setPriceError("")
@@ -278,15 +278,15 @@ export function Collection({ category = "shop" }) {
       <Breadcrumb
         items={[
           {
-            label: "Shop",
+            label: t("Shop"),
             href: category === "shop" ? undefined : "/collections/shop/",
           },
-          ...(category !== "shop" ? [{ label: title.replace(/\.$/, "") }] : []),
+          ...(category !== "shop" ? [{ label: t(title.replace(/\.$/, "")) }] : []),
         ]}
       />
-      <PageHeading title={title}>
+      <PageHeading title={t(title)}>
         {categories.find((item) => item.id === category)?.description ||
-          "Find the technology that fits your everyday."}
+          t("Find the technology that fits your everyday.")}
       </PageHeading>
       <section
         className="collection-discovery"
@@ -413,14 +413,14 @@ export function Collection({ category = "shop" }) {
             </label>
             <div className="view-toggle">
               <IconButton
-                label="Grid view"
+                label={t("Grid view")}
                 aria-pressed={filters.view === "grid"}
                 onClick={() => change({ view: "grid" })}
               >
                 <LayoutGrid size={17} />
               </IconButton>
               <IconButton
-                label="List view"
+                label={t("List view")}
                 aria-pressed={filters.view === "list"}
                 onClick={() => change({ view: "list" })}
               >
@@ -445,7 +445,7 @@ export function Collection({ category = "shop" }) {
                 <button
                   key={brand}
                   onClick={() => toggleBrand(brand)}
-                  aria-label={`Remove ${brand} filter`}
+                  aria-label={t("Remove {name} filter", { name: brand })}
                 >
                   {brand}
                   <X size={13} />
@@ -491,14 +491,14 @@ export function Collection({ category = "shop" }) {
           ) : (
             <Empty
               icon={Search}
-              title="No products match just yet."
+              title={t("No products match just yet.")}
               action={
                 <Button variant="secondary" onClick={clear}>
-                  Reset filters
+                  {t("Reset filters")}
                 </Button>
               }
             >
-              Try another brand, price range or search term.
+              {t("Try another brand, price range or search term.")}
             </Empty>
           )}
           {pages > 1 && (
@@ -560,7 +560,7 @@ export function Collection({ category = "shop" }) {
       </div>
       {filterOpen && (
         <Modal
-          title="Filter products"
+          title={t("Filter products")}
           drawer
           className="collection-filter-dialog"
           onClose={() => setFilterOpen(false)}
@@ -568,10 +568,10 @@ export function Collection({ category = "shop" }) {
           {controls}
           <div className="refined-mobile-filter-actions">
             <Button variant="secondary" onClick={clear}>
-              Clear
+              {t("Clear")}
             </Button>
             <Button onClick={() => setFilterOpen(false)}>
-              Show {filtered.length} products
+              {t("Show {count} products", { count: filtered.length })}
               <ArrowRight size={16} />
             </Button>
           </div>

@@ -14,19 +14,9 @@ import {
   Truck,
 } from "lucide-react"
 import { statusLabel } from "../lib/api.js"
+import { useLocale } from "../lib/locale.jsx"
 
 const kampala = "Africa/Kampala"
-const eventTime = new Intl.DateTimeFormat("en-UG", {
-  dateStyle: "medium",
-  timeStyle: "short",
-  timeZone: kampala,
-})
-const dayLabel = new Intl.DateTimeFormat("en-UG", {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-  timeZone: kampala,
-})
 const statuses = {
   pending_payment: "Awaiting payment",
   quote_requested: "Request received",
@@ -36,18 +26,19 @@ const statuses = {
 }
 
 function CopyReference({ value, label }) {
+  const { t } = useLocale()
   const [result, setResult] = useState("")
   return (
     <button
       className="tracking-copy"
       type="button"
-      aria-label={`Copy ${label}`}
+      aria-label={t("Copy {label}", { label: t(label) })}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(value)
-          setResult("Copied")
+          setResult(t("Copied"))
         } catch {
-          setResult("Select to copy")
+          setResult(t("Select to copy"))
         }
       }}
     >
@@ -56,35 +47,47 @@ function CopyReference({ value, label }) {
       ) : (
         <Copy size={15} aria-hidden="true" />
       )}
-      <span aria-live="polite">{result || "Copy"}</span>
+      <span aria-live="polite">{result || t("Copy")}</span>
     </button>
   )
 }
 
 export function OrderTracking({ order, refreshing, refresh }) {
+  const { t, language } = useLocale()
+  const eventTime = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: kampala,
+  })
+  const dayLabel = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: kampala,
+  })
   const pickup = order.fulfillment === "collection"
-  const mode = pickup ? "Store pickup" : "Delivery"
+  const mode = t(pickup ? "Store pickup" : "Delivery")
   const stages = [
-    ["confirmed", "Confirmed", Check],
-    ["processing", "Preparing", Package],
+    ["confirmed", t("Confirmed"), Check],
+    ["processing", t("Preparing"), Package],
     ...(pickup
-      ? [["ready", "Ready for pickup", Store]]
-      : [["shipped", "Dispatched", Truck]]),
-    ["completed", pickup ? "Collected" : "Delivered", PackageCheck],
+      ? [["ready", t("Ready for pickup"), Store]]
+      : [["shipped", t("Dispatched"), Truck]]),
+    ["completed", t(pickup ? "Collected" : "Delivered"), PackageCheck],
   ]
   const timeline = order.timeline || []
   const history = [...timeline].reverse()
   const labels = Object.fromEntries(stages.map(([key, label]) => [key, label]))
   const statusTitle = (status) =>
-    labels[status] || statuses[status] || statusLabel(status)
+    labels[status] || t(statuses[status] || statusLabel(status))
   const expired =
     ["pending_payment", "quoted"].includes(order.status) &&
     order.expiresAt &&
     new Date(order.expiresAt) <= new Date()
   const displayStatus = expired
     ? order.status === "quoted"
-      ? "Quote expired"
-      : "Payment window expired"
+      ? t("Quote expired")
+      : t("Payment window expired")
     : statusTitle(order.status)
   const active =
     !expired && !["cancelled", "review", "expired"].includes(order.status)
@@ -120,7 +123,7 @@ export function OrderTracking({ order, refreshing, refresh }) {
             {pickup && (
               <p className="tracking-destination">
                 <MapPin size={16} aria-hidden="true" />
-                London Tech · Arua Park
+          {t("London Tech · Arua Park")}
               </p>
             )}
           </div>
@@ -129,7 +132,7 @@ export function OrderTracking({ order, refreshing, refresh }) {
           <div className="tracking-time-panel">
             <CalendarDays size={18} aria-hidden="true" />
             <div>
-              <span>Estimated delivery</span>
+              <span>{t("Estimated delivery")}</span>
               <strong>
                 {dayLabel.format(new Date(`${estimated}T12:00:00Z`))}
               </strong>
@@ -139,10 +142,10 @@ export function OrderTracking({ order, refreshing, refresh }) {
         <div className="tracking-update">
           <span aria-live="polite">
             {refreshing
-              ? "Checking for updates…"
+              ? t("Checking for updates…")
               : latest && (
                   <>
-                    Last update{" "}
+                    {t("Last update")}{" "}
                     <time dateTime={latest}>
                       {eventTime.format(new Date(latest))} EAT
                     </time>
@@ -152,8 +155,8 @@ export function OrderTracking({ order, refreshing, refresh }) {
           <button
             className="tracking-refresh"
             type="button"
-            aria-label="Check for tracking updates"
-            title="Check for tracking updates"
+            aria-label={t("Check for tracking updates")}
+            title={t("Check for tracking updates")}
             disabled={refreshing}
             onClick={refresh}
           >
@@ -164,7 +167,7 @@ export function OrderTracking({ order, refreshing, refresh }) {
       <div className="tracking-body">
         <div className="tracking-reference-row">
           <div>
-            <span>Order reference</span>
+            <span>{t("Order reference")}</span>
             <strong>{order.id}</strong>
           </div>
           <CopyReference
@@ -174,12 +177,12 @@ export function OrderTracking({ order, refreshing, refresh }) {
           />
           {itemCount > 0 && (
             <span className="tracking-item-count">
-              {itemCount} {itemCount === 1 ? "item" : "items"}
+              {t(itemCount === 1 ? "{count} item" : "{count} items", { count: itemCount })}
             </span>
           )}
         </div>
         {active && (
-          <ol className="tracking-stages" aria-label="Order milestones">
+        <ol className="tracking-stages" aria-label={t("Order milestones")}>
             {stages.map(([key, label, Icon]) => {
               const recorded = timeline.find(
                 (event) =>
@@ -218,13 +221,13 @@ export function OrderTracking({ order, refreshing, refresh }) {
             <dl>
               {tracking.carrier && (
                 <div>
-                  <dt>Courier</dt>
+                  <dt>{t("Courier")}</dt>
                   <dd>{tracking.carrier}</dd>
                 </div>
               )}
               {tracking.reference && (
                 <div>
-                  <dt>Tracking reference</dt>
+                  <dt>{t("Tracking reference")}</dt>
                   <dd>{tracking.reference}</dd>
                 </div>
               )}
@@ -244,7 +247,7 @@ export function OrderTracking({ order, refreshing, refresh }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Track with courier{" "}
+                  {t("Track with courier")}{" "}
                   <ArrowUpRight size={15} aria-hidden="true" />
                 </a>
               )}
@@ -255,7 +258,7 @@ export function OrderTracking({ order, refreshing, refresh }) {
           <details className="tracking-history">
             <summary>
               <Clock3 size={18} aria-hidden="true" />
-              <span>Activity history</span>
+              <span>{t("Activity history")}</span>
               <span className="tracking-history-count">{history.length}</span>
               <ChevronDown size={17} aria-hidden="true" />
             </summary>
@@ -265,11 +268,11 @@ export function OrderTracking({ order, refreshing, refresh }) {
                   <div>
                     <strong>
                       {event.kind === "payment"
-                        ? "Payment received"
+                        ? t("Payment received")
                         : event.kind === "tracking"
-                          ? "Delivery details updated"
+                          ? t("Delivery details updated")
                           : event.kind === "note"
-                            ? "Store update"
+                            ? t("Store update")
                             : statusTitle(event.status)}
                     </strong>
                     <time dateTime={event.at}>

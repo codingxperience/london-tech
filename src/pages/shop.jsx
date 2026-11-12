@@ -103,7 +103,7 @@ export function Product({ id }) {
 
   const add = () => {
     if ((p.options.length && !option) || (p.colors.length && !color)) {
-      notify("Choose your preferred options.")
+        notify(t("Choose your preferred options."))
       return false
     }
     addCart(p, quantity, option, color)
@@ -121,7 +121,7 @@ export function Product({ id }) {
       <Breadcrumb
         items={[
           {
-            label: categoryName(p.category),
+            label: t(categoryName(p.category)),
             href: "/collections/" + p.category + "/",
           },
           { label: p.name },
@@ -132,7 +132,7 @@ export function Product({ id }) {
         <div className="product-purchase">
           <div className="product-overline">
             <a href={"/collections/" + p.category + "/"}>
-              {p.brand} / {categoryName(p.category)}
+              {p.brand} / {t(categoryName(p.category))}
             </a>
             <span>SKU {p.sku}</span>
           </div>
@@ -143,8 +143,7 @@ export function Product({ id }) {
                 <Star size={14} fill="currentColor" />
                 <b>{rating}</b>
                 <a href="#product-reviews">
-                  {reviews.length} verified review
-                  {reviews.length !== 1 ? "s" : ""}
+                  {t(reviews.length === 1 ? "{count} verified review" : "{count} verified reviews", { count: reviews.length })}
                 </a>
               </>
             ) : (
@@ -153,19 +152,19 @@ export function Product({ id }) {
             <span
               className={"stock-status " + (p.stock > 0 ? "available" : "")}
             >
-              {availability}
+              {t(availability)}
             </span>
           </div>
           <p className="product-description">
-            {productInformation(p).description}
+            {t(productInformation(p).description)}
           </p>
           <div className="detail-quick-specs">
             {productInformation(p)
               .specifications.slice(0, 3)
               .map(([label, value]) => (
                 <span key={label}>
-                  <small>{label}</small>
-                  <strong>{value}</strong>
+                  <small>{t(label)}</small>
+                  <strong>{t(value)}</strong>
                 </span>
               ))}
           </div>
@@ -173,16 +172,16 @@ export function Product({ id }) {
             <ProductOffer product={p} />
             {(p.price == null || !p.priceConfirmed) && (
               <span>
-                {p.price == null
-                  ? "Request the current price and configuration before purchase."
-                  : "Estimated price. Confirm the selected configuration and current selling price before payment."}
+                  {p.price == null
+                  ? t("Request the current price and configuration before purchase.")
+                  : t("Estimated price. Confirm the selected configuration and current selling price before payment.")}
               </span>
             )}
           </div>
           {p.options.length > 0 && (
             <fieldset className="option-selector">
               <legend>
-                Configuration <b>{option || "Choose an option"}</b>
+                {t("Configuration")} <b>{option || t("Choose an option")}</b>
               </legend>
               <div>
                 {p.options.map((v) => (
@@ -201,7 +200,7 @@ export function Product({ id }) {
           {p.colors.length > 0 && (
             <fieldset className="option-selector">
               <legend>
-                Colour <b>{color || "Choose a colour"}</b>
+                {t("Colour")} <b>{color || t("Choose a colour")}</b>
               </legend>
               <div>
                 {p.colors.map((v) => (
@@ -224,14 +223,14 @@ export function Product({ id }) {
               onChange={setQuantity}
             />
             <Button disabled={p.stock === 0} onClick={add}>
-              Add to cart
+              {t("Add to cart")}
               <ArrowRight size={17} />
             </Button>
             <IconButton
               label={
                 wishlist.includes(id)
-                  ? "Remove from wishlist"
-                  : "Save to wishlist"
+                  ? t("Remove from wishlist")
+                  : t("Save to wishlist")
               }
               onClick={() => toggleWish(id)}
               className={wishlist.includes(id) ? "selected" : ""}
@@ -250,29 +249,29 @@ export function Product({ id }) {
             }}
           >
             {p.price == null || !p.priceConfirmed || p.stock == null
-              ? "Request this item"
-              : "Continue to checkout"}
+              ? t("Request this item")
+              : t("Continue to checkout")}
             <ArrowUpRight size={17} />
           </Button>
           <div className="product-auxiliary">
             <button onClick={() => toggleCompare(id)}>
               <GitCompareArrows size={15} />
               {compare.includes(id)
-                ? "Remove from comparison"
-                : "Add to comparison"}
+                ? t("Remove from comparison")
+                : t("Add to comparison")}
             </button>
             <button
               onClick={async () => {
                 try {
                   await navigator.clipboard.writeText(location.href)
-                  notify("Product link copied")
+                  notify(t("Product link copied"))
                 } catch {
-                  notify("Copy the link from your address bar.")
+                  notify(t("Copy the link from your address bar."))
                 }
               }}
             >
               <Copy size={14} />
-              Share product
+              {t("Share product")}
             </button>
           </div>
           <div className="product-assurances">
@@ -291,7 +290,7 @@ export function Product({ id }) {
                 <strong>{t("Delivery & collection")}</strong>
                 <small>
                   {p.delivery ||
-                    "Confirm availability and delivery details before paying."}
+                    t("Confirm availability and delivery details before paying.")}
                 </small>
               </span>
             </p>
@@ -300,8 +299,8 @@ export function Product({ id }) {
               <span>
                 <strong>{t("Product condition")}</strong>
                 <small>
-                  {p.condition}.{" "}
-                  {p.warranty || "Ask about the warranty for this item."}
+                  {t(p.condition)}. {" "}
+                  {t(p.warranty || "Ask about the warranty for this item.")}
                 </small>
               </span>
             </p>
@@ -325,7 +324,7 @@ export function Product({ id }) {
       />
       {recent.filter((x) => x !== id).length > 0 && (
         <section className="section bottom-section">
-          <SectionHeading title="Worth another look." />
+          <SectionHeading title={t("Worth another look.")} />
           <ProductGrid
             products={recent
               .filter((x) => x !== id)
@@ -337,7 +336,7 @@ export function Product({ id }) {
       )}
       {reviewForm && (
         <Modal
-          title="Share your experience"
+          title={t("Share your experience")}
           onClose={() => setReviewForm(false)}
         >
           <form
@@ -356,7 +355,7 @@ export function Product({ id }) {
                 const data = await api("products/" + id + "/reviews")
                 setReviews(data.reviews)
                 setReviewForm(false)
-                notify("Thank you. Your review has been saved.")
+                notify(t("Thank you. Your review has been saved."))
               } catch (e) {
                 setError(e.message)
               } finally {
@@ -365,23 +364,23 @@ export function Product({ id }) {
             }}
           >
             {error && <Notice type="error">{error}</Notice>}
-            <Field label="Your rating">
+            <Field label={t("Your rating")}>
               <select name="rating" required>
                 {[5, 4, 3, 2, 1].map((n) => (
                   <option key={n} value={n}>
-                    {n} star{n > 1 ? "s" : ""}
+                    {t(n === 1 ? "{count} star" : "{count} stars", { count: n })}
                   </option>
                 ))}
               </select>
             </Field>
             <Field
-              label="Review title"
+              label={t("Review title")}
               name="title"
               minLength={3}
               maxLength={100}
               required
             />
-            <Field label="Your experience">
+            <Field label={t("Your experience")}>
               <textarea
                 name="body"
                 minLength={10}
@@ -391,7 +390,7 @@ export function Product({ id }) {
               />
             </Field>
             <Button type="submit" busy={busy}>
-              Publish review
+              {t("Publish review")}
             </Button>
           </form>
         </Modal>
@@ -408,26 +407,26 @@ export function Wishlist() {
     .filter(Boolean)
   return (
     <main className="container standard-page">
-      <Breadcrumb items={[{ label: "Wishlist" }]} />
+      <Breadcrumb items={[{ label: t("Wishlist") }]} />
       <PageHeading
-        eyebrow="SAVED FOR ANOTHER DAY"
-        title="Your favourites, together."
+        eyebrow={t("SAVED FOR ANOTHER DAY")}
+        title={t("Your favourites, together.")}
       >
-        {items.length} products saved. A little inspiration for what comes next.
+        {t("{count} products saved. A little inspiration for what comes next.", { count: items.length })}
       </PageHeading>
       {items.length ? (
         <ProductGrid products={items} />
       ) : (
         <Empty
           icon={Heart}
-          title="Make a little room for favourites."
+          title={t("Make a little room for favourites.")}
           action={
             <ActionLink href="/collections/shop/">
-              Explore the collection
+              {t("Explore the collection")}
             </ActionLink>
           }
         >
-          Tap the heart on a product to save it here.
+          {t("Tap the heart on a product to save it here.")}
         </Empty>
       )}
     </main>
@@ -445,12 +444,12 @@ export function Compare() {
   ]
   return (
     <main className="container standard-page">
-      <Breadcrumb items={[{ label: "Compare" }]} />
+      <Breadcrumb items={[{ label: t("Compare") }]} />
       <PageHeading
-        eyebrow="THE DETAILS, SIDE BY SIDE"
-        title="Choose with clarity."
+        eyebrow={t("THE DETAILS, SIDE BY SIDE")}
+        title={t("Choose with clarity.")}
       >
-        Compare up to four products. Focus on the features that matter to you.
+        {t("Compare up to four products. Focus on the features that matter to you.")}
       </PageHeading>
       {items.length ? (
         <div className="comparison-scroll">
@@ -498,14 +497,14 @@ export function Compare() {
       ) : (
         <Empty
           icon={GitCompareArrows}
-          title="The right choice starts with a comparison."
+          title={t("The right choice starts with a comparison.")}
           action={
             <ActionLink href="/collections/shop/">
-              Find products to compare
+              {t("Find products to compare")}
             </ActionLink>
           }
         >
-          Use the comparison icon on a product to put your options side by side.
+          {t("Use the comparison icon on a product to put your options side by side.")}
         </Empty>
       )}
     </main>
@@ -518,10 +517,10 @@ export function NotFound() {
     <main className="container standard-page">
       <Empty
         icon={Search}
-        title="That page has moved on."
+        title={t("That page has moved on.")}
         action={<ActionLink href="/">{t("Back to London Tech")}</ActionLink>}
       >
-        The page or product you are looking for could not be found.
+        {t("The page or product you are looking for could not be found.")}
       </Empty>
     </main>
   )

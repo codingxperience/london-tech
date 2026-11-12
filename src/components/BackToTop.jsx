@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { ArrowUp } from "lucide-react"
+import { useLocale } from "../lib/locale.jsx"
 
 export function BackToTop() {
+  const { t } = useLocale()
   const [visible, setVisible] = useState(false)
   useEffect(() => {
     const update = () => setVisible(window.scrollY > 500)
@@ -14,8 +16,8 @@ export function BackToTop() {
     <button
       className="back-to-top"
       type="button"
-      aria-label="Back to top"
-      title="Back to top"
+      aria-label={t("Back to top")}
+      title={t("Back to top")}
       onClick={() => {
         const reduced = window.matchMedia(
           "(prefers-reduced-motion: reduce)",

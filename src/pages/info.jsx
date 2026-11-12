@@ -6,6 +6,7 @@ import React from "react"
 import { Phone } from "lucide-react"
 
 import { useStore } from "../store.jsx"
+import { useLocale } from "../lib/locale.jsx"
 
 import { ActionLink, Breadcrumb, PageHeading } from "../components/ui.jsx"
 
@@ -22,6 +23,7 @@ export function Info({ page }) {
 }
 function DefaultInfo({ page }) {
   const { settings } = useStore()
+  const { t } = useLocale()
   const phoneLink = (phone) =>
     "tel:" +
     String(phone || "")
@@ -135,12 +137,12 @@ function DefaultInfo({ page }) {
   if (page === "help")
     return (
       <main className="container info-page">
-        <Breadcrumb items={[{ label: "Help" }]} />
+        <Breadcrumb items={[{ label: t("Help") }]} />
         <PageHeading
-          eyebrow="A LITTLE CLARITY"
-          title="Good questions. Clear answers."
+          eyebrow={t("A LITTLE CLARITY")}
+          title={t("Good questions. Clear answers.")}
         >
-          A few things that help make your next choice easier.
+          {t("A few things that help make your next choice easier.")}
         </PageHeading>
         <div className="faq-list">
           {[
@@ -174,32 +176,32 @@ function DefaultInfo({ page }) {
           ].map(([q, a]) => (
             <details key={q}>
               <summary>
-                {q}
+                {t(q)}
                 <span>+</span>
               </summary>
-              <p>{a}</p>
+              <p>{t(a)}</p>
             </details>
           ))}
         </div>
-        <ActionLink href="/contact/">Still have a question?</ActionLink>
+        <ActionLink href="/contact/">{t("Still have a question?")}</ActionLink>
       </main>
     )
 
   return (
     <main className="container info-page">
-      <Breadcrumb items={[{ label: content?.title || "Information" }]} />
-      <PageHeading eyebrow={content?.eyebrow} title={content?.title}>
-        {content?.intro}
+      <Breadcrumb items={[{ label: t(content?.title || "Information") }]} />
+      <PageHeading eyebrow={t(content?.eyebrow)} title={t(content?.title)}>
+        {t(content?.intro || "")}
       </PageHeading>
       <div className="policy-content">
         {content?.sections.map(([title, text]) => (
           <section key={title}>
-            <h2>{title}</h2>
-            <p>{text}</p>
+            <h2>{t(title)}</h2>
+            <p>{t(text)}</p>
           </section>
         ))}
         <section>
-          <h2>Talk to London Tech.</h2>
+          <h2>{t("Talk to London Tech.")}</h2>
           <p>{settings.address}</p>
           <a className="text-link" href={phoneLink(settings.phone)}>
             <Phone size={15} />

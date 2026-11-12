@@ -67,7 +67,7 @@ export function UtilityBanner() {
         (reduced ? " reduced-motion" : "") +
         (hidden ? " is-suspended" : "")
       }
-      aria-label="London Tech announcements"
+      aria-label={t("London Tech announcements")}
     >
       <div className="utility-banner-stage store-container">
         <a
@@ -84,10 +84,10 @@ export function UtilityBanner() {
         <a
           className="utility-centre"
           href="/collections/shop/"
-          aria-label="Shop London Tech offers"
+          aria-label={t("Shop London Tech offers")}
         >
           <span className="sr-only">
-            Phones, laptops, audio and gaming. Shop London Tech offers.
+            {t("Phones, laptops, audio and gaming. Shop London Tech offers.")}
           </span>
           <span
             className={`utility-centre-word motion-${message.motion}${
@@ -102,7 +102,7 @@ export function UtilityBanner() {
         </a>
         <div
           className="utility-brand-lockup"
-          aria-label="London Tech"
+          aria-label={t("London Tech")}
           style={{
             animationName:
               round % 2 ? "utility-brand-return" : "utility-brand-arrive",

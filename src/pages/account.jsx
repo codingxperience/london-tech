@@ -31,7 +31,7 @@ import { useMessageAlerts } from "../lib/message-alerts.js"
 
 import { money, productPath } from "../data/catalog.js"
 
-import { api, post, dateLabel, statusLabel, writeStorage } from "../lib/api.js"
+import { api, post, statusLabel, writeStorage } from "../lib/api.js"
 
 import {
   ActionLink,
@@ -58,26 +58,26 @@ function GuestWishlist() {
     <main className="container standard-page account-wishlist-page">
       <Breadcrumb
         items={[
-          { label: "My account", href: "/account/" },
-          { label: "Wishlist" },
+          { label: t("My account"), href: "/account/" },
+          { label: t("Wishlist") },
         ]}
       />
-      <PageHeading eyebrow="SAVED FOR LATER" title="Your wishlist.">
-        Keep the things you love close by.
+      <PageHeading eyebrow={t("SAVED FOR LATER")} title={t("Your wishlist.")}>
+        {t("Keep the things you love close by.")}
       </PageHeading>
       <div className="wishlist-sign-in">
         <Heart size={22} />
         <span>
           <strong>{t("Your favourites, together.")}</strong>
           <small>
-            Saved on this device. Sign in to keep them with your account.
+            {t("Saved on this device. Sign in to keep them with your account.")}
           </small>
         </span>
         <Button
           variant="secondary"
           onClick={() => openAuth("login", "/account/wishlist/")}
         >
-          Sign in
+          {t("Sign in")}
         </Button>
       </div>
       {saved.length ? (
@@ -85,14 +85,14 @@ function GuestWishlist() {
       ) : (
         <Empty
           icon={Heart}
-          title="Save something you love."
+          title={t("Save something you love.")}
           action={
             <ActionLink href="/collections/shop/">
               {t("Explore the store")}
             </ActionLink>
           }
         >
-          Tap the heart on a product and find it here.
+          {t("Tap the heart on a product and find it here.")}
         </Empty>
       )}
     </main>
@@ -142,7 +142,7 @@ export function Account({ section = "overview", orderId }) {
   if (authLoading)
     return (
       <main className="container standard-page">
-        <p className="loading-line">Opening your account…</p>
+        <p className="loading-line">{t("Opening your account…")}</p>
       </main>
     )
 
@@ -151,20 +151,20 @@ export function Account({ section = "overview", orderId }) {
       <main className="container standard-page">
         <Empty
           icon={UserRound}
-          title="A place for your next."
+          title={t("A place for your next.")}
           action={
             <>
               <Button onClick={() => openAuth("login", location.pathname)}>
-                Sign in
+                {t("Sign in")}
               </Button>
               <a className="text-link" href="/register/">
-                Create an account
+                {t("Create an account")}
                 <ArrowRight size={15} />
               </a>
             </>
           }
         >
-          Sign in to see your orders, saved addresses and account details.
+          {t("Sign in to see your orders, saved addresses and account details.")}
         </Empty>
       </main>
     )
@@ -190,7 +190,7 @@ export function Account({ section = "overview", orderId }) {
       },
     })
     setUser(result.user)
-    notify("Your details have been saved.")
+    notify(t("Your details have been saved."))
   }
 
   const selectedOrder = orders.find((o) => o.id === orderId)
@@ -238,7 +238,7 @@ export function Account({ section = "overview", orderId }) {
             >
               <span>{t("Account menu")}</span>
               <strong>
-                {nav.find(([id]) => id === section)?.[1] || "My orders"}
+                {t(nav.find(([id]) => id === section)?.[1] || "My orders")}
               </strong>
               <ChevronDown size={19} />
             </button>
@@ -261,7 +261,7 @@ export function Account({ section = "overview", orderId }) {
                 {id === "messages" && messageAlerts.unread > 0 && (
                   <span
                     className="message-count"
-                    aria-label={`${messageAlerts.unread} unread messages`}
+                    aria-label={t("{count} unread messages", { count: messageAlerts.unread })}
                   >
                     {messageAlerts.unread > 99 ? "99+" : messageAlerts.unread}
                   </span>
@@ -272,13 +272,13 @@ export function Account({ section = "overview", orderId }) {
             {user.role === "admin" && (
               <a href="/admin/">
                 <Settings size={17} />
-                Store admin
+                {t("Store admin")}
                 <ArrowRight size={13} />
               </a>
             )}
             <button onClick={() => logout().catch((e) => setError(e.message))}>
               <LogOut size={17} />
-              Sign out
+              {t("Sign out")}
             </button>
           </nav>
         </aside>
@@ -293,7 +293,7 @@ export function Account({ section = "overview", orderId }) {
                   <Package size={22} />
                   <strong>{orders.length}</strong>
                   <span>
-                    Orders
+                    {t("Orders")}
                     <ArrowRight size={14} />
                   </span>
                 </a>
@@ -301,7 +301,7 @@ export function Account({ section = "overview", orderId }) {
                   <Heart size={22} />
                   <strong>{wishlist.length}</strong>
                   <span>
-                    Saved favourites
+                    {t("Saved favourites")}
                     <ArrowRight size={14} />
                   </span>
                 </a>
@@ -309,7 +309,7 @@ export function Account({ section = "overview", orderId }) {
                   <MapPin size={22} />
                   <strong>{user.addresses.length}</strong>
                   <span>
-                    Saved addresses
+                    {t("Saved addresses")}
                     <ArrowRight size={14} />
                   </span>
                 </a>
@@ -317,7 +317,7 @@ export function Account({ section = "overview", orderId }) {
               <div className="section-heading">
                 <h2>{t("Your latest orders")}</h2>
                 <a className="text-link" href="/account/orders/">
-                  View all
+                  {t("View all")}
                   <ArrowRight size={14} />
                 </a>
               </div>
@@ -325,10 +325,10 @@ export function Account({ section = "overview", orderId }) {
               {(!user.phone || !user.addresses.length) && (
                 <div className="account-profile-reminder">
                   <span>
-                    Save your contact and delivery details for your next order.
+                    {t("Save your contact and delivery details for your next order.")}
                   </span>
                   <a href="/account/profile/">
-                    Account details <ArrowRight size={16} />
+                    {t("Account details")} <ArrowRight size={16} />
                   </a>
                 </div>
               )}
@@ -356,8 +356,8 @@ export function Account({ section = "overview", orderId }) {
                     .filter(Boolean)}
                 />
               ) : (
-                <Empty icon={Heart} title="A little inspiration for later.">
-                  Save products with the heart icon to find them here.
+                <Empty icon={Heart} title={t("A little inspiration for later.")}>
+                  {t("Save products with the heart icon to find them here.")}
                 </Empty>
               )}
             </>
@@ -365,7 +365,7 @@ export function Account({ section = "overview", orderId }) {
             <section className="form-card">
               <h2>{t("Account details")}</h2>
               <p className="muted">
-                Keep your name and contact number up to date.
+                {t("Keep your name and contact number up to date.")}
               </p>
               <form
                 className="stack-form"
@@ -387,7 +387,7 @@ export function Account({ section = "overview", orderId }) {
                 }}
               >
                 <Field
-                  label="Full name"
+                  label={t("Full name")}
                   name="name"
                   defaultValue={user.name}
                   required
@@ -395,22 +395,22 @@ export function Account({ section = "overview", orderId }) {
                   maxLength={100}
                 />
                 <Field
-                  label="Email address"
+                  label={t("Email address")}
                   type="email"
                   value={user.email}
                   title={user.email}
                   readOnly
-                  hint="Your email identifies your account."
+                  hint={t("Your email identifies your account.")}
                 />
                 <Field
-                  label="Phone number"
+                  label={t("Phone number")}
                   name="phone"
                   type="tel"
                   defaultValue={user.phone}
                   maxLength={25}
                 />
                 <Button busy={busy} type="submit">
-                  Save your details
+                  {t("Save your details")}
                   <CheckCircle2 size={16} />
                 </Button>
               </form>
@@ -419,7 +419,7 @@ export function Account({ section = "overview", orderId }) {
             <section className="form-card">
               <h2>{t("Password & security")}</h2>
               <p className="muted">
-                Changing your password signs out other sessions.
+                {t("Changing your password signs out other sessions.")}
               </p>
               <form
                 className="stack-form"
@@ -434,7 +434,7 @@ export function Account({ section = "overview", orderId }) {
                       currentPassword: fd.get("currentPassword"),
                       password: fd.get("password"),
                     })
-                    notify("Your password has been updated.")
+                    notify(t("Your password has been updated."))
                     form.reset()
                   } catch (err) {
                     setError(err.message)
@@ -444,24 +444,24 @@ export function Account({ section = "overview", orderId }) {
                 }}
               >
                 <Field
-                  label="Current password"
+                  label={t("Current password")}
                   name="currentPassword"
                   type="password"
                   autoComplete="current-password"
                   required
                 />
                 <Field
-                  label="New password"
+                  label={t("New password")}
                   name="password"
                   type="password"
                   autoComplete="new-password"
                   minLength={12}
                   maxLength={128}
-                  hint="At least 12 characters."
+                  hint={t("At least 12 characters.")}
                   required
                 />
                 <Button busy={busy} type="submit">
-                  Update password
+                  {t("Update password")}
                   <ShieldCheck size={16} />
                 </Button>
               </form>
@@ -475,7 +475,7 @@ export function Account({ section = "overview", orderId }) {
                   disabled={user.addresses.length >= 5}
                 >
                   <Plus size={15} />
-                  Add an address
+                  {t("Add an address")}
                 </Button>
               </div>
               {user.addresses.length ? (
@@ -485,7 +485,7 @@ export function Account({ section = "overview", orderId }) {
                       <div>
                         <Badge>{a.label}</Badge>
                         <IconButton
-                          label="Remove address"
+                          label={t("Remove address")}
                           onClick={async () => {
                             try {
                               await persist({
@@ -513,7 +513,7 @@ export function Account({ section = "overview", orderId }) {
                         className="text-link"
                         onClick={() => setAddressModal({ ...a, index: i })}
                       >
-                        Edit address
+                        {t("Edit address")}
                         <ArrowRight size={14} />
                       </button>
                     </article>
@@ -522,9 +522,9 @@ export function Account({ section = "overview", orderId }) {
               ) : (
                 <Empty
                   icon={MapPin}
-                  title="Your next delivery, a little easier."
+                  title={t("Your next delivery, a little easier.")}
                 >
-                  Save up to five addresses for checkout.
+                  {t("Save up to five addresses for checkout.")}
                 </Empty>
               )}
             </>
@@ -533,7 +533,7 @@ export function Account({ section = "overview", orderId }) {
       </div>
       {addressModal && (
         <Modal
-          title={addressModal.id ? "Edit your address" : "Add an address"}
+          title={t(addressModal.id ? "Edit your address" : "Add an address")}
           onClose={() => setAddressModal(null)}
         >
           <form
@@ -563,14 +563,14 @@ export function Account({ section = "overview", orderId }) {
           >
             {error && <Notice type="error">{error}</Notice>}
             <Field
-              label="Address label"
+              label={t("Address label")}
               name="label"
-              defaultValue={addressModal.label || "Home"}
+              defaultValue={addressModal.label || t("Home")}
               required
               maxLength={60}
             />
             <Field
-              label="Recipient name"
+              label={t("Recipient name")}
               name="name"
               defaultValue={addressModal.name || user.name}
               required
@@ -578,7 +578,7 @@ export function Account({ section = "overview", orderId }) {
               maxLength={100}
             />
             <Field
-              label="Phone number"
+              label={t("Phone number")}
               name="phone"
               type="tel"
               defaultValue={addressModal.phone || user.phone}
@@ -587,14 +587,14 @@ export function Account({ section = "overview", orderId }) {
               maxLength={25}
             />
             <Field
-              label="District / city"
+              label={t("District / city")}
               name="district"
               defaultValue={addressModal.district}
               required
               minLength={2}
               maxLength={100}
             />
-            <Field label="Street, building and directions">
+            <Field label={t("Street, building and directions")}>
               <textarea
                 name="address"
                 rows={3}
@@ -605,7 +605,7 @@ export function Account({ section = "overview", orderId }) {
               />
             </Field>
             <Button busy={busy} type="submit">
-              Save address
+              {t("Save address")}
               <CheckCircle2 size={16} />
             </Button>
           </form>
@@ -616,20 +616,24 @@ export function Account({ section = "overview", orderId }) {
 }
 
 function OrderList({ orders, loaded }) {
-  const { t } = useLocale()
-  if (!loaded) return <p className="loading-line">Loading your orders…</p>
+  const { t, language } = useLocale()
+  const orderDate = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    dateStyle: "medium",
+    timeZone: "Africa/Kampala",
+  })
+  if (!loaded) return <p className="loading-line">{t("Loading your orders…")}</p>
   if (!orders.length)
     return (
       <Empty
         icon={Package}
-        title="Your next story starts here."
+        title={t("Your next story starts here.")}
         action={
           <ActionLink href="/collections/shop/">
-            Explore the collection
+            {t("Explore the collection")}
           </ActionLink>
         }
       >
-        Orders and confirmation requests will appear here.
+        {t("Orders and confirmation requests will appear here.")}
       </Empty>
     )
   return (
@@ -644,13 +648,12 @@ function OrderList({ orders, loaded }) {
           <div>
             <strong>{o.id}</strong>
             <small>
-              {dateLabel(o.createdAt)} · {o.items.length} item
-              {o.items.length !== 1 ? "s" : ""}
-              {o.paymentMode === "test" && " · Test order"}
+              {orderDate.format(new Date(o.createdAt))} · {t(o.items.length === 1 ? "{count} item" : "{count} items", { count: o.items.length })}
+              {o.paymentMode === "test" && " · " + t("Test order")}
             </small>
           </div>
           <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
-            {statusLabel(o.status)}
+            {t(statusLabel(o.status))}
           </Badge>
           <b>{money(o.amount ?? o.subtotal)}</b>
           <ArrowRight size={16} />
@@ -661,17 +664,21 @@ function OrderList({ orders, loaded }) {
 }
 
 function OrderDetail({ order: o, loaded, reload }) {
-  const { t } = useLocale()
+  const { t, language } = useLocale()
+  const orderDate = new Intl.DateTimeFormat(language === "ar" ? "ar-UG" : "en-UG", {
+    dateStyle: "medium",
+    timeZone: "Africa/Kampala",
+  })
   const { settings, notify } = useStore()
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [refreshing, setRefreshing] = useState(false)
 
-  if (!loaded) return <p className="loading-line">Opening your order…</p>
+  if (!loaded) return <p className="loading-line">{t("Opening your order…")}</p>
   if (!o)
     return (
-      <Empty icon={Package} title="This order could not be found.">
-        Check the reference or return to your order list.
+      <Empty icon={Package} title={t("This order could not be found.")}>
+        {t("Check the reference or return to your order list.")}
       </Empty>
     )
 
@@ -680,28 +687,24 @@ function OrderDetail({ order: o, loaded, reload }) {
       <div className="order-tracking-heading">
         <a className="text-link" href="/account/orders/">
           <ArrowLeft size={15} />
-          All orders
+          {t("All orders")}
         </a>
         <h2>{t("Track order")}</h2>
       </div>
       {error && <Notice type="error">{error}</Notice>}
       {o.status === "quote_requested" && (
         <Notice>
-          Your request is with the store. The price, configuration and
-          availability will be confirmed before any payment.
+          {t("Your request is with the store. The price, configuration and availability will be confirmed before any payment.")}
         </Notice>
       )}
       {o.status === "quoted" && (
         <Notice type="success">
-          Your confirmed quote is ready. Review the total and details below,
-          then continue to secure payment. The quote is valid for 24 hours,
-          subject to available stock.
+          {t("Your confirmed quote is ready. Review the total and details below, then continue to secure payment. The quote is valid for 24 hours, subject to available stock.")}
         </Notice>
       )}
       {o.paymentStatus === "paid" && o.status === "review" && (
         <Notice type="success">
-          Payment confirmed. The store is reviewing fulfillment and will contact
-          you.
+          {t("Payment confirmed. The store is reviewing fulfillment and will contact you.")}
         </Notice>
       )}
       <OrderTracking
@@ -719,7 +722,7 @@ function OrderDetail({ order: o, loaded, reload }) {
       <div className="form-card order-items-card">
         <div className="order-items-heading">
           <h3>{t("Order items")}</h3>
-          <time dateTime={o.createdAt}>Placed {dateLabel(o.createdAt)}</time>
+          <time dateTime={o.createdAt}>{t("Placed {date}", { date: orderDate.format(new Date(o.createdAt)) })}</time>
         </div>
         {o.items.map((p, i) => (
           <div className="order-detail-item" key={i}>
@@ -727,7 +730,7 @@ function OrderDetail({ order: o, loaded, reload }) {
             <span>
               <a href={productPath(p)}>{p.name}</a>
               <small>
-                {[p.option, p.color].filter(Boolean).join(" · ")} · Qty{" "}
+                {[p.option, p.color].filter(Boolean).join(" · ")} · {t("Qty")}{" "}
                 {p.quantity}
               </small>
             </span>
@@ -741,11 +744,11 @@ function OrderDetail({ order: o, loaded, reload }) {
           <strong>{money(o.subtotal)}</strong>
         </div>
         <div className="summary-row">
-          <span>{statusLabel(o.fulfillment)}</span>
+          <span>{t(statusLabel(o.fulfillment))}</span>
           <span>{money(o.deliveryFee)}</span>
         </div>
         <div className="summary-total">
-          <span>{o.amount == null ? "Estimated subtotal" : "Total"}</span>
+          <span>{t(o.amount == null ? "Estimated subtotal" : "Total")}</span>
           <strong>{money(o.amount ?? o.subtotal)}</strong>
         </div>
       </div>
@@ -761,8 +764,8 @@ function OrderDetail({ order: o, loaded, reload }) {
           </p>
           <h4>
             {o.fulfillment === "delivery"
-              ? "Delivery address"
-              : "Collection location"}
+              ? t("Delivery address")
+              : t("Collection location")}
           </h4>
           <p>
             {o.fulfillment === "delivery"
@@ -776,10 +779,10 @@ function OrderDetail({ order: o, loaded, reload }) {
             <PaymentMethod method={o.paymentMethod} />
           </p>
           <Badge type={o.paymentStatus === "paid" ? "success" : ""}>
-            {o.paymentMode === "test" ? "Test · " : ""}
-            {statusLabel(o.paymentStatus)}
+            {o.paymentMode === "test" ? t("Test") + " · " : ""}
+            {t(statusLabel(o.paymentStatus))}
           </Badge>
-          {o.cashReceipt?.receipt && <p>Receipt {o.cashReceipt.receipt}</p>}
+          {o.cashReceipt?.receipt && <p>{t("Receipt {receipt}", { receipt: o.cashReceipt.receipt })}</p>}
           {o.notes && (
             <>
               <h4>{t("Your note")}</h4>
@@ -804,7 +807,7 @@ function OrderDetail({ order: o, loaded, reload }) {
                 }
               }}
             >
-              Continue payment
+              {t("Continue payment")}
               <ArrowRight size={15} />
             </Button>
           )}
@@ -815,13 +818,13 @@ function OrderDetail({ order: o, loaded, reload }) {
               variant="secondary"
               busy={busy}
               onClick={async () => {
-                if (!window.confirm("Cancel this unpaid order?")) return
+                if (!window.confirm(t("Cancel this unpaid order?"))) return
                 setBusy(true)
                 try {
                   await post("orders/" + o.id + "/cancel")
                   writeStorage("lt.checkout-key", null)
                   await reload()
-                  notify("Your order has been cancelled.")
+                  notify(t("Your order has been cancelled."))
                 } catch (e) {
                   setError(e.message)
                 } finally {
@@ -829,15 +832,15 @@ function OrderDetail({ order: o, loaded, reload }) {
                 }
               }}
             >
-              Cancel order
+              {t("Cancel order")}
             </Button>
           )}
         <Button variant="secondary" onClick={() => window.print()}>
           <Printer size={15} />
-          Print {o.paymentStatus === "paid" ? "receipt" : "summary"}
+          {t("Print {name}", { name: t(o.paymentStatus === "paid" ? "receipt" : "summary") })}
         </Button>
         <ActionLink className="secondary" href="/contact/">
-          Contact the store
+          {t("Contact the store")}
         </ActionLink>
       </div>
     </div>

@@ -104,7 +104,7 @@ export function StoreFooter({ logo, quiet = false }) {
     <footer className={"site-footer shop-footer" + (quiet ? " is-quiet" : "")}>
       <div className="footer-newsletter-band">
         <div className="store-container footer-newsletter-inner">
-          <a href="/" aria-label="London Tech home" className="footer-wordmark">
+          <a href="/" aria-label={t("London Tech home")} className="footer-wordmark">
             <img src={logo} alt="London Tech" />
             <span>
               <BrandWordmark inverse width={185} />
@@ -145,7 +145,7 @@ export function StoreFooter({ logo, quiet = false }) {
             compact={compact}
           />
         ))}
-        <section className="footer-contact" aria-label="Visit London Tech">
+        <section className="footer-contact" aria-label={t("Visit London Tech")}>
           <h3>{t("Find us in Kampala")}</h3>
           <p>
             <MapPin size={15} />

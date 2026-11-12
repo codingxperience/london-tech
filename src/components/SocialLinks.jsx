@@ -1,4 +1,5 @@
 import React from "react"
+import { useLocale } from "../lib/locale.jsx"
 
 const networks = [
   { key: "facebook", name: "Facebook", hosts: ["facebook.com", "fb.com"] },
@@ -78,12 +79,13 @@ function SocialMark({ network }) {
 }
 
 export function SocialLinks({ profiles = {} }) {
+  const { t } = useLocale()
   const linked = networks.filter((network) =>
     socialProfile(network.key, profiles?.[network.key]),
   )
   return (
-    <section className="footer-socials" aria-label="Follow London Tech">
-      <h3>Follow us</h3>
+    <section className="footer-socials" aria-label={t("Follow London Tech")}>
+      <h3>{t("Follow us")}</h3>
       <div className="footer-social-icons">
         {networks.map((network) => {
           const href = socialProfile(network.key, profiles?.[network.key])
@@ -95,7 +97,7 @@ export function SocialLinks({ profiles = {} }) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`London Tech on ${network.name} (opens in a new tab)`}
+              aria-label={t("London Tech on {network} (opens in a new tab)", { network: network.name })}
               title={network.name}
             >
               {mark}
@@ -104,11 +106,11 @@ export function SocialLinks({ profiles = {} }) {
             <span
               key={network.key}
               className={`footer-social-link social-${network.key} is-pending`}
-              title={`${network.name} profile coming soon`}
+              title={t("{network} profile coming soon", { network: network.name })}
             >
               {mark}
               <span className="sr-only">
-                {network.name} profile coming soon
+                {t("{network} profile coming soon", { network: network.name })}
               </span>
             </span>
           )
@@ -117,8 +119,8 @@ export function SocialLinks({ profiles = {} }) {
       {linked.length < networks.length && (
         <p className="footer-social-note">
           {linked.length
-            ? "More channels coming soon."
-            : "Our social profiles will be linked here soon."}
+            ? t("More channels coming soon.")
+            : t("Our social profiles will be linked here soon.")}
         </p>
       )}
     </section>

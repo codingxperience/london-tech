@@ -5,8 +5,10 @@ import { galleryImages, zoomOrigin } from "../lib/product-experience.js"
 import { showProductImageFallback } from "../lib/product-image.js"
 import { useStore } from "../store.jsx"
 import { ProductPhotoPlaceholder } from "./ProductPhotoPlaceholder.jsx"
+import { useLocale } from "../lib/locale.jsx"
 
 export function ProductGallery({ product }) {
+  const { t } = useLocale()
   const { settings } = useStore()
   const images = galleryImages(product)
   const [selected, setSelected] = useState(0)
@@ -118,7 +120,7 @@ export function ProductGallery({ product }) {
               <iframe
                 key={current.embedSrc}
                 src={current.embedSrc}
-                title={current.alt}
+                title={t(current.alt)}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 referrerPolicy="strict-origin-when-cross-origin"
@@ -128,7 +130,7 @@ export function ProductGallery({ product }) {
                 key={current.videoSrc}
                 src={current.videoSrc}
                 poster={current.src}
-                aria-label={current.alt}
+                aria-label={t(current.alt)}
                 controls
                 autoPlay
                 muted
@@ -143,7 +145,7 @@ export function ProductGallery({ product }) {
             <button
               type="button"
               className="image-expand"
-              aria-label={`Open ${product.name} video`}
+              aria-label={t("Open {name} video", { name: product.name })}
               onClick={() => setEnlarged(true)}
             >
               <Expand size={18} />
@@ -156,7 +158,7 @@ export function ProductGallery({ product }) {
               "product-main-image detail-zoom-image" +
               (hovered ? " is-zoomed" : "")
             }
-            aria-label={`Enlarge ${product.name}, image ${selected + 1} of ${images.length}`}
+              aria-label={t("Enlarge {name}, image {current} of {total}", { name: product.name, current: selected + 1, total: images.length })}
             onPointerEnter={(event) => {
               if (event.pointerType !== "mouse") return
               setOrigin(
@@ -188,7 +190,7 @@ export function ProductGallery({ product }) {
           >
             <img
               src={current.src}
-              alt={current.alt}
+              alt={t(current.alt)}
               onError={showProductImageFallback}
               fetchPriority="high"
               decoding="async"
@@ -205,7 +207,7 @@ export function ProductGallery({ product }) {
         <div className="gallery-thumbnail-row">
           {images.length > 5 && (
             <IconButton
-              label="Previous thumbnails"
+              label={t("Previous thumbnails")}
               onClick={() => scrollThumbnails(-240)}
             >
               <ChevronLeft size={18} />
@@ -215,7 +217,7 @@ export function ProductGallery({ product }) {
             className="product-thumbnails"
             ref={rail}
             role="group"
-            aria-label="Product images. Hover, focus or select a thumbnail to preview."
+              aria-label={t("Product images. Hover, focus or select a thumbnail to preview.")}
           >
             {images.map((image, index) => (
               <button
@@ -224,7 +226,7 @@ export function ProductGallery({ product }) {
                 data-image-index={index}
                 data-media-type={image.type || "image"}
                 className={selected === index ? "selected" : ""}
-                aria-label={`View ${image.alt}, ${index + 1} of ${images.length}`}
+                aria-label={t("View {name}, {current} of {total}", { name: t(image.alt), current: index + 1, total: images.length })}
                 aria-pressed={selected === index}
                 onPointerEnter={(event) => {
                   if (event.pointerType !== "touch") setSelected(index)
@@ -244,7 +246,7 @@ export function ProductGallery({ product }) {
           </div>
           {images.length > 5 && (
             <IconButton
-              label="Next thumbnails"
+              label={t("Next thumbnails")}
               onClick={() => scrollThumbnails(240)}
             >
               <ChevronRight size={18} />
@@ -254,8 +256,7 @@ export function ProductGallery({ product }) {
       </div>
       <p className="gallery-instruction">
         <ZoomIn size={15} />
-        <span className="desktop-zoom-hint">Hover to zoom · </span>Click or tap
-        to explore
+        <span className="desktop-zoom-hint">{t("Hover to zoom · ")}</span>{t("Click or tap to explore")}
       </p>
       <p className="gallery-note">
         {product.mediaNote ||
@@ -268,7 +269,7 @@ export function ProductGallery({ product }) {
               target="_blank"
               rel="noreferrer"
             >
-              Photo credits
+            {t("Photo credits")}
             </a>
           </>
         )}
@@ -285,7 +286,7 @@ export function ProductGallery({ product }) {
               <iframe
                 className="gallery-lightbox-video"
                 src={current.embedSrc}
-                title={current.alt}
+                title={t(current.alt)}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 referrerPolicy="strict-origin-when-cross-origin"
@@ -295,7 +296,7 @@ export function ProductGallery({ product }) {
                 className="gallery-lightbox-video"
                 src={current.videoSrc}
                 poster={current.src}
-                aria-label={current.alt}
+                aria-label={t(current.alt)}
                 controls
                 autoPlay
                 muted
@@ -304,7 +305,7 @@ export function ProductGallery({ product }) {
               />
             )
           ) : (
-            <img src={current.src} alt={current.alt} onError={showProductImageFallback} />
+            <img src={current.src} alt={t(current.alt)} onError={showProductImageFallback} />
           )}
           <div className="image-controls">
             <IconButton
@@ -327,7 +328,7 @@ export function ProductGallery({ product }) {
               <ChevronRight />
             </IconButton>
           </div>
-          <p>{current.alt}</p>
+          <p>{t(current.alt)}</p>
         </Modal>
       )}
     </div>

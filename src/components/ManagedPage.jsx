@@ -3,24 +3,27 @@ import React, { useEffect, useState } from "react"
 import { api } from "../lib/api.js"
 import { Breadcrumb, Notice } from "./ui.jsx"
 import { useStore } from "../store.jsx"
+import { useLocale } from "../lib/locale.jsx"
 
 export function PageDocument({ page }) {
+  const { t } = useLocale()
   return (
     <main className="container info-page managed-page">
-      <Breadcrumb items={[{ label: page.title }]} />
+      <Breadcrumb items={[{ label: t(page.title) }]} />
       <header>
-        <h1>{page.title}</h1>
-        {page.summary && <p>{page.summary}</p>}
+        <h1>{t(page.title)}</h1>
+        {page.summary && <p>{t(page.summary)}</p>}
       </header>
       <article>
         {page.body.split(/\n\s*\n/).map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
+          <p key={i}>{t(paragraph)}</p>
         ))}
       </article>
     </main>
   )
 }
 export function ManagedPage({ slug, fallback = null }) {
+  const { t } = useLocale()
   const store = useStore()
   const [page, setPage] = useState(
       () => store?.pages?.find((p) => p.slug === slug && p.body) || null,
@@ -49,9 +52,9 @@ export function ManagedPage({ slug, fallback = null }) {
     fallback || (
       <main className="container standard-page">
         {loaded ? (
-          <Notice>This page is unavailable or has not been published.</Notice>
+          <Notice>{t("This page is unavailable or has not been published.")}</Notice>
         ) : (
-          <p>Opening page…</p>
+          <p>{t("Opening page…")}</p>
         )}
       </main>
     )
