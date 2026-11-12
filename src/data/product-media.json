@@ -1,4 +1,124 @@
 {
+  "naviforce-nf9248l-silver-brown": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf9248l-silver-brown-front.webp",
+      "alt": "Naviforce NF9248L with a silver case, black dial and brown leather strap",
+      "source": "https://www.naviforce.com/naviforce-nf9248l-japanese-movement-luminous-waterproof-sports-watch-with-date-for-teens-product/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9248l-silver-brown-angle.webp",
+      "alt": "Angled view of the silver Naviforce NF9248L with brown leather strap",
+      "source": "https://naviforce.lk/product/nf-9248l-sbdbn-2/"
+    }
+  ],
+  "naviforce-nf9248l-black-green": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf9248l-black-green-front.webp",
+      "alt": "Black Naviforce NF9248L with a green minute ring and orange markings",
+      "source": "https://www.naviforce.com/naviforce-nf9248l-japanese-movement-luminous-waterproof-sports-watch-with-date-for-teens-product/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9248l-black-green-date-and-crown.webp",
+      "alt": "Black and green Naviforce NF9248L date window and crown adjustment diagram",
+      "source": "https://naviforce.com.bd/product/naviforce-9248l-black-green"
+    }
+  ],
+  "naviforce-nf9226-black-rose-gold": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf9226-black-rose-gold-angle.webp",
+      "alt": "Black Naviforce NF9226 with rose gold-tone hands and crown",
+      "source": "https://alixstore.in/products/nf9226-black-rosegold-analog-watch-for-men-naviforce"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9226-black-rose-gold-date-and-crown.webp",
+      "alt": "Naviforce NF9226 black dial, date window and rose gold-tone crown adjustment diagram",
+      "source": "https://alixstore.in/products/nf9226-black-rosegold-analog-watch-for-men-naviforce"
+    }
+  ],
+  "discover-tab-x1": [
+    {
+      "src": "/assets/product-gallery/discover-tab-x1-tablet-and-keyboard.webp",
+      "alt": "Discover Tab X1 on its keyboard with the supplier's display accessories",
+      "source": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"
+    },
+    {
+      "src": "/assets/product-gallery/discover-tab-x1-retail-box-front.webp",
+      "alt": "Discover Tab X1 retail packaging, front",
+      "source": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"
+    },
+    {
+      "src": "/assets/product-gallery/discover-tab-x1-retail-box-rear.webp",
+      "alt": "Discover Tab X1 retail packaging, back with model and bundle details",
+      "source": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"
+    }
+  ],
+  "skmei-1712-silver-white": [
+    {
+      "src": "/assets/product-gallery/skmei-1712-silver-white-front.webp",
+      "alt": "Silver SKMEI 1712 digital watch with dark digits on a light display",
+      "source": "https://skmei.com/digital-watch-1712"
+    },
+    {
+      "src": "/assets/product-gallery/skmei-1712-silver-white-dial-of-the-store-unit.webp",
+      "alt": "SKMEI 1712 Digital Watch · Silver / White — dial of the store unit"
+    }
+  ],
+  "naviforce-nf8042-silver-white": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf8042-silver-white-front.webp",
+      "alt": "Naviforce NF8042 chronograph with a textured white dial and silver bracelet",
+      "source": "https://global.microless.com/product/naviforce-nf8042-multi-function-chronograph-watch-fashion-waterproof-luxury-gift-luminous-mens-watch-sws/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf8042-silver-white-angle.webp",
+      "alt": "Angled view of the silver-white Naviforce NF8042 showing crown and chronograph pushers",
+      "source": "https://global.microless.com/product/naviforce-nf8042-multi-function-chronograph-watch-fashion-waterproof-luxury-gift-luminous-mens-watch-sws/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf8042-silver-white-side.webp",
+      "alt": "Silver-white Naviforce NF8042 on its side with the bracelet visible",
+      "source": "https://global.microless.com/product/naviforce-nf8042-multi-function-chronograph-watch-fashion-waterproof-luxury-gift-luminous-mens-watch-sws/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf8042-silver-white-wrist.webp",
+      "alt": "Silver-white Naviforce NF8042 chronograph worn on the wrist",
+      "source": "https://www.naviforce.com/naviforce-nf8042-multi-function-chronograph-watch-fashion-waterproof-luxury-gift-luminous-mens-watch-product/"
+    }
+  ],
+  "naviforce-nf9230-silver-white": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf9230-silver-white-front.webp",
+      "alt": "Naviforce NF9230 with a white sunray dial and silver stainless steel bracelet",
+      "source": "https://www.naviforce.com/naviforce-minimalist-fashion-and-gentle-best-selling-business-stainless-steel-quartz-mens-watch-nf9230-product/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9230-silver-white-angle.webp",
+      "alt": "Angled view of the white-dial Naviforce NF9230 and its crown",
+      "source": "https://timeverse.com.bd/product/naviforce-9230-silver"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9230-silver-white-dial.webp",
+      "alt": "Close-up of the white Naviforce NF9230 dial and date window",
+      "source": "https://timeverse.com.bd/product/naviforce-9230-silver"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9230-silver-white-wrist.webp",
+      "alt": "White-dial silver Naviforce NF9230 on the wrist",
+      "source": "https://www.naviforce.com/naviforce-minimalist-fashion-and-gentle-best-selling-business-stainless-steel-quartz-mens-watch-nf9230-product/"
+    }
+  ],
+  "naviforce-nf9230-silver-black": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf9230-silver-black-front.webp",
+      "alt": "Naviforce NF9230 with a black sunray dial and silver stainless steel bracelet",
+      "source": "https://www.naviforce.com/naviforce-minimalist-fashion-and-gentle-best-selling-business-stainless-steel-quartz-mens-watch-nf9230-product/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf9230-silver-black-wrist.webp",
+      "alt": "Black-dial silver Naviforce NF9230 on the wrist",
+      "source": "https://www.naviforce.com/naviforce-minimalist-fashion-and-gentle-best-selling-business-stainless-steel-quartz-mens-watch-nf9230-product/"
+    }
+  ],
   "samsung-galaxy-tab-a11-plus-5g-128gb-gray": [
     {
       "src": "/assets/product-gallery/samsung-galaxy-tab-a11-plus-5g-128gb-gray-front.webp",
@@ -855,6 +975,468 @@
       "src": "/assets/official-lenovo-thinkpad-pro-topload-feature-a.png",
       "alt": "ThinkPad Professional 16-inch Topload Gen 2 — open workstation compartment",
       "source": "https://www.lenovo.com/ca/en/p/accessories-and-software/cases-and-bags/briefcases-toploads/4x41m69795"
+    }
+  ],
+  "jbl-tune-530bt-black": [
+    {
+      "src": "/assets/product-gallery/jbl-tune-530bt-black-earcup-profile.webp",
+      "alt": "JBL Tune 530BT Wireless Headphones · Black — earcup profile",
+      "source": "https://www.argos.co.uk/product/7721636"
+    },
+    {
+      "src": "/assets/product-gallery/jbl-tune-530bt-black-headphone-views.webp",
+      "alt": "JBL Tune 530BT Wireless Headphones · Black — headphone views",
+      "source": "https://allegro.pl/oferta/jbl-tune-530bt-bezprzewodowe-sluchawki-nauszne-z-dzwiekiem-pure-bass-czarne-18149323869"
+    },
+    {
+      "src": "/assets/product-gallery/jbl-tune-530bt-black-store-1.webp",
+      "alt": "JBL Tune 530BT Wireless Headphones · Black — retail packaging"
+    }
+  ],
+  "jbl-tune-520c-usb-c-black": [
+    {
+      "src": "/assets/product-gallery/jbl-tune-520c-usb-c-black-headphones-and-USB-C-remote.webp",
+      "alt": "JBL Tune 520C USB-C Headphones · Black — headphones and USB-C remote",
+      "source": "https://de.jbl.com/TUNE520C-USB-C.html"
+    },
+    {
+      "src": "/assets/product-gallery/jbl-tune-520c-usb-c-black-store-1.webp",
+      "alt": "JBL Tune 520C USB-C Headphones · Black — retail packaging"
+    }
+  ],
+  "jbl-tune-520bt-purple": [
+    {
+      "src": "/assets/product-gallery/jbl-tune-520bt-purple-folded-headphones.webp",
+      "alt": "JBL Tune 520BT Wireless Headphones · Purple — folded headphones",
+      "source": "https://www.abt.com/JBL-On-Ear-Headphones-Tune-520BT-Wireless-in-Purple-JBLT520BTPURAM/p/204334.html"
+    },
+    {
+      "src": "/assets/product-gallery/jbl-tune-520bt-purple-earcups-and-headband.webp",
+      "alt": "JBL Tune 520BT Wireless Headphones · Purple — earcups and headband",
+      "source": "https://www.walmart.com/ip/JBL-Tune-520BT-Wireless-on-ear-headphones-Purple/5461164337"
+    },
+    {
+      "src": "/assets/product-gallery/jbl-tune-520bt-purple-store-1.webp",
+      "alt": "JBL Tune 520BT Wireless Headphones · Purple — retail packaging"
+    }
+  ],
+  "soundcore-liberty-5-white": [
+    {
+      "src": "/assets/product-gallery/soundcore-liberty-5-white-white-earbuds-and-case.webp",
+      "alt": "Soundcore Liberty 5 Earbuds · White — white earbuds and case",
+      "source": "https://www.soundcore.com/eu/products/a3957-liberty-5-tws-earbuds"
+    },
+    {
+      "src": "/assets/product-gallery/soundcore-liberty-5-white-store-1.webp",
+      "alt": "Soundcore Liberty 5 Earbuds · White — retail packaging"
+    }
+  ],
+  "soundcore-liberty-4-nc": [
+    {
+      "src": "/assets/product-gallery/soundcore-liberty-4-nc-store-1.webp",
+      "alt": "Anker Soundcore Liberty 4 NC Earbuds — retail packaging"
+    }
+  ],
+  "soundcore-p41i-white": [
+    {
+      "src": "/assets/product-gallery/soundcore-p41i-white-open-case-and-USB-C-cable.webp",
+      "alt": "Soundcore P41i Earbuds · White — open case and USB-C cable",
+      "source": "https://www.abt.com/Soundcore-P41i-True-Wireless-Earbuds-and-Charging-Case-with-Built-in-USB-C-Phone-Charger-In-White-A3937Z21/p/231518.html"
+    },
+    {
+      "src": "/assets/product-gallery/soundcore-p41i-white-closed-case-and-earbuds.webp",
+      "alt": "Soundcore P41i Earbuds · White — closed case and earbuds",
+      "source": "https://etisalstore.com/en/anker-soundcore-p41i-wireless-earbuds-with-portable-phone-charger-built-in-white"
+    },
+    {
+      "src": "/assets/product-gallery/soundcore-p41i-white-store-1.webp",
+      "alt": "Soundcore P41i Earbuds · White — retail packaging"
+    }
+  ],
+  "soundcore-a20i-black": [
+    {
+      "src": "/assets/product-gallery/soundcore-a20i-black-store-1.webp",
+      "alt": "Soundcore A20i Earbuds · Black — retail packaging"
+    }
+  ],
+  "soundcore-r50i": [
+    {
+      "src": "/assets/product-gallery/soundcore-r50i-store-1.webp",
+      "alt": "Anker Soundcore R50i Wireless Earbuds — retail packaging"
+    }
+  ],
+  "a16-pro-screen-case-earbuds": [
+    {
+      "src": "/assets/product-gallery/a16-pro-screen-case-earbuds-store-1.webp",
+      "alt": "A16 Pro Wireless Earbuds with Display Case — retail packaging"
+    }
+  ],
+  "fantesi-a45-earbuds": [
+    {
+      "src": "/assets/product-gallery/fantesi-a45-earbuds-store-1.webp",
+      "alt": "Fantesi A-45 Wireless Earbuds · Black — retail packaging"
+    }
+  ],
+  "excellent-h1-headphones": [
+    {
+      "src": "/assets/product-gallery/excellent-h1-headphones-retail-packaging.webp",
+      "alt": "Excellent H1 Wireless Headphones — retail-packaging"
+    }
+  ],
+  "excellent-t6-ows-earbuds": [
+    {
+      "src": "/assets/product-gallery/excellent-t6-ows-earbuds-retail-packaging.webp",
+      "alt": "Excellent T6 OWS Open-Ear Earbuds — retail-packaging"
+    }
+  ],
+  "vj376-anc-wireless-headphones": [
+    {
+      "src": "/assets/product-gallery/vj376-anc-wireless-headphones-store-1.webp",
+      "alt": "VJ376 ANC Wireless Headphones — retail packaging"
+    }
+  ],
+  "vj378-anc-wireless-headphones": [
+    {
+      "src": "/assets/product-gallery/vj378-anc-wireless-headphones-store-1.webp",
+      "alt": "VJ378 ANC Wireless Headphones — retail packaging"
+    }
+  ],
+  "sy-anc889bt-headphones-blue": [
+    {
+      "src": "/assets/product-gallery/sy-anc889bt-headphones-blue-store-1.webp",
+      "alt": "SY-ANC889BT Wireless Headphones · Blue — retail packaging"
+    }
+  ],
+  "hd80-lightning-headset": [
+    {
+      "src": "/assets/product-gallery/hd80-lightning-headset-store-1.webp",
+      "alt": "HD80 Lightning Headset · White — retail packaging"
+    }
+  ],
+  "apple-earpods-usbc": [
+    {
+      "src": "/assets/product-gallery/apple-earpods-usbc-store-1.webp",
+      "alt": "Apple EarPods with USB-C — retail packaging"
+    }
+  ],
+  "samsung-usbc-wired-earphones": [
+    {
+      "src": "/assets/product-gallery/samsung-usbc-wired-earphones-store-1.webp",
+      "alt": "Samsung USB-C Wired Earphones — retail packaging"
+    }
+  ],
+  "vidvie-usbc-in-ear-headset": [
+    {
+      "src": "/assets/product-gallery/vidvie-usbc-in-ear-headset-store-1.webp",
+      "alt": "Vidvie HS684T USB-C In-Ear Headset · White — retail packaging"
+    }
+  ],
+  "aideepo-pro-pd100-power-bank": [
+    {
+      "src": "/assets/product-gallery/aideepo-pro-pd100-power-bank-store-1.webp",
+      "alt": "Aideepo PRO-PD100 10,000 mAh Power Bank — retail packaging"
+    }
+  ],
+  "aideepo-usbc-lightning-braided-cable": [
+    {
+      "src": "/assets/product-gallery/aideepo-usbc-lightning-braided-cable-store-1.webp",
+      "alt": "Aideepo USB-C to Lightning Braided Cable · 1 m — retail packaging"
+    }
+  ],
+  "anker-25w-compact-usbc-charger": [
+    {
+      "src": "/assets/product-gallery/anker-25w-compact-usbc-charger-store-1.webp",
+      "alt": "Anker 25W Compact USB-C Charger · Black — retail packaging"
+    }
+  ],
+  "anker-20w-usbc-charger-black": [
+    {
+      "src": "/assets/product-gallery/anker-20w-usbc-charger-black-store-1.webp",
+      "alt": "Anker 20W USB-C Charger · Black — retail packaging"
+    }
+  ],
+  "anker-maggo-10k-slim-black": [
+    {
+      "src": "/assets/product-gallery/anker-maggo-10k-slim-black-store-1.webp",
+      "alt": "Anker MagGo 10K Slim Magnetic Power Bank · Black — retail packaging"
+    }
+  ],
+  "apple-20w-usbc-power-adapter-type-g": [
+    {
+      "src": "/assets/product-gallery/apple-20w-usbc-power-adapter-type-g-store-1.webp",
+      "alt": "Apple 20W USB-C Power Adapter · UK Plug — retail packaging"
+    }
+  ],
+  "apple-240w-usbc-charge-cable-2m": [
+    {
+      "src": "/assets/product-gallery/apple-240w-usbc-charge-cable-2m-store-1.webp",
+      "alt": "Apple 240W USB-C Charge Cable · 2 m — retail packaging"
+    }
+  ],
+  "apple-usbc-lightning-cable-1m": [
+    {
+      "src": "/assets/product-gallery/apple-usbc-lightning-cable-1m-store-1.webp",
+      "alt": "Apple USB-C to Lightning Cable · 1 m — retail packaging"
+    }
+  ],
+  "oraimo-powerflow-b11-10000": [
+    {
+      "src": "/assets/product-gallery/oraimo-powerflow-b11-10000-store-1.webp",
+      "alt": "Oraimo PowerFlow B11 10,000 mAh Power Bank — retail packaging"
+    }
+  ],
+  "oraimo-traveler-15-20000": [
+    {
+      "src": "/assets/product-gallery/oraimo-traveler-15-20000-store-1.webp",
+      "alt": "Oraimo Traveler 15 20,000 mAh Power Bank — retail packaging"
+    }
+  ],
+  "vidvie-car-air-vent-gravity-holder": [
+    {
+      "src": "/assets/product-gallery/vidvie-car-air-vent-gravity-holder-store-1.webp",
+      "alt": "Vidvie Car Air Vent Gravity Phone Holder — retail packaging"
+    }
+  ],
+  "excellent-p26-20000-power-bank": [
+    {
+      "src": "/assets/product-gallery/excellent-p26-20000-power-bank-retail-packaging.webp",
+      "alt": "Excellent P26 20,000 mAh Power Bank — retail-packaging"
+    }
+  ],
+  "fs09-phone-cooler": [
+    {
+      "src": "/assets/product-gallery/fs09-phone-cooler-store-1.webp",
+      "alt": "FS09 Phone Cooler — retail packaging"
+    }
+  ],
+  "samsung-45w-usbc-charger": [
+    {
+      "src": "/assets/product-gallery/samsung-45w-usbc-charger-store-1.webp",
+      "alt": "45W USB-C Wall Charger for Samsung Galaxy — retail packaging"
+    }
+  ],
+  "samsung-65w-three-port-charger": [
+    {
+      "src": "/assets/product-gallery/samsung-65w-three-port-charger-store-1.webp",
+      "alt": "65W Three-Port USB Charger for Samsung Galaxy — retail packaging 1"
+    }
+  ],
+  "usb-c-8a-charge-cable": [
+    {
+      "src": "/assets/product-gallery/usb-c-8a-charge-cable-store-1.webp",
+      "alt": "USB-C to USB-C Charging Cable · 8A Label — retail packaging"
+    }
+  ],
+  "vidvie-cb4038c-usbc-cable": [
+    {
+      "src": "/assets/product-gallery/vidvie-cb4038c-usbc-cable-store-1.webp",
+      "alt": "Vidvie CB4038C 60W USB-C Data Cable — retail packaging"
+    }
+  ],
+  "vidvie-three-in-one-charging-cable": [
+    {
+      "src": "/assets/product-gallery/vidvie-three-in-one-charging-cable-store-1.webp",
+      "alt": "Vidvie 3-in-1 Charging Cable — retail packaging"
+    }
+  ],
+  "flat-wire-2-to-2-charging-cable": [
+    {
+      "src": "/assets/product-gallery/flat-wire-2-to-2-charging-cable-store-1.webp",
+      "alt": "Flat Wire 2-to-2 USB Charging Cable — retail packaging"
+    }
+  ],
+  "wireless-power-bank-20000-black": [
+    {
+      "src": "/assets/product-gallery/wireless-power-bank-20000-black-store-1.webp",
+      "alt": "Wireless Power Bank · 20,000 mAh, Black — retail packaging"
+    }
+  ],
+  "kh-740-fascial-massage-gun": [
+    {
+      "src": "/assets/product-gallery/kh-740-fascial-massage-gun-store-1.webp",
+      "alt": "KH-740 Handheld Massage Gun — retail packaging"
+    }
+  ],
+  "shoulder-neck-wrap-massager": [
+    {
+      "src": "/assets/product-gallery/shoulder-neck-wrap-massager-store-1.webp",
+      "alt": "FH-670 Shoulder and Neck Wrap Massager — retail packaging 1"
+    },
+    {
+      "src": "/assets/product-gallery/shoulder-neck-wrap-massager-store-2.webp",
+      "alt": "FH-670 Shoulder and Neck Wrap Massager — retail packaging 2"
+    }
+  ],
+  "le-falcone-majestic-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/le-falcone-majestic-edp-100ml-front-of-bottle.webp",
+      "alt": "Le Falconé Majestic Eau de Parfum · 100 ml — front of bottle",
+      "source": "https://www.beautyandperfumeintl.com/products/majestic-eau-de-parfum"
+    },
+    {
+      "src": "/assets/product-gallery/le-falcone-majestic-edp-100ml-angled-bottle.webp",
+      "alt": "Le Falconé Majestic Eau de Parfum · 100 ml — angled bottle",
+      "source": "https://www.beautyandperfumeintl.com/products/majestic-eau-de-parfum"
+    },
+    {
+      "src": "/assets/product-gallery/le-falcone-majestic-edp-100ml-bottle-base.webp",
+      "alt": "Le Falconé Majestic Eau de Parfum · 100 ml — bottle base",
+      "source": "https://www.beautyandperfumeintl.com/products/majestic-eau-de-parfum"
+    },
+    {
+      "src": "/assets/product-gallery/le-falcone-majestic-edp-100ml-store-1.webp",
+      "alt": "Le Falconé Majestic Eau de Parfum · 100 ml — bottle and packaging"
+    }
+  ],
+  "malika-eau-de-parfum": [
+    {
+      "src": "/assets/product-gallery/malika-eau-de-parfum-store-1.webp",
+      "alt": "Malika Eau de Parfum — bottle and packaging"
+    }
+  ],
+  "al-ezz-oud-hersh-mehwar-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/al-ezz-oud-hersh-mehwar-edp-100ml-crown-capped-bottle.webp",
+      "alt": "Al Ezz Oud Hersh Mehwar Eau de Parfum · 100 ml — crown-capped bottle",
+      "source": "https://soghaat.co.uk/products/hersh-mehwar-100ml-eau-de-parfum-al-ezz-oud"
+    },
+    {
+      "src": "/assets/product-gallery/al-ezz-oud-hersh-mehwar-edp-100ml-bottle-and-presentation-box.webp",
+      "alt": "Al Ezz Oud Hersh Mehwar Eau de Parfum · 100 ml — bottle and presentation box",
+      "source": "https://arabiascents.com/products/hersh-mehwar-edp-100-ml"
+    },
+    {
+      "src": "/assets/product-gallery/al-ezz-oud-hersh-mehwar-edp-100ml-brand-campaign-image.webp",
+      "alt": "Al Ezz Oud Hersh Mehwar Eau de Parfum · 100 ml — brand campaign image",
+      "source": "https://alezz-oud.com/"
+    },
+    {
+      "src": "/assets/product-gallery/al-ezz-oud-hersh-mehwar-edp-100ml-store-1.webp",
+      "alt": "Al Ezz Oud Hersh Mehwar Eau de Parfum · 100 ml — bottle and packaging"
+    }
+  ],
+  "reyane-paris-for-men-edt-100ml": [
+    {
+      "src": "/assets/product-gallery/reyane-paris-for-men-edt-100ml-store-1.webp",
+      "alt": "Reyane Paris for Men Eau de Toilette · 100 ml — bottle and packaging"
+    }
+  ],
+  "le-chameau-save-elixir-edp-85ml": [
+    {
+      "src": "/assets/product-gallery/le-chameau-save-elixir-edp-85ml-store-1.webp",
+      "alt": "Le Chameau Save Elixir Eau de Parfum · 85 ml — bottle and packaging"
+    },
+    {
+      "src": "/assets/product-gallery/le-chameau-save-elixir-edp-85ml-store-2.webp",
+      "alt": "Le Chameau Save Elixir Eau de Parfum · 85 ml — bottle cap and 85 ml box label"
+    }
+  ],
+  "banafa-sparky-white-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/banafa-sparky-white-edp-100ml-store-1.webp",
+      "alt": "Banafa Sparky White Eau de Parfum · 100 ml — bottle and packaging"
+    },
+    {
+      "src": "/assets/product-gallery/banafa-sparky-white-edp-100ml-store-2.webp",
+      "alt": "Banafa Sparky White Eau de Parfum · 100 ml — bottle cap and volume label from above"
+    }
+  ],
+  "smo-al-oud-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/smo-al-oud-edp-100ml-store-1.webp",
+      "alt": "Smo Al Oud Eau de Parfum · 100 ml — bottle and packaging"
+    }
+  ],
+  "le-chameau-arabia-haya-gift-set": [
+    {
+      "src": "/assets/product-gallery/le-chameau-arabia-haya-gift-set-store-1.webp",
+      "alt": "Le Chameau Arabia Haya 2-Piece Gift Set — opened gift set with both bottles"
+    }
+  ],
+  "al-ezz-oud-hersh-55-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/al-ezz-oud-hersh-55-edp-100ml-store-1.webp",
+      "alt": "Al Ezz Oud Hersh 55° Eau de Parfum · 100 ml — blue retail packaging"
+    }
+  ],
+  "lattafa-maahir-black-edition-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/lattafa-maahir-black-edition-edp-100ml-store-1.webp",
+      "alt": "Lattafa Maahir Black Edition Eau de Parfum · 100 ml — bottle and packaging"
+    }
+  ],
+  "lattafa-eclaire-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/lattafa-eclaire-edp-100ml-store-1.webp",
+      "alt": "Lattafa Eclaire Eau de Parfum · 100 ml — bottle and packaging"
+    },
+    {
+      "src": "/assets/product-gallery/lattafa-eclaire-edp-100ml-store-2.webp",
+      "alt": "Lattafa Eclaire Eau de Parfum · 100 ml — bottle and box from above"
+    }
+  ],
+  "afnan-9am-dive-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/afnan-9am-dive-edp-100ml-store-1.webp",
+      "alt": "Afnan 9 AM Dive Eau de Parfum · 100 ml — blue bottle in its presentation box"
+    }
+  ],
+  "s-color-s-kids4-max": [
+    {
+      "src": "/assets/product-gallery/s-color-s-kids4-max-store-1.webp",
+      "alt": "S-Color S Kids4 Max 7-inch Tablet — front of the retail box"
+    },
+    {
+      "src": "/assets/product-gallery/s-color-s-kids4-max-store-2.webp",
+      "alt": "S-Color S Kids4 Max 7-inch Tablet — back of the retail box"
+    }
+  ],
+  "usb-a-to-usbc-1-5m-two-pack": [
+    {
+      "src": "/assets/product-gallery/usb-a-to-usbc-1-5m-two-pack-store-1.webp",
+      "alt": "USB-A to USB-C Cables · 1.5 m, 2 Pack — retail packaging"
+    }
+  ],
+  "lattafa-al-areeq-silver-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/lattafa-al-areeq-silver-edp-100ml-green-bottle.webp",
+      "alt": "Lattafa Pride Al Areeq Silver Eau de Parfum · 100 ml — green bottle",
+      "source": "https://arabicscents.bg/myzhki-arabski-parfyumi/mujki-parfyum-lattafa-al-areeq-silver"
+    },
+    {
+      "src": "/assets/product-gallery/lattafa-al-areeq-silver-edp-100ml-bottle-with-matching-Silver-box.webp",
+      "alt": "Lattafa Pride Al Areeq Silver Eau de Parfum · 100 ml — bottle with matching Silver box",
+      "source": "https://supermigo.gr/lattafa-perfumes-al-areeq-silver-eau-de-parfum-100ml-unisex"
+    }
+  ],
+  "emper-presidente-fragrance": [
+    {
+      "src": "/assets/product-gallery/emper-presidente-fragrance-bottle-front.webp",
+      "alt": "Emper Presidente Fragrance — bottle-front"
+    }
+  ],
+  "apple-20w-usbc-power-adapter-eu": [
+    {
+      "src": "/assets/product-gallery/apple-20w-usbc-power-adapter-eu-store-1.webp",
+      "alt": "Apple 20W USB-C Power Adapter · EU Plug — retail packaging"
+    }
+  ],
+  "samsung-usbc-anc-earphones": [
+    {
+      "src": "/assets/product-gallery/samsung-usbc-anc-earphones-store-1.webp",
+      "alt": "Samsung USB-C ANC Earphones — retail packaging"
+    }
+  ],
+  "galaxy-akg-style-wired-earphones": [
+    {
+      "src": "/assets/product-gallery/galaxy-akg-style-wired-earphones-store-1.webp",
+      "alt": "Galaxy Wired In-Ear Earphones · Black — retail packaging"
+    }
+  ],
+  "kg56-bluetooth-neckband-headset": [
+    {
+      "src": "/assets/product-gallery/kg56-bluetooth-neckband-headset-store-1.webp",
+      "alt": "KG56 Bluetooth Neckband Headset — retail packaging"
     }
   ]
 }

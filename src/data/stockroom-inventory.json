@@ -1,0 +1,1373 @@
+[
+  {
+    "id": "jbl-tune-530bt-black",
+    "sku": "LT-STOCK-A01",
+    "name": "JBL Tune 530BT Wireless Headphones · Black",
+    "category": "audio",
+    "brand": "JBL",
+    "price": 185000,
+    "description": "Foldable wireless on-ear headphones with JBL Pure Bass, Bluetooth multipoint and two microphones for calls.",
+    "specifications": [
+      [
+        "Model",
+        "Tune 530BT"
+      ],
+      [
+        "Fit",
+        "On-ear"
+      ],
+      [
+        "Battery",
+        "Up to 76 hours, according to JBL"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "jbl-tune-520c-usb-c-black",
+    "sku": "LT-STOCK-A02",
+    "name": "JBL Tune 520C USB-C Headphones · Black",
+    "category": "audio",
+    "brand": "JBL",
+    "price": 145000,
+    "description": "Wired on-ear headphones with a USB-C plug, in-line microphone and three-button remote.",
+    "specifications": [
+      [
+        "Model",
+        "Tune 520C USB-C"
+      ],
+      [
+        "Connection",
+        "Wired USB-C digital audio"
+      ],
+      [
+        "Controls",
+        "Three-button remote with microphone"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "jbl-tune-520bt-purple",
+    "sku": "LT-STOCK-A03",
+    "name": "JBL Tune 520BT Wireless Headphones · Purple",
+    "category": "audio",
+    "brand": "JBL",
+    "price": 170000,
+    "description": "Foldable on-ear Bluetooth headphones in purple with hands-free calling and up to 57 hours of listening, according to JBL.",
+    "specifications": [
+      [
+        "Model",
+        "Tune 520BT"
+      ],
+      [
+        "Connection",
+        "Bluetooth"
+      ],
+      [
+        "Battery",
+        "Up to 57 hours, according to JBL"
+      ],
+      [
+        "Colour",
+        "Purple"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-liberty-5-white",
+    "sku": "LT-STOCK-A04",
+    "name": "Soundcore Liberty 5 Earbuds · White",
+    "category": "audio",
+    "brand": "Soundcore",
+    "price": 365000,
+    "description": "True wireless earbuds with adaptive noise cancellation, Dolby Audio and a charging case.",
+    "specifications": [
+      [
+        "Model",
+        "Liberty 5 (A3957)"
+      ],
+      [
+        "Noise control",
+        "Adaptive active noise cancellation"
+      ],
+      [
+        "Colour",
+        "White"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-liberty-4-nc",
+    "sku": "LT-MODEL-A3947",
+    "name": "Anker Soundcore Liberty 4 NC Earbuds",
+    "category": "audio",
+    "brand": "Soundcore",
+    "price": 275000,
+    "description": "True wireless earbuds with adaptive active noise cancellation, 11 mm drivers and a wireless charging case. The photographed unit is black.",
+    "specifications": [
+      [
+        "Model",
+        "Liberty 4 NC (A3947)"
+      ],
+      [
+        "Noise control",
+        "Adaptive active noise cancellation"
+      ],
+      [
+        "Battery",
+        "Up to 10 hours, up to 50 hours with the case under Soundcore’s stated conditions"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-p41i-white",
+    "sku": "LT-STOCK-A05",
+    "name": "Soundcore P41i Earbuds · White",
+    "category": "audio",
+    "brand": "Soundcore",
+    "price": 245000,
+    "description": "Noise cancelling wireless earbuds with a charging case that can supply backup power to a compatible phone.",
+    "specifications": [
+      [
+        "Model",
+        "P41i (A3937)"
+      ],
+      [
+        "Noise control",
+        "Adaptive active noise cancellation"
+      ],
+      [
+        "Case",
+        "Built-in USB-C cable and phone charging"
+      ],
+      [
+        "Colour",
+        "White"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-a20i-black",
+    "sku": "LT-STOCK-A06",
+    "name": "Soundcore A20i Earbuds · Black",
+    "category": "audio",
+    "brand": "Soundcore",
+    "price": 100000,
+    "description": "Compact true wireless earbuds with a lanyard case and sound presets in the Soundcore app.",
+    "specifications": [
+      [
+        "Model",
+        "A20i (A3948)"
+      ],
+      [
+        "Connection",
+        "Bluetooth"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "soundcore-r50i",
+    "sku": "LT-MODEL-A3949",
+    "name": "Anker Soundcore R50i Wireless Earbuds",
+    "category": "audio",
+    "brand": "Soundcore",
+    "price": 115000,
+    "description": "Black true wireless earbuds with a lanyard case, touch controls and sound presets in the Soundcore app.",
+    "specifications": [
+      [
+        "Model",
+        "R50i (A3949)"
+      ],
+      [
+        "Connection",
+        "Bluetooth"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "a16-pro-screen-case-earbuds",
+    "sku": "LT-STOCK-A07",
+    "name": "A16 Pro Wireless Earbuds with Display Case",
+    "category": "audio",
+    "brand": "",
+    "price": 65000,
+    "description": "White wireless earbuds with a charging case that shows battery information.",
+    "specifications": [
+      [
+        "Model",
+        "A16 Pro"
+      ],
+      [
+        "Case",
+        "Display on the front"
+      ],
+      [
+        "Colour",
+        "White"
+      ]
+    ]
+  },
+  {
+    "id": "fantesi-a45-earbuds",
+    "sku": "LT-STOCK-A08",
+    "name": "Fantesi A-45 Wireless Earbuds · Black",
+    "category": "audio",
+    "brand": "Fantesi",
+    "price": 55000,
+    "description": "Black stem-style earbuds with silicone tips and a charging case.",
+    "specifications": [
+      [
+        "Model",
+        "A-45"
+      ],
+      [
+        "Bluetooth on packaging",
+        "5.3"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "excellent-h1-headphones",
+    "sku": "LT-STOCK-A09",
+    "name": "Excellent H1 Wireless Headphones",
+    "category": "audio",
+    "brand": "Excellent",
+    "price": 65000,
+    "description": "Black wireless headphones with blue trim. The packaging lists FM radio and hands-free calling.",
+    "specifications": [
+      [
+        "Model",
+        "H1"
+      ],
+      [
+        "Bluetooth on packaging",
+        "5.3"
+      ],
+      [
+        "Colour",
+        "Black with blue trim"
+      ]
+    ]
+  },
+  {
+    "id": "excellent-t6-ows-earbuds",
+    "sku": "LT-STOCK-A10",
+    "name": "Excellent T6 OWS Open-Ear Earbuds",
+    "category": "audio",
+    "brand": "Excellent",
+    "price": 70000,
+    "description": "Open-ear earbuds with wraparound ear hooks and an oval charging case.",
+    "specifications": [
+      [
+        "Model",
+        "T6 OWS"
+      ],
+      [
+        "Fit",
+        "Open-ear hooks"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "vj376-anc-wireless-headphones",
+    "sku": "LT-STOCK-A11",
+    "name": "VJ376 ANC Wireless Headphones",
+    "category": "audio",
+    "brand": "",
+    "price": 85000,
+    "description": "Black over-ear wireless headphones. The retail box identifies the model as VJ376 ANC.",
+    "specifications": [
+      [
+        "Model",
+        "VJ376 ANC"
+      ],
+      [
+        "Fit",
+        "Over-ear"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "vj378-anc-wireless-headphones",
+    "sku": "LT-STOCK-A12",
+    "name": "VJ378 ANC Wireless Headphones",
+    "category": "audio",
+    "brand": "",
+    "price": 90000,
+    "description": "Black over-ear wireless headphones with a built-in microphone, as shown on the retail box.",
+    "specifications": [
+      [
+        "Model",
+        "VJ378 ANC"
+      ],
+      [
+        "Bluetooth on packaging",
+        "5.3"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "sy-anc889bt-headphones-blue",
+    "sku": "LT-STOCK-A13",
+    "name": "SY-ANC889BT Wireless Headphones · Blue",
+    "category": "audio",
+    "brand": "",
+    "price": 85000,
+    "description": "Blue over-ear wireless headphones with physical buttons on the earcup.",
+    "specifications": [
+      [
+        "Model",
+        "SY-ANC889BT"
+      ],
+      [
+        "Bluetooth on packaging",
+        "5.4"
+      ],
+      [
+        "Colour",
+        "Blue"
+      ]
+    ]
+  },
+  {
+    "id": "hd80-lightning-headset",
+    "sku": "LT-STOCK-A14",
+    "name": "HD80 Lightning Headset · White",
+    "category": "audio",
+    "brand": "",
+    "price": 25000,
+    "description": "White earbuds with a Lightning plug. The packaging describes Bluetooth pairing with a pop-up prompt.",
+    "specifications": [
+      [
+        "Model",
+        "HD80"
+      ],
+      [
+        "Plug",
+        "Lightning"
+      ],
+      [
+        "Colour",
+        "White"
+      ]
+    ]
+  },
+  {
+    "id": "apple-earpods-usbc",
+    "sku": "LT-STOCK-A15",
+    "name": "Apple EarPods with USB-C",
+    "category": "audio",
+    "brand": "Apple",
+    "price": 85000,
+    "description": "White wired EarPods with a USB-C connector, microphone and in-line remote. Check USB-C audio support on your device.",
+    "specifications": [
+      [
+        "Connector",
+        "USB-C"
+      ],
+      [
+        "Controls",
+        "Volume, playback and calls"
+      ],
+      [
+        "Colour",
+        "White"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-usbc-wired-earphones",
+    "sku": "LT-STOCK-A16",
+    "name": "Samsung USB-C Wired Earphones",
+    "category": "audio",
+    "brand": "Samsung",
+    "price": 35000,
+    "description": "Black wired in-ear headphones with a USB-C connector. Check USB-C audio support on your device.",
+    "specifications": [
+      [
+        "Connection",
+        "USB-C"
+      ],
+      [
+        "Fit",
+        "In-ear"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "vidvie-usbc-in-ear-headset",
+    "sku": "LT-STOCK-A17",
+    "name": "Vidvie HS684T USB-C In-Ear Headset · White",
+    "category": "audio",
+    "brand": "Vidvie",
+    "price": 30000,
+    "description": "White wired in-ear headset with USB-C connection. Check USB-C audio support on your device.",
+    "specifications": [
+      [
+        "Model",
+        "HS684T"
+      ],
+      [
+        "Connection",
+        "USB-C"
+      ],
+      [
+        "Fit",
+        "In-ear"
+      ],
+      [
+        "Colour",
+        "White"
+      ]
+    ]
+  },
+  {
+    "id": "aideepo-pro-pd100-power-bank",
+    "sku": "LT-STOCK-C01",
+    "name": "Aideepo PRO-PD100 10,000 mAh Power Bank",
+    "category": "accessories",
+    "brand": "Aideepo",
+    "price": 65000,
+    "description": "A compact power bank with a digital battery display and two built-in cables shown on the box.",
+    "specifications": [
+      [
+        "Model",
+        "PRO-PD100"
+      ],
+      [
+        "Rated capacity on packaging",
+        "10,000 mAh"
+      ],
+      [
+        "Maximum output on packaging",
+        "22.5 W"
+      ]
+    ]
+  },
+  {
+    "id": "aideepo-usbc-lightning-braided-cable",
+    "sku": "LT-STOCK-C02",
+    "name": "Aideepo USB-C to Lightning Braided Cable · 1 m",
+    "category": "accessories",
+    "brand": "Aideepo",
+    "price": 25000,
+    "description": "A braided charging cable with USB-C and Lightning plugs for a compatible charger and device.",
+    "specifications": [
+      [
+        "Connectors",
+        "USB-C to Lightning"
+      ],
+      [
+        "Length on packaging",
+        "1 m"
+      ],
+      [
+        "Jacket",
+        "Braided"
+      ]
+    ]
+  },
+  {
+    "id": "anker-25w-compact-usbc-charger",
+    "sku": "LT-STOCK-C03",
+    "name": "Anker 25W Compact USB-C Charger · Black",
+    "category": "accessories",
+    "brand": "Anker",
+    "price": 80000,
+    "description": "A compact black wall charger with one USB-C port. Charging speed depends on the device and cable.",
+    "specifications": [
+      [
+        "Output on packaging",
+        "Up to 25 W"
+      ],
+      [
+        "Port",
+        "USB-C"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "anker-20w-usbc-charger-black",
+    "sku": "LT-STOCK-C04",
+    "name": "Anker 20W USB-C Charger · Black",
+    "category": "accessories",
+    "brand": "Anker",
+    "price": 65000,
+    "description": "A compact black USB-C wall charger for compatible phones and accessories.",
+    "specifications": [
+      [
+        "Output on packaging",
+        "Up to 20 W"
+      ],
+      [
+        "Port",
+        "USB-C"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "anker-maggo-10k-slim-black",
+    "sku": "LT-STOCK-C05",
+    "name": "Anker MagGo 10K Slim Magnetic Power Bank · Black",
+    "category": "accessories",
+    "brand": "Anker",
+    "price": 270000,
+    "description": "A slim magnetic power bank with Qi2 wireless charging and a USB-C port for wired charging.",
+    "specifications": [
+      [
+        "Model",
+        "A1664"
+      ],
+      [
+        "Rated battery capacity",
+        "10,000 mAh"
+      ],
+      [
+        "Wireless charging",
+        "Qi2, up to 15 W on compatible devices"
+      ],
+      [
+        "Wired output",
+        "USB-C, up to 30 W"
+      ]
+    ]
+  },
+  {
+    "id": "apple-20w-usbc-power-adapter-type-g",
+    "sku": "LT-STOCK-C06",
+    "name": "Apple 20W USB-C Power Adapter · UK Plug",
+    "category": "accessories",
+    "brand": "Apple",
+    "price": 95000,
+    "description": "A white USB-C power adapter with a foldable Type G plug. Pair it with a USB-C charging cable suited to your device.",
+    "specifications": [
+      [
+        "Output",
+        "Up to 20 W"
+      ],
+      [
+        "Port",
+        "USB-C"
+      ],
+      [
+        "Plug",
+        "Type G (UK three-pin)"
+      ]
+    ]
+  },
+  {
+    "id": "apple-240w-usbc-charge-cable-2m",
+    "sku": "LT-STOCK-C07",
+    "name": "Apple 240W USB-C Charge Cable · 2 m",
+    "category": "accessories",
+    "brand": "Apple",
+    "price": 130000,
+    "description": "A woven two-metre cable with a USB-C connector on each end for charging compatible devices. The charger and device determine actual power.",
+    "specifications": [
+      [
+        "Connectors",
+        "USB-C to USB-C"
+      ],
+      [
+        "Length",
+        "2 m"
+      ],
+      [
+        "Charging",
+        "Up to 240 W with compatible equipment"
+      ]
+    ]
+  },
+  {
+    "id": "apple-usbc-lightning-cable-1m",
+    "sku": "LT-STOCK-C08",
+    "name": "Apple USB-C to Lightning Cable · 1 m",
+    "category": "accessories",
+    "brand": "Apple",
+    "price": 85000,
+    "description": "A one-metre cable for connecting a Lightning device to a USB-C charger or computer.",
+    "specifications": [
+      [
+        "Connectors",
+        "USB-C to Lightning"
+      ],
+      [
+        "Length",
+        "1 m"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-powerflow-b11-10000",
+    "sku": "LT-STOCK-C09",
+    "name": "Oraimo PowerFlow B11 10,000 mAh Power Bank",
+    "category": "accessories",
+    "brand": "Oraimo",
+    "price": 65000,
+    "description": "A black power bank with two-way USB-C charging for topping up a phone or recharging the bank.",
+    "specifications": [
+      [
+        "Model",
+        "OPB-1102"
+      ],
+      [
+        "Rated capacity",
+        "10,000 mAh"
+      ],
+      [
+        "USB-C charging",
+        "Up to 15 W"
+      ]
+    ]
+  },
+  {
+    "id": "oraimo-traveler-15-20000",
+    "sku": "LT-STOCK-C10",
+    "name": "Oraimo Traveler 15 20,000 mAh Power Bank",
+    "category": "accessories",
+    "brand": "Oraimo",
+    "price": 105000,
+    "description": "A black power bank with two-way USB-C charging and a built-in light.",
+    "specifications": [
+      [
+        "Model",
+        "OPB-1201P"
+      ],
+      [
+        "Rated capacity",
+        "20,000 mAh"
+      ],
+      [
+        "USB-C charging",
+        "Up to 15 W"
+      ]
+    ]
+  },
+  {
+    "id": "vidvie-car-air-vent-gravity-holder",
+    "sku": "LT-STOCK-C11",
+    "name": "Vidvie Car Air Vent Gravity Phone Holder",
+    "category": "accessories",
+    "brand": "Vidvie",
+    "price": 35000,
+    "description": "An air-vent mount with gravity-closing side arms and a lower cradle. Check the vent shape and phone width before ordering.",
+    "specifications": [
+      [
+        "Mount",
+        "Car air vent"
+      ],
+      [
+        "Holder",
+        "Gravity cradle"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "excellent-p26-20000-power-bank",
+    "sku": "LT-STOCK-C12",
+    "name": "Excellent P26 20,000 mAh Power Bank",
+    "category": "accessories",
+    "brand": "Excellent",
+    "price": 85000,
+    "description": "A pocket-size power bank with a percentage display on the front.",
+    "specifications": [
+      [
+        "Model",
+        "P26"
+      ],
+      [
+        "Rated capacity on packaging",
+        "20,000 mAh"
+      ],
+      [
+        "Maximum output on packaging",
+        "22.5 W"
+      ]
+    ]
+  },
+  {
+    "id": "fs09-phone-cooler",
+    "sku": "LT-STOCK-C13",
+    "name": "FS09 Phone Cooler",
+    "category": "accessories",
+    "brand": "",
+    "price": 65000,
+    "description": "A phone cooling accessory with an illuminated fan and a display on the housing. Check mounting fit and power requirements with the store.",
+    "specifications": [
+      [
+        "Model",
+        "FS09"
+      ],
+      [
+        "Design",
+        "Vented fan housing with display"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-45w-usbc-charger",
+    "sku": "LT-MODEL-GALAXY-45W-KIT",
+    "name": "45W USB-C Wall Charger for Samsung Galaxy",
+    "category": "accessories",
+    "brand": "",
+    "price": 85000,
+    "description": "A black USB-C wall charging kit for compatible Galaxy phones. The package shows a USB-C cable. Confirm the adapter model and PPS compatibility before ordering.",
+    "specifications": [
+      [
+        "Charging rating on packaging",
+        "45 W"
+      ],
+      [
+        "Port",
+        "USB-C"
+      ],
+      [
+        "Box contents shown",
+        "Wall adapter and USB-C cable"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-65w-three-port-charger",
+    "sku": "LT-MODEL-GALAXY-65W-TRIO",
+    "name": "65W Three-Port USB Charger for Samsung Galaxy",
+    "category": "accessories",
+    "brand": "",
+    "price": 115000,
+    "description": "A three-port wall charger for compatible Galaxy devices. The photographed packaging differs by kit. Confirm the adapter model, included cable and output when using multiple ports.",
+    "specifications": [
+      [
+        "Charging rating on packaging",
+        "65 W"
+      ],
+      [
+        "Ports shown",
+        "Three"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "usb-c-8a-charge-cable",
+    "sku": "LT-STOCK-C14",
+    "name": "USB-C to USB-C Charging Cable · 8A Label",
+    "category": "accessories",
+    "brand": "",
+    "price": 20000,
+    "description": "A black charging cable with a USB-C plug at each end. The 8 A marking comes from the retail box and charging depends on the device and charger.",
+    "specifications": [
+      [
+        "Connectors",
+        "USB-C to USB-C"
+      ],
+      [
+        "Current on packaging",
+        "8 A"
+      ]
+    ]
+  },
+  {
+    "id": "vidvie-cb4038c-usbc-cable",
+    "sku": "LT-STOCK-C15",
+    "name": "Vidvie CB4038C 60W USB-C Data Cable",
+    "category": "accessories",
+    "brand": "Vidvie",
+    "price": 30000,
+    "description": "A braided cable with USB-C plugs at both ends, for charging and data transfer.",
+    "specifications": [
+      [
+        "Model on packaging",
+        "CB4038C&C"
+      ],
+      [
+        "Connectors",
+        "USB-C to USB-C"
+      ],
+      [
+        "Power on packaging",
+        "Up to 60 W"
+      ]
+    ]
+  },
+  {
+    "id": "vidvie-three-in-one-charging-cable",
+    "sku": "LT-STOCK-C16",
+    "name": "Vidvie 3-in-1 Charging Cable",
+    "category": "accessories",
+    "brand": "Vidvie",
+    "price": 30000,
+    "description": "A black multi-tip cable with a USB-A plug at the charger end. Match the tips to your devices before ordering.",
+    "specifications": [
+      [
+        "Charger connection",
+        "USB-A"
+      ],
+      [
+        "Design",
+        "Three device tips"
+      ],
+      [
+        "Current on packaging",
+        "3 A"
+      ]
+    ]
+  },
+  {
+    "id": "flat-wire-2-to-2-charging-cable",
+    "sku": "LT-STOCK-C17",
+    "name": "Flat Wire 2-to-2 USB Charging Cable",
+    "category": "accessories",
+    "brand": "",
+    "price": 35000,
+    "description": "A flat cable with interchangeable USB-A and USB-C input options and USB-C or Lightning at the device end.",
+    "specifications": [
+      [
+        "Charger-side options",
+        "USB-A or USB-C"
+      ],
+      [
+        "Device-side options",
+        "USB-C or Lightning"
+      ],
+      [
+        "Power markings on box",
+        "65 W / 27 W by connector"
+      ]
+    ]
+  },
+  {
+    "id": "usb-a-to-usbc-1-5m-two-pack",
+    "sku": "LT-STOCK-C18",
+    "name": "USB-A to USB-C Cables · 1.5 m, 2 Pack",
+    "category": "accessories",
+    "brand": "",
+    "price": 30000,
+    "description": "Two black USB-A to USB-C cables for connecting compatible devices to a USB-A charger or port.",
+    "specifications": [
+      [
+        "Connectors",
+        "USB-A to USB-C"
+      ],
+      [
+        "Length on packaging",
+        "1.5 m each"
+      ],
+      [
+        "Pack quantity",
+        "2"
+      ]
+    ]
+  },
+  {
+    "id": "wireless-power-bank-20000-black",
+    "sku": "LT-STOCK-C19",
+    "name": "Wireless Power Bank · 20,000 mAh, Black",
+    "category": "accessories",
+    "brand": "",
+    "price": 95000,
+    "description": "A black power bank with a wireless charging pad shown on the packaging. Confirm your phone’s charging compatibility before ordering.",
+    "specifications": [
+      [
+        "Rated capacity on packaging",
+        "20,000 mAh"
+      ],
+      [
+        "Charging",
+        "Wireless pad shown"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "kh-740-fascial-massage-gun",
+    "sku": "LT-STOCK-L01",
+    "name": "KH-740 Handheld Massage Gun",
+    "category": "lifestyle",
+    "brand": "",
+    "price": 100000,
+    "description": "A handheld massage gun with a pistol grip and round attachment pictured on the box.",
+    "specifications": [
+      [
+        "Model on packaging",
+        "KH-740"
+      ],
+      [
+        "Design",
+        "Handheld"
+      ],
+      [
+        "Attachment shown",
+        "Round massage head"
+      ]
+    ]
+  },
+  {
+    "id": "shoulder-neck-wrap-massager",
+    "sku": "LT-STOCK-L02",
+    "name": "FH-670 Shoulder and Neck Wrap Massager",
+    "category": "lifestyle",
+    "brand": "",
+    "price": 135000,
+    "description": "A shoulder-and-neck massager with a wraparound shape. Confirm the power supply and controls with the store.",
+    "specifications": [
+      [
+        "Model",
+        "FH-670"
+      ],
+      [
+        "Style",
+        "Shoulder and neck wrap"
+      ],
+      [
+        "Controls and power",
+        "Confirm with the store"
+      ]
+    ]
+  },
+  {
+    "id": "le-falcone-majestic-edp-100ml",
+    "sku": "LT-SCENT-001",
+    "name": "Le Falconé Majestic Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Le Falconé",
+    "price": 175000,
+    "description": "Majestic comes in a round red bottle with a gold-tone base and a matching red box.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "malika-eau-de-parfum",
+    "sku": "LT-SCENT-002",
+    "name": "Malika Eau de Parfum",
+    "category": "lifestyle",
+    "brand": "",
+    "price": 85000,
+    "description": "Malika comes in a faceted clear bottle with a gold-tone cap and a cream box with gold detailing.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ]
+    ]
+  },
+  {
+    "id": "al-ezz-oud-hersh-mehwar-edp-100ml",
+    "sku": "LT-SCENT-003",
+    "name": "Al Ezz Oud Hersh Mehwar Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Al Ezz Oud",
+    "price": 135000,
+    "description": "Hersh Mehwar comes in a pale bottle with a crown-shaped cap and matching presentation box.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "reyane-paris-for-men-edt-100ml",
+    "sku": "LT-SCENT-004",
+    "name": "Reyane Paris for Men Eau de Toilette · 100 ml",
+    "category": "lifestyle",
+    "brand": "Reyane Paris",
+    "price": 115000,
+    "description": "Reyane Paris for Men comes in a blue-toned bottle with a silver-tone handle. The photographed box identifies it as eau de toilette.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de toilette"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "le-chameau-save-elixir-edp-85ml",
+    "sku": "LT-SCENT-005",
+    "name": "Le Chameau Save Elixir Eau de Parfum · 85 ml",
+    "category": "lifestyle",
+    "brand": "Le Chameau",
+    "price": 125000,
+    "description": "Save Elixir pairs warm spices and lavender with a woody base. It comes in an 85 ml spray bottle.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "85 ml"
+      ]
+    ]
+  },
+  {
+    "id": "banafa-sparky-white-edp-100ml",
+    "sku": "LT-SCENT-006",
+    "name": "Banafa Sparky White Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Banafa",
+    "price": 95000,
+    "description": "Sparky White comes in a clear 100 ml spray bottle with a ribbed silver-tone cap and a pale presentation box.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "smo-al-oud-edp-100ml",
+    "sku": "LT-SCENT-007",
+    "name": "Smo Al Oud Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "",
+    "price": 90000,
+    "description": "Smo Al Oud comes in a burgundy 100 ml spray bottle with a matching patterned box.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "le-chameau-arabia-haya-gift-set",
+    "sku": "LT-SCENT-008",
+    "name": "Le Chameau Arabia Haya 2-Piece Gift Set",
+    "category": "lifestyle",
+    "brand": "Le Chameau",
+    "price": 165000,
+    "description": "A two-piece Arabia Haya set with an eau de parfum and a body spray in a presentation box.",
+    "specifications": [
+      [
+        "Perfume",
+        "100 ml eau de parfum"
+      ],
+      [
+        "Fragrance mist",
+        "100 ml"
+      ],
+      [
+        "Set contents",
+        "Two bottles in a presentation box"
+      ]
+    ]
+  },
+  {
+    "id": "al-ezz-oud-hersh-55-edp-100ml",
+    "sku": "LT-SCENT-009",
+    "name": "Al Ezz Oud Hersh 55° Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Al Ezz Oud",
+    "price": 135000,
+    "description": "Hersh 55° Fifty-Five Degrees Celsius is a 100 ml eau de parfum in the blue Hersh presentation box.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "lattafa-maahir-black-edition-edp-100ml",
+    "sku": "LT-SCENT-010",
+    "name": "Lattafa Maahir Black Edition Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Lattafa",
+    "price": 175000,
+    "description": "A spicy, woody fragrance with pepper and saffron, a smoky heart and a leather and cedar base.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ],
+      [
+        "Opening notes",
+        "Pink pepper, black pepper and saffron"
+      ]
+    ]
+  },
+  {
+    "id": "lattafa-eclaire-edp-100ml",
+    "sku": "LT-SCENT-011",
+    "name": "Lattafa Eclaire Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Lattafa",
+    "price": 175000,
+    "description": "A gourmand fragrance with caramel, milk and sugar, followed by honey and white flowers over vanilla, praline and musk.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "afnan-9am-dive-edp-100ml",
+    "sku": "LT-SCENT-012",
+    "name": "Afnan 9 AM Dive Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Afnan",
+    "price": 185000,
+    "description": "A fresh fragrance with lemon and mint, an apple and incense heart, and a woody base. The 100 ml blue bottle sits in an ocean-themed presentation box.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ]
+    ]
+  },
+  {
+    "id": "s-color-s-kids4-max",
+    "sku": "LT-TAB-005",
+    "name": "S-Color S Kids4 Max 7-inch Tablet",
+    "category": "tablets",
+    "brand": "S-Color",
+    "price": 235000,
+    "description": "A 7-inch Android kids’ tablet shown with a carry-handle case. The display and connectivity are described on the retail box. Ask the store to confirm the installed memory, storage and included accessories.",
+    "specifications": [
+      [
+        "Model",
+        "S Kids4 Max"
+      ],
+      [
+        "Display on packaging",
+        "7-inch IPS"
+      ],
+      [
+        "Connectivity on packaging",
+        "Wi-Fi, Bluetooth and GPS"
+      ],
+      [
+        "Operating system on packaging",
+        "Android"
+      ]
+    ]
+  },
+  {
+    "id": "lattafa-al-areeq-silver-edp-100ml",
+    "sku": "LT-SCENT-013",
+    "name": "Lattafa Pride Al Areeq Silver Eau de Parfum · 100 ml",
+    "category": "lifestyle",
+    "brand": "Lattafa",
+    "price": 175000,
+    "description": "Al Areeq Silver pairs saffron and black tea with a suede and incense heart. It comes in a dark green bottle with a silver-tone cap.",
+    "specifications": [
+      [
+        "Concentration",
+        "Eau de parfum"
+      ],
+      [
+        "Volume",
+        "100 ml"
+      ],
+      [
+        "Opening notes",
+        "Saffron and black tea"
+      ]
+    ]
+  },
+  {
+    "id": "emper-presidente-fragrance",
+    "sku": "LT-SCENT-014",
+    "name": "Emper Presidente Fragrance",
+    "category": "lifestyle",
+    "brand": "Emper",
+    "price": 105000,
+    "description": "Emper Presidente comes in a dark bottle with a stitched sleeve and embossed eagle. Ask the store to confirm the volume and concentration on the supplied unit.",
+    "specifications": [
+      [
+        "Collection",
+        "Presidente"
+      ],
+      [
+        "Bottle",
+        "Dark stitched sleeve and embossed eagle"
+      ]
+    ]
+  },
+  {
+    "id": "apple-20w-usbc-power-adapter-eu",
+    "sku": "LT-STOCK-C20",
+    "name": "Apple 20W USB-C Power Adapter · EU Plug",
+    "category": "accessories",
+    "brand": "Apple",
+    "price": 90000,
+    "description": "A white 20W USB-C power adapter with two round pins. Check that your outlet accepts the European two-pin plug.",
+    "specifications": [
+      [
+        "Output",
+        "Up to 20 W"
+      ],
+      [
+        "Charging port",
+        "USB-C"
+      ],
+      [
+        "Plug",
+        "EU two round pins"
+      ]
+    ]
+  },
+  {
+    "id": "samsung-usbc-anc-earphones",
+    "sku": "LT-STOCK-A18",
+    "name": "Samsung USB-C ANC Earphones",
+    "category": "audio",
+    "brand": "Samsung",
+    "price": 65000,
+    "description": "Black in-ear wired earphones with a USB-C plug. The retail box lists active noise cancellation. Confirm the adapter model and device support with the store.",
+    "specifications": [
+      [
+        "Connector",
+        "USB-C"
+      ],
+      [
+        "Noise control on packaging",
+        "ANC"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "galaxy-akg-style-wired-earphones",
+    "sku": "LT-STOCK-A19",
+    "name": "Galaxy Wired In-Ear Earphones · Black",
+    "category": "audio",
+    "brand": "",
+    "price": 30000,
+    "description": "Black wired earphones in packaging marked for the Galaxy S8, S9 and S10+. Confirm the connector before ordering.",
+    "specifications": [
+      [
+        "Fit",
+        "In-ear"
+      ],
+      [
+        "Compatibility shown on box",
+        "Galaxy S8, S9 and S10+"
+      ],
+      [
+        "Colour",
+        "Black"
+      ]
+    ]
+  },
+  {
+    "id": "kg56-bluetooth-neckband-headset",
+    "sku": "LT-STOCK-A20",
+    "name": "KG56 Bluetooth Neckband Headset",
+    "category": "audio",
+    "brand": "",
+    "price": 55000,
+    "description": "A black neckband with wired earpieces and Bluetooth connection. The retail box shows an LED display and lists memory card playback.",
+    "specifications": [
+      [
+        "Model on packaging",
+        "KG56"
+      ],
+      [
+        "Connection",
+        "Bluetooth"
+      ],
+      [
+        "Fit",
+        "Neckband"
+      ]
+    ]
+  }
+]

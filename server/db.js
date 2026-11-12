@@ -10,6 +10,7 @@ import {
   adoptReferenceDetails,
   adoptReferencePrices,
   adoptStockedPhones,
+  adoptStockroomDetails,
   repairSeedCatalogue,
   retireReferenceListings,
 } from "./catalogue-migration.js"
@@ -223,6 +224,7 @@ async function initialize() {
   await adoptReferencePrices(db)
   await adoptReferenceDetails(db)
   await adoptStockedPhones(db)
+  await adoptStockroomDetails(db)
   await adoptCataloguePrices(db)
 
   await db.query(

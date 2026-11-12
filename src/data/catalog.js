@@ -4,7 +4,7 @@ import catalogueCorrections from "./catalogue-corrections.json" with { type: "js
 import launchOffers from "./launch-offers.json" with { type: "json" }
 import { referenceProducts } from "./reference-catalogue.js"
 import { stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
-import { verifiedInventory } from "./verified-inventory.js"
+import { stockroomProducts, verifiedInventory } from "./verified-inventory.js"
 
 import { cataloguePriceDefaults, guidePrices } from "./prices.js"
 import { formatShillings } from "../lib/number-format.js"
@@ -534,6 +534,8 @@ export const caseProducts = [
   },
 ]
 
+const stockroomIds = new Set(stockroomProducts.map(({ id }) => id))
+
 export const products = [
   ...phoneProducts,
   ...approvedProducts
@@ -543,7 +545,8 @@ export const products = [
     ),
   ...caseProducts,
   ...verifiedInventory,
-  ...referenceProducts,
+  ...referenceProducts.filter(({ id }) => !stockroomIds.has(id)),
+  ...stockroomProducts,
 ].map((product) => {
   const price = cataloguePriceDefaults[product.id]
   if (price == null || (product.price != null && product.price !== price)) return product

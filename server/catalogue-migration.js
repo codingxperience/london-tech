@@ -7,6 +7,7 @@ import {
   retiredPhoneSkus,
 } from "../src/data/catalog.js"
 import { cataloguePriceDefaults } from "../src/data/prices.js"
+import { stockroomProducts } from "../src/data/verified-inventory.js"
 import {
   referenceProducts,
   retiredReferenceSkus,
@@ -68,6 +69,57 @@ export async function adoptReferencePrices(db) {
 
 export async function adoptCataloguePrices(db) {
   return fillSeedPrices(db, "2026-11-12-catalogue-prices", missingPrices)
+}
+
+/** Refresh matching seed listings and keep merchant edits to price, stock and photos. */
+export async function adoptStockroomDetails(db) {
+  const reference = new Map(referenceProducts.map((product) => [product.id, product]))
+  const replacements = stockroomProducts.flatMap((product) => {
+    const previous = reference.get(product.id)
+    return previous?.sku === product.sku ? [{ previous, product }] : []
+  })
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      "INSERT INTO catalogue_migrations(version) VALUES($1) ON CONFLICT DO NOTHING RETURNING version",
+      ["2026-11-12-stockroom-accessories"],
+    )
+    if (!marker.rows.length) return
+
+    const { rows } = await tx.query(
+      "SELECT id, data FROM products WHERE id=ANY($1::text[]) FOR UPDATE",
+      [replacements.map(({ product }) => product.id)],
+    )
+    const current = new Map(rows.map(({ id, data }) => [id, data]))
+    const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+    for (const { previous, product } of replacements) {
+      const data = current.get(product.id)
+      if (!data || data.sku !== previous.sku || data.name !== previous.name) continue
+      const updates = {}
+      for (const field of ["brand", "description", "mediaNote"]) {
+        if (same(data[field], previous[field])) updates[field] = product[field] ?? ""
+      }
+      if (
+        same(data.specifications, previous.specifications) ||
+        same(data.specifications, previous.specifications.slice(0, 1))
+      ) {
+        updates.specifications = product.specifications
+      }
+      if (data.image === previous.image && same(data.gallery, previous.gallery)) {
+        updates.image = product.image
+        updates.gallery = product.gallery
+      }
+      if (data.price == null && !data.priceConfirmed) {
+        updates.price = product.price
+        updates.priceConfirmed = product.priceConfirmed
+      }
+      if (Object.keys(updates).some((field) => !same(updates[field], data[field]))) {
+        await tx.query(
+          "UPDATE products SET data=data || $2::jsonb, updated_at=NOW() WHERE id=$1",
+          [product.id, JSON.stringify(updates)],
+        )
+      }
+    }
+  })
 }
 
 function fillSeedPrices(db, version, listings) {

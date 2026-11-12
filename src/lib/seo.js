@@ -153,6 +153,8 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
     else {
       const information = productInformation(p)
       const specs = new Map(information.specifications)
+      const model = specs.get("Model number") || specs.get("Model code") || specs.get("Model")
+      const color = specs.get("Colour") || specs.get("Color") || specs.get("Finish")
       result.title = `${p.name} in Uganda | London Tech Stores Kampala`
       result.description = summary(
         `${information.description} Shop at London Tech Stores in Kampala.`,
@@ -172,8 +174,8 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
         sku: p.sku,
         description: information.description,
         image: galleryImages(p).map((i) => new URL(i.src, origin).href),
-        ...(specs.get("Finish") ? { color: specs.get("Finish") } : {}),
-        ...(specs.get("Model number") ? { model: specs.get("Model number") } : {}),
+        ...(color ? { color } : {}),
+        ...(model ? { model } : {}),
         ...(specs.get("Storage")
           ? { additionalProperty: { "@type": "PropertyValue", name: "Storage", value: specs.get("Storage") } }
           : {}),

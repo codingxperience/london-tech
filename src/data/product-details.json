@@ -12,6 +12,31 @@
   "naviforce-nf8076-silver-black": {
     "sources": [{"label": "Naviforce — NF8076 specifications", "url": "https://www.naviforce.com/naviforce-8076-mens-quartz-chronograph-watch-stainless-steel-band-business-dress-analog-watch-with-datewholesale-purchase-oem-product/"}]
   },
+  "discover-tab-x1": {
+    "sources": [{"label": "Alisco Tech — Discover Tab X1 gallery", "url": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"}]
+  },
+  "skmei-1712-silver-white": {
+    "sources": [{"label": "SKMEI — 1712 specifications", "url": "https://skmei.com/digital-watch-1712"}],
+    "video": {"label": "Watch the silver SKMEI 1712 unboxing", "url": "https://www.youtube.com/watch?v=kk2yPLEjpXU", "credit": "Watch Centre"}
+  },
+  "naviforce-nf8042-silver-white": {
+    "sources": [{"label": "Naviforce — NF8042 specifications", "url": "https://www.naviforce.com/naviforce-nf8042-multi-function-chronograph-watch-fashion-waterproof-luxury-gift-luminous-mens-watch-product/"}]
+  },
+  "naviforce-nf9230-silver-white": {
+    "sources": [{"label": "Naviforce — NF9230 specifications", "url": "https://www.naviforce.com/naviforce-minimalist-fashion-and-gentle-best-selling-business-stainless-steel-quartz-mens-watch-nf9230-product/"}]
+  },
+  "naviforce-nf9230-silver-black": {
+    "sources": [{"label": "Naviforce — NF9230 specifications", "url": "https://www.naviforce.com/naviforce-minimalist-fashion-and-gentle-best-selling-business-stainless-steel-quartz-mens-watch-nf9230-product/"}]
+  },
+  "naviforce-nf9248l-silver-brown": {
+    "sources": [{"label": "Naviforce — NF9248L specifications", "url": "https://www.naviforce.com/naviforce-nf9248l-japanese-movement-luminous-waterproof-sports-watch-with-date-for-teens-product/"}]
+  },
+  "naviforce-nf9248l-black-green": {
+    "sources": [{"label": "Naviforce — NF9248L specifications", "url": "https://www.naviforce.com/naviforce-nf9248l-japanese-movement-luminous-waterproof-sports-watch-with-date-for-teens-product/"}]
+  },
+  "naviforce-nf9226-black-rose-gold": {
+    "sources": [{"label": "Naviforce — NF9226 specifications", "url": "https://www.naviforce.com/naviforce-nf9226-mens-watch-simple-fashion-business-large-dial-luminous-waterproof-high-quality-quartz-watch-product/"}]
+  },
   "black-knit-magnetic-case-iphone-17-pro-18-pro": {
     "sources": [{"label": "Floy — black Knit Case product gallery", "url": "https://floy.com.ua/iphone-17-pro/chekhly_1157231/attr/black"}]
   },
@@ -224,5 +249,235 @@
     "specifications": [["Design", "Wireless over-ear headphones"], ["Noise control", "Active noise cancellation and Aware mode"], ["Personalisation", "CustomTune audio calibration"], ["Spatial listening", "Bose Immersive Audio"], ["Companion app", "Bose app"], ["Generation", "Confirm first generation or second generation before ordering"], ["Battery and USB audio", "Generation-dependent; confirm the actual model"]],
     "sources": [{"label": "Bose — original QuietComfort Ultra Headphones features", "url": "https://www.bose.com/pressroom/bose-announces-new-quietcomfort-ultra-headphones-and-earbuds"}, {"label": "Bose — first and second generation differences", "url": "https://support.bose.com/article/quietcomfort-ultra-headphones-2nd-gen-whats-new-in-the-latest-generation?language=en_US"}],
     "guides": [{"label": "Bose original QuietComfort Ultra Headphones owner’s guide (PDF)", "url": "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/QCUH-HEADPHONEARN/pdf/884885_OG_QCUH-HEADPHONEARN_en.pdf"}]
+  },
+  "jbl-tune-530bt-black": {
+    "sources": [
+      {
+        "label": "JBL product information",
+        "url": "https://global.jbl.com/on-ear-headphones/TUNE530BT.html"
+      }
+    ]
+  },
+  "jbl-tune-520c-usb-c-black": {
+    "sources": [
+      {
+        "label": "JBL product information",
+        "url": "https://global.jbl.com/on-ear-headphones/TUNE520C-USB-C.html"
+      }
+    ]
+  },
+  "jbl-tune-520bt-purple": {
+    "sources": [
+      {
+        "label": "JBL product information",
+        "url": "https://fr.jbl.com/JBLT520BTBLKEU.html?dwvar_JBLT520BTBLKEU_color=Purple-EMEA-Current"
+      }
+    ]
+  },
+  "soundcore-liberty-5-white": {
+    "sources": [
+      {
+        "label": "Soundcore product information",
+        "url": "https://www.soundcore.com/products/a3957-liberty-5-tws-earbuds"
+      }
+    ]
+  },
+  "soundcore-liberty-4-nc": {
+    "sources": [
+      {
+        "label": "Soundcore product information",
+        "url": "https://www.soundcore.com/liberty-4-nc"
+      }
+    ]
+  },
+  "soundcore-p41i-white": {
+    "sources": [
+      {
+        "label": "Soundcore product information",
+        "url": "https://www.soundcore.com/products/a3937-p41i-ture-wireless-earbuds"
+      }
+    ],
+    "guides": [
+      {
+        "label": "Product support",
+        "url": "https://service.soundcore.com/product-description/a08J1000000YrzOIAS/p41i"
+      }
+    ]
+  },
+  "soundcore-a20i-black": {
+    "sources": [
+      {
+        "label": "Soundcore product information",
+        "url": "https://service.soundcore.com/article-description/Guide-to-Locating-the-Serial-Number-SN-of-Your-soundcore-Headphones?urlName=Guide-to-Locating-the-Serial-Number-SN-of-Your-soundcore-Headphones"
+      }
+    ]
+  },
+  "soundcore-r50i": {
+    "sources": [
+      {
+        "label": "Soundcore product information",
+        "url": "https://ru.soundcore.com/upload/iblock/05f/b94603thb7alb8sslh5rveayatd80f2u/A3949_P20i_QSG.pdf"
+      }
+    ]
+  },
+  "apple-earpods-usbc": {
+    "sources": [
+      {
+        "label": "Apple product information",
+        "url": "https://www.apple.com/shop/product/mtjy3am/a/earpods-usb-c"
+      }
+    ]
+  },
+  "anker-maggo-10k-slim-black": {
+    "sources": [
+      {
+        "label": "Anker product information",
+        "url": "https://www.anker.com/products/a1664-maggo-10000mah-power-bank"
+      }
+    ]
+  },
+  "apple-20w-usbc-power-adapter-type-g": {
+    "sources": [
+      {
+        "label": "Apple product information",
+        "url": "https://www.apple.com/uk/shop/product/muvt3b/a/20w-usb-c-power-adapter"
+      }
+    ]
+  },
+  "apple-240w-usbc-charge-cable-2m": {
+    "sources": [
+      {
+        "label": "Apple product information",
+        "url": "https://www.apple.com/uk/shop/iphone/accessories/chargers-adapters/apple-usb-c"
+      }
+    ]
+  },
+  "apple-usbc-lightning-cable-1m": {
+    "sources": [
+      {
+        "label": "Apple product information",
+        "url": "https://www.apple.com/uk/shop/iphone/accessories/chargers-adapters/apple-usb-c"
+      }
+    ]
+  },
+  "oraimo-powerflow-b11-10000": {
+    "sources": [
+      {
+        "label": "Oraimo product information",
+        "url": "https://ug.oraimo.com/product/oraimo-10000mah-power-bank-powerflow-b11-opb-1102"
+      }
+    ]
+  },
+  "oraimo-traveler-15-20000": {
+    "sources": [
+      {
+        "label": "Oraimo product information",
+        "url": "https://cm.oraimo.com/product/oraimo-traveler-15-20000mah-15w-fast-charge-type-c-2-way-power-bank"
+      }
+    ]
+  },
+  "le-falcone-majestic-edp-100ml": {
+    "sources": [
+      {
+        "label": "Le Falconé product information",
+        "url": "https://www.beautyandperfumeintl.com/products/majestic-eau-de-parfum"
+      }
+    ]
+  },
+  "al-ezz-oud-hersh-mehwar-edp-100ml": {
+    "sources": [
+      {
+        "label": "Al Ezz Oud product information",
+        "url": "https://kw.souqscent.com/products/hersh-mehwar-100-ml"
+      }
+    ]
+  },
+  "le-chameau-save-elixir-edp-85ml": {
+    "sources": [
+      {
+        "label": "Le Chameau product information",
+        "url": "https://uae.emperperfumes.com/products/save-elixir"
+      }
+    ]
+  },
+  "banafa-sparky-white-edp-100ml": {
+    "sources": [
+      {
+        "label": "Banafa product information",
+        "url": "https://buabedbanafa.com/product/sparky-white-100ml-perfume"
+      }
+    ]
+  },
+  "le-chameau-arabia-haya-gift-set": {
+    "sources": [
+      {
+        "label": "Le Chameau product information",
+        "url": "https://uae.emperperfumes.com/products/2-in-1-gift-set-arabia-haya"
+      }
+    ]
+  },
+  "al-ezz-oud-hersh-55-edp-100ml": {
+    "sources": [
+      {
+        "label": "Al Ezz Oud product information",
+        "url": "https://dcperfumes.ae/product/hersh-55-degrees/"
+      }
+    ]
+  },
+  "lattafa-maahir-black-edition-edp-100ml": {
+    "sources": [
+      {
+        "label": "Lattafa product information",
+        "url": "https://lattafa.com/product/maahir-black-edition/"
+      }
+    ]
+  },
+  "lattafa-eclaire-edp-100ml": {
+    "sources": [
+      {
+        "label": "Lattafa product information",
+        "url": "https://lattafa.com/product/eclaire/"
+      }
+    ]
+  },
+  "afnan-9am-dive-edp-100ml": {
+    "sources": [
+      {
+        "label": "Afnan product information",
+        "url": "https://afnan.com/products/9-am-dive"
+      }
+    ]
+  },
+  "lattafa-al-areeq-silver-edp-100ml": {
+    "sources": [
+      {
+        "label": "Lattafa product information",
+        "url": "https://lattafa.com/product/al-areeq-silver/"
+      }
+    ]
+  },
+  "emper-presidente-fragrance": {
+    "sources": [
+      {
+        "label": "Emper Presidente product reference",
+        "url": "https://www.emper-parfums.de/kaufen/parfum-emper-presidente-545"
+      }
+    ]
+  },
+  "vidvie-usbc-in-ear-headset": {
+    "sources": [
+      {
+        "label": "Vidvie HS684T specifications",
+        "url": "https://www.vidvie.hk/products/view.html?id=748"
+      }
+    ]
+  },
+  "apple-20w-usbc-power-adapter-eu": {
+    "sources": [
+      {
+        "label": "Apple product information",
+        "url": "https://support.apple.com/en-euro/guide/iphone/iph8c1e31583/ios"
+      }
+    ]
   }
 }

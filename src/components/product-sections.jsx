@@ -426,6 +426,16 @@ export function ProductSections({
               </p>
             )}
             <div className="detail-guide-list">
+              {information.video && !information.promotion && (
+                <a href={information.video.url} target="_blank" rel="noreferrer">
+                  <PlayCircle size={22} />
+                  <span>
+                    <strong>{information.video.label}</strong>
+                    <small>{information.video.credit} · {t("Opens in a new tab")}</small>
+                  </span>
+                  <ArrowUpRight size={18} />
+                </a>
+              )}
               {information.modelReferences?.map(({ network, code, video, credit }) => (
                 <a href={video} key={code} target="_blank" rel="noreferrer">
                   <PlayCircle size={22} />

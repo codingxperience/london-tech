@@ -76,6 +76,7 @@ export function productInformation(product) {
     specifications,
     sources: customSpecs ? [] : researched.sources || [],
     guides: researched.guides || [],
+    video: researched.video,
   }
 }
 
