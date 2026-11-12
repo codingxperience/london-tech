@@ -16,6 +16,7 @@ const arabic = {
   Currency: "العملة",
   "Number format": "تنسيق الأرقام",
   "Ugandan shilling": "الشلن الأوغندي",
+  "US dollars": "دولار أمريكي",
   "Estimated price in US dollars": "السعر التقريبي بالدولار الأمريكي",
   "Estimated equivalent in US dollars": "ما يعادل السعر بالدولار الأمريكي",
   "View details": "عرض التفاصيل",

@@ -163,6 +163,7 @@ function RouterContent({ path }) {
   return (
     <>
       <ReferenceStorefront
+        currentPath={path}
         quiet={["/contact", "/visit", "/collections/visit"].includes(
           normalized,
         )}

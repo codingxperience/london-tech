@@ -37,6 +37,11 @@ export function formatShillings(value) {
   return "UGX " + displayNumber(value)
 }
 
+export function formatArabicShillings(value) {
+  if (value == null) return "السعر عند الطلب"
+  return arabic.format(value) + " شلن أوغندي"
+}
+
 export function formatEstimatedDollars(shillings) {
   const style = typeof window !== "undefined" && display.numberStyle === "arab"
     ? "arab"

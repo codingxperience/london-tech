@@ -1,10 +1,14 @@
 import React from "react"
 import { useLocale } from "../lib/locale.jsx"
-import { formatEstimatedDollars, formatShillings } from "../lib/number-format.js"
+import {
+  formatArabicShillings,
+  formatEstimatedDollars,
+  formatShillings,
+} from "../lib/number-format.js"
 import { productOffer } from "../lib/offer-details.js"
 
 export function CardPrices({ product, showDiscount = false }) {
-  const { t, formatNumber } = useLocale()
+  const { t, formatNumber, language } = useLocale()
   const offer = productOffer(product)
   const { price } = offer
   if (price === null)
@@ -14,8 +18,15 @@ export function CardPrices({ product, showDiscount = false }) {
     <div className="product-card-prices">
       <strong dir="ltr">{formatShillings(price)}</strong>
       <span dir="ltr" title={t("Estimated equivalent in US dollars")}>
-        {formatEstimatedDollars(price)}
+        {language === "ar"
+          ? `${formatEstimatedDollars(price)} ${t("US dollars")}`
+          : `US ${formatEstimatedDollars(price)}`}
       </span>
+      {language === "ar" && (
+        <span className="product-card-price-ar" dir="rtl" lang="ar">
+          {formatArabicShillings(price)}
+        </span>
+      )}
       {showDiscount && offer.discounted && (
         <span className="card-sale-details">
           <del
