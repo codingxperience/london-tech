@@ -1,5 +1,5 @@
 import { build } from "vite"
-import { cp, mkdir, readFile, writeFile } from "node:fs/promises"
+import { access, cp, mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { products, categories, storeDefaults } from "../src/data/catalog.js"
@@ -10,6 +10,7 @@ import {
   sitemapPages,
 } from "../src/lib/seo.js"
 import { siteUrl } from "./site-config.mjs"
+import { galleryImages } from "../src/lib/product-experience.js"
 
 await build()
 const directory = path.resolve("dist")
@@ -35,6 +36,17 @@ const data = {
   pages: [],
   reviews: {},
 }
+const mediaPaths = new Set(data.products.flatMap((product) => [
+  product.image,
+  ...galleryImages(product).flatMap(({ src, videoSrc }) => [src, videoSrc]),
+]).filter((src) => src?.startsWith("/assets/")))
+await Promise.all([...mediaPaths].map(async (src) => {
+  try {
+    await access(path.join(directory, decodeURIComponent(src.slice(1))))
+  } catch (error) {
+    throw new Error(`Missing storefront media in the build: ${src}`, { cause: error })
+  }
+}))
 const privatePaths = [
   "cart",
   "checkout",

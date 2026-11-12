@@ -167,6 +167,9 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
         },
         { name: p.name, url: result.canonical },
       )
+      const images = galleryImages(p)
+        .filter((item) => item.type !== "video")
+        .map((item) => new URL(item.src, origin).href)
       main = {
         "@type": "Product",
         "@id": result.canonical + "#product",
@@ -174,7 +177,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
         url: result.canonical,
         sku: p.sku,
         description: information.description,
-        image: galleryImages(p).map((i) => new URL(i.src, origin).href),
+        ...(images.length ? { image: images } : {}),
         ...(color ? { color } : {}),
         ...(model ? { model } : {}),
         ...(specs.get("Storage")

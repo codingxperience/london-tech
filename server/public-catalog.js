@@ -1,4 +1,5 @@
 import { products, storeDefaults } from "../src/data/catalog.js"
+import { repairCatalogueMedia } from "../src/lib/catalogue-media.js"
 import { databaseConfigured, getDatabase } from "./db.js"
 
 /** Public records only. Never serialize users, sessions, messages or keys. */
@@ -37,7 +38,7 @@ export async function publicCatalog() {
   const stored = settings.rows[0]?.data || {}
   return {
     products: catalog.rows.map(({ data, updated_at }) => ({
-      ...data,
+      ...repairCatalogueMedia(data),
       updatedAt: updated_at,
     })),
     settings: {

@@ -2,6 +2,7 @@ import productMedia from "../data/product-media.json" with { type: "json" }
 import productDetails from "../data/product-details.json" with { type: "json" }
 import { products } from "../data/catalog.js"
 import { stockedPhoneDetails } from "../data/phone-stock.js"
+import { productImagePlaceholder } from "./product-image.js"
 
 const defaults = new Map(products.map((product) => [product.id, product]))
 const changed = (a, b) => JSON.stringify(a) !== JSON.stringify(b)
@@ -76,13 +77,13 @@ export function galleryImages(product) {
       }]
     : []
   const existing = [product.image, ...(product.gallery || [])]
-    .filter(Boolean)
+    .filter((src) => src && src !== productImagePlaceholder)
     // A generic stock photo is not an extra view of a specific device.
     .filter((src) => !researched.length || !src.includes("images.unsplash.com"))
     .map((src, i) => ({ src, alt: `${product.name} — product view ${i + 1}` }))
   // A curated set replaces legacy photos, which may be the same angle at a
   // different resolution. A single new view can still complement store photos.
-  const images = sourceOnlyGalleryIds.has(product.id)
+  const images = researched.length && sourceOnlyGalleryIds.has(product.id)
     ? researched
     : researched.length >= 2
       ? researched

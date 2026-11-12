@@ -6,6 +6,7 @@ import { access, readFile } from "node:fs/promises"
 
 import { products, categories, storeDefaults } from "../src/data/catalog.js"
 import { referenceProducts } from "../src/data/reference-catalogue.js"
+import { productImagePlaceholder } from "../src/lib/product-image.js"
 
 test("catalogue images exist, identifiers are unique and every category resolves", async () => {
   assert.equal(new Set(products.map((p) => p.id)).size, products.length)
@@ -24,7 +25,12 @@ test("catalogue images exist, identifiers are unique and every category resolves
       assert.ok(product.comparePrice > product.price)
     }
 
-    assert.ok(product.gallery.length > 0)
+    assert.ok(
+      product.gallery.length > 0 || product.image === productImagePlaceholder,
+      product.id + " has a gallery or a photo unavailable placeholder",
+    )
+    if (product.image.startsWith("/"))
+      await access("public" + decodeURIComponent(product.image))
 
     for (const image of product.gallery) {
       if (image.startsWith("/"))

@@ -40,16 +40,6 @@
       "src": "/assets/product-gallery/discover-tab-x1-tablet-and-keyboard.webp",
       "alt": "Discover Tab X1 on its keyboard with the supplier's display accessories",
       "source": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"
-    },
-    {
-      "src": "/assets/product-gallery/discover-tab-x1-retail-box-front.webp",
-      "alt": "Discover Tab X1 retail packaging, front",
-      "source": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"
-    },
-    {
-      "src": "/assets/product-gallery/discover-tab-x1-retail-box-rear.webp",
-      "alt": "Discover Tab X1 retail packaging, back with model and bundle details",
-      "source": "https://aliscotech.co.ke/products/discover-tab-x1-10-inch-5g-16-512-gb-tablet-with-keyboard"
     }
   ],
   "skmei-1712-silver-white": [
@@ -57,10 +47,6 @@
       "src": "/assets/product-gallery/skmei-1712-silver-white-front.webp",
       "alt": "Silver SKMEI 1712 digital watch with dark digits on a light display",
       "source": "https://skmei.com/digital-watch-1712"
-    },
-    {
-      "src": "/assets/product-gallery/skmei-1712-silver-white-dial-of-the-store-unit.webp",
-      "alt": "SKMEI 1712 Digital Watch · Silver / White — dial of the store unit"
     }
   ],
   "naviforce-nf8042-silver-white": [
@@ -987,10 +973,6 @@
       "src": "/assets/product-gallery/jbl-tune-530bt-black-headphone-views.webp",
       "alt": "JBL Tune 530BT Wireless Headphones · Black — headphone views",
       "source": "https://allegro.pl/oferta/jbl-tune-530bt-bezprzewodowe-sluchawki-nauszne-z-dzwiekiem-pure-bass-czarne-18149323869"
-    },
-    {
-      "src": "/assets/product-gallery/jbl-tune-530bt-black-store-1.webp",
-      "alt": "JBL Tune 530BT Wireless Headphones · Black — retail packaging"
     }
   ],
   "jbl-tune-520c-usb-c-black": [
@@ -998,10 +980,6 @@
       "src": "/assets/product-gallery/jbl-tune-520c-usb-c-black-headphones-and-USB-C-remote.webp",
       "alt": "JBL Tune 520C USB-C Headphones · Black — headphones and USB-C remote",
       "source": "https://de.jbl.com/TUNE520C-USB-C.html"
-    },
-    {
-      "src": "/assets/product-gallery/jbl-tune-520c-usb-c-black-store-1.webp",
-      "alt": "JBL Tune 520C USB-C Headphones · Black — retail packaging"
     }
   ],
   "jbl-tune-520bt-purple": [
@@ -1014,10 +992,6 @@
       "src": "/assets/product-gallery/jbl-tune-520bt-purple-earcups-and-headband.webp",
       "alt": "JBL Tune 520BT Wireless Headphones · Purple — earcups and headband",
       "source": "https://www.walmart.com/ip/JBL-Tune-520BT-Wireless-on-ear-headphones-Purple/5461164337"
-    },
-    {
-      "src": "/assets/product-gallery/jbl-tune-520bt-purple-store-1.webp",
-      "alt": "JBL Tune 520BT Wireless Headphones · Purple — retail packaging"
     }
   ],
   "soundcore-liberty-5-white": [
@@ -1025,16 +999,13 @@
       "src": "/assets/product-gallery/soundcore-liberty-5-white-white-earbuds-and-case.webp",
       "alt": "Soundcore Liberty 5 Earbuds · White — white earbuds and case",
       "source": "https://www.soundcore.com/eu/products/a3957-liberty-5-tws-earbuds"
-    },
-    {
-      "src": "/assets/product-gallery/soundcore-liberty-5-white-store-1.webp",
-      "alt": "Soundcore Liberty 5 Earbuds · White — retail packaging"
     }
   ],
   "soundcore-liberty-4-nc": [
     {
-      "src": "/assets/product-gallery/soundcore-liberty-4-nc-store-1.webp",
-      "alt": "Anker Soundcore Liberty 4 NC Earbuds — retail packaging"
+      "src": "/assets/product-gallery/lt-soundcore-liberty-4-nc-1.webp",
+      "alt": "Black Soundcore Liberty 4 NC earbuds inside their open charging case",
+      "source": "https://www.bestbuy.com/product/soundcore-by-anker-liberty-4-nc-noise-canceling-true-wireless-earbud-headphones-black/6545164?skuId=6545164"
     }
   ],
   "soundcore-p41i-white": [
@@ -1047,88 +1018,106 @@
       "src": "/assets/product-gallery/soundcore-p41i-white-closed-case-and-earbuds.webp",
       "alt": "Soundcore P41i Earbuds · White — closed case and earbuds",
       "source": "https://etisalstore.com/en/anker-soundcore-p41i-wireless-earbuds-with-portable-phone-charger-built-in-white"
-    },
-    {
-      "src": "/assets/product-gallery/soundcore-p41i-white-store-1.webp",
-      "alt": "Soundcore P41i Earbuds · White — retail packaging"
     }
   ],
   "soundcore-a20i-black": [
     {
-      "src": "/assets/product-gallery/soundcore-a20i-black-store-1.webp",
-      "alt": "Soundcore A20i Earbuds · Black — retail packaging"
+      "src": "/assets/product-gallery/lt-soundcore-a20i-black-1.webp",
+      "alt": "Black Soundcore A20i earbuds and charging case with lanyard",
+      "source": "https://www.digital3store.com/product-page/anker-soundcore-a20i-tws-headset-bluetooth-earbuds-earphone-a3948"
     }
   ],
   "soundcore-r50i": [
     {
-      "src": "/assets/product-gallery/soundcore-r50i-store-1.webp",
-      "alt": "Anker Soundcore R50i Wireless Earbuds — retail packaging"
+      "src": "/assets/product-gallery/lt-soundcore-r50i-1.webp",
+      "alt": "Pair of black Soundcore R50i wireless earbuds",
+      "source": "https://www.anker.com.ph/products/soundcore-r50i"
     }
   ],
   "a16-pro-screen-case-earbuds": [
     {
-      "src": "/assets/product-gallery/a16-pro-screen-case-earbuds-store-1.webp",
-      "alt": "A16 Pro Wireless Earbuds with Display Case — retail packaging"
+      "src": "/assets/product-gallery/lt-a16-pro-screen-case-earbuds-1.webp",
+      "alt": "White A16 Pro earbuds with a rectangular touchscreen charging case",
+      "source": "https://phukiencantho.com/san-pham/tai-nghe-a16pro-co-man-hinh-cam-ung-chong-on-anc/"
     }
   ],
-  "fantesi-a45-earbuds": [
-    {
-      "src": "/assets/product-gallery/fantesi-a45-earbuds-store-1.webp",
-      "alt": "Fantesi A-45 Wireless Earbuds · Black — retail packaging"
-    }
-  ],
+  "fantesi-a45-earbuds": [],
   "excellent-h1-headphones": [
     {
-      "src": "/assets/product-gallery/excellent-h1-headphones-retail-packaging.webp",
-      "alt": "Excellent H1 Wireless Headphones — retail-packaging"
+      "src": "/assets/product-gallery/lt-excellent-h1-headphones-1.webp",
+      "alt": "Black Excellent H1 wireless headphones with blue trim",
+      "source": "https://www.jumia.ug/excellent-h1-extra-bass-bluetooth-headphones-black-259711871.html"
     }
   ],
   "excellent-t6-ows-earbuds": [
     {
-      "src": "/assets/product-gallery/excellent-t6-ows-earbuds-retail-packaging.webp",
-      "alt": "Excellent T6 OWS Open-Ear Earbuds — retail-packaging"
+      "src": "/assets/product-gallery/lt-excellent-t6-ows-earbuds-1.webp",
+      "alt": "Black Excellent T6 OWS earbuds with ear hooks and matching charging case",
+      "source": "https://www.jumia.ug/excellent-t6-ows-open-ear-wireless-earbuds-comfortable-sport-earphones-with-hd-sound-quality-charging-case-black-260074251.html"
+    },
+    {
+      "src": "/assets/product-gallery/lt-excellent-t6-ows-earbuds-2.webp",
+      "alt": "Excellent T6 OWS ear hook and earbud profile",
+      "source": "https://www.jumia.ug/excellent-t6-ows-open-ear-wireless-earbuds-comfortable-sport-earphones-with-hd-sound-quality-charging-case-black-260074251.html"
     }
   ],
   "vj376-anc-wireless-headphones": [
     {
-      "src": "/assets/product-gallery/vj376-anc-wireless-headphones-store-1.webp",
-      "alt": "VJ376 ANC Wireless Headphones — retail packaging"
+      "src": "/assets/product-gallery/lt-vj376-anc-wireless-headphones-1.webp",
+      "alt": "Black VJ376 ANC wireless headphones at a three-quarter angle",
+      "source": "https://ncjtechnology.com/product/anc-headphone-vj376/"
+    },
+    {
+      "src": "/assets/product-gallery/lt-vj376-anc-wireless-headphones-2.webp",
+      "alt": "VJ376 headband adjustment and earcup close-up",
+      "source": "https://ncjtechnology.com/product/anc-headphone-vj376/"
     }
   ],
   "vj378-anc-wireless-headphones": [
     {
-      "src": "/assets/product-gallery/vj378-anc-wireless-headphones-store-1.webp",
-      "alt": "VJ378 ANC Wireless Headphones — retail packaging"
+      "src": "/assets/product-gallery/lt-vj378-anc-wireless-headphones-1.webp",
+      "alt": "Black VJ378 ANC headphones with the earcups swivelled flat",
+      "source": "https://ncjtechnology.com/product/anc-headphone-vj378/"
     }
   ],
   "sy-anc889bt-headphones-blue": [
     {
-      "src": "/assets/product-gallery/sy-anc889bt-headphones-blue-store-1.webp",
-      "alt": "SY-ANC889BT Wireless Headphones · Blue — retail packaging"
+      "src": "/assets/product-gallery/lt-sy-anc889bt-headphones-blue-1.webp",
+      "alt": "Dark blue SY-ANC889BT headphones with red earcup trim",
+      "source": "https://www.dunlau.com/ANC-Bluetooth-Headphone-SY-ANC889-PG9080042"
+    },
+    {
+      "src": "/assets/product-gallery/lt-sy-anc889bt-headphones-blue-2.webp",
+      "alt": "Front view of the dark blue SY-ANC889BT headphones",
+      "source": "https://www.dunlau.com/ANC-Bluetooth-Headphone-SY-ANC889-PG9080042"
     }
   ],
   "hd80-lightning-headset": [
     {
-      "src": "/assets/product-gallery/hd80-lightning-headset-store-1.webp",
-      "alt": "HD80 Lightning Headset · White — retail packaging"
+      "src": "/assets/product-gallery/lt-hd80-lightning-headset-1.webp",
+      "alt": "White HD80 wired headset with Lightning connector",
+      "source": "https://www.rsrobotica.com.br/fone-de-ouvido-iphone-lightning-hd80"
     }
   ],
   "apple-earpods-usbc": [
     {
-      "src": "/assets/product-gallery/apple-earpods-usbc-store-1.webp",
-      "alt": "Apple EarPods with USB-C — retail packaging"
+      "src": "/assets/product-gallery/lt-apple-earpods-usbc-1.webp",
+      "alt": "White Apple EarPods with their USB-C connector",
+      "source": "https://www.apple.com/ca_smb_en/shop/product/myqy3am/a/earpods-usb-c"
     }
   ],
   "samsung-usbc-wired-earphones": [
     {
-      "src": "/assets/product-gallery/samsung-usbc-wired-earphones-store-1.webp",
-      "alt": "Samsung USB-C Wired Earphones — retail packaging"
+      "src": "/assets/product-gallery/lt-samsung-usbc-wired-earphones-1.webp",
+      "alt": "Black Samsung USB-C wired earphones with inline controls",
+      "source": "https://www.samsung.com/nl/business/mobile-accessories/type-c-earphones-black-eo-ic100bbegeu/"
     }
   ],
   "vidvie-usbc-in-ear-headset": [
     {
-      "src": "/assets/product-gallery/vidvie-usbc-in-ear-headset-store-1.webp",
-      "alt": "Vidvie HS684T USB-C In-Ear Headset · White — retail packaging"
+      "src": "/assets/product-gallery/lt-vidvie-usbc-in-ear-headset-1.webp",
+      "alt": "White Vidvie HS684T USB-C headset packaging",
+      "source": "https://www.vidvie.hk/products/view/id/748.html"
     }
   ],
   "aideepo-pro-pd100-power-bank": [
@@ -1434,16 +1423,7 @@
       "source": "https://www.at.afnan.com/en/products/9-am-dive"
     }
   ],
-  "s-color-s-kids4-max": [
-    {
-      "src": "/assets/product-gallery/s-color-s-kids4-max-store-1.webp",
-      "alt": "S-Color S Kids4 Max 7-inch Tablet — front of the retail box"
-    },
-    {
-      "src": "/assets/product-gallery/s-color-s-kids4-max-store-2.webp",
-      "alt": "S-Color S Kids4 Max 7-inch Tablet — back of the retail box"
-    }
-  ],
+  "s-color-s-kids4-max": [],
   "usb-a-to-usbc-1-5m-two-pack": [
     {
       "src": "/assets/product-gallery/london-tech-usb-a-to-usbc-1-5m-two-pack-1.webp",
@@ -1479,20 +1459,11 @@
   ],
   "samsung-usbc-anc-earphones": [
     {
-      "src": "/assets/product-gallery/samsung-usbc-anc-earphones-store-1.webp",
-      "alt": "Samsung USB-C ANC Earphones — retail packaging"
+      "src": "/assets/product-gallery/lt-samsung-usbc-anc-earphones-1.webp",
+      "alt": "Black Samsung USB-C ANC wired earphones",
+      "source": "https://www.samsung.com/uy/mobile-accessories/anc-type-c-earphone-black-eo-ic500bbegww/"
     }
   ],
-  "galaxy-akg-style-wired-earphones": [
-    {
-      "src": "/assets/product-gallery/galaxy-akg-style-wired-earphones-store-1.webp",
-      "alt": "Galaxy Wired In-Ear Earphones · Black — retail packaging"
-    }
-  ],
-  "kg56-bluetooth-neckband-headset": [
-    {
-      "src": "/assets/product-gallery/kg56-bluetooth-neckband-headset-store-1.webp",
-      "alt": "KG56 Bluetooth Neckband Headset — retail packaging"
-    }
-  ]
+  "galaxy-akg-style-wired-earphones": [],
+  "kg56-bluetooth-neckband-headset": []
 }

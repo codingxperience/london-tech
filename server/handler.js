@@ -3,6 +3,7 @@ import { randomUUID, randomBytes } from "node:crypto"
 import { z } from "zod"
 
 import { products, storeDefaults } from "../src/data/catalog.js"
+import { repairCatalogueImage, repairCatalogueMedia } from "../src/lib/catalogue-media.js"
 
 import { databaseConfigured, getDatabase } from "./db.js"
 import { saveProductPhoto, serveProductPhoto, uploadedPhotoUrl } from "./product-photos.js"
@@ -256,6 +257,10 @@ export const publicOrder = (row) => ({
   amount: row.amount == null ? null : Number(row.amount),
   currency: row.currency,
   ...row.details,
+  items: (row.details?.items || []).map((item) => ({
+    ...item,
+    image: repairCatalogueImage(item.id, item.image),
+  })),
   createdAt: row.created_at,
   updatedAt: row.updated_at,
   expiresAt: row.expires_at,
@@ -572,7 +577,7 @@ export default async function handler(req, res) {
 
       return send(res, {
         products: rows.rows.map((r) => ({
-          ...r.data,
+          ...repairCatalogueMedia(r.data),
           reviewCount: Number(r.review_count),
           rating: r.review_count > 0 ? Number(r.average_rating) : null,
         })),

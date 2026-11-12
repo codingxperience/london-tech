@@ -3,6 +3,7 @@ import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
 import { LocaleSelector } from "./components/LocaleSelector.jsx"
 import { useLocale } from "./lib/locale.jsx"
+import { showProductImageFallback } from "./lib/product-image.js"
 import { StoreFooter } from "./components/StoreFooter.jsx"
 import { CardPrices } from "./components/CardPrices.jsx"
 import { UtilityBanner } from "./components/UtilityBanner.jsx"
@@ -299,7 +300,7 @@ function ProductCard({ p }: { p: Product }) {
     <article className="pcard home-product-card">
       <a className="home-product-link" href={"/products/" + id + "/"}>
         <div className="home-product-image">
-          <img src={item.image} loading="lazy" decoding="async" alt="" />
+          <img src={item.image} loading="lazy" decoding="async" alt="" onError={showProductImageFallback} />
         </div>
         <div className="home-product-copy">
           <h3>{item.name}</h3>
@@ -432,12 +433,10 @@ export default function App({
   currentPath = typeof window === "undefined" ? "/" : window.location.pathname,
 }: StorefrontProps) {
   const { t } = useLocale()
-  const normalizedPath = currentPath.split(/[?#]/, 1)[0] || "/"
+  const normalizedPath = currentPath.split(/[?#]/, 1)[0].replace(/\/+$/, "") + "/"
   const isNavigationActive = (label: string) => {
     const targetPath = navigationPath(label)
-    return label === "Home"
-      ? normalizedPath === "/"
-      : targetPath !== "/" && normalizedPath.startsWith(targetPath)
+    return normalizedPath === targetPath
   }
   const {
     products: catalogue,
@@ -495,13 +494,9 @@ export default function App({
         p.category === searchCategory.split(" · ")[0] ||
         (searchCategory.startsWith("Earbuds") && p.category === "Audio")),
   )
+  const categorySearch = q.trim() ? "?q=" + encodeURIComponent(q.trim()) : ""
   const shopCategory = (category: string) => {
-    navigate(
-      "/collections/" +
-        categoryId(category) +
-        "/" +
-        (q.trim() ? "?q=" + encodeURIComponent(q.trim()) : ""),
-    )
+    navigate("/collections/" + categoryId(category) + "/" + categorySearch)
   }
 
   return (
@@ -735,7 +730,7 @@ export default function App({
       </header>
 
       {/* ── Navigation ────────────────────────────────────────────────── */}
-      <nav style={{ background: "#fff", borderBottom: `2px solid ${B_BLUE}` }}>
+      <nav className="store-primary-nav" aria-label={t("Explore categories")} style={{ background: "#fff", borderBottom: `2px solid ${B_BLUE}` }}>
         <div
           className="store-container"
           style={{
@@ -746,27 +741,16 @@ export default function App({
           }}
         >
           {/* ALL CATEGORIES pill */}
-          <button
-            onClick={() => shopCategory("All")}
-            style={{
-              background: B_BLUE,
-              color: "#fff",
-              border: "none",
-              padding: "10px 16px",
-              fontWeight: 800,
-              fontSize: 13,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              fontFamily: "Nunito,sans-serif",
-              flexShrink: 0,
-              whiteSpace: "nowrap",
-            }}
+          <a
+            className="nav-all-categories"
+            href={"/collections/shop/" + categorySearch}
+            aria-label={t("ALL CATEGORIES")}
+            aria-current={normalizedPath === "/collections/shop/" ? "page" : undefined}
+            onClick={() => setNavOpen(false)}
           >
             <Grid3x3 size={15} strokeWidth={2.1} />{" "}
             <span className="nav-cat-label">{t("ALL CATEGORIES")}</span>
-          </button>
+          </a>
 
           {/* Desktop links */}
           <div
@@ -798,27 +782,6 @@ export default function App({
                     event.preventDefault()
                     navigate(targetPath)
                   }}
-                  style={{
-                    padding: "10px 12px",
-                    fontSize: 13,
-                    fontWeight: isActive ? 800 : 600,
-                    color: isActive ? B_BLUE : "#555",
-                    textDecoration: "none",
-                    fontFamily: "Nunito,sans-serif",
-                    whiteSpace: "nowrap",
-                    borderBottom: isActive
-                      ? `2px solid ${B_BLUE}`
-                      : "2px solid transparent",
-                    marginBottom: -2,
-                    display: "inline-block",
-                  }}
-                  onMouseEnter={(e) => {
-                    ;(e.currentTarget as HTMLAnchorElement).style.color = B_BLUE
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.color =
-                      isActive ? B_BLUE : "#555"
-                  }}
                 >
                   {t(lnk)}
                 </a>
@@ -832,12 +795,13 @@ export default function App({
             onClick={() => setNavOpen((v) => !v)}
             style={{
               marginLeft: "auto",
-              background: "none",
               border: "none",
               cursor: "pointer",
               padding: 8,
             }}
             aria-label={t("Menu")}
+            aria-expanded={navOpen}
+            aria-controls="store-primary-nav-drawer"
           >
             {navOpen ? (
               <X size={22} color={B_BLUE} />
@@ -849,6 +813,7 @@ export default function App({
 
         {/* Mobile dropdown */}
         <div
+          id="store-primary-nav-drawer"
           className={`nav-drawer${navOpen ? " open" : ""}`}
           style={{ borderTop: `1px solid ${B_BLUE_LIGHT}` }}
         >
@@ -874,21 +839,9 @@ export default function App({
                   setNavOpen(false)
                   navigate(targetPath)
                 }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "11px 20px",
-                  borderBottom: "1px solid #f0f0f0",
-                  fontSize: 14,
-                  fontWeight: isActive ? 800 : 600,
-                  color: isActive ? B_BLUE : "#444",
-                  textDecoration: "none",
-                  fontFamily: "Nunito,sans-serif",
-                }}
               >
                 {t(lnk)}
-                <ChevronRight size={14} color={isActive ? B_GOLD : "#ccc"} />
+                <ChevronRight size={14} aria-hidden="true" />
               </a>
             )
           })}
@@ -913,36 +866,10 @@ export default function App({
               }}
             >
               {CATS.map((cat) => (
-                <div
+                <a
                   key={cat.name}
-                  role="link"
-                  tabIndex={0}
-                  onClick={() => shopCategory(cat.name)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") shopCategory(cat.name)
-                  }}
-                  style={{
-                    padding: "9px 12px",
-                    borderBottom: "1px solid #f5f5f5",
-                    fontSize: 12.5,
-                    color: "#555",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontFamily: "Nunito Sans,sans-serif",
-                    transition: "all .15s",
-                  }}
-                  onMouseEnter={(e) => {
-                    const d = e.currentTarget as HTMLDivElement
-                    d.style.background = B_BLUE_LIGHT
-                    d.style.color = B_BLUE
-                  }}
-                  onMouseLeave={(e) => {
-                    const d = e.currentTarget as HTMLDivElement
-                    d.style.background = ""
-                    d.style.color = "#555"
-                  }}
+                  className="home-category-link"
+                  href={navigationPath(cat.name) + categorySearch}
                 >
                   <span
                     style={{ color: B_BLUE, display: "flex", flexShrink: 0 }}
@@ -952,8 +879,8 @@ export default function App({
                   <span style={{ flex: 1, fontWeight: 500 }}>
                     {t(cat.name)}
                   </span>
-                  <ChevronRight size={12} color="#ccc" />
-                </div>
+                  <ChevronRight size={14} aria-hidden="true" />
+                </a>
               ))}
               <div
                 style={{
@@ -995,7 +922,7 @@ export default function App({
                 className="sidebar-featured-product"
                 href={"/products/" + featuredPhone.id + "/"}
               >
-                <img src={featuredPhone.image} alt={featuredPhone.name} />
+                <img src={featuredPhone.image} alt={featuredPhone.name} onError={showProductImageFallback} />
                 <span>{t("In focus")}</span>
                 <h3>{featuredPhone.name}</h3>
                 <CardPrices product={featuredPhone} />
@@ -1093,6 +1020,7 @@ export default function App({
                 >
                   <img
                     src={p.image}
+                    onError={showProductImageFallback}
                     alt={p.name}
                     style={{
                       width: 54,
@@ -1299,6 +1227,7 @@ export default function App({
                     >
                       <img
                         src={feature.product.image}
+                        onError={showProductImageFallback}
                         alt={feature.product.name}
                       />
                       <div>
@@ -1448,6 +1377,7 @@ export default function App({
                       >
                         <img
                           src={item.image}
+                          onError={showProductImageFallback}
                           alt={item.name}
                           className="deal-img"
                           style={{
@@ -1518,19 +1448,10 @@ export default function App({
                     {TREND_CATS.map((cat) => (
                       <button
                         key={cat}
+                        type="button"
+                        className="home-category-filter"
+                        aria-pressed={tcat === cat}
                         onClick={() => setTcat(cat)}
-                        style={{
-                          padding: "4px 11px",
-                          fontSize: 11.5,
-                          fontFamily: "Nunito,sans-serif",
-                          fontWeight: 600,
-                          background: tcat === cat ? B_BLUE : "none",
-                          color: tcat === cat ? "#fff" : "#666",
-                          border: "none",
-                          cursor: "pointer",
-                          borderRadius: tcat === cat ? 3 : 0,
-                          transition: "all .15s",
-                        }}
                       >
                         {t(cat)}
                       </button>

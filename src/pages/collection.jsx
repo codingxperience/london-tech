@@ -15,6 +15,7 @@ import {
 import { DiscoveryRail } from "../components/DiscoveryRail.jsx"
 import { useStore } from "../store.jsx"
 import { categories, categoryName, money } from "../data/catalog.js"
+import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
 import {
   collectionQuery,
   readCollectionFilters,
@@ -81,7 +82,8 @@ export function Collection({ category = "shop" }) {
     .map((item) => ({
       ...item,
       product: products.find(
-        (product) => product.category === item.id && product.active !== false,
+        (product) => product.category === item.id && product.active !== false &&
+          product.image && product.image !== productImagePlaceholder,
       ),
     }))
     .filter((item) => item.product)
@@ -331,7 +333,7 @@ export function Collection({ category = "shop" }) {
                   key={item.id}
                 >
                   <span>
-                    <img src={item.product.image} alt="" loading="lazy" />
+                    <img src={item.product.image} alt="" loading="lazy" onError={showProductImageFallback} />
                   </span>
                   <strong>{t(item.name)}</strong>
                 </a>
@@ -358,7 +360,7 @@ export function Collection({ category = "shop" }) {
                     }
                   >
                     <span>
-                      <img src={representative.image} alt="" loading="lazy" />
+                      <img src={representative.image} alt="" loading="lazy" onError={showProductImageFallback} />
                       {filters.brands.includes(brand) && (
                         <i>
                           <Check size={12} />

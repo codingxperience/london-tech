@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, Expand, Play, ZoomIn } from "lucide-react"
 import { IconButton, Modal } from "./ui.jsx"
 import { galleryImages, zoomOrigin } from "../lib/product-experience.js"
+import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
 
 export function ProductGallery({ product }) {
   const images = galleryImages(product)
@@ -45,7 +46,7 @@ export function ProductGallery({ product }) {
         top: target.bottom - bounds.bottom,
         behavior: "auto",
       })
-  }, [selected, enlarged, current.src])
+  }, [selected, enlarged, current?.src])
   useEffect(() => {
     if (!enlarged) return
     const key = (event) => {
@@ -89,6 +90,14 @@ export function ProductGallery({ product }) {
         : "smooth",
     })
   }
+
+  if (!current) return (
+    <div className="product-gallery">
+      <div className="product-main-image">
+        <img src={productImagePlaceholder} alt={`Photo unavailable for ${product.name}`} />
+      </div>
+    </div>
+  )
 
   return (
     <div className="product-gallery">
@@ -170,6 +179,7 @@ export function ProductGallery({ product }) {
             <img
               src={current.src}
               alt={current.alt}
+              onError={showProductImageFallback}
               fetchPriority="high"
               decoding="async"
               style={{ transformOrigin: origin }}
@@ -199,7 +209,7 @@ export function ProductGallery({ product }) {
           >
             {images.map((image, index) => (
               <button
-                key={image.src}
+                key={image.type === "video" ? image.videoSrc || image.embedSrc : image.src}
                 type="button"
                 data-image-index={index}
                 data-media-type={image.type || "image"}
@@ -213,7 +223,7 @@ export function ProductGallery({ product }) {
                 onClick={() => setSelected(index)}
                 onKeyDown={(event) => selectWithKeyboard(event, index)}
               >
-                <img src={image.src} alt="" loading="lazy" decoding="async" />
+                <img src={image.src} alt="" loading="lazy" decoding="async" onError={showProductImageFallback} />
                 {image.type === "video" && (
                   <span className="gallery-video-play" aria-hidden="true">
                     <Play size={14} fill="currentColor" />
@@ -284,7 +294,7 @@ export function ProductGallery({ product }) {
               />
             )
           ) : (
-            <img src={current.src} alt={current.alt} />
+            <img src={current.src} alt={current.alt} onError={showProductImageFallback} />
           )}
           <div className="image-controls">
             <IconButton

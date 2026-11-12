@@ -1,5 +1,6 @@
 import productMedia from "./product-media.json" with { type: "json" }
 import stockroomInventory from "./stockroom-inventory.json" with { type: "json" }
+import { productImagePlaceholder } from "../lib/product-image.js"
 
 export const verifiedInventory = [
   {
@@ -183,7 +184,7 @@ function withCatalogueDefaults(product) {
   return {
     inTheBox: "",
     ...product,
-    image: gallery[0],
+    image: gallery[0] || productImagePlaceholder,
     gallery,
     priceConfirmed: true,
     comparePrice: null,

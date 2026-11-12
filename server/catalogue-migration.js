@@ -1,4 +1,4 @@
-import { repairCatalogueMedia } from "../src/lib/catalogue-media.js"
+import { repairableProductIds, repairCatalogueMedia } from "../src/lib/catalogue-media.js"
 import {
   approvedProducts,
   legacyProducts,
@@ -261,7 +261,7 @@ export async function adoptStockedPhones(db) {
 export async function repairSeedCatalogue(db) {
   const rows = await db.query(
     "SELECT id,data FROM products WHERE id = ANY($1::text[])",
-    [legacyProducts.map((product) => product.id)],
+    [repairableProductIds],
   )
   const updates = rows.rows.flatMap(({ id, data }) => {
     const next = repairCatalogueMedia(data)
