@@ -1041,7 +1041,12 @@
       "source": "https://phukiencantho.com/san-pham/tai-nghe-a16pro-co-man-hinh-cam-ung-chong-on-anc/"
     }
   ],
-  "fantesi-a45-earbuds": [],
+  "fantesi-a45-earbuds": [
+    {
+      "src": "/assets/product-gallery/lt-fantesi-a45-earbuds-box-front.webp",
+      "alt": "Front of the Fantesi A-45 retail box, showing the black earbuds and their charging case"
+    }
+  ],
   "excellent-h1-headphones": [
     {
       "src": "/assets/product-gallery/lt-excellent-h1-headphones-1.webp",
@@ -1423,7 +1428,16 @@
       "source": "https://www.at.afnan.com/en/products/9-am-dive"
     }
   ],
-  "s-color-s-kids4-max": [],
+  "s-color-s-kids4-max": [
+    {
+      "src": "/assets/product-gallery/lt-s-color-s-kids4-max-box-front.webp",
+      "alt": "Front of the S-Color S Kids4 Max tablet box showing the space-themed case"
+    },
+    {
+      "src": "/assets/product-gallery/lt-s-color-s-kids4-max-box-back.webp",
+      "alt": "Back of the S-Color S Kids4 Max tablet box showing the printed colour range"
+    }
+  ],
   "usb-a-to-usbc-1-5m-two-pack": [
     {
       "src": "/assets/product-gallery/london-tech-usb-a-to-usbc-1-5m-two-pack-1.webp",
@@ -1464,6 +1478,16 @@
       "source": "https://www.samsung.com/uy/mobile-accessories/anc-type-c-earphone-black-eo-ic500bbegww/"
     }
   ],
-  "galaxy-akg-style-wired-earphones": [],
-  "kg56-bluetooth-neckband-headset": []
+  "galaxy-akg-style-wired-earphones": [
+    {
+      "src": "/assets/product-gallery/lt-galaxy-akg-style-wired-earphones-box-front.webp",
+      "alt": "Front of the black Galaxy wired earphones retail box with its braided carry handle"
+    }
+  ],
+  "kg56-bluetooth-neckband-headset": [
+    {
+      "src": "/assets/product-gallery/lt-kg56-bluetooth-neckband-headset-box-front.webp",
+      "alt": "Front of the KG56 retail box, showing the black neckband and angular controls"
+    }
+  ]
 }

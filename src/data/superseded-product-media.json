@@ -34,7 +34,8 @@
     "/assets/product-gallery/a16-pro-screen-case-earbuds-store-1.webp"
   ],
   "fantesi-a45-earbuds": [
-    "/assets/product-gallery/fantesi-a45-earbuds-store-1.webp"
+    "/assets/product-gallery/fantesi-a45-earbuds-store-1.webp",
+    "/assets/product-image-unavailable.svg"
   ],
   "excellent-h1-headphones": [
     "/assets/product-gallery/excellent-h1-headphones-retail-packaging.webp"
@@ -171,7 +172,8 @@
   ],
   "s-color-s-kids4-max": [
     "/assets/product-gallery/s-color-s-kids4-max-store-1.webp",
-    "/assets/product-gallery/s-color-s-kids4-max-store-2.webp"
+    "/assets/product-gallery/s-color-s-kids4-max-store-2.webp",
+    "/assets/product-image-unavailable.svg"
   ],
   "usb-a-to-usbc-1-5m-two-pack": [
     "/assets/product-gallery/usb-a-to-usbc-1-5m-two-pack-store-1.webp"
@@ -186,9 +188,11 @@
     "/assets/product-gallery/samsung-usbc-anc-earphones-store-1.webp"
   ],
   "galaxy-akg-style-wired-earphones": [
-    "/assets/product-gallery/galaxy-akg-style-wired-earphones-store-1.webp"
+    "/assets/product-gallery/galaxy-akg-style-wired-earphones-store-1.webp",
+    "/assets/product-image-unavailable.svg"
   ],
   "kg56-bluetooth-neckband-headset": [
-    "/assets/product-gallery/kg56-bluetooth-neckband-headset-store-1.webp"
+    "/assets/product-gallery/kg56-bluetooth-neckband-headset-store-1.webp",
+    "/assets/product-image-unavailable.svg"
   ]
 }
