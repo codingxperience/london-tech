@@ -1,7 +1,7 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import { readFile, readdir } from "node:fs/promises"
-import { phoneProducts, products, retiredPhoneSkus, storeDefaults } from "../src/data/catalog.js"
+import { caseProducts, phoneProducts, products, retiredPhoneSkus, storeDefaults } from "../src/data/catalog.js"
 import {
   defaultOrigin,
   resolveSeo,
@@ -13,11 +13,11 @@ import { pathToRegexp } from "path-to-regexp"
 import { postgresConfig } from "../server/postgres-config.js"
 
 const data = { products, settings: storeDefaults, pages: [], reviews: {} }
-test("verified phones and their crawlable images appear on canonical product pages and the sitemap", async () => {
+test("verified phones, cases and their crawlable images appear on canonical product pages and the sitemap", async () => {
   const xml = sitemapXml(data, defaultOrigin)
   assert.ok(xml.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'))
   assert.equal(phoneProducts.length, 17)
-  for (const product of phoneProducts) {
+  for (const product of [...phoneProducts, ...caseProducts]) {
     const path = "/products/" + product.id + "/"
     const seo = resolveSeo(path, data)
     assert.equal(seo.status, 200, product.id)
@@ -31,7 +31,7 @@ test("verified phones and their crawlable images appear on canonical product pag
       assert.ok(xml.includes("<image:loc>" + defaultOrigin + src + "</image:loc>"), src)
       assert.ok(html.includes(src), src)
     }
-    if (product.id === "iphone-air" || product.id === "galaxy-z-fold8")
+    if (caseProducts.includes(product) || product.id === "iphone-air" || product.id === "galaxy-z-fold8")
       assert.ok(new Set(product.gallery).size >= 4, product.id)
   }
   for (const id of Object.keys(retiredPhoneSkus)) {

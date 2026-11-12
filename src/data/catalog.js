@@ -487,6 +487,45 @@ export const phoneProducts = stockedPhones.map(({ id }) => {
   }
 })
 
+const knitCaseId = "black-knit-magnetic-case-iphone-17-pro-18-pro"
+const knitCaseGallery = productMedia[knitCaseId].map(({ src }) => src)
+
+export const caseProducts = [
+  {
+    id: knitCaseId,
+    sku: "LT-CASE-001",
+    name: "Black Knit Magnetic Case for iPhone 17 Pro / 18 Pro",
+    category: "accessories",
+    brand: "",
+    description:
+      "A black case with a textured knit finish, a raised camera surround and a built-in magnetic ring. Sized for the 6.3-inch iPhone 17 Pro and iPhone 18 Pro.",
+    specifications: [
+      ["Fits", "iPhone 17 Pro and iPhone 18 Pro (6.3-inch)"],
+      ["Colour", "Black"],
+      ["Finish", "Textured knit pattern"],
+      ["Material", "TPU"],
+      ["Attachment", "Integrated magnetic ring"],
+    ],
+    image: knitCaseGallery[0],
+    gallery: knitCaseGallery,
+    mediaNote: "Supplier photos show the black case. Phone sold separately.",
+    inTheBox: "One black magnetic case",
+    price: null,
+    priceConfirmed: false,
+    comparePrice: null,
+    stock: null,
+    active: true,
+    featured: false,
+    condition: "Confirm with store",
+    warranty: "",
+    delivery: "",
+    options: [],
+    colors: [],
+    tags: [],
+    createdAt: "2026-11-12T00:00:00Z",
+  },
+]
+
 export const products = [
   ...phoneProducts,
   ...approvedProducts
@@ -494,6 +533,7 @@ export const products = [
     .map((product) =>
       retiredPhoneSkus[product.id] ? { ...product, active: false } : product,
     ),
+  ...caseProducts,
   ...referenceProducts,
 ]
 
