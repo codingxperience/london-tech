@@ -8,6 +8,7 @@ import {
   productInformation,
 } from "../src/lib/product-experience.js"
 import {
+  adoptCataloguePrices,
   adoptReferencePrices,
   adoptStockedPhones,
   repairSeedCatalogue,
@@ -65,6 +66,25 @@ test("reference prices replace old quotes once and preserve merchant figures and
       { ...old, price: 159315, priceConfirmed: true },
       merchant,
     ])
+
+    const phone = products.find(({ id }) => id === "samsung-galaxy-a16")
+    const caseListing = products.find(({ id }) => id === "galaxy-s10-family-silicone-pink")
+    const editedPhone = products.find(({ id }) => id === "galaxy-a17")
+    const inputs = [
+      { ...phone, price: null, priceConfirmed: false, stock: null },
+      { ...caseListing, priceConfirmed: false, stock: null },
+      { ...editedPhone, price: 765000, priceConfirmed: false, stock: 2 },
+    ]
+    for (const input of inputs) {
+      await db.query("INSERT INTO products(id,data) VALUES($1,$2)", [input.id, JSON.stringify(input)])
+    }
+    assert.equal(await adoptCataloguePrices(db), 2)
+    assert.equal(await adoptCataloguePrices(db), 0)
+    const saved = await db.query("SELECT id,data FROM products WHERE id=ANY($1::text[])", [inputs.map(({ id }) => id)])
+    const records = new Map(saved.rows.map(({ id, data }) => [id, data]))
+    assert.deepEqual(records.get(phone.id), phone)
+    assert.deepEqual(records.get(caseListing.id), caseListing)
+    assert.deepEqual(records.get(editedPhone.id), inputs[2])
   } finally {
     await db.close()
   }

@@ -4,8 +4,9 @@ import catalogueCorrections from "./catalogue-corrections.json" with { type: "js
 import launchOffers from "./launch-offers.json" with { type: "json" }
 import { referenceProducts } from "./reference-catalogue.js"
 import { stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
+import { verifiedInventory } from "./verified-inventory.js"
 
-import { guidePrices } from "./prices.js"
+import { cataloguePriceDefaults, guidePrices } from "./prices.js"
 import { formatShillings } from "../lib/number-format.js"
 
 export const categories = [
@@ -42,6 +43,13 @@ export const categories = [
     name: "Smart watches",
     icon: "Watch",
     description: "Your day, a glance away.",
+  },
+
+  {
+    id: "wristwatches",
+    name: "Wristwatches",
+    icon: "Watch",
+    description: "Explore watches for everyday wear.",
   },
 
   {
@@ -534,8 +542,13 @@ export const products = [
       retiredPhoneSkus[product.id] ? { ...product, active: false } : product,
     ),
   ...caseProducts,
+  ...verifiedInventory,
   ...referenceProducts,
-]
+].map((product) => {
+  const price = cataloguePriceDefaults[product.id]
+  if (price == null || (product.price != null && product.price !== price)) return product
+  return { ...product, price, priceConfirmed: true }
+})
 
 export const storeDefaults = {
   name: "London Tech",

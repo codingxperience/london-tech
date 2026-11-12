@@ -6,6 +6,7 @@ import path from "node:path"
 
 import { products, storeDefaults } from "../src/data/catalog.js"
 import {
+  adoptCataloguePrices,
   adoptReferenceDetails,
   adoptReferencePrices,
   adoptStockedPhones,
@@ -222,6 +223,7 @@ async function initialize() {
   await adoptReferencePrices(db)
   await adoptReferenceDetails(db)
   await adoptStockedPhones(db)
+  await adoptCataloguePrices(db)
 
   await db.query(
     `INSERT INTO settings(id,data) VALUES('store',$1::jsonb) ON CONFLICT(id) DO NOTHING`,

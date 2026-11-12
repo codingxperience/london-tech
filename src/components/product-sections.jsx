@@ -420,7 +420,22 @@ export function ProductSections({
             aria-labelledby="guides-heading"
           >
             <h2 id="guides-heading">{t("Guides & product support")}</h2>
+            {information.modelReferences?.length > 0 && (
+              <p className="detail-lead">
+                {t("Match the code under Settings → About phone → Model number to the video below. Ask us to confirm the available version.")}
+              </p>
+            )}
             <div className="detail-guide-list">
+              {information.modelReferences?.map(({ network, code, video, credit }) => (
+                <a href={video} key={code} target="_blank" rel="noreferrer">
+                  <PlayCircle size={22} />
+                  <span>
+                    <strong>{network} · {code}</strong>
+                    <small>{credit} · {t("Opens in a new tab")}</small>
+                  </span>
+                  <ArrowUpRight size={18} />
+                </a>
+              ))}
               {information.guides.map(({ label, url }) => (
                 <a href={url} key={url} target="_blank" rel="noreferrer">
                   <BookOpen size={22} />

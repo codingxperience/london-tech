@@ -3,8 +3,10 @@ import {
   approvedProducts,
   legacyProducts,
   phoneProducts,
+  products,
   retiredPhoneSkus,
 } from "../src/data/catalog.js"
+import { cataloguePriceDefaults } from "../src/data/prices.js"
 import {
   referenceProducts,
   retiredReferenceSkus,
@@ -15,6 +17,9 @@ const phoneVersion = "2026-11-11-stocked-phone-catalogue"
 const referencePrices = referenceProducts
   .filter(({ priceConfirmed }) => priceConfirmed)
   .map(({ id, sku, price }) => ({ id, sku, price }))
+const missingPrices = products
+  .filter(({ id, active }) => active && Object.hasOwn(cataloguePriceDefaults, id))
+  .map(({ id, sku }) => ({ id, sku, price: cataloguePriceDefaults[id] }))
 
 const singleSpecAccessories = new Set([
   "itel-bl-5c-battery",
@@ -58,11 +63,19 @@ export async function adoptReferenceDetails(db) {
 
 /** Fill in prices once on the original quote-only listings. Keep merchant prices and stock. */
 export async function adoptReferencePrices(db) {
+  return fillSeedPrices(db, referencePriceVersion, referencePrices)
+}
+
+export async function adoptCataloguePrices(db) {
+  return fillSeedPrices(db, "2026-11-12-catalogue-prices", missingPrices)
+}
+
+function fillSeedPrices(db, version, listings) {
   return db.transaction(async (tx) => {
     const marker = await tx.query(
       `INSERT INTO catalogue_migrations(version) VALUES($1)
        ON CONFLICT(version) DO NOTHING RETURNING version`,
-      [referencePriceVersion],
+      [version],
     )
     if (!marker.rows.length) return 0
 
@@ -73,8 +86,9 @@ export async function adoptReferencePrices(db) {
        FROM jsonb_to_recordset($1::jsonb) AS listing(id text, sku text, price integer)
        WHERE p.id=listing.id AND p.data->>'sku'=listing.sku
          AND p.data->>'active'='true' AND p.data->>'priceConfirmed'='false'
-         AND p.data->>'price' IS NULL AND p.data->>'comparePrice' IS NULL`,
-      [JSON.stringify(referencePrices)],
+         AND (p.data->>'price' IS NULL OR p.data->>'price'=listing.price::text)
+         AND p.data->>'comparePrice' IS NULL`,
+      [JSON.stringify(listings)],
     )
     return result.affectedRows ?? result.rowCount
   })

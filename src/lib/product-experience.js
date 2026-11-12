@@ -48,6 +48,7 @@ export function productInformation(product) {
       guides: phone.guide ? [{ label: "iPhone user guide", url: phone.guide }] : [],
       promotion: phone.promotion,
       video: phone.video,
+      modelReferences: phone.modelReferences,
     }
   }
   const researched =

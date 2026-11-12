@@ -107,3 +107,28 @@ export const guidePrices = {
   "green-lion-usbc-cable": 45000,
   "dji-pocket-camera": 2650000,
 }
+
+// UGX prices for previously unpriced listings, based on local retail checks.
+export const cataloguePriceDefaults = {
+  "iphone-17-pro-max-cosmic-orange-512gb": 6550000,
+  "iphone-16-pro-max-desert-titanium-512gb": 4350000,
+  "iphone-15-pro-max-natural-titanium-256gb": 3350000,
+  "galaxy-a57-5g": 1850000,
+  "samsung-galaxy-a16": 650000,
+  "galaxy-a17": 820000,
+  "galaxy-a07": 550000,
+  "honor-x9d-5g": 1490000,
+  "honor-x9c-5g": 1350000,
+  "honor-600-lite-5g": 1300000,
+  "black-knit-magnetic-case-iphone-17-pro-18-pro": 50000,
+  "multi-connector-usb-cable": 25000,
+  "universal-usb-wall-charger": 35000,
+  "wired-headsets": 25000,
+  "bluetooth-hands-free-headsets": 50000,
+  "phone-screen-guards": 15000,
+  "smartphone-cases": 20000,
+  "tecno-camon-20-premier-case": 28475,
+  "galaxy-s10-family-silicone-plum": 23800,
+  "galaxy-a-series-silicone-ice-blue": 23800,
+  "galaxy-s10-family-silicone-pink": 23800,
+}

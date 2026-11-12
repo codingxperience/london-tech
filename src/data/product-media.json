@@ -1,4 +1,77 @@
 {
+  "samsung-galaxy-tab-a11-plus-5g-128gb-gray": [
+    {
+      "src": "/assets/product-gallery/samsung-galaxy-tab-a11-plus-5g-128gb-gray-front.webp",
+      "alt": "Samsung Galaxy Tab A11+ 5G in gray — front display and rear panel",
+      "source": "https://www.reliancedigital.in/product/samsung-tablet-a11-2794-cm-11-inch-wi-fi-5g-tablet-6-gb-ram-128-gb-gray-sm-x236bzaains-miftx3-9653444"
+    },
+    {
+      "src": "/assets/product-gallery/samsung-galaxy-tab-a11-plus-5g-128gb-gray-rear.webp",
+      "alt": "Samsung Galaxy Tab A11+ 5G in gray — rear camera and back panel",
+      "source": "https://www.samsung.com/africa_en/tablets/galaxy-tab-a/galaxy-tab-a11-plus-gray-256gb-sm-x236bzaeect/"
+    },
+    {
+      "src": "/assets/product-gallery/samsung-galaxy-tab-a11-plus-5g-128gb-gray-left-angle.webp",
+      "alt": "Samsung Galaxy Tab A11+ 5G in gray — left oblique view",
+      "source": "https://www.samsung.com/africa_en/tablets/galaxy-tab-a/galaxy-tab-a11-plus-gray-256gb-sm-x236bzaeect/"
+    },
+    {
+      "src": "/assets/product-gallery/samsung-galaxy-tab-a11-plus-5g-128gb-gray-right-angle.webp",
+      "alt": "Samsung Galaxy Tab A11+ 5G in gray — right oblique view",
+      "source": "https://www.samsung.com/africa_en/tablets/galaxy-tab-a/galaxy-tab-a11-plus-gray-256gb-sm-x236bzaeect/"
+    }
+  ],
+  "bebe-tab-b88-master-red": [
+    {
+      "src": "/assets/product-gallery/bebe-tab-b88-master-red-front.webp",
+      "alt": "Bébé-Tab B88 Master — front with red carry-handle case",
+      "source": "https://1995.ng/B88-MASTER"
+    },
+    {
+      "src": "/assets/product-gallery/bebe-tab-b88-master-red-rear.webp",
+      "alt": "Bébé-Tab B88 Master — red rear case with fold-out feet",
+      "source": "https://1995.ng/B88-MASTER"
+    }
+  ],
+  "bebe-tab-b2060-pro-max-blue": [
+    {
+      "src": "/assets/product-gallery/bebe-tab-b2060-pro-max-blue-front.webp",
+      "alt": "Bébé-Tab B2060 Pro Max — front with blue case and controller",
+      "source": "https://1995.ng/2060-PRO-MAX"
+    },
+    {
+      "src": "/assets/product-gallery/bebe-tab-b2060-pro-max-blue-rear-stand.webp",
+      "alt": "Bébé-Tab B2060 Pro Max — blue rear case with the ring stand open",
+      "source": "https://1995.ng/2060-PRO-MAX"
+    },
+    {
+      "src": "/assets/product-gallery/bebe-tab-b2060-pro-max-blue-bundle.webp",
+      "alt": "Bébé-Tab B2060 Pro Max — blue tablet and supplier bundle accessories",
+      "source": "https://1995.ng/2060-PRO-MAX"
+    }
+  ],
+  "naviforce-nf8076-silver-black": [
+    {
+      "src": "/assets/product-gallery/naviforce-nf8076-silver-black-front.webp",
+      "alt": "Naviforce NF8076 — black dial and silver bracelet",
+      "source": "https://hmrgroup.catalog.to/s/gallery/h-m-r-group/---/l3g/product/-OdeOlntKAcluYSWjDH4"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf8076-silver-black-side-angle.webp",
+      "alt": "Naviforce NF8076 — angled view of the silver bracelet and black dial",
+      "source": "https://suntimestore.com/products/reloj-analogico-hombre-nf8076-s-b-s-naviforce"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf8076-silver-black-crown.webp",
+      "alt": "Naviforce NF8076 — crown and chronograph pushers",
+      "source": "https://www.naviforce.com/naviforce-8076-mens-quartz-chronograph-watch-stainless-steel-band-business-dress-analog-watch-with-datewholesale-purchase-oem-product/"
+    },
+    {
+      "src": "/assets/product-gallery/naviforce-nf8076-silver-black-caseback.webp",
+      "alt": "Naviforce NF8076 — engraved case back",
+      "source": "https://www.naviforce.com/naviforce-8076-mens-quartz-chronograph-watch-stainless-steel-band-business-dress-analog-watch-with-datewholesale-purchase-oem-product/"
+    }
+  ],
   "black-knit-magnetic-case-iphone-17-pro-18-pro": [
     {
       "src": "/assets/product-gallery/black-knit-magnetic-case-rear.webp",

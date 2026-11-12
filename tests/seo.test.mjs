@@ -2,6 +2,7 @@ import { test } from "node:test"
 import assert from "node:assert/strict"
 import { readFile, readdir } from "node:fs/promises"
 import { caseProducts, phoneProducts, products, retiredPhoneSkus, storeDefaults } from "../src/data/catalog.js"
+import { verifiedInventory } from "../src/data/verified-inventory.js"
 import {
   defaultOrigin,
   resolveSeo,
@@ -13,11 +14,11 @@ import { pathToRegexp } from "path-to-regexp"
 import { postgresConfig } from "../server/postgres-config.js"
 
 const data = { products, settings: storeDefaults, pages: [], reviews: {} }
-test("verified phones, cases and their crawlable images appear on canonical product pages and the sitemap", async () => {
+test("verified catalogue additions and their images appear on canonical pages and the sitemap", async () => {
   const xml = sitemapXml(data, defaultOrigin)
   assert.ok(xml.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'))
   assert.equal(phoneProducts.length, 17)
-  for (const product of [...phoneProducts, ...caseProducts]) {
+  for (const product of [...phoneProducts, ...caseProducts, ...verifiedInventory]) {
     const path = "/products/" + product.id + "/"
     const seo = resolveSeo(path, data)
     assert.equal(seo.status, 200, product.id)
@@ -33,11 +34,30 @@ test("verified phones, cases and their crawlable images appear on canonical prod
     }
     if (caseProducts.includes(product) || product.id === "iphone-air" || product.id === "galaxy-z-fold8")
       assert.ok(new Set(product.gallery).size >= 4, product.id)
+    if (verifiedInventory.includes(product)) {
+      assert.ok(new Set(product.gallery).size >= 2, product.id)
+      assert.equal(product.stock, null, product.id)
+      assert.ok(!html.includes('"@type":"Offer"'), product.id)
+    }
   }
   for (const id of Object.keys(retiredPhoneSkus)) {
     const path = "/products/" + id + "/"
     assert.equal(resolveSeo(path, data).status, 404, id)
     assert.ok(!xml.includes("<loc>" + defaultOrigin + path + "</loc>"), id)
+  }
+})
+
+test("A16 and A17 pages show separately labelled LTE and 5G videos", async () => {
+  const listings = [
+    ["samsung-galaxy-a16", "SM-A165F", "vTTaiQIt4WI", "SM-A166B", "ZLIjzl4JqJI"],
+    ["galaxy-a17", "SM-A175F", "xq2BXdMueD0", "SM-A176B", "lxC0rjhyO3I"],
+  ]
+  for (const [id, lte, lteVideo, fiveG, fiveGVideo] of listings) {
+    const html = await readFile(`dist/products/${id}/index.html`, "utf8")
+    assert.ok(html.includes(`https://www.youtube.com/watch?v=${lteVideo}`), id)
+    assert.ok(html.includes(`https://www.youtube.com/watch?v=${fiveGVideo}`), id)
+    assert.match(html, new RegExp(`4G LTE(?:<!--.*?-->)? · (?:<!--.*?-->)?${lte}`))
+    assert.match(html, new RegExp(`5G(?:<!--.*?-->)? · (?:<!--.*?-->)?${fiveG}`))
   }
 })
 

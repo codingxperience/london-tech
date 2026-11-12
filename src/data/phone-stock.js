@@ -46,6 +46,17 @@ const unidentifiedGalaxy = {
   mediaNote: "Samsung shows the LTE model in these photos. Confirm the store unit’s model code, network and storage before ordering.",
 }
 
+const galaxyModelReferences = {
+  a16: [
+    { network: "4G LTE", code: "SM-A165F", video: "https://www.youtube.com/watch?v=vTTaiQIt4WI", credit: "GSMArena review" },
+    { network: "5G", code: "SM-A166B", video: "https://www.youtube.com/watch?v=ZLIjzl4JqJI", credit: "GSMArena review" },
+  ],
+  a17: [
+    { network: "4G LTE", code: "SM-A175F", video: "https://www.youtube.com/watch?v=xq2BXdMueD0", credit: "Infofull unboxing" },
+    { network: "5G", code: "SM-A176B", video: "https://www.youtube.com/watch?v=lxC0rjhyO3I", credit: "Samsung video" },
+  ],
+}
+
 export const stockedPhones = [
   apple("iphone-18-pro-max", "iPhone 18 Pro Max 256GB · Glacier", appleSpecs("en-asia/148591"),
     "The Glacier iPhone 18 Pro Max pairs a 6.9-inch ProMotion display with the A20 Pro chip and three 48 MP rear cameras.",
@@ -144,7 +155,7 @@ export const stockedPhones = [
       ["Rear cameras", "50 MP main, 5 MP ultra wide and 2 MP macro"],
       ["Battery", "5,000 mAh typical"],
       ["Configuration", "Confirm model code, network, RAM and storage with the store"],
-    ], unidentifiedGalaxy),
+    ], { ...unidentifiedGalaxy, modelReferences: galaxyModelReferences.a16 }),
   phone("galaxy-a17", "Samsung", "Samsung Galaxy A17",
     samsung + "africa_fr/smartphones/galaxy-a/galaxy-a17-light-blue-256gb-sm-a175flboafb/",
     "The Galaxy A17 has a 90 Hz Super AMOLED display and optical image stabilisation on its 50 MP main camera.",
@@ -153,7 +164,7 @@ export const stockedPhones = [
       ["Rear cameras", "50 MP main with OIS, 5 MP ultra wide and 2 MP macro"],
       ["Battery", "5,000 mAh typical"],
       ["Configuration", "Confirm model code, network, RAM and storage with the store"],
-    ], unidentifiedGalaxy),
+    ], { ...unidentifiedGalaxy, modelReferences: galaxyModelReferences.a17 }),
   phone("galaxy-a07", "Samsung", "Samsung Galaxy A07",
     samsung + "za/smartphones/galaxy-a/galaxy-a07-black-128gb-sm-a075fzkgafa/",
     "The Galaxy A07 has a large 90 Hz screen, a 50 MP main camera and a 5,000 mAh battery.",
