@@ -38,11 +38,14 @@ export function usePath() {
   useEffect(() => {
     const change = () => {
       setPath(location.pathname + location.search)
-      window.scrollTo({ top: 0, behavior: "instant" })
+      window.scrollTo({ top: 0, behavior: "auto" })
     }
+    const routeChange = () => change()
     window.addEventListener("popstate", change)
+    window.addEventListener("london-tech:navigate", routeChange)
     const click = (e) => {
-      const a = e.target.closest("a[href]")
+      const target = e.target instanceof Element ? e.target : e.target?.parentElement
+      const a = target?.closest("a[href]")
       if (
         !a ||
         e.defaultPrevented ||
@@ -58,14 +61,25 @@ export function usePath() {
       const url = new URL(a.href)
       if (url.origin !== location.origin || url.pathname.startsWith("/api/"))
         return
-      if (url.hash && url.pathname === location.pathname) return
+      if (
+        url.hash &&
+        url.pathname === location.pathname &&
+        url.search === location.search
+      )
+        return
       e.preventDefault()
-      history.pushState({}, "", url)
-      change()
+      try {
+        history.pushState({}, "", url.href)
+        window.dispatchEvent(new Event("london-tech:navigate"))
+      } catch (error) {
+        console.error("Could not update the store route:", error)
+        location.assign(url.href)
+      }
     }
     document.addEventListener("click", click)
     return () => {
       window.removeEventListener("popstate", change)
+      window.removeEventListener("london-tech:navigate", routeChange)
       document.removeEventListener("click", click)
     }
   }, [])
@@ -73,8 +87,13 @@ export function usePath() {
 }
 
 export const navigate = (path) => {
-  history.pushState({}, "", path)
-  window.dispatchEvent(new PopStateEvent("popstate"))
+  try {
+    history.pushState({}, "", path)
+    window.dispatchEvent(new Event("london-tech:navigate"))
+  } catch (error) {
+    console.error("Could not update the store route:", error)
+    window.location.assign(path)
+  }
 }
 
 const validLines = (lines) =>

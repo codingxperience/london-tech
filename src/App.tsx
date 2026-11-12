@@ -5,7 +5,6 @@ import { LocaleSelector } from "./components/LocaleSelector.jsx"
 import { useLocale } from "./lib/locale.jsx"
 import { StoreFooter } from "./components/StoreFooter.jsx"
 import { CardPrices } from "./components/CardPrices.jsx"
-import { formatShillings } from "./lib/number-format.js"
 import { UtilityBanner } from "./components/UtilityBanner.jsx"
 import { TypewriterText } from "./components/MotionText"
 import { useState, useEffect, type ReactNode } from "react"
@@ -28,6 +27,7 @@ import {
   Flame,
   Sparkles,
   Grid3x3,
+  LayoutGrid,
   Cpu,
   Shirt,
   ShoppingBag,
@@ -290,67 +290,74 @@ function ProductCard({ p }: { p: Product }) {
   if (!item) return null
   const wished = wishlist.includes(id)
   const added = cart.some((line: { id: string }) => line.id === id)
+  const hasVariants = Boolean(item.options?.length || item.colors?.length)
   const message = encodeURIComponent(
-    `Hello London Tech, I am interested in ${item.name} (guide price ${formatShillings(item.price)}). Please confirm the configuration and availability.`,
+    `Hello London Tech, I’m interested in ${item.name}.`,
   )
 
   return (
-    <article
-      className="pcard home-product-card"
-      onClick={(event) => {
-        if (!(event.target as HTMLElement).closest("button,a"))
-          navigate("/products/" + id + "/")
-      }}
-    >
-      <div className="home-product-image">
-        <a href={"/products/" + id + "/"} aria-label={item.name}>
-          <img src={item.image} loading="lazy" decoding="async" alt={item.name} />
+    <article className="pcard home-product-card">
+      <a className="home-product-link" href={"/products/" + id + "/"}>
+        <div className="home-product-image">
+          <img src={item.image} loading="lazy" decoding="async" alt="" />
+        </div>
+        <div className="home-product-copy">
+          <h3>{item.name}</h3>
+          <CardPrices product={item} />
+        </div>
+      </a>
+      <button
+        className={`home-product-wishlist${wished ? " selected" : ""}`}
+        type="button"
+        aria-pressed={wished}
+        aria-label={t(
+          wished ? "Remove {name} from wishlist" : "Save {name} to wishlist",
+          { name: item.name },
+        )}
+        onClick={() => toggleWish(id)}
+      >
+        <Heart size={17} fill={wished ? "currentColor" : "none"} />
+      </button>
+      <div className="home-product-actions">
+        <a
+          className="home-product-chat"
+          href={`https://wa.me/256788341111?text=${message}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("Ask about {name} on WhatsApp", { name: item.name })}
+        >
+          <WhatsAppIcon size={16} />
+          <span>{t("Chat")}</span>
         </a>
-        <div className="pover" aria-label={t("Product actions")}>
-          <button
-            className={`home-product-overlay-add${added ? " is-added" : ""}`}
-            type="button"
-            disabled={item.stock === 0}
-            onClick={() => addCart(item)}
-          >
-            {added ? "✓ " + t("Added") : "+ " + t("Add to cart")}
-          </button>
-          <button
-            className={`home-product-wishlist${wished ? " selected" : ""}`}
-            type="button"
-            aria-pressed={wished}
-            aria-label={t(wished ? "Remove from wishlist" : "Save to wishlist")}
-            onClick={() => toggleWish(id)}
-          >
-            <Heart size={16} fill={wished ? B_BLUE : "none"} />
-          </button>
-        </div>
-      </div>
-      <div className="home-product-copy">
-        <h3>
-          <a href={"/products/" + id + "/"}>{item.name}</a>
-        </h3>
-        <CardPrices product={item} />
-        <div className="product-actions home-product-actions">
-          <a
-            className="whatsapp-cta"
-            href={`https://wa.me/256788341111?text=${message}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t("Ask about {name} on WhatsApp", { name: item.name })}
-          >
-            <WhatsAppIcon size={15} /> {t("Chat")}
-          </a>
-          <button
-            className={`home-product-add${added ? " is-added" : ""}`}
-            type="button"
-            disabled={item.stock === 0}
-            onClick={() => addCart(item)}
-            aria-label={t("Add {name} to cart", { name: item.name })}
-          >
-            <ShoppingCart size={13} /> {t(added ? "Added" : "Add")}
-          </button>
-        </div>
+        <button
+          className="home-product-add"
+          type="button"
+          disabled={item.stock === 0}
+          onClick={() =>
+            hasVariants ? navigate("/products/" + id + "/") : addCart(item)
+          }
+          aria-label={t(
+            item.stock === 0
+              ? "{name} is out of stock"
+              : hasVariants
+                ? "Choose options for {name}"
+                : added
+                  ? "Add another {name} to cart"
+                  : "Add {name} to cart",
+            { name: item.name },
+          )}
+        >
+          <ShoppingCart size={15} aria-hidden="true" />
+          <span>
+            {item.stock === 0
+              ? t("Out of stock")
+              : hasVariants
+                ? t("Choose options")
+                : added
+                  ? t("Added")
+                  : t("Add to cart")}
+          </span>
+        </button>
       </div>
     </article>
   )
@@ -779,6 +786,18 @@ export default function App({
                   href={targetPath}
                   className={`nav-link${isActive ? " active" : ""}`}
                   aria-current={isActive ? "page" : undefined}
+                  onClick={(event) => {
+                    if (
+                      event.button !== 0 ||
+                      event.metaKey ||
+                      event.ctrlKey ||
+                      event.shiftKey ||
+                      event.altKey
+                    )
+                      return
+                    event.preventDefault()
+                    navigate(targetPath)
+                  }}
                   style={{
                     padding: "10px 12px",
                     fontSize: 13,
@@ -842,7 +861,19 @@ export default function App({
                 href={targetPath}
                 className={`nav-link mobile-nav-link${isActive ? " active" : ""}`}
                 aria-current={isActive ? "page" : undefined}
-                onClick={() => setNavOpen(false)}
+                onClick={(event) => {
+                  if (
+                    event.button !== 0 ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey
+                  )
+                    return
+                  event.preventDefault()
+                  setNavOpen(false)
+                  navigate(targetPath)
+                }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -939,9 +970,21 @@ export default function App({
               >
                 <a
                   href="/collections/shop/"
+                  onClick={(event) => {
+                    if (
+                      event.button !== 0 ||
+                      event.metaKey ||
+                      event.ctrlKey ||
+                      event.shiftKey ||
+                      event.altKey
+                    )
+                      return
+                    event.preventDefault()
+                    navigate("/collections/shop/")
+                  }}
                   style={{ display: "flex", alignItems: "center", gap: 6 }}
                 >
-                  <Sparkles size={13} /> {t("More Categories")}
+                  <LayoutGrid size={17} strokeWidth={1.8} /> {t("More Categories")}
                 </a>
               </div>
             </div>

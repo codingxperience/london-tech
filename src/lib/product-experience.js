@@ -8,6 +8,46 @@ const changed = (a, b) => JSON.stringify(a) !== JSON.stringify(b)
 const headlinePhoneSpecs = new Set([
   "Display", "Main display", "Chip", "Main camera", "Rear camera", "Rear cameras", "Battery",
 ])
+const sourceOnlyGalleryIds = new Set([
+  "aideepo-pro-pd100-power-bank",
+  "aideepo-usbc-lightning-braided-cable",
+  "anker-25w-compact-usbc-charger",
+  "anker-20w-usbc-charger-black",
+  "anker-maggo-10k-slim-black",
+  "apple-20w-usbc-power-adapter-type-g",
+  "apple-240w-usbc-charge-cable-2m",
+  "apple-usbc-lightning-cable-1m",
+  "oraimo-powerflow-b11-10000",
+  "oraimo-traveler-15-20000",
+  "vidvie-car-air-vent-gravity-holder",
+  "excellent-p26-20000-power-bank",
+  "fs09-phone-cooler",
+  "samsung-45w-usbc-charger",
+  "samsung-65w-three-port-charger",
+  "usb-c-8a-charge-cable",
+  "vidvie-cb4038c-usbc-cable",
+  "vidvie-three-in-one-charging-cable",
+  "flat-wire-2-to-2-charging-cable",
+  "usb-a-to-usbc-1-5m-two-pack",
+  "wireless-power-bank-20000-black",
+  "kh-740-fascial-massage-gun",
+  "shoulder-neck-wrap-massager",
+  "le-falcone-majestic-edp-100ml",
+  "malika-eau-de-parfum",
+  "al-ezz-oud-hersh-mehwar-edp-100ml",
+  "reyane-paris-for-men-edt-100ml",
+  "le-chameau-save-elixir-edp-85ml",
+  "banafa-sparky-white-edp-100ml",
+  "smo-al-oud-edp-100ml",
+  "le-chameau-arabia-haya-gift-set",
+  "al-ezz-oud-hersh-55-edp-100ml",
+  "lattafa-maahir-black-edition-edp-100ml",
+  "lattafa-eclaire-edp-100ml",
+  "afnan-9am-dive-edp-100ml",
+  "lattafa-al-areeq-silver-edp-100ml",
+  "emper-presidente-fragrance",
+  "apple-20w-usbc-power-adapter-eu",
+])
 
 export function galleryImages(product) {
   const baseline = defaults.get(product.id)
@@ -16,9 +56,25 @@ export function galleryImages(product) {
     (product.name !== baseline.name ||
       product.image !== baseline.image ||
       changed(product.gallery, baseline.gallery))
-  const researched = edited
-    ? []
-    : stockedPhoneDetails.get(product.id)?.views || productMedia[product.id] || []
+  const phone = edited ? null : stockedPhoneDetails.get(product.id)
+  const researched = phone?.views || (edited ? [] : productMedia[product.id]) || []
+  const videoInfo = phone?.video || (!edited ? productDetails[product.id]?.video : null)
+  const videoUrl = videoInfo?.url
+  const youtubeId = videoUrl?.match(
+    /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/,
+  )?.[1]
+  const embedSrc = videoInfo?.embedUrl || (youtubeId
+    ? `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&playsinline=1&rel=0`
+    : null)
+  const video = videoUrl && (embedSrc || /\.mp4(?:[?#]|$)/i.test(videoUrl))
+    ? [{
+        type: "video",
+        src: researched[0]?.src || product.image,
+        videoSrc: embedSrc ? null : videoUrl,
+        embedSrc,
+        alt: videoInfo.label || `Product video for ${product.name}`,
+      }]
+    : []
   const existing = [product.image, ...(product.gallery || [])]
     .filter(Boolean)
     // A generic stock photo is not an extra view of a specific device.
@@ -26,10 +82,17 @@ export function galleryImages(product) {
     .map((src, i) => ({ src, alt: `${product.name} — product view ${i + 1}` }))
   // A curated set replaces legacy photos, which may be the same angle at a
   // different resolution. A single new view can still complement store photos.
-  const images =
-    researched.length >= 2 ? researched : [...researched, ...existing]
-  return images.filter(
-    (image, i) => images.findIndex((other) => other.src === image.src) === i,
+  const images = sourceOnlyGalleryIds.has(product.id)
+    ? researched
+    : researched.length >= 2
+      ? researched
+      : [...researched, ...existing]
+  const gallery = [...video, ...images]
+  return gallery.filter(
+    (image, index) =>
+      gallery.findIndex(
+        (other) => other.src === image.src && other.type === image.type,
+      ) === index,
   )
 }
 

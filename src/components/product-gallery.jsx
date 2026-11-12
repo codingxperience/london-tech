@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { ChevronLeft, ChevronRight, Expand, ZoomIn } from "lucide-react"
+import { ChevronLeft, ChevronRight, Expand, Play, ZoomIn } from "lucide-react"
 import { IconButton, Modal } from "./ui.jsx"
 import { galleryImages, zoomOrigin } from "../lib/product-experience.js"
 
@@ -93,56 +93,95 @@ export function ProductGallery({ product }) {
   return (
     <div className="product-gallery">
       <div className="detail-gallery-stage">
-        <button
-          type="button"
-          className={
-            "product-main-image detail-zoom-image" +
-            (hovered ? " is-zoomed" : "")
-          }
-          aria-label={`Enlarge ${product.name}, image ${selected + 1} of ${images.length}`}
-          onPointerEnter={(event) => {
-            if (event.pointerType !== "mouse") return
-            setOrigin(
-              zoomOrigin(
-                event.clientX,
-                event.clientY,
-                event.currentTarget.getBoundingClientRect(),
-              ),
-            )
-            setHovered(true)
-          }}
-          onPointerMove={(event) => {
-            if (event.pointerType !== "mouse") return
-            setOrigin(
-              zoomOrigin(
-                event.clientX,
-                event.clientY,
-                event.currentTarget.getBoundingClientRect(),
-              ),
-            )
-            setHovered(true)
-          }}
-          onPointerLeave={() => setHovered(false)}
-          onBlur={() => setHovered(false)}
-          onClick={() => {
-            setHovered(false)
-            setEnlarged(true)
-          }}
-        >
-          <img
-            src={current.src}
-            alt={current.alt}
-            fetchPriority="high"
-            decoding="async"
-            style={{ transformOrigin: origin }}
-          />
-          <span className="image-count">
-            {selected + 1} / {images.length}
-          </span>
-          <span className="image-expand">
-            <Expand size={18} />
-          </span>
-        </button>
+        {current.type === "video" ? (
+          <div className="product-main-image detail-video-stage">
+            {current.embedSrc ? (
+              <iframe
+                key={current.embedSrc}
+                src={current.embedSrc}
+                title={current.alt}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            ) : (
+              <video
+                key={current.videoSrc}
+                src={current.videoSrc}
+                poster={current.src}
+                aria-label={current.alt}
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
+            )}
+            <span className="image-count">
+              {selected + 1} / {images.length}
+            </span>
+            <button
+              type="button"
+              className="image-expand"
+              aria-label={`Open ${product.name} video`}
+              onClick={() => setEnlarged(true)}
+            >
+              <Expand size={18} />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className={
+              "product-main-image detail-zoom-image" +
+              (hovered ? " is-zoomed" : "")
+            }
+            aria-label={`Enlarge ${product.name}, image ${selected + 1} of ${images.length}`}
+            onPointerEnter={(event) => {
+              if (event.pointerType !== "mouse") return
+              setOrigin(
+                zoomOrigin(
+                  event.clientX,
+                  event.clientY,
+                  event.currentTarget.getBoundingClientRect(),
+                ),
+              )
+              setHovered(true)
+            }}
+            onPointerMove={(event) => {
+              if (event.pointerType !== "mouse") return
+              setOrigin(
+                zoomOrigin(
+                  event.clientX,
+                  event.clientY,
+                  event.currentTarget.getBoundingClientRect(),
+                ),
+              )
+              setHovered(true)
+            }}
+            onPointerLeave={() => setHovered(false)}
+            onBlur={() => setHovered(false)}
+            onClick={() => {
+              setHovered(false)
+              setEnlarged(true)
+            }}
+          >
+            <img
+              src={current.src}
+              alt={current.alt}
+              fetchPriority="high"
+              decoding="async"
+              style={{ transformOrigin: origin }}
+            />
+            <span className="image-count">
+              {selected + 1} / {images.length}
+            </span>
+            <span className="image-expand">
+              <Expand size={18} />
+            </span>
+          </button>
+        )}
         <div className="gallery-thumbnail-row">
           {images.length > 5 && (
             <IconButton
@@ -163,6 +202,7 @@ export function ProductGallery({ product }) {
                 key={image.src}
                 type="button"
                 data-image-index={index}
+                data-media-type={image.type || "image"}
                 className={selected === index ? "selected" : ""}
                 aria-label={`View ${image.alt}, ${index + 1} of ${images.length}`}
                 aria-pressed={selected === index}
@@ -174,6 +214,11 @@ export function ProductGallery({ product }) {
                 onKeyDown={(event) => selectWithKeyboard(event, index)}
               >
                 <img src={image.src} alt="" loading="lazy" decoding="async" />
+                {image.type === "video" && (
+                  <span className="gallery-video-play" aria-hidden="true">
+                    <Play size={14} fill="currentColor" />
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -215,7 +260,32 @@ export function ProductGallery({ product }) {
           className="image-modal detail-lightbox"
           onClose={() => setEnlarged(false)}
         >
-          <img src={current.src} alt={current.alt} />
+          {current.type === "video" ? (
+            current.embedSrc ? (
+              <iframe
+                className="gallery-lightbox-video"
+                src={current.embedSrc}
+                title={current.alt}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            ) : (
+              <video
+                className="gallery-lightbox-video"
+                src={current.videoSrc}
+                poster={current.src}
+                aria-label={current.alt}
+                controls
+                autoPlay
+                muted
+                playsInline
+                preload="metadata"
+              />
+            )
+          ) : (
+            <img src={current.src} alt={current.alt} />
+          )}
           <div className="image-controls">
             <IconButton
               label="Previous product image"
@@ -227,7 +297,7 @@ export function ProductGallery({ product }) {
               <ChevronLeft />
             </IconButton>
             <span aria-live="polite">
-              Image {selected + 1} of {images.length}
+              {current.type === "video" ? "Video" : "Image"} {selected + 1} of {images.length}
             </span>
             <IconButton
               label="Next product image"

@@ -48,8 +48,9 @@
       "source": "https://www.apple.com/newsroom/2025/09/introducing-iphone-air-a-powerful-new-iphone-with-a-breakthrough-design/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-air-plateau/large_2x.mp4",
-      "label": "Watch Apple’s iPhone Air design video"
+      "url": "/assets/product-gallery/videos/iphone-air.mp4",
+      "label": "Watch Apple’s iPhone Air design video",
+      "source": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-air-plateau/large_2x.mp4"
     }
   },
   "galaxy-z-fold8": {
@@ -96,8 +97,9 @@
       "source": "https://www.samsung.com/us/smartphones/galaxy-z-fold8/"
     },
     "video": {
-      "url": "https://images.samsung.com/us/smartphones/galaxy-z-fold8/videos/galaxy-z-fold8-features-design-intro.mp4",
-      "label": "Watch Samsung’s Galaxy Z Fold8 design video"
+      "url": "/assets/product-gallery/videos/galaxy-z-fold8.mp4",
+      "label": "Watch Samsung’s Galaxy Z Fold8 design video",
+      "source": "https://images.samsung.com/us/smartphones/galaxy-z-fold8/videos/galaxy-z-fold8-features-design-intro.mp4"
     }
   },
   "iphone-18-pro-max": {
@@ -124,8 +126,9 @@
       "source": "https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/2026/autoplay/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/apple-iphone-18-pro-camera-close-up/large_2x.mp4",
-      "label": "Watch Apple’s camera close-up"
+      "url": "/assets/product-gallery/videos/iphone-18-pro-max.mp4",
+      "label": "Watch Apple’s iPhone 18 Pro camera video",
+      "source": "https://www.apple.com/newsroom/videos/2026/autoplay/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/apple-iphone-18-pro-camera-close-up/large_2x.mp4"
     }
   },
   "iphone-18-pro-max-burgundy": {
@@ -152,8 +155,9 @@
       "source": "https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/2026/autoplay/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/apple-iphone-18-pro-camera-close-up/large_2x.mp4",
-      "label": "Watch Apple’s camera close-up"
+      "url": "/assets/product-gallery/videos/iphone-18-pro-max.mp4",
+      "label": "Watch Apple’s camera close-up",
+      "source": "https://www.apple.com/newsroom/videos/2026/autoplay/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/apple-iphone-18-pro-camera-close-up/large_2x.mp4"
     }
   },
   "iphone-17-pro-max": {
@@ -180,8 +184,9 @@
       "source": "https://www.apple.com/uk/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-the-most-powerful-and-advanced-pro-models-ever/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-17-pro-forged-plateau/large_2x.mp4",
-      "label": "Watch Apple’s design video"
+      "url": "/assets/product-gallery/videos/iphone-17-pro-max.mp4",
+      "label": "Watch Apple’s iPhone 17 Pro design video",
+      "source": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-17-pro-forged-plateau/large_2x.mp4"
     }
   },
   "iphone-17-pro-max-cosmic-orange-512gb": {
@@ -208,8 +213,9 @@
       "source": "https://www.apple.com/uk/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-the-most-powerful-and-advanced-pro-models-ever/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-17-pro-forged-plateau/large_2x.mp4",
-      "label": "Watch Apple’s design video"
+      "url": "/assets/product-gallery/videos/iphone-17-pro-max.mp4",
+      "label": "Watch Apple’s design video",
+      "source": "https://www.apple.com/newsroom/videos/2025/autoplay/09/apple-iphone-17-pro-forged-plateau/large_2x.mp4"
     }
   },
   "iphone-16-pro-max-desert-titanium-512gb": {
@@ -246,8 +252,9 @@
       "source": "https://www.apple.com/uk/newsroom/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/videos-2024/autoplay/2024/09/apple-iphone-16-pro-light-and-durable-upgraded-design/large_2x.mp4",
-      "label": "Watch Apple’s titanium design video"
+      "url": "/assets/product-gallery/videos/iphone-16-pro-max-desert-titanium-512gb.mp4",
+      "label": "Watch Apple’s iPhone 16 Pro design video",
+      "source": "https://www.apple.com/newsroom/videos/videos-2024/autoplay/2024/09/apple-iphone-16-pro-light-and-durable-upgraded-design/large_2x.mp4"
     }
   },
   "iphone-15-pro-max-natural-titanium-256gb": {
@@ -274,8 +281,9 @@
       "source": "https://www.apple.com/uk/newsroom/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/iphone-15-pro-camera-optical-zoom/large_2x.mp4",
-      "label": "Watch Apple’s optical zoom video"
+      "url": "/assets/product-gallery/videos/iphone-15-pro-max-natural-titanium-256gb.mp4",
+      "label": "Watch Apple’s iPhone 15 Pro camera video",
+      "source": "https://www.apple.com/newsroom/videos/iphone-15-pro-camera-optical-zoom/large_2x.mp4"
     }
   },
   "iphone-13-pro-max": {
@@ -302,8 +310,9 @@
       "source": "https://www.apple.com/newsroom/2021/09/apple-unveils-iphone-13-pro-and-iphone-13-pro-max-more-pro-than-ever-before/"
     },
     "video": {
-      "url": "https://www.apple.com/newsroom/videos/iphone-13-pro-promotion/large_2x.mp4",
-      "label": "Watch Apple’s ProMotion video"
+      "url": "/assets/product-gallery/videos/iphone-13-pro-max.mp4",
+      "label": "Watch Apple’s iPhone 13 Pro video",
+      "source": "https://www.apple.com/newsroom/videos/iphone-13-pro-promotion/large_2x.mp4"
     }
   },
   "galaxy-s26-ultra": {
@@ -335,8 +344,10 @@
       "source": "https://www.samsung.com/africa_en/smartphones/galaxy-s26-ultra/"
     },
     "video": {
-      "url": "https://images.samsung.com/africa_en/smartphones/galaxy-s26-ultra/videos/galaxy-s26-ultra-features-intro-overview.mp4",
-      "label": "Watch Samsung’s Galaxy S26 Ultra overview"
+      "url": "https://www.youtube.com/watch?v=oO2i0yuEek8",
+      "label": "Watch Samsung’s Galaxy S26 Ultra overview",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/oO2i0yuEek8?autoplay=1&mute=1&playsinline=1&rel=0",
+      "source": "https://www.youtube.com/watch?v=oO2i0yuEek8"
     }
   },
   "galaxy-a57-5g": {
@@ -358,8 +369,9 @@
       "source": "https://www.samsung.com/id/smartphones/galaxy-a/galaxy-a57-5g-awesome-navy-256gb-sm-a576bdbsxid/"
     },
     "video": {
-      "url": "https://images.samsung.com/is/content/samsung/p6pim/id/feature/167029494/id-feature---x20-551656412.mp4",
-      "label": "Watch Samsung’s Galaxy A57 5G video"
+      "url": "/assets/product-gallery/videos/galaxy-a57-5g.mp4",
+      "label": "Watch Samsung’s Galaxy A57 5G video",
+      "source": "https://images.samsung.com/is/content/samsung/p6pim/id/feature/167029494/id-feature---x20-551656412.mp4"
     }
   },
   "samsung-galaxy-a16": {
@@ -521,6 +533,7 @@
     },
     "video": {
       "url": "https://www.itweb.co.za/office/honor/videos/8OKdWqDXwXOqbznQ",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/Bk1Mm_zoKWQ?autoplay=1&mute=1&playsinline=1&rel=0",
       "label": "Watch the HONOR X9c unboxing"
     }
   },

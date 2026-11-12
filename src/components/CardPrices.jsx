@@ -22,11 +22,9 @@ export function CardPrices({ product, showDiscount = false }) {
           ? `${formatEstimatedDollars(price)} ${t("US dollars")}`
           : `US ${formatEstimatedDollars(price)}`}
       </span>
-      {language === "ar" && (
-        <span className="product-card-price-ar" dir="rtl" lang="ar">
-          {formatArabicShillings(price)}
-        </span>
-      )}
+      <span className="product-card-price-ar" dir="rtl" lang="ar">
+        {formatArabicShillings(price)}
+      </span>
       {showDiscount && offer.discounted && (
         <span className="card-sale-details">
           <del
