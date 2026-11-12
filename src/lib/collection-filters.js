@@ -43,6 +43,10 @@ export function scopeCollection(products, category) {
     return active.filter((p) => /iphone/i.test(p.name))
   if (category === "samsung-galaxy-ultra-london")
     return active.filter((p) => /Galaxy.*Ultra/i.test(p.name))
+  if (category === "hot-deals")
+    return active.filter(
+      (p) => p.price != null && p.comparePrice != null && p.comparePrice > p.price,
+    )
   return active.filter((p) => p.category === category)
 }
 

@@ -56,6 +56,10 @@ export function Collection({ category = "shop" }) {
   const filtered = selectCollection(all, filters)
   const pages = Math.max(1, Math.ceil(filtered.length / 12)),
     page = Math.min(filters.page, pages)
+  const pageNumbers =
+    pages <= 5
+      ? Array.from({ length: pages }, (_, index) => index + 1)
+      : [...new Set([1, ...(page > 2 ? [page - 1] : []), page, ...(page < pages - 1 ? [page + 1] : []), pages])].sort((a, b) => a - b)
   const shown = filtered.slice((page - 1) * 12, page * 12)
   const active =
     filters.brands.length +
@@ -64,6 +68,8 @@ export function Collection({ category = "shop" }) {
   const title =
     category === "shop"
       ? "Everything in shop."
+      : category === "hot-deals"
+        ? "Hot deals, while they last."
       : category === "apple-products-london"
         ? "The Apple collection."
         : category === "iphones-london"
@@ -512,18 +518,22 @@ export function Collection({ category = "shop" }) {
                   <ChevronLeft size={17} />
                 </span>
               )}
-              {Array.from({ length: pages }, (_, index) => (
-                <a
-                  key={index}
-                  href={
-                    requestPath.split("?")[0] +
-                    collectionQuery({ ...filters, page: index + 1 })
-                  }
-                  className={page === index + 1 ? "active" : ""}
-                  aria-current={page === index + 1 ? "page" : undefined}
-                >
-                  {formatNumber(index + 1)}
-                </a>
+              {pageNumbers.map((pageNumber, index) => (
+                <React.Fragment key={pageNumber}>
+                  {index > 0 && pageNumber - pageNumbers[index - 1] > 1 && (
+                    <span className="pagination-ellipsis" aria-hidden="true">…</span>
+                  )}
+                  <a
+                    href={
+                      requestPath.split("?")[0] +
+                      collectionQuery({ ...filters, page: pageNumber })
+                    }
+                    className={page === pageNumber ? "active" : ""}
+                    aria-current={page === pageNumber ? "page" : undefined}
+                  >
+                    {formatNumber(pageNumber)}
+                  </a>
+                </React.Fragment>
               ))}
               {page < pages ? (
                 <a

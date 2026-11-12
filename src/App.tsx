@@ -40,11 +40,9 @@ import {
   Palette,
   Smartphone,
   Watch,
-  Laptop,
   Tablet,
   Headphones,
   Speaker,
-  Camera,
   Gamepad2,
   Cable,
   TrendingUp,
@@ -57,11 +55,12 @@ const B_GOLD = "#E32738"
 const B_BLUE_LIGHT = "#EEF3F8"
 const B_BLUE_DARK = "#041D3A"
 const SEARCH_WORDS = [
-  "smartphones",
-  "laptops & tablets",
+  "phones",
+  "tablets",
   "wireless earbuds",
-  "smart watches",
+  "wristwatches",
   "premium accessories",
+  "perfumes",
 ]
 
 function WhatsAppIcon({ size = 20 }: { size?: number }) {
@@ -142,34 +141,32 @@ function Btn({
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const CATS: CategoryEntry[] = [
-  { name: "Smartphones · الهواتف", icon: <Smartphone size={14} /> },
-  { name: "Smart Watches · الساعات", icon: <Watch size={14} /> },
-  { name: "Laptops & PC · الحواسيب", icon: <Laptop size={14} /> },
+  { name: "Phones · الهواتف", icon: <Smartphone size={14} /> },
   { name: "Tablets · الأجهزة اللوحية", icon: <Tablet size={14} /> },
-  { name: "Earbuds · سماعات الأذن", icon: <Headphones size={14} /> },
-  { name: "Speakers · مكبرات الصوت", icon: <Speaker size={14} /> },
-  { name: "Headphones · سماعات الرأس", icon: <Headphones size={14} /> },
-  { name: "Cameras · الكاميرات", icon: <Camera size={14} /> },
-  { name: "Gaming · الألعاب", icon: <Gamepad2 size={14} /> },
+  { name: "Audio · الصوتيات", icon: <Headphones size={14} /> },
+  { name: "Wristwatches · ساعات اليد", icon: <Watch size={14} /> },
   { name: "Accessories · الإكسسوارات", icon: <Cable size={14} /> },
+  { name: "Perfumes · العطور", icon: <Sparkles size={14} /> },
 ]
 
 const NAV_LINKS = [
   "Home",
-  "Smartphones",
-  "Laptops",
+  "Phones",
   "Tablets",
+  "Audio",
   "Accessories",
-  "Smart Watches",
+  "Wristwatches",
+  "Perfumes",
   "Hot Deals",
 ]
 const TREND_CATS = [
   "All",
-  "Smartphones",
+  "Phones",
   "Tablets",
   "Audio",
   "Accessories",
-  "Cameras",
+  "Wristwatches",
+  "Perfumes",
 ]
 
 // Product order and merchandising only. Names, photos, prices and stock come
@@ -179,7 +176,6 @@ const PRODUCTS: ProductReference[] = Array.from({ length: 12 }, (_, index) => ({
   ...(index < 4 ? { badge: "Spotlight" } : {}),
 }))
 const LATEST: ProductReference[] = [101, 102, 103, 104].map((id) => ({ id }))
-const DEALS: ProductReference[] = [201, 202].map((id) => ({ id }))
 
 const HERO_SLIDES = [
   {
@@ -187,7 +183,7 @@ const HERO_SLIDES = [
     headline: "New week.",
     hl: "New tech.",
     bg: "/promotions/gadget-collection.webp",
-    alt: "Collection of phones, headphones, watches, tablets and gaming accessories",
+    alt: "London Tech collection of phones, headphones, watches, tablets and accessories",
     category: "All",
   },
   {
@@ -209,43 +205,40 @@ const HERO_SLIDES = [
 ]
 
 const COMMERCE_IDS: Record<number, string> = {
-  1: "iphone-18-pro-max",
-  2: "iphone-18-pro-max-burgundy",
+  1: "iphone-17-pro-max-cosmic-orange-512gb",
+  2: "samsung-galaxy-a16",
   3: "galaxy-s26-ultra",
-  4: "galaxy-a57-5g",
-  5: "honor-x9d-5g",
+  4: "honor-x9d-5g",
+  5: "iphone-16-pro-max-desert-titanium-512gb",
   6: "galaxy-a17",
-  7: "samsung-galaxy-tablet",
-  8: "apple-ipad-pro",
-  9: "soundcore-wireless-earbuds",
-  10: "green-lion-usbc-cable",
-  11: "dji-pocket-camera",
-  12: "apple-watch-series",
-  101: "iphone-18-pro-max",
-  102: "galaxy-a57-5g",
-  103: "apple-ipad-pro",
-  104: "dji-pocket-camera",
-  201: "galaxy-s26-ultra",
-  202: "soundcore-wireless-earbuds",
+  7: "bebe-tab-b88-master-red",
+  8: "discover-tab-x1",
+  9: "jbl-tune-530bt-black",
+  10: "anker-25w-compact-usbc-charger",
+  11: "naviforce-nf8076-silver-black",
+  12: "skmei-1712-silver-white",
+  101: "iphone-air",
+  102: "galaxy-a17",
+  103: "s-color-s-kids4-max",
+  104: "soundcore-liberty-5-white",
 }
 const commerceId = (p: Product) => COMMERCE_IDS[p.id] || String(p.id)
 const categoryId = (name: string) =>
   (({
     All: "shop",
     "All Categories": "shop",
+    Phones: "mobiles",
     Smartphones: "mobiles",
-    "Smart Watches": "watches",
-    "Laptops & PC": "laptops",
-    Laptops: "laptops",
     Tablets: "tablets",
     Earbuds: "audio",
     Speakers: "audio",
     Headphones: "audio",
     Audio: "audio",
     "Audio & Earbuds": "audio",
-    Cameras: "cameras",
-    Gaming: "gaming",
     Accessories: "accessories",
+    Perfumes: "perfumes",
+    Wristwatches: "wristwatches",
+    "Hot Deals": "hot-deals",
   }) as Record<string, string>)[name.split(" · ")[0]] || "shop"
 const navigationPath = (label: string) =>
   label === "Home" ? "/" : "/collections/" + categoryId(label) + "/"
@@ -258,14 +251,12 @@ function hydrateProduct(p: ProductReference, catalogue: any[]): Product | null {
   if (!live) return null
   const category =
     ({
-      mobiles: "Smartphones",
-      laptops: "Laptops",
+      mobiles: "Phones",
       tablets: "Tablets",
       audio: "Audio",
-      watches: "Smart Watches",
-      gaming: "Gaming",
-      cameras: "Cameras",
+      wristwatches: "Wristwatches",
       accessories: "Accessories",
+      perfumes: "Perfumes",
     } as Record<string, string>)[live.category] || "Accessories"
   return {
     ...p,
@@ -292,6 +283,7 @@ function catalogueProducts(
 }
 function ProductCard({ p }: { p: Product }) {
   const { products } = useStore()
+  const { t } = useLocale()
   const id = commerceId(p)
   const item = products.find((product: { id: string }) => product.id === id)
   if (!item) return null
@@ -305,6 +297,10 @@ function ProductCard({ p }: { p: Product }) {
         <div className="home-product-copy">
           <h3>{item.name}</h3>
           <CardPrices product={item} />
+          <span className="home-product-cta">
+            {t("View details")}
+            <ArrowUpRight size={14} aria-hidden="true" />
+          </span>
         </div>
       </a>
     </article>
@@ -410,8 +406,19 @@ export default function App({ children, quiet = false }: StorefrontProps) {
 
   const hero = HERO_SLIDES[slide]
   const featuredPhone = catalogue.find(
-    (product: { id: string }) => product.id === "iphone-18-pro-max",
+    (product: { id: string }) => product.id === "iphone-17-pro-max-cosmic-orange-512gb",
   )
+  const dealProducts = catalogue.filter(
+    (product: any) =>
+      product.active !== false &&
+      product.price != null &&
+      product.comparePrice != null &&
+      product.comparePrice > product.price,
+  )
+  const visibleDeals =
+    dealProducts.length > 0
+      ? [...dealProducts.slice(dealOffset), ...dealProducts.slice(0, dealOffset)].slice(0, 2)
+      : []
   const filtered = catalogueProducts(PRODUCTS, catalogue).filter(
     (p) =>
       (tcat === "All" || p.category === tcat) &&
@@ -1149,12 +1156,12 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               <div className="hero-side hero-category-features">
                 {[
                   {
-                    id: "apple-watch-series",
-                    label: "Smart watches",
-                    category: "watches",
+                    id: "skmei-1712-silver-white",
+                    label: "Wristwatches",
+                    category: "wristwatches",
                   },
                   {
-                    id: "bose-qc-ultra",
+                    id: "jbl-tune-530bt-black",
                     label: "Personal audio",
                     category: "audio",
                   },
@@ -1237,8 +1244,8 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               </Btn>
             </div>
 
-            {/* Daily Deals */}
-            <div
+            {/* Show sale pricing only when the merchant has set a real compare price. */}
+            {dealProducts.length > 0 && <div
               style={{
                 background: "#fff",
                 border: "1px solid #e0e8f5",
@@ -1247,67 +1254,67 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               }}
             >
               <SectionHeader
-                label="Daily Deals"
+                label="Hot Deals"
                 icon={<Flame size={16} color={B_BLUE} />}
                 controls={
                   <>
-                    <button
-                      onClick={() =>
-                        setDealOffset(
-                          (i) => (i + DEALS.length - 1) % DEALS.length,
-                        )
-                      }
-                      aria-label="Previous featured products"
-                      style={{
-                        background: "#f5f5f5",
-                        border: "1px solid #ddd",
-                        color: "#666",
-                        width: 26,
-                        height: 26,
-                        borderRadius: 3,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <ChevronLeft size={14} />
-                    </button>
-                    <button
-                      onClick={() =>
-                        setDealOffset((i) => (i + 1) % DEALS.length)
-                      }
-                      aria-label="Next featured products"
-                      style={{
-                        background: B_BLUE,
-                        border: "none",
-                        color: "#fff",
-                        width: 26,
-                        height: 26,
-                        borderRadius: 3,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <ChevronRight size={14} />
-                    </button>
+                    {dealProducts.length > 2 && (
+                      <>
+                        <button
+                          onClick={() =>
+                            setDealOffset((i) =>
+                              (i + dealProducts.length - 1) % dealProducts.length,
+                            )
+                          }
+                          aria-label="Previous hot deals"
+                          style={{
+                            background: "#f5f5f5",
+                            border: "1px solid #ddd",
+                            color: "#666",
+                            width: 26,
+                            height: 26,
+                            borderRadius: 3,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <ChevronLeft size={14} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            setDealOffset((i) => (i + 1) % dealProducts.length)
+                          }
+                          aria-label="Next hot deals"
+                          style={{
+                            background: B_BLUE,
+                            border: "none",
+                            color: "#fff",
+                            width: 26,
+                            height: 26,
+                            borderRadius: 3,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <ChevronRight size={14} />
+                        </button>
+                      </>
+                    )}
+                    <Btn small onClick={() => shopCategory("Hot Deals")}>
+                      {t("View hot deals")}
+                    </Btn>
                   </>
                 }
               />
               <div className="deals-grid">
-                {catalogueProducts(
-                  [...DEALS.slice(dealOffset), ...DEALS.slice(0, dealOffset)],
-                  catalogue,
-                ).map((p, i) => {
-                  const item = catalogue.find(
-                    (product: { id: string }) => product.id === commerceId(p),
-                  )
-                  if (!item) return null
+                {visibleDeals.map((item: any, i: number) => {
                   return (
                     <div
-                      key={p.id}
+                      key={item.id}
                       className="deal-item"
                       style={{
                         padding: "16px 18px",
@@ -1323,8 +1330,8 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                         style={{ position: "relative", flexShrink: 0 }}
                       >
                         <img
-                          src={p.image}
-                          alt={p.name}
+                          src={item.image}
+                          alt={item.name}
                           className="deal-img"
                           style={{
                             width: 150,
@@ -1346,17 +1353,17 @@ export default function App({ children, quiet = false }: StorefrontProps) {
                             marginBottom: 4,
                           }}
                         >
-                          <a href={"/products/" + commerceId(p) + "/"}>
-                            {p.name}
+                          <a href={"/products/" + item.id + "/"}>
+                            {item.name}
                           </a>
                         </div>
-                        <CardPrices product={item} />
+                        <CardPrices product={item} showDiscount />
                       </div>
                     </div>
                   )
                 })}
               </div>
-            </div>
+            </div>}
 
             <section className="company-promo">
               <div className="promo-copy">
@@ -1373,7 +1380,7 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               </div>
               <img
                 src="/promotions/accessories.jpg"
-                alt="London Tech selection of chargers, smart watches, earbuds and phone accessories"
+                alt="London Tech selection of chargers, earbuds and phone accessories"
               />
             </section>
 

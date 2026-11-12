@@ -4,15 +4,14 @@ import {
   ArrowUpRight,
   AudioLines,
   CheckCircle2,
-  Gamepad2,
   Headphones,
   HeartHandshake,
   MapPin,
   MessageCircle,
-  Monitor,
   PackageCheck,
   Play,
   Smartphone,
+  Sparkles,
   Watch,
 } from "lucide-react"
 import { useStore } from "../store.jsx"
@@ -42,7 +41,7 @@ const films = [
     duration: "0:20",
     poster: "product-recap-poster.webp",
     description:
-      "A product recap featuring iPhones and London Tech’s branded shopping bags.",
+      "A product recap featuring iPhones and other devices available at London Tech.",
   },
   {
     id: "community-moments",
@@ -246,10 +245,9 @@ export function AboutPage() {
         <div className="about-collection-links">
           {[
             ["mobiles", "Phones", Smartphone],
-            ["laptops", "Laptops", Monitor],
             ["audio", "Audio", Headphones],
-            ["watches", "Watches", Watch],
-            ["gaming", "Gaming", Gamepad2],
+            ["wristwatches", "Wristwatches", Watch],
+            ["perfumes", "Perfumes", Sparkles],
             ["accessories", "Accessories", AudioLines],
           ].map(([id, label, Icon]) => (
             <a key={id} href={"/collections/" + id + "/"}>

@@ -7,7 +7,7 @@ import {
   retiredPhoneSkus,
 } from "../src/data/catalog.js"
 import { cataloguePriceDefaults } from "../src/data/prices.js"
-import { stockroomProducts } from "../src/data/verified-inventory.js"
+import { stockroomProducts, verifiedInventory } from "../src/data/verified-inventory.js"
 import {
   referenceProducts,
   retiredReferenceSkus,
@@ -119,6 +119,60 @@ export async function adoptStockroomDetails(db) {
         )
       }
     }
+  })
+}
+
+/** Retire only listings from the old built-in seed catalogue that are not in
+ * the owner-supplied inventory. Preserve order history and merchant records. */
+export async function retireUnlistedSeedProducts(db) {
+  const activeInventory = new Set(
+    products.filter((product) => product.active !== false).map(({ id }) => id),
+  )
+  const seedRows = [...legacyProducts, ...referenceProducts, ...verifiedInventory]
+  const retired = [...new Map(seedRows.map(({ id, sku }) => [`${id}:${sku}`, { id, sku }])).values()]
+    .filter(({ id }) => !activeInventory.has(id))
+
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      `INSERT INTO catalogue_migrations(version) VALUES($1)
+       ON CONFLICT(version) DO NOTHING RETURNING version`,
+      ["2026-11-12-owner-inventory-only"],
+    )
+    if (!marker.rows.length) return 0
+
+    const result = await tx.query(
+      `UPDATE products AS p
+       SET data=jsonb_set(p.data, '{active}', 'false'::jsonb), updated_at=NOW()
+       FROM jsonb_to_recordset($1::jsonb) AS item(id text, sku text)
+       WHERE p.id=item.id AND p.data->>'sku'=item.sku
+         AND p.data->>'active' IS DISTINCT FROM 'false'`,
+      [JSON.stringify(retired)],
+    )
+    return result.affectedRows ?? result.rowCount
+  })
+}
+
+/** Move supplied stockroom items to their current owner-defined categories. */
+export async function adoptStockroomCategories(db) {
+  const rows = stockroomProducts
+    .filter(({ category }) => category === "accessories" || category === "perfumes")
+    .map(({ id, sku, category }) => ({ id, sku, previous: "lifestyle", category }))
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      `INSERT INTO catalogue_migrations(version) VALUES($1)
+       ON CONFLICT(version) DO NOTHING RETURNING version`,
+      ["2026-11-12-owner-stockroom-categories"],
+    )
+    if (!marker.rows.length) return 0
+    const result = await tx.query(
+      `UPDATE products AS p
+       SET data=jsonb_set(p.data, '{category}', to_jsonb(item.category), true), updated_at=NOW()
+       FROM jsonb_to_recordset($1::jsonb) AS item(id text, sku text, previous text, category text)
+       WHERE p.id=item.id AND p.data->>'sku'=item.sku
+         AND p.data->>'category'=item.previous`,
+      [JSON.stringify(rows)],
+    )
+    return result.affectedRows ?? result.rowCount
   })
 }
 

@@ -87,6 +87,11 @@
   object-fit: contain;
 }
 .home-product-copy { padding: 12px; }
+.home-product-cta { display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;padding-top:10px;border-top:1px solid #e8edf3;color:#082a52;font-size:12px;font-weight:800; }
+.home-product-cta svg { color:#d23136; }
+.card-sale-details{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px}
+.card-sale-previous{color:#8794a6;font-size:11px;font-weight:600;text-decoration-thickness:1px}
+.card-sale-discount{display:inline-flex;align-items:center;min-height:20px;padding:2px 6px;border-radius:4px;background:#fff0f2;color:#c51e36;font-size:11px;font-weight:900;line-height:1.2}
 .home-product-copy h3 {
   color: #17334f;
   font-size: 15px;

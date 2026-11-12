@@ -4,7 +4,7 @@ const arabic = new Intl.NumberFormat("ar-UG", {
   numberingSystem: "arab",
 })
 const dollarDigits = {
-  latn: new Intl.NumberFormat("en-UG", {
+  latn: new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }),
@@ -41,5 +41,5 @@ export function formatEstimatedDollars(shillings) {
   const style = typeof window !== "undefined" && display.numberStyle === "arab"
     ? "arab"
     : "latn"
-  return "≈ USD " + dollarDigits[style].format(shillings / shillingsPerDollar)
+  return "$" + dollarDigits[style].format(shillings / shillingsPerDollar)
 }

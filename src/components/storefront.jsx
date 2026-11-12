@@ -71,6 +71,7 @@ export function CategoryIcon({ category, size = 22 }) {
 export { PaymentMarks } from "./PaymentMarks.jsx"
 
 export function ProductCard({ product: p, detailed = false }) {
+  const { t } = useLocale()
   const image = galleryImages(p)[0]?.src || p.image
   const href = productPath(p)
 
@@ -86,6 +87,10 @@ export function ProductCard({ product: p, detailed = false }) {
         <div className="product-card-bottom">
           <CardPrices product={p} />
         </div>
+        <a className="product-card-cta" href={href}>
+          {t("View details")}
+          <ArrowRight size={15} aria-hidden="true" />
+        </a>
       </div>
     </article>
   )

@@ -43,6 +43,7 @@ const phone = (value) =>
     .replace(/^0/, "+256")
 const curated = {
   shop: "Shop Electronics",
+  "hot-deals": "Hot Deals",
   "apple-products-london": "Apple Products",
   "iphones-london": "iPhones",
   "samsung-galaxy-ultra-london": "Samsung Galaxy Ultra",
@@ -116,7 +117,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
   const result = {
     status: 200,
     title: "London Tech Stores | Electronics in Kampala",
-    description: `Shop phones, laptops, audio, watches, gaming and accessories at London Tech Stores in Arua Park, Kampala. Explore prices in UGX and visit shop FN:19.`,
+    description: `Shop phones, tablets, audio, watches, accessories and perfumes at London Tech Stores in Arua Park, Kampala. Explore prices in UGX and visit shop FN:19.`,
     canonical: origin + canonicalPath,
     noindex: false,
     render: true,
@@ -315,7 +316,7 @@ export function resolveSeo(requestPath, data, origin = defaultOrigin) {
       ...result,
       title: "Page Not Found | London Tech Stores",
       description:
-        "This page is unavailable. Explore phones, laptops and more at London Tech Stores.",
+        "This page is unavailable. Explore phones, tablets and more at London Tech Stores.",
       noindex: true,
       schemas: [],
     }

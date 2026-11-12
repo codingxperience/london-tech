@@ -9,10 +9,12 @@ import {
   adoptCataloguePrices,
   adoptReferenceDetails,
   adoptReferencePrices,
+  adoptStockroomCategories,
   adoptStockedPhones,
   adoptStockroomDetails,
   repairSeedCatalogue,
   retireReferenceListings,
+  retireUnlistedSeedProducts,
 } from "./catalogue-migration.js"
 import { adoptLaunchOffers } from "./launch-offers-migration.js"
 import { postgresConfig } from "./postgres-config.js"
@@ -226,6 +228,8 @@ async function initialize() {
   await adoptStockedPhones(db)
   await adoptStockroomDetails(db)
   await adoptCataloguePrices(db)
+  await adoptStockroomCategories(db)
+  await retireUnlistedSeedProducts(db)
 
   await db.query(
     `INSERT INTO settings(id,data) VALUES('store',$1::jsonb) ON CONFLICT(id) DO NOTHING`,

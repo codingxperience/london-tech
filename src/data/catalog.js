@@ -2,7 +2,6 @@ import originalCatalog from "./legacy-catalog.json" with { type: "json" }
 import productMedia from "./product-media.json" with { type: "json" }
 import catalogueCorrections from "./catalogue-corrections.json" with { type: "json" }
 import launchOffers from "./launch-offers.json" with { type: "json" }
-import { referenceProducts } from "./reference-catalogue.js"
 import { stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
 import { stockroomProducts, verifiedInventory } from "./verified-inventory.js"
 
@@ -15,13 +14,6 @@ export const categories = [
     name: "Phones",
     icon: "Smartphone",
     description: "Find your next everyday essential.",
-  },
-
-  {
-    id: "laptops",
-    name: "Laptops",
-    icon: "Laptop",
-    description: "Space for your best work.",
   },
 
   {
@@ -39,31 +31,10 @@ export const categories = [
   },
 
   {
-    id: "watches",
-    name: "Smart watches",
-    icon: "Watch",
-    description: "Your day, a glance away.",
-  },
-
-  {
     id: "wristwatches",
     name: "Wristwatches",
     icon: "Watch",
     description: "Explore watches for everyday wear.",
-  },
-
-  {
-    id: "gaming",
-    name: "Gaming",
-    icon: "Gamepad2",
-    description: "Make more time for play.",
-  },
-
-  {
-    id: "cameras",
-    name: "Cameras",
-    icon: "Camera",
-    description: "Keep the moments that matter.",
   },
 
   {
@@ -74,31 +45,10 @@ export const categories = [
   },
 
   {
-    id: "game-discs",
-    name: "Games",
-    icon: "Disc3",
-    description: "Discover your next adventure.",
-  },
-
-  {
-    id: "bags",
-    name: "Laptop bags",
-    icon: "Backpack",
-    description: "A considered way to carry.",
-  },
-
-  {
-    id: "travel",
-    name: "Travel",
-    icon: "Luggage",
-    description: "Ready for wherever comes next.",
-  },
-
-  {
-    id: "lifestyle",
-    name: "Lifestyle",
+    id: "perfumes",
+    name: "Perfumes",
     icon: "Sparkles",
-    description: "Everyday essentials, thoughtfully chosen.",
+    description: "Fragrance for every day and every occasion.",
   },
 ]
 
@@ -534,18 +484,12 @@ export const caseProducts = [
   },
 ]
 
-const stockroomIds = new Set(stockroomProducts.map(({ id }) => id))
-
 export const products = [
   ...phoneProducts,
-  ...approvedProducts
-    .filter(({ id }) => !stockedPhoneDetails.has(id))
-    .map((product) =>
-      retiredPhoneSkus[product.id] ? { ...product, active: false } : product,
-    ),
   ...caseProducts,
-  ...verifiedInventory,
-  ...referenceProducts.filter(({ id }) => !stockroomIds.has(id)),
+  ...verifiedInventory.filter(
+    ({ id }) => id !== "samsung-galaxy-tab-a11-plus-5g-128gb-gray",
+  ),
   ...stockroomProducts,
 ].map((product) => {
   const price = cataloguePriceDefaults[product.id]
