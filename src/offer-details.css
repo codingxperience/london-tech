@@ -87,8 +87,23 @@
   object-fit: contain;
 }
 .home-product-copy { padding: 12px; }
-.home-product-cta { display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;padding-top:10px;border-top:1px solid #e8edf3;color:#082a52;font-size:12px;font-weight:800; }
-.home-product-cta svg { color:#d23136; }
+.home-product-card { position:relative;display:flex;flex-direction:column;height:100%; }
+.home-product-link { flex:1;min-width:0;color:inherit;text-decoration:none; }
+.home-product-link:hover h3 { color:#082a52; }
+.home-product-wishlist { position:absolute;top:10px;right:10px;z-index:1;display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid #dce4ed;border-radius:50%;background:#fff;color:#082a52;box-shadow:0 2px 8px #082a5212;transition:color .18s,border-color .18s,transform .18s; }
+.home-product-wishlist:hover { transform:translateY(-1px);border-color:#e32738;color:#e32738; }
+.home-product-wishlist.selected { border-color:#e32738;color:#e32738; }
+.home-product-actions { display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:8px;padding:0 12px 12px; }
+.home-product-actions>a,.home-product-actions>button { display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:40px;padding:7px 8px;border:1px solid #d8e1eb;border-radius:4px;font:800 12px/1.2 Nunito,sans-serif;text-decoration:none;white-space:nowrap;transition:background .18s,border-color .18s,color .18s; }
+.home-product-chat { background:#fff;color:#176e4b; }
+.home-product-chat:hover { border-color:#b7dccb;background:#f0faf5; }
+.home-product-add { background:#082a52;color:#fff;border-color:#082a52!important; }
+.home-product-add:hover:not(:disabled) { background:#041d3a; }
+.home-product-add:disabled { background:#e7ebf0;color:#758397;border-color:#e7ebf0!important;cursor:not-allowed; }
+.home-product-actions svg { flex:0 0 auto; }
+.nav-desktop .nav-link[aria-current="page"] { position:relative; }
+.nav-desktop .nav-link[aria-current="page"]::after { position:absolute;right:12px;bottom:-2px;left:12px;height:2px;background:#e32738;content:""; }
+.nav-drawer .mobile-nav-link[aria-current="page"] { border-left:3px solid #e32738!important;background:#eef3f8; }
 .card-sale-details{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px}
 .card-sale-previous{color:#8794a6;font-size:11px;font-weight:600;text-decoration-thickness:1px}
 .card-sale-discount{display:inline-flex;align-items:center;min-height:20px;padding:2px 6px;border-radius:4px;background:#fff0f2;color:#c51e36;font-size:11px;font-weight:900;line-height:1.2}

@@ -1,5 +1,5 @@
 import { BrandWordmark } from "./components/BrandWordmark.jsx"
-import { useStore, navigate } from "./store.jsx"
+import { useStore, navigate, usePath } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
 import { LocaleSelector } from "./components/LocaleSelector.jsx"
 import { useLocale } from "./lib/locale.jsx"
@@ -282,11 +282,17 @@ function catalogueProducts(
   })
 }
 function ProductCard({ p }: { p: Product }) {
-  const { products } = useStore()
+  const { products, wishlist, toggleWish, addCart, cart } = useStore()
   const { t } = useLocale()
   const id = commerceId(p)
   const item = products.find((product: { id: string }) => product.id === id)
   if (!item) return null
+  const wished = wishlist.includes(id)
+  const added = cart.some((line: { id: string }) => line.id === id)
+  const hasVariants = Boolean(item.options?.length || item.colors?.length)
+  const message = encodeURIComponent(
+    `Hello London Tech, I’m interested in ${item.name}.`,
+  )
 
   return (
     <article className="pcard home-product-card">
@@ -297,12 +303,63 @@ function ProductCard({ p }: { p: Product }) {
         <div className="home-product-copy">
           <h3>{item.name}</h3>
           <CardPrices product={item} />
-          <span className="home-product-cta">
-            {t("View details")}
-            <ArrowUpRight size={14} aria-hidden="true" />
-          </span>
         </div>
       </a>
+      <button
+        className={`home-product-wishlist${wished ? " selected" : ""}`}
+        type="button"
+        aria-pressed={wished}
+        aria-label={t(
+          wished ? "Remove {name} from wishlist" : "Save {name} to wishlist",
+          { name: item.name },
+        )}
+        onClick={() => toggleWish(id)}
+      >
+        <Heart size={17} fill={wished ? "currentColor" : "none"} />
+      </button>
+      <div className="home-product-actions">
+        <a
+          className="home-product-chat"
+          href={`https://wa.me/256788341111?text=${message}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("Ask about {name} on WhatsApp", { name: item.name })}
+        >
+          <WhatsAppIcon size={16} />
+          <span>{t("Chat")}</span>
+        </a>
+        <button
+          className="home-product-add"
+          type="button"
+          disabled={item.stock === 0}
+          onClick={() =>
+            hasVariants
+              ? navigate("/products/" + id + "/")
+              : addCart(item)
+          }
+          aria-label={t(
+            item.stock === 0
+              ? "{name} is out of stock"
+              : hasVariants
+                ? "Choose options for {name}"
+                : added
+                  ? "Add another {name} to cart"
+                  : "Add {name} to cart",
+            { name: item.name },
+          )}
+        >
+          <ShoppingCart size={15} aria-hidden="true" />
+          <span>
+            {item.stock === 0
+              ? t("Out of stock")
+              : hasVariants
+                ? t("Choose options")
+                : added
+                  ? t("Added")
+                  : t("Add to cart")}
+          </span>
+        </button>
+      </div>
     </article>
   )
 }
@@ -371,6 +428,13 @@ interface StorefrontProps {
 }
 export default function App({ children, quiet = false }: StorefrontProps) {
   const { t } = useLocale()
+  const currentPath = usePath().split(/[?#]/, 1)[0] || "/"
+  const isNavigationActive = (label: string) => {
+    const targetPath = navigationPath(label)
+    return label === "Home"
+      ? currentPath === "/"
+      : targetPath !== "/" && currentPath.startsWith(targetPath)
+  }
   const {
     products: catalogue,
     cart: cartItems,
@@ -709,34 +773,41 @@ export default function App({ children, quiet = false }: StorefrontProps) {
               overflowY: "hidden",
             }}
           >
-            {NAV_LINKS.map((lnk, i) => (
-              <a
-                key={lnk}
-                href={navigationPath(lnk)}
-                style={{
-                  padding: "10px 12px",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: i === 0 ? B_BLUE : "#555",
-                  textDecoration: "none",
-                  fontFamily: "Nunito,sans-serif",
-                  whiteSpace: "nowrap",
-                  borderBottom:
-                    i === 0 ? `2px solid ${B_BLUE}` : "2px solid transparent",
-                  marginBottom: -2,
-                  display: "inline-block",
-                }}
-                onMouseEnter={(e) => {
-                  ;(e.currentTarget as HTMLAnchorElement).style.color = B_BLUE
-                }}
-                onMouseLeave={(e) => {
-                  if (i !== 0)
-                    (e.currentTarget as HTMLAnchorElement).style.color = "#555"
-                }}
-              >
-                {t(lnk)}
-              </a>
-            ))}
+            {NAV_LINKS.map((lnk) => {
+              const targetPath = navigationPath(lnk)
+              const isActive = isNavigationActive(lnk)
+              return (
+                <a
+                  key={lnk}
+                  href={targetPath}
+                  className={`nav-link${isActive ? " active" : ""}`}
+                  aria-current={isActive ? "page" : undefined}
+                  style={{
+                    padding: "10px 12px",
+                    fontSize: 13,
+                    fontWeight: isActive ? 800 : 600,
+                    color: isActive ? B_BLUE : "#555",
+                    textDecoration: "none",
+                    fontFamily: "Nunito,sans-serif",
+                    whiteSpace: "nowrap",
+                    borderBottom: isActive
+                      ? `2px solid ${B_BLUE}`
+                      : "2px solid transparent",
+                    marginBottom: -2,
+                    display: "inline-block",
+                  }}
+                  onMouseEnter={(e) => {
+                    ;(e.currentTarget as HTMLAnchorElement).style.color = B_BLUE
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.color =
+                      isActive ? B_BLUE : "#555"
+                  }}
+                >
+                  {t(lnk)}
+                </a>
+              )
+            })}
           </div>
 
           {/* Mobile hamburger */}
@@ -765,28 +836,34 @@ export default function App({ children, quiet = false }: StorefrontProps) {
           className={`nav-drawer${navOpen ? " open" : ""}`}
           style={{ borderTop: `1px solid ${B_BLUE_LIGHT}` }}
         >
-          {NAV_LINKS.map((lnk, i) => (
-            <a
-              key={lnk}
-              href={navigationPath(lnk)}
-              onClick={() => setNavOpen(false)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "11px 20px",
-                borderBottom: "1px solid #f0f0f0",
-                fontSize: 14,
-                fontWeight: 600,
-                color: i === 0 ? B_BLUE : "#444",
-                textDecoration: "none",
-                fontFamily: "Nunito,sans-serif",
-              }}
-            >
-              {t(lnk)}
-              <ChevronRight size={14} color="#ccc" />
-            </a>
-          ))}
+          {NAV_LINKS.map((lnk) => {
+            const targetPath = navigationPath(lnk)
+            const isActive = isNavigationActive(lnk)
+            return (
+              <a
+                key={lnk}
+                href={targetPath}
+                className={`nav-link mobile-nav-link${isActive ? " active" : ""}`}
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => setNavOpen(false)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "11px 20px",
+                  borderBottom: "1px solid #f0f0f0",
+                  fontSize: 14,
+                  fontWeight: isActive ? 800 : 600,
+                  color: isActive ? B_BLUE : "#444",
+                  textDecoration: "none",
+                  fontFamily: "Nunito,sans-serif",
+                }}
+              >
+                {t(lnk)}
+                <ChevronRight size={14} color={isActive ? B_GOLD : "#ccc"} />
+              </a>
+            )
+          })}
         </div>
       </nav>
 
