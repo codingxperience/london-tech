@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, Expand, Play, ZoomIn } from "lucide-react"
 import { IconButton, Modal } from "./ui.jsx"
 import { galleryImages, zoomOrigin } from "../lib/product-experience.js"
-import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
+import { showProductImageFallback } from "../lib/product-image.js"
+import { useStore } from "../store.jsx"
+import { ProductPhotoPlaceholder } from "./ProductPhotoPlaceholder.jsx"
 
 export function ProductGallery({ product }) {
+  const { settings } = useStore()
   const images = galleryImages(product)
   const [selected, setSelected] = useState(0)
   const [enlarged, setEnlarged] = useState(false)
@@ -91,13 +94,20 @@ export function ProductGallery({ product }) {
     })
   }
 
-  if (!current) return (
-    <div className="product-gallery">
-      <div className="product-main-image">
-        <img src={productImagePlaceholder} alt={`Photo unavailable for ${product.name}`} />
+  if (!current) {
+    const number = (settings.whatsapp || settings.phone || "")
+      .replace(/\D/g, "")
+      .replace(/^0/, "256")
+    const message = encodeURIComponent(`Hello London Tech, could you send me a photo of ${product.name} (${product.sku})?`)
+    return (
+      <div className="product-gallery product-gallery-empty">
+        <ProductPhotoPlaceholder
+          category={product.category}
+          requestHref={number ? `https://wa.me/${number}?text=${message}` : "/contact/"}
+        />
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <div className="product-gallery">

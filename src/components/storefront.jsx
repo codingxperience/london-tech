@@ -29,7 +29,8 @@ import {
 
 import { useStore, cartKey } from "../store.jsx"
 import { galleryImages } from "../lib/product-experience.js"
-import { showProductImageFallback } from "../lib/product-image.js"
+import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
+import { ProductPhotoPlaceholder } from "./ProductPhotoPlaceholder.jsx"
 import { CardPrices } from "./CardPrices.jsx"
 import { useLocale } from "../lib/locale.jsx"
 
@@ -80,7 +81,11 @@ export function ProductCard({ product: p, detailed = false }) {
     <article className={"product-card" + (detailed ? " detailed-product-card" : "")}>
       <div className="product-card-media">
         <a href={href} tabIndex={-1} aria-hidden="true">
-          <img src={image} alt="" loading="lazy" decoding="async" onError={showProductImageFallback} />
+          {image === productImagePlaceholder ? (
+            <ProductPhotoPlaceholder category={p.category} />
+          ) : (
+            <img src={image} alt="" loading="lazy" decoding="async" onError={showProductImageFallback} />
+          )}
         </a>
       </div>
       <div className="product-card-copy">

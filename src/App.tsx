@@ -3,7 +3,8 @@ import { useStore, navigate } from "./store.jsx"
 import { AccountMenu } from "./components/AccountMenu"
 import { LocaleSelector } from "./components/LocaleSelector.jsx"
 import { useLocale } from "./lib/locale.jsx"
-import { showProductImageFallback } from "./lib/product-image.js"
+import { productImagePlaceholder, showProductImageFallback } from "./lib/product-image.js"
+import { ProductPhotoPlaceholder } from "./components/ProductPhotoPlaceholder.jsx"
 import { StoreFooter } from "./components/StoreFooter.jsx"
 import { CardPrices } from "./components/CardPrices.jsx"
 import { UtilityBanner } from "./components/UtilityBanner.jsx"
@@ -300,7 +301,11 @@ function ProductCard({ p }: { p: Product }) {
     <article className="pcard home-product-card">
       <a className="home-product-link" href={"/products/" + id + "/"}>
         <div className="home-product-image">
-          <img src={item.image} loading="lazy" decoding="async" alt="" onError={showProductImageFallback} />
+          {item.image === productImagePlaceholder ? (
+            <ProductPhotoPlaceholder category={item.category} />
+          ) : (
+            <img src={item.image} loading="lazy" decoding="async" alt="" onError={showProductImageFallback} />
+          )}
         </div>
         <div className="home-product-copy">
           <h3>{item.name}</h3>

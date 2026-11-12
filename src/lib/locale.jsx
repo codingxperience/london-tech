@@ -134,6 +134,8 @@ const arabic = {
   "Save {name} to wishlist": "أضف {name} إلى المفضلة",
   "Remove {name} from wishlist": "أزل {name} من المفضلة",
   "Ask about {name} on WhatsApp": "اسأل عن {name} عبر واتساب",
+  "Photo on request": "الصورة عند الطلب",
+  "Ask the store for a photo": "اطلب صورة من المتجر",
   "Add {name} to cart": "أضف {name} إلى السلة",
   "Add another {name} to cart": "أضف {name} مرة أخرى إلى السلة",
   "Choose options for {name}": "اختر خيارات {name}",
