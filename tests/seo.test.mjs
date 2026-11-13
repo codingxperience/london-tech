@@ -17,7 +17,7 @@ const data = { products, settings: storeDefaults, pages: [], reviews: {} }
 test("verified catalogue additions and their images appear on canonical pages and the sitemap", async () => {
   const xml = sitemapXml(data, defaultOrigin)
   assert.ok(xml.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'))
-  assert.equal(phoneProducts.length, 17)
+  assert.equal(phoneProducts.length, 24)
   for (const product of [...phoneProducts, ...caseProducts, ...verifiedInventory]) {
     const path = "/products/" + product.id + "/"
     const seo = resolveSeo(path, data)

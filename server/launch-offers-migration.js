@@ -1,5 +1,6 @@
 import launchOffers from "../src/data/launch-offers.json" with { type: "json" }
 import { legacyProducts } from "../src/data/catalog.js"
+import { restoredPhoneIds } from "../src/data/phone-stock.js"
 
 const version = "2026-11-01-approved-launch-offers"
 const before = new Map(legacyProducts.map((p) => [p.id, p]))
@@ -16,7 +17,7 @@ export async function adoptLaunchOffers(db) {
     // Serialize against stock reservations, payments and administrative saves.
     const rows = await tx.query(
       "SELECT id,data FROM products WHERE id=ANY($1::text[]) FOR UPDATE",
-      [Object.keys(launchOffers)],
+      [Object.keys(launchOffers).filter((id) => !restoredPhoneIds.includes(id))],
     )
     let updated = 0
     for (const { id, data } of rows.rows) {

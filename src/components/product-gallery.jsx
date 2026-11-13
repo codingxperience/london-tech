@@ -142,6 +142,7 @@ export function ProductGallery({ product }) {
             <span className="image-count">
               {selected + 1} / {images.length}
             </span>
+            {current.preview && <span className="gallery-preview-label">{t(current.alt)}</span>}
             <button
               type="button"
               className="image-expand"
@@ -300,6 +301,7 @@ export function ProductGallery({ product }) {
                 controls
                 autoPlay
                 muted
+                loop={current.preview || undefined}
                 playsInline
                 preload="metadata"
               />

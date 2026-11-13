@@ -38,7 +38,7 @@ export function ProductSections({
     timeZone: "Africa/Kampala",
   })
   const information = productInformation(p)
-  const images = galleryImages(p)
+  const images = galleryImages(p).filter(({ type }) => type !== "video")
   const [expandedSpecs, setExpandedSpecs] = useState(false)
   const [reviewRating, setReviewRating] = useState("all")
   const [reviewSort, setReviewSort] = useState("newest")

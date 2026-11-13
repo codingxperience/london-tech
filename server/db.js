@@ -16,6 +16,7 @@ import {
   adoptStockroomDetails,
   repairSeedCatalogue,
   restoreStockroomTablet,
+  restoreRequestedPhones,
   retireReferenceListings,
   retireUnlistedSeedProducts,
 } from "./catalogue-migration.js"
@@ -236,6 +237,7 @@ async function initialize() {
   await adoptStockroomCategories(db)
   await retireUnlistedSeedProducts(db)
   await restoreStockroomTablet(db)
+  await restoreRequestedPhones(db)
 
   await db.query(
     `INSERT INTO settings(id,data) VALUES('store',$1::jsonb) ON CONFLICT(id) DO NOTHING`,

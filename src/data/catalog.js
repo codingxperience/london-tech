@@ -2,7 +2,7 @@ import originalCatalog from "./legacy-catalog.json" with { type: "json" }
 import productMedia from "./product-media.json" with { type: "json" }
 import catalogueCorrections from "./catalogue-corrections.json" with { type: "json" }
 import launchOffers from "./launch-offers.json" with { type: "json" }
-import { stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
+import { onRequestPhoneIds, stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
 import { stockroomProducts, verifiedInventory } from "./verified-inventory.js"
 
 import { cataloguePriceDefaults, guidePrices } from "./prices.js"
@@ -399,6 +399,11 @@ export const retiredPhoneSkus = Object.fromEntries(
 )
 
 const phoneSkus = {
+  "galaxy-s24": "LT-PHONE-011",
+  "galaxy-s24-ultra": "LT-PHONE-012",
+  "iphone-14-pro-max": "LT-PHONE-013",
+  "honor-x9e-pro": "LT-PHONE-015",
+  "iphone-duo": "LT-PHONE-014",
   "iphone-17-pro-max-cosmic-orange-512gb": "LT-PHONE-001",
   "iphone-16-pro-max-desert-titanium-512gb": "LT-PHONE-002",
   "iphone-15-pro-max-natural-titanium-256gb": "LT-PHONE-003",
@@ -430,6 +435,9 @@ export const phoneProducts = stockedPhones.map(({ id }) => {
     createdAt: "2026-11-11T00:00:00Z",
     sku: phoneSkus[id],
     ...previous,
+    ...(onRequestPhoneIds.has(id)
+      ? { stock: null, priceConfirmed: false, comparePrice: null }
+      : {}),
     id,
     brand,
     name,

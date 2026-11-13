@@ -1573,7 +1573,7 @@ export function ProductEditor({
     [optionsText, setOptionsText] = useState(product.options.join(", ")),
     [colorsText, setColorsText] = useState(product.colors.join(", ")),
     [gallery, setGallery] = useState(() =>
-      existing ? galleryImages(product).map(({ src }) => src).slice(0, 10) : [],
+      existing ? galleryImages(product).filter(({ type }) => type !== "video").map(({ src }) => src).slice(0, 10) : [],
     ),
     [preparingPhotos, setPreparingPhotos] = useState(false),
     [specs, setSpecs] = useState(
@@ -1586,7 +1586,7 @@ export function ProductEditor({
   }, [preparingPhotos, saving])
   const library = useMemo(
     () => [...new Map(libraryProducts.flatMap((product) =>
-      galleryImages(product).map(({ src }) => [src, { src, name: product.name }]),
+      galleryImages(product).filter(({ type }) => type !== "video").map(({ src }) => [src, { src, name: product.name }]),
     )).values()],
     [libraryProducts],
   )
@@ -1609,7 +1609,7 @@ export function ProductEditor({
       return
     }
     const photosChanged = JSON.stringify(gallery) !== JSON.stringify(
-      existing ? galleryImages(product).map(({ src }) => src).slice(0, 10) : [],
+      existing ? galleryImages(product).filter(({ type }) => type !== "video").map(({ src }) => src).slice(0, 10) : [],
     )
     const images = existing && !photosChanged && gallery.length
       ? product.gallery

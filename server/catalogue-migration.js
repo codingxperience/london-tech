@@ -7,6 +7,7 @@ import {
   retiredPhoneSkus,
 } from "../src/data/catalog.js"
 import { cataloguePriceDefaults } from "../src/data/prices.js"
+import { restoredPhoneIds } from "../src/data/phone-stock.js"
 import { stockroomProducts, verifiedInventory } from "../src/data/verified-inventory.js"
 import { productImagePlaceholder } from "../src/lib/product-image.js"
 import {
@@ -323,6 +324,45 @@ export async function adoptStockedPhones(db) {
           "UPDATE products SET data=data || $2::jsonb,updated_at=NOW() WHERE id=$1",
           [id, JSON.stringify(updates)],
         )
+    }
+  })
+}
+
+/** Restore the archived seed rows without resurrecting old inventory counts. */
+export async function restoreRequestedPhones(db) {
+  const originals = new Map(approvedProducts.map((product) => [product.id, product]))
+  const requested = phoneProducts.filter(({ id }) => restoredPhoneIds.includes(id))
+  await db.transaction(async (tx) => {
+    const marker = await tx.query(
+      "INSERT INTO catalogue_migrations(version) VALUES($1) ON CONFLICT DO NOTHING RETURNING version",
+      ["2026-11-13-restore-requested-phones"],
+    )
+    if (!marker.rows.length) return
+    for (const phone of requested) {
+      const original = originals.get(phone.id)
+      const { rows } = await tx.query(
+        "SELECT data FROM products WHERE id=$1 AND data->>'sku'=$2 AND data->>'category'='mobiles' FOR UPDATE",
+        [phone.id, phone.sku],
+      )
+      const stored = rows[0]?.data
+      if (!stored || stored.active !== false) continue
+      const changes = { active: true }
+      for (const field of [
+        "name", "brand", "description", "specifications", "mediaNote",
+        "stock", "priceConfirmed", "comparePrice",
+      ]) {
+        if (JSON.stringify(stored[field] ?? null) === JSON.stringify(original[field] ?? null))
+          changes[field] = phone[field]
+      }
+      if (stored.image === original.image &&
+          JSON.stringify(stored.gallery) === JSON.stringify(original.gallery)) {
+        changes.image = phone.image
+        changes.gallery = phone.gallery
+      }
+      await tx.query(
+        "UPDATE products SET data=data || $2::jsonb,updated_at=NOW() WHERE id=$1",
+        [phone.id, JSON.stringify(changes)],
+      )
     }
   })
 }

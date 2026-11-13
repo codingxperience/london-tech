@@ -18,7 +18,7 @@ const presentProduct = (product) => {
   const corrected = repairCatalogueMedia(product)
   return {
     ...corrected,
-    image: galleryImages(corrected)[0]?.src || corrected.image,
+    image: galleryImages(corrected).find(({ type }) => type !== "video")?.src || corrected.image,
   }
 }
 

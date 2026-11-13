@@ -442,7 +442,9 @@ export function sitemapXml(data, origin) {
         const lastmod = Number.isFinite(date)
           ? `<lastmod>${new Date(date).toISOString()}</lastmod>`
           : ""
-        const images = product ? galleryImages(product).filter(({ src }) => src.startsWith("/assets/")) : []
+        const images = product
+          ? galleryImages(product).filter(({ src, type }) => type !== "video" && src.startsWith("/assets/"))
+          : []
         const imageEntries = images.map(({ src }) =>
           `<image:image><image:loc>${escapeHtml(new URL(src, origin).href)}</image:loc></image:image>`,
         ).join("")

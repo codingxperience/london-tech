@@ -59,23 +59,25 @@ export function galleryImages(product) {
       changed(product.gallery, baseline.gallery))
   const phone = edited ? null : stockedPhoneDetails.get(product.id)
   const researched = phone?.views || (edited ? [] : productMedia[product.id]) || []
-  const videoInfo = phone?.video || (!edited ? productDetails[product.id]?.video : null)
-  const videoUrl = videoInfo?.url
-  const youtubeId = videoUrl?.match(
-    /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/,
-  )?.[1]
-  const embedSrc = videoInfo?.embedUrl || (youtubeId
-    ? `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&playsinline=1&rel=0`
-    : null)
-  const video = videoUrl && (embedSrc || /\.mp4(?:[?#]|$)/i.test(videoUrl))
-    ? [{
-        type: "video",
-        src: researched[0]?.src || product.image,
-        videoSrc: embedSrc ? null : videoUrl,
-        embedSrc,
-        alt: videoInfo.label || `Product video for ${product.name}`,
-      }]
-    : []
+  const featuredVideo = phone?.video || (!edited ? productDetails[product.id]?.video : null)
+  const videos = (phone?.videos || (featuredVideo ? [featuredVideo] : [])).flatMap((videoInfo) => {
+    const videoUrl = videoInfo.url
+    const youtubeId = videoUrl?.match(
+      /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/,
+    )?.[1]
+    const embedSrc = videoInfo.embedUrl || (youtubeId
+      ? `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&playsinline=1&rel=0`
+      : null)
+    if (!videoUrl || (!embedSrc && !/\.mp4(?:[?#]|$)/i.test(videoUrl))) return []
+    return [{
+      type: "video",
+      src: videoInfo.poster || researched[0]?.src || product.image,
+      videoSrc: embedSrc ? null : videoUrl,
+      embedSrc,
+      alt: videoInfo.label || `Product video for ${product.name}`,
+      preview: videoInfo.preview,
+    }]
+  })
   const existing = [product.image, ...(product.gallery || [])]
     .filter((src) => src && src !== productImagePlaceholder)
     // A generic stock photo is not an extra view of a specific device.
@@ -88,11 +90,12 @@ export function galleryImages(product) {
     : researched.length >= 2
       ? researched
       : [...researched, ...existing]
-  const gallery = [...video, ...images]
+  const gallery = [...videos, ...images]
   return gallery.filter(
     (image, index) =>
       gallery.findIndex(
-        (other) => other.src === image.src && other.type === image.type,
+        (other) => other.src === image.src && other.type === image.type &&
+          other.videoSrc === image.videoSrc && other.embedSrc === image.embedSrc,
       ) === index,
   )
 }

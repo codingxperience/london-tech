@@ -7,6 +7,7 @@ import { access, readFile } from "node:fs/promises"
 import { products, categories, storeDefaults } from "../src/data/catalog.js"
 import { referenceProducts } from "../src/data/reference-catalogue.js"
 import { productImagePlaceholder } from "../src/lib/product-image.js"
+import { onRequestPhoneIds } from "../src/data/phone-stock.js"
 
 test("catalogue images exist, identifiers are unique and every category resolves", async () => {
   assert.equal(new Set(products.map((p) => p.id)).size, products.length)
@@ -17,7 +18,10 @@ test("catalogue images exist, identifiers are unique and every category resolves
       product.id + " has a category",
     )
 
-    if (product.active) {
+    if (onRequestPhoneIds.has(product.id)) {
+      assert.equal(product.stock, null, product.id)
+      assert.equal(product.priceConfirmed, false, product.id)
+    } else if (product.active) {
       assert.ok(Number.isSafeInteger(product.price) && product.price > 0, product.id)
       assert.equal(product.priceConfirmed, true, product.id)
     }

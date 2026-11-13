@@ -486,7 +486,7 @@ export function Collection({ category = "shop" }) {
           )}
           {shown.length ? (
             <div className={filters.view === "list" ? "catalog-list" : ""}>
-              <ProductGrid products={shown} detailed showDiscount={category === "hot-deals"} />
+              <ProductGrid products={shown} detailed showDiscount={category === "hot-deals"} list={filters.view === "list"} />
             </div>
           ) : (
             <Empty

@@ -106,6 +106,7 @@ for (const product of products.filter((product) => product.active !== false)) {
     ...new Set([
       product.image,
       ...galleryImages(product)
+        .filter(({ type }) => type !== "video")
         .slice(0, 3)
         .map((image) => image.src),
     ]),

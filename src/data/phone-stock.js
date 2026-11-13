@@ -4,6 +4,8 @@ const appleGuide = "https://support.apple.com/guide/iphone/welcome/ios"
 const samsung = "https://www.samsung.com/"
 const honor = "https://www.honor.com/"
 const appleSpecs = (page) => "https://support.apple.com/" + page
+const samsungS24 = samsung + "ie/smartphones/galaxy-s24/specs/"
+const samsungS25 = samsung + "uk/smartphones/galaxy-s25/specs/"
 
 const phone = (id, brand, name, source, description, specifications, options = {}) => ({
   id,
@@ -41,6 +43,11 @@ const iphone17 = [
   ["Rear cameras", "48 MP main, ultra wide and telephoto"],
   ["Front camera", "18 MP Center Stage"],
   ["Charging", "USB-C and MagSafe"],
+]
+const iphone14 = [
+  ["Chip", "Apple A16 Bionic"],
+  ["Rear cameras", "48 MP main, 12 MP ultra wide and 12 MP 3× telephoto"],
+  ["Charging", "Lightning and MagSafe"],
 ]
 const unidentifiedGalaxy = {
   mediaNote: "Samsung shows the LTE model in these photos. Confirm the store unit’s model code, network and storage before ordering.",
@@ -176,6 +183,16 @@ export const stockedPhones = [
       ["Connectivity", "4G LTE on Samsung’s pictured model"],
       ["Configuration", "Confirm RAM and storage with the store"],
     ]),
+  phone("honor-x9e-pro", "HONOR", "HONOR X9e Pro",
+    honor + "global/phones/honor-x9e-pro/",
+    "The HONOR X9e Pro pairs an 11,000 mAh battery with a 120 Hz OLED display and an optically stabilised 108 MP main camera.",
+    [
+      ["Display", "6.8-inch 1.5K OLED, up to 120 Hz"],
+      ["Main camera", "108 MP with optical image stabilisation"],
+      ["Battery", "11,000 mAh typical"],
+      ["Charging", "Up to 80 W wired charging and 27 W wired reverse charging"],
+      ["Connectivity", "5G"],
+    ], { mediaNote: "HONOR’s Deep Purple model is shown. Confirm the available finish, RAM and storage with the store." }),
   phone("honor-x9d-5g", "HONOR", "HONOR X9d 5G",
     honor + "my/phones/honor-x9d/spec/",
     "The HONOR X9d 5G combines a 120 Hz AMOLED display with a high-capacity battery and an optically stabilised 108 MP main camera.",
@@ -209,9 +226,52 @@ export const stockedPhones = [
       ["Connectivity", "5G"],
       ["Configuration", "256 GB indicated on packaging. Confirm storage, RAM and finish with the store"],
     ], { mediaNote: "HONOR’s green reference is shown. Confirm the store unit’s finish before ordering." }),
+  phone("galaxy-s24", "Samsung", "Samsung Galaxy S24", samsungS24,
+    "The Galaxy S24 pairs a compact 120 Hz AMOLED display with a 50 MP main camera and 3× optical zoom.",
+    [["Display", "6.2-inch Dynamic AMOLED 2X, up to 120 Hz"],
+      ["Rear cameras", "50 MP main, 12 MP ultra wide and 10 MP 3× telephoto"],
+      ["Battery", "4,000 mAh typical"]]),
+  phone("galaxy-s24-ultra", "Samsung", "Samsung Galaxy S24 Ultra",
+    samsung + "ie/smartphones/galaxy-s24-ultra/specs/",
+    "The Galaxy S24 Ultra has a 6.8-inch AMOLED display, an integrated S Pen and a 200 MP main camera.",
+    [["Display", "6.8-inch Dynamic AMOLED 2X, up to 120 Hz"],
+      ["Rear cameras", "200 MP main, 12 MP ultra wide, 50 MP 5× and 10 MP 3× telephoto"],
+      ["Battery", "5,000 mAh typical"], ["Stylus", "Integrated S Pen"]]),
+  phone("galaxy-s25", "Samsung", "Samsung Galaxy S25", samsungS25,
+    "The compact Galaxy S25 combines a 6.2-inch AMOLED display and Snapdragon 8 Elite for Galaxy with a 50 MP main camera.",
+    [["Display", "6.2-inch Dynamic AMOLED 2X, up to 120 Hz"],
+      ["Chip", "Snapdragon 8 Elite for Galaxy"],
+      ["Rear cameras", "50 MP main, 12 MP ultra wide and 10 MP 3× telephoto"]]),
+  phone("galaxy-s25-ultra", "Samsung", "Samsung Galaxy S25 Ultra",
+    samsung + "uk/smartphones/galaxy-s25-ultra/specs/",
+    "The Galaxy S25 Ultra combines a 6.9-inch AMOLED display, a 200 MP main camera and a built-in S Pen.",
+    [["Display", "6.9-inch Dynamic AMOLED 2X, up to 120 Hz"],
+      ["Chip", "Snapdragon 8 Elite for Galaxy"],
+      ["Rear cameras", "200 MP main, 50 MP ultra wide, 50 MP 5× and 10 MP 3× telephoto"]]),
+  phone("iphone-14-pro-used", "Apple", "iPhone 14 Pro", appleSpecs("en-us/111849"),
+    "The iPhone 14 Pro pairs a 6.1-inch ProMotion display with Dynamic Island and a 48 MP main camera.",
+    [["Display", "6.1-inch Super Retina XDR OLED, up to 120 Hz"], ...iphone14],
+    { guide: appleGuide }),
+  phone("iphone-14-pro-max", "Apple", "iPhone 14 Pro Max", appleSpecs("en-us/111846"),
+    "The iPhone 14 Pro Max has a 6.7-inch ProMotion display, Dynamic Island and a 48 MP main camera.",
+    [["Display", "6.7-inch Super Retina XDR OLED, up to 120 Hz"], ...iphone14],
+    { guide: appleGuide }),
+  phone("iphone-duo", "Apple", "iPhone Duo", "https://www.apple.com/iphone-duo/specs/",
+    "iPhone Duo unfolds from a 5.4-inch outer display to a 7.6-inch inner display for multitasking, viewing and gaming.",
+    [["Main display", "7.6-inch Super Retina XDR"],
+      ["Cover display", "5.4-inch Super Retina XDR"],
+      ["Rear cameras", "48 MP Fusion Main and 48 MP Fusion Ultra Wide"]],
+    { guide: appleGuide,
+      mediaNote: "The gallery opens with a supplied XXVIII design preview. The product photos show Apple’s released iPhone Duo. Confirm the store’s available configuration." }),
 ]
 
 export const stockedPhoneDetails = new Map(stockedPhones.map((entry) => [
   entry.id,
   { ...entry, ...media[entry.id] },
 ]))
+
+// Earlier inventory reconciliation archived these records. Reuse their IDs.
+export const restoredPhoneIds = ["galaxy-s25", "galaxy-s25-ultra", "iphone-14-pro-used"]
+export const onRequestPhoneIds = new Set([
+  ...restoredPhoneIds, "galaxy-s24", "galaxy-s24-ultra", "iphone-14-pro-max", "iphone-duo",
+])

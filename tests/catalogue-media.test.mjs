@@ -13,7 +13,35 @@ import {
   adoptStockedPhones,
   repairSeedCatalogue,
   retireReferenceListings,
+  restoreRequestedPhones,
 } from "../server/catalogue-migration.js"
+
+test("requested phones reuse archived IDs and keep merchant edits without restoring old stock", async () => {
+  const db = new PGlite()
+  try {
+    await db.exec(`CREATE TABLE products (id TEXT PRIMARY KEY, data JSONB NOT NULL, updated_at TIMESTAMPTZ DEFAULT NOW());
+      CREATE TABLE catalogue_migrations (version TEXT PRIMARY KEY)`)
+    const s25 = approvedProducts.find(({ id }) => id === "galaxy-s25")
+    const s25Ultra = approvedProducts.find(({ id }) => id === "galaxy-s25-ultra")
+    const merchant = { ...s25Ultra, active: false, stock: 2, price: 3150000,
+      image: "/assets/shop-photo.webp", gallery: ["/assets/shop-photo.webp"] }
+    for (const product of [{ ...s25, active: false }, merchant])
+      await db.query("INSERT INTO products(id,data) VALUES($1,$2)", [product.id, JSON.stringify(product)])
+
+    await restoreRequestedPhones(db)
+    const { rows } = await db.query("SELECT id,data FROM products")
+    const byId = new Map(rows.map(({ id, data }) => [id, data]))
+    assert.equal(byId.get(s25.id).active, true)
+    assert.equal(byId.get(s25.id).stock, null)
+    assert.equal(byId.get(s25.id).priceConfirmed, false)
+    assert.equal(byId.get(s25Ultra.id).active, true)
+    assert.equal(byId.get(s25Ultra.id).stock, 2)
+    assert.equal(byId.get(s25Ultra.id).price, merchant.price)
+    assert.deepEqual(byId.get(s25Ultra.id).gallery, merchant.gallery)
+  } finally {
+    await db.close()
+  }
+})
 
 test("phone reconciliation archives old inventory and preserves merchant edits", async () => {
   const db = new PGlite()

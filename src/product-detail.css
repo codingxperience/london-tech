@@ -247,6 +247,17 @@
 }
 .detail-campaign figcaption a:hover { text-decoration: underline; }
 .commerce-surface .product-page .detail-video-stage{overflow:hidden;padding:0;background:#111827}
+.commerce-surface .product-page .gallery-preview-label {
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-start: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #111827e8;
+  color: white;
+  font-size: 12px;
+  pointer-events: none;
+}
 .commerce-surface .product-page .detail-video-stage>video,.commerce-surface .product-page .detail-video-stage>iframe{display:block;width:100%;height:100%;object-fit:contain;background:#111827;border:0}
 .commerce-surface .product-page .detail-video-stage .image-expand{position:absolute;display:grid;place-items:center;top:auto;left:auto;right:16px;bottom:16px;width:38px;height:38px;padding:0;border:1px solid #e0e8f0;border-radius:50%;background:#fffffff2;color:#082a52;pointer-events:auto;cursor:pointer}
 .commerce-surface .product-page .product-thumbnails button{position:relative;overflow:hidden}

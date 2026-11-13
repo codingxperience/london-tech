@@ -5,6 +5,11 @@ import { productImagePlaceholder } from "./product-image.js"
 const before = new Map(legacyProducts.map((product) => [product.id, product]))
 const after = new Map(products.map((product) => [product.id, product]))
 const same = (left, right) => JSON.stringify(left) === JSON.stringify(right)
+const s26Id = "galaxy-s26-ultra"
+const s26OldCover = "/assets/stocked-phones/galaxy-s26-ultra-1.webp"
+const s26OldGallery = [1, 2, 3, 4].map(
+  (index) => `/assets/stocked-phones/galaxy-s26-ultra-${index}.webp`,
+)
 
 const stockroomPhotoReplacements = new Map()
 for (const { id, gallery } of products) {
@@ -26,6 +31,7 @@ export const repairableProductIds = [...new Set([
 ])]
 
 export function repairCatalogueImage(id, src) {
+  if (id === s26Id && src === s26OldCover) return after.get(id).image
   const whitePhoto = stockroomPhotoReplacements.get(id)?.get(src)
   if (whitePhoto) return whitePhoto
   if (supersededMedia[id]?.includes(src))
@@ -35,6 +41,11 @@ export function repairCatalogueImage(id, src) {
 
 /** Repair only the repository's known seed media; actual merchant edits win. */
 export function repairCatalogueMedia(product) {
+  if (product.id === s26Id && product.image === s26OldCover &&
+      same(product.gallery, s26OldGallery)) {
+    const { image, gallery } = after.get(product.id)
+    return { ...product, image, gallery }
+  }
   const replacements = stockroomPhotoReplacements.get(product.id)
   if (replacements) {
     const image = replacements.get(product.image) ?? product.image

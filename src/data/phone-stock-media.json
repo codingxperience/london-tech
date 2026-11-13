@@ -318,14 +318,14 @@
   "galaxy-s26-ultra": {
     "views": [
       {
-        "src": "/assets/stocked-phones/galaxy-s26-ultra-1.webp",
-        "alt": "Galaxy S26 Ultra in Sky Blue — Front",
-        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415148"
-      },
-      {
         "src": "/assets/stocked-phones/galaxy-s26-ultra-2.webp",
         "alt": "Galaxy S26 Ultra in Sky Blue — Rear three-quarter view",
         "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415146"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s26-ultra-1.webp",
+        "alt": "Galaxy S26 Ultra in Sky Blue — Front",
+        "source": "https://images.samsung.com/is/image/samsung/p6pim/africa_en/sm-s948blbiafb/gallery/africa-en-galaxy-s26-ultra-s948-578665-sm-s948blbiafb-551415148"
       },
       {
         "src": "/assets/stocked-phones/galaxy-s26-ultra-3.webp",
@@ -475,6 +475,25 @@
       "label": "Watch Samsung’s Galaxy A07 introduction"
     }
   },
+  "honor-x9e-pro": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/honor-x9e-pro-purple-front-and-rear.webp",
+        "alt": "HONOR X9e Pro in Deep Purple — front and rear",
+        "source": "https://www.honor.com/content/dam/honor/common/product-list/product-series/honor-x9e-pro/honor-x9e-pro-purple-list.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9e-pro-purple-rear.webp",
+        "alt": "HONOR X9e Pro in Deep Purple — rear",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-x9e-pro/honor-x9e-pro-purple-back.png"
+      },
+      {
+        "src": "/assets/stocked-phones/honor-x9e-pro-purple-front.webp",
+        "alt": "HONOR X9e Pro in Deep Purple — front",
+        "source": "https://www-file.honor.com/content/dam/honor/common/product-list/product-series/honor-x9e-pro/honor-x9e-pro-purple-front.png"
+      }
+    ]
+  },
   "honor-x9d-5g": {
     "views": [
       {
@@ -569,5 +588,134 @@
       "url": "https://www.youtube.com/watch?v=opiGSpkuCOM",
       "label": "Watch the HONOR 600 Lite introduction"
     }
+  },
+  "galaxy-s24": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/galaxy-s24-onyx-front-and-rear.webp",
+        "alt": "Galaxy S24 in Onyx Black — front and rear",
+        "source": "https://www.buyitdirect.ie/p/samsung-galaxy-s24-128gb-5g-mobile-phone-onyx-black-sm-s921bzkdeub"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s24-onyx-rear.webp",
+        "alt": "Galaxy S24 in Onyx Black — rear",
+        "source": "https://www.samsung.com/ie/smartphones/galaxy-s24/specs/"
+      }
+    ]
+  },
+  "galaxy-s24-ultra": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/galaxy-s24-ultra-titanium-grey.webp",
+        "alt": "Galaxy S24 Ultra in Titanium Gray — rear",
+        "source": "https://www.samsung.com/ie/smartphones/galaxy-s24-ultra/specs/"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s24-ultra-titanium-black.webp",
+        "alt": "Galaxy S24 Ultra in Titanium Black — rear",
+        "source": "https://www.samsung.com/ie/smartphones/galaxy-s24-ultra/specs/"
+      }
+    ]
+  },
+  "galaxy-s25": {
+    "views": [
+      {
+        "src": "/assets/product-gallery/galaxy-s25-507a4f496a.jpg",
+        "alt": "Samsung Galaxy S25 — Navy rear design",
+        "source": "https://www.samsung.com/uk/smartphones/galaxy-s25/"
+      },
+      {
+        "src": "/assets/product-gallery/galaxy-s25-3e670013a9.jpg",
+        "alt": "Samsung Galaxy S25 — Mint rear design",
+        "source": "https://www.samsung.com/uk/smartphones/galaxy-s25/"
+      }
+    ]
+  },
+  "galaxy-s25-ultra": {
+    "views": [
+      {
+        "src": "/assets/product-gallery/galaxy-s25-ultra-7e6b75ea51.jpg",
+        "alt": "Samsung Galaxy S25 Ultra — Titanium Gray design",
+        "source": "https://www.samsung.com/uk/smartphones/galaxy-s25-ultra/"
+      },
+      {
+        "src": "/assets/product-gallery/galaxy-s25-ultra-77a6d25ec4.jpg",
+        "alt": "Samsung Galaxy S25 Ultra — frame design",
+        "source": "https://www.samsung.com/uk/smartphones/galaxy-s25-ultra/"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s25-ultra-retail-rear.webp",
+        "alt": "Galaxy S25 Ultra — supplied rear and packaging photo",
+        "source": "Supplied reference photo"
+      },
+      {
+        "src": "/assets/stocked-phones/galaxy-s25-ultra-retail-front.webp",
+        "alt": "Galaxy S25 Ultra — supplied front and packaging photo",
+        "source": "Supplied reference photo"
+      }
+    ]
+  },
+  "iphone-14-pro-used": {
+    "views": [
+      {
+        "src": "/assets/product-gallery/iphone-14-pro-used-5016b755b5.jpg",
+        "alt": "iPhone 14 Pro family — Space Black front and rear",
+        "source": "https://www.apple.com/newsroom/2022/09/apple-debuts-iphone-14-pro-and-iphone-14-pro-max/"
+      },
+      {
+        "src": "/assets/product-gallery/iphone-14-pro-used-1e9af739ed.jpg",
+        "alt": "iPhone 14 Pro family — Silver front and rear",
+        "source": "https://www.apple.com/newsroom/2022/09/apple-debuts-iphone-14-pro-and-iphone-14-pro-max/"
+      }
+    ]
+  },
+  "iphone-14-pro-max": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-14-series-space-black.webp",
+        "alt": "iPhone 14 Pro family in Space Black — design reference",
+        "source": "https://www.apple.com/newsroom/2022/09/apple-debuts-iphone-14-pro-and-iphone-14-pro-max/"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-14-series-silver.webp",
+        "alt": "iPhone 14 Pro family in Silver — design reference",
+        "source": "https://www.apple.com/newsroom/2022/09/apple-debuts-iphone-14-pro-and-iphone-14-pro-max/"
+      }
+    ]
+  },
+  "iphone-duo": {
+    "views": [
+      {
+        "src": "/assets/stocked-phones/iphone-duo-finishes.webp",
+        "alt": "Apple iPhone Duo — official finish lineup",
+        "source": "https://www.apple.com/newsroom/2026/09/apple-unveils-iphone-duo/"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-duo-open.webp",
+        "alt": "Apple iPhone Duo — unfolded display",
+        "source": "https://www.apple.com/iphone-duo/"
+      },
+      {
+        "src": "/assets/stocked-phones/iphone-duo-displays.webp",
+        "alt": "Apple iPhone Duo — outer and inner displays",
+        "source": "https://www.apple.com/newsroom/2026/09/apple-unveils-iphone-duo/"
+      }
+    ],
+    "videos": [
+      {
+        "url": "/assets/stocked-phones/iphone-duo-design-loop.mp4",
+        "poster": "/assets/stocked-phones/iphone-duo-design-camera.webp",
+        "label": "XXVIII design preview",
+        "credit": "XXVIII",
+        "preview": true
+      },
+      {
+        "url": "/assets/stocked-phones/iphone-duo-design-film.mp4",
+        "poster": "/assets/stocked-phones/iphone-duo-design-study.webp",
+        "label": "XXVIII design film",
+        "credit": "XXVIII",
+        "preview": true
+      }
+    ]
   }
 }

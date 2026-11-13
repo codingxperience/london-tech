@@ -75,10 +75,10 @@ export function CategoryIcon({ category, size = 22 }) {
 
 export { PaymentMarks } from "./PaymentMarks.jsx"
 
-export function ProductCard({ product: p, detailed = false, showDiscount = false }) {
+export function ProductCard({ product: p, detailed = false, showDiscount = false, list = false }) {
   const { t } = useLocale()
   const { wishlist, toggleWish, addCart, cart } = useStore()
-  const image = galleryImages(p)[0]?.src || p.image
+  const image = galleryImages(p).find((media) => media.type !== "video")?.src || p.image
   const href = productPath(p)
   const wished = wishlist.includes(p.id)
   const added = cart.some((line) => line.id === p.id)
@@ -115,6 +115,7 @@ export function ProductCard({ product: p, detailed = false, showDiscount = false
             className="card-add-button"
           >
             <Plus size={18} aria-hidden="true" />
+            {list && <span>{t(p.stock === 0 ? "Out of stock" : hasVariants ? "Choose options" : "Add")}</span>}
           </IconButton>
         </div>
       </div>
@@ -129,11 +130,11 @@ export function ProductCard({ product: p, detailed = false, showDiscount = false
   )
 }
 
-export function ProductGrid({ products, detailed = false, showDiscount = false }) {
+export function ProductGrid({ products, detailed = false, showDiscount = false, list = false }) {
   return (
     <div className="product-grid">
       {products.map((p) => (
-        <ProductCard key={p.id} product={p} detailed={detailed} showDiscount={showDiscount} />
+        <ProductCard key={p.id} product={p} detailed={detailed} showDiscount={showDiscount} list={list} />
       ))}
     </div>
   )

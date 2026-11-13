@@ -1,7 +1,7 @@
 {
   "version": 1,
   "model": "/assets/vision/tinyclip-image-q8-6599d459de82.onnx",
-  "index": "/assets/vision/catalogue-f2ee04a70d86.json",
+  "index": "/assets/vision/catalogue-f159e2657582.json",
   "runtime": {
     "mjs": "/assets/vision/ort-1.31.1.mjs",
     "wasm": "/assets/vision/ort-1.31.1.wasm"
@@ -13,6 +13,6 @@
     "sha256": "10921310ddef06557ec1598d1260470a0a4db53f70ffe0deb60b946dcad6d27a"
   },
   "modelSha256": "6599d459de82b0dbc364698105280197c90efd20acd9df1dc1144c511e4d077c",
-  "indexedProducts": 298,
-  "indexedViews": 433
+  "indexedProducts": 147,
+  "indexedViews": 253
 }
