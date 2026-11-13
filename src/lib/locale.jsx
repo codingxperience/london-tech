@@ -486,7 +486,7 @@ Object.assign(arabic, {
   "Map and store directions": "الخريطة والاتجاهات إلى المتجر",
   "Arua Park, Kampala": "أروى بارك، كمبالا",
   "Find the area, then visit us on the second floor.": "اعثر على المنطقة، ثم زرنا في الطابق الثاني.",
-  "Interactive map of the Arua Park area in Kampala": "خريطة تفاعلية لمنطقة أروى بارك في كمبالا",
+  "Map of the Arua Park area in Kampala": "خريطة منطقة أروى بارك في كمبالا",
   "Larger map": "عرض خريطة أكبر",
   "A LITTLE CLARITY": "إجابات واضحة",
   "Good questions. Clear answers.": "أسئلة مهمة. وإجابات واضحة.",

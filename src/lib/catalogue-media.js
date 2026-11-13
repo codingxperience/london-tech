@@ -10,11 +10,13 @@ const stockroomPhotoReplacements = new Map()
 for (const { id, gallery } of products) {
   const replacements = new Map()
   for (const src of gallery || []) {
-    const match = src.match(/^\/assets\/stockroom\/white\/([^/]+)-white(-v2)?\.jpg$/)
+    const match = src.match(/^\/assets\/stockroom\/white\/([^/]+)-white(?:-v(\d+))?\.jpg$/)
     if (!match) continue
-    const [, stem, revised] = match
+    const [, stem, revision] = match
     replacements.set(`/assets/stockroom/${stem}.jpeg`, src)
-    if (revised) replacements.set(`/assets/stockroom/white/${stem}-white.jpg`, src)
+    if (revision) replacements.set(`/assets/stockroom/white/${stem}-white.jpg`, src)
+    if (Number(revision) > 2)
+      replacements.set(`/assets/stockroom/white/${stem}-white-v2.jpg`, src)
   }
   if (replacements.size) stockroomPhotoReplacements.set(id, replacements)
 }

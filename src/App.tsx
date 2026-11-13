@@ -271,61 +271,76 @@ function catalogueProducts(
     return product ? [product] : []
   })
 }
-function ProductCard({ p }: { p: Product }) {
-  const { products, wishlist, toggleWish, addCart, cart } = useStore()
+function ProductCard({ id, showDiscount = false }: { id: string; showDiscount?: boolean }) {
+  const { products, settings, wishlist, toggleWish, addCart, cart } = useStore()
   const { t } = useLocale()
-  const id = commerceId(p)
   const item = products.find((product: { id: string }) => product.id === id)
   if (!item) return null
   const wished = wishlist.includes(id)
   const added = cart.some((line: { id: string }) => line.id === id)
   const hasVariants = Boolean(item.options?.length || item.colors?.length)
+  const href = "/products/" + encodeURIComponent(id) + "/"
+  const outOfStock = item.stock === 0
+  const showAdded = added && !hasVariants && !outOfStock
+  const whatsappNumber = (settings.whatsapp || settings.phone || "256788341111")
+    .replace(/\D/g, "")
+    .replace(/^0/, "256")
+  const message = encodeURIComponent(`Hello London Tech, I have a question about ${item.name} (${item.sku}).`)
   return (
     <article className="pcard home-product-card">
       <div className="home-product-image">
-        <a className="home-product-media-link" href={"/products/" + id + "/"} tabIndex={-1} aria-hidden="true">
+        <a className="home-product-media-link" href={href} tabIndex={-1} aria-hidden="true">
           {item.image === productImagePlaceholder ? (
             <ProductPhotoPlaceholder category={item.category} />
           ) : (
             <img src={item.image} loading="lazy" decoding="async" alt="" onError={showProductImageFallback} />
           )}
         </a>
+      </div>
+      <div className="home-product-copy">
+        <h3><a href={href}>{t(item.name)}</a></h3>
+        <CardPrices product={item} showDiscount={showDiscount} />
         <div className="home-product-actions">
           <button
             className="home-product-add"
+            data-added={showAdded || undefined}
             type="button"
-            disabled={item.stock === 0}
-            onClick={() =>
-              hasVariants ? navigate("/products/" + id + "/") : addCart(item)
-            }
+            disabled={outOfStock}
+            onClick={() => hasVariants ? navigate(href) : addCart(item)}
             aria-label={t(
-              item.stock === 0
+              outOfStock
                 ? "{name} is out of stock"
                 : hasVariants
                   ? "Choose options for {name}"
-                  : added
+                  : showAdded
                     ? "Add another {name} to cart"
                     : "Add {name} to cart",
               { name: t(item.name) },
             )}
           >
-            <span aria-hidden="true">{added ? "✓" : "+"}</span>
+            <ShoppingCart size={15} aria-hidden="true" />
             <span>
-              {item.stock === 0
+              {outOfStock
                 ? t("Out of stock")
                 : hasVariants
                   ? t("Choose options")
-                  : added
+                  : showAdded
                     ? t("Added")
-                    : t("Add to cart")}
+                    : t("Add")}
             </span>
           </button>
+          <a
+            className="home-product-whatsapp whatsapp-cta"
+            href={`https://wa.me/${whatsappNumber}?text=${message}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t("Ask about {name} on WhatsApp", { name: t(item.name) })}
+          >
+            <WhatsAppIcon size={15} />
+            <span>WhatsApp</span>
+          </a>
         </div>
       </div>
-      <a className="home-product-link home-product-copy" href={"/products/" + id + "/"}>
-        <h3>{t(item.name)}</h3>
-        <CardPrices product={item} />
-      </a>
       <button
         className={`home-product-wishlist${wished ? " selected" : ""}`}
         type="button"
@@ -498,7 +513,7 @@ export default function App({
         .page-wrap    { display:flex; gap:24px; align-items:flex-start; max-width:1600px; margin:0 auto; padding:24px clamp(16px,3vw,48px); }
         .sidebar-col  { width:200px; flex-shrink:0; }
         .hero-grid    { display:grid; grid-template-columns:minmax(0,1fr) minmax(160px,22%); gap:16px; margin-bottom:20px; }
-        .deals-grid   { display:grid; grid-template-columns:1fr 1fr; }
+        .deals-grid   { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; padding:20px; }
         .products-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; padding:20px; }
         .search-cat   { display:block; }
 
@@ -523,10 +538,6 @@ export default function App({
         @media (max-width:768px) {
           .ann-extra       { display:none; }
           .nav-cat-label   { display:none; }
-          /* Deal cards: stack image above text, image goes full width */
-          .deal-item       { flex-direction:column !important; border-right:none !important; border-bottom:1px solid #eee; }
-          .deal-img-wrap   { width:100% !important; flex-shrink:unset !important; }
-          .deal-img        { width:100% !important; height:200px !important; }
         }
       `}</style>
 
@@ -1335,58 +1346,9 @@ export default function App({
                 }
               />
               <div className="deals-grid">
-                {visibleDeals.map((item: any, i: number) => {
-                  return (
-                    <div
-                      key={item.id}
-                      className="deal-item"
-                      style={{
-                        padding: "16px 18px",
-                        borderRight: i === 0 ? "1px solid #eee" : "none",
-                        display: "flex",
-                        gap: 14,
-                        alignItems: "flex-start",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      <div
-                        className="deal-img-wrap"
-                        style={{ position: "relative", flexShrink: 0 }}
-                      >
-                        <img
-                          src={item.image}
-                          onError={showProductImageFallback}
-                          alt={t(item.name)}
-                          className="deal-img"
-                          style={{
-                            width: 150,
-                            height: 120,
-                            objectFit: "contain",
-                            padding: 8,
-                            borderRadius: 4,
-                            display: "block",
-                          }}
-                        />
-                      </div>
-                      <div style={{ flex: 1, minWidth: 120 }}>
-                        <div
-                          style={{
-                            fontFamily: "Nunito,sans-serif",
-                            fontWeight: 700,
-                            fontSize: 13.5,
-                            color: "#333",
-                            marginBottom: 4,
-                          }}
-                        >
-                          <a href={"/products/" + item.id + "/"}>
-                            {t(item.name)}
-                          </a>
-                        </div>
-                        <CardPrices product={item} showDiscount />
-                      </div>
-                    </div>
-                  )
-                })}
+                {visibleDeals.map((item: { id: string }) => (
+                  <ProductCard key={item.id} id={item.id} showDiscount />
+                ))}
               </div>
             </div>}
 
@@ -1439,7 +1401,7 @@ export default function App({
               />
               <div className="products-grid">
                 {filtered.slice(0, 12).map((p) => (
-                  <ProductCard key={p.id} p={p} />
+                  <ProductCard key={p.id} id={commerceId(p)} />
                 ))}
                 {filtered.length === 0 && (
                   <div

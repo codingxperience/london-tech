@@ -93,12 +93,23 @@ export function ContactPage() {
               <span>{t("Find the area, then visit us on the second floor.")}</span>
             </div>
           </header>
-          <iframe
-            title={t("Interactive map of the Arua Park area in Kampala")}
-            src="https://www.openstreetmap.org/export/embed.html?bbox=32.5718%2C0.3135%2C32.5784%2C0.3190&layer=mapnik"
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
+          <figure className="contact-map-preview">
+            <a href={maps} target="_blank" rel="noreferrer">
+              <img
+                src="/assets/store/arua-park-map.webp"
+                width="768"
+                height="400"
+                alt={t("Map of the Arua Park area in Kampala")}
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <figcaption>
+              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+                © OpenStreetMap contributors
+              </a>
+            </figcaption>
+          </figure>
           <footer>
             <div>
               <strong>{t("NYUMBA KUBUA building")}</strong>
