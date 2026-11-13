@@ -152,6 +152,26 @@ export async function retireUnlistedSeedProducts(db) {
   })
 }
 
+/** Restore the matching seed tablet retired by the inventory-only migration. */
+export async function restoreStockroomTablet(db) {
+  const tablet = verifiedInventory.find(
+    ({ id }) => id === "samsung-galaxy-tab-a11-plus-5g-128gb-gray",
+  )
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      "INSERT INTO catalogue_migrations(version) VALUES($1) ON CONFLICT DO NOTHING RETURNING version",
+      ["2026-11-13-restore-stockroom-tablet"],
+    )
+    if (!marker.rows.length) return
+    await tx.query(
+      `UPDATE products SET data=jsonb_set(data, '{active}', 'true'::jsonb), updated_at=NOW()
+       WHERE id=$1 AND data->>'sku'=$2 AND data->>'active'='false'
+         AND data->>'name'=$3 AND data->>'price'=$4 AND data->>'stock' IS NULL`,
+      [tablet.id, tablet.sku, tablet.name, String(tablet.price)],
+    )
+  })
+}
+
 /** Move supplied stockroom items to their current owner-defined categories. */
 export async function adoptStockroomCategories(db) {
   const rows = stockroomProducts

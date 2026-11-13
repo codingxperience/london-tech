@@ -280,24 +280,51 @@ function ProductCard({ p }: { p: Product }) {
   const wished = wishlist.includes(id)
   const added = cart.some((line: { id: string }) => line.id === id)
   const hasVariants = Boolean(item.options?.length || item.colors?.length)
-  const message = encodeURIComponent(
-    `Hello London Tech, I’m interested in ${item.name}.`,
-  )
-
   return (
     <article className="pcard home-product-card">
-      <a className="home-product-link" href={"/products/" + id + "/"}>
-        <div className="home-product-image">
+      <div className="home-product-image">
+        <a className="home-product-media-link" href={"/products/" + id + "/"} tabIndex={-1} aria-hidden="true">
           {item.image === productImagePlaceholder ? (
             <ProductPhotoPlaceholder category={item.category} />
           ) : (
             <img src={item.image} loading="lazy" decoding="async" alt="" onError={showProductImageFallback} />
           )}
+        </a>
+        <div className="home-product-actions">
+          <button
+            className="home-product-add"
+            type="button"
+            disabled={item.stock === 0}
+            onClick={() =>
+              hasVariants ? navigate("/products/" + id + "/") : addCart(item)
+            }
+            aria-label={t(
+              item.stock === 0
+                ? "{name} is out of stock"
+                : hasVariants
+                  ? "Choose options for {name}"
+                  : added
+                    ? "Add another {name} to cart"
+                    : "Add {name} to cart",
+              { name: t(item.name) },
+            )}
+          >
+            <span aria-hidden="true">{added ? "✓" : "+"}</span>
+            <span>
+              {item.stock === 0
+                ? t("Out of stock")
+                : hasVariants
+                  ? t("Choose options")
+                  : added
+                    ? t("Added")
+                    : t("Add to cart")}
+            </span>
+          </button>
         </div>
-        <div className="home-product-copy">
-          <h3>{item.name}</h3>
-          <CardPrices product={item} />
-        </div>
+      </div>
+      <a className="home-product-link home-product-copy" href={"/products/" + id + "/"}>
+        <h3>{t(item.name)}</h3>
+        <CardPrices product={item} />
       </a>
       <button
         className={`home-product-wishlist${wished ? " selected" : ""}`}
@@ -305,53 +332,12 @@ function ProductCard({ p }: { p: Product }) {
         aria-pressed={wished}
         aria-label={t(
           wished ? "Remove {name} from wishlist" : "Save {name} to wishlist",
-          { name: item.name },
+          { name: t(item.name) },
         )}
         onClick={() => toggleWish(id)}
       >
         <Heart size={17} fill={wished ? "currentColor" : "none"} />
       </button>
-      <div className="home-product-actions">
-        <a
-          className="home-product-chat"
-          href={`https://wa.me/256788341111?text=${message}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={t("Ask about {name} on WhatsApp", { name: item.name })}
-        >
-          <WhatsAppIcon size={16} />
-          <span>{t("Chat")}</span>
-        </a>
-        <button
-          className="home-product-add"
-          type="button"
-          disabled={item.stock === 0}
-          onClick={() =>
-            hasVariants ? navigate("/products/" + id + "/") : addCart(item)
-          }
-          aria-label={t(
-            item.stock === 0
-              ? "{name} is out of stock"
-              : hasVariants
-                ? "Choose options for {name}"
-                : added
-                  ? "Add another {name} to cart"
-                  : "Add {name} to cart",
-            { name: item.name },
-          )}
-        >
-          <ShoppingCart size={15} aria-hidden="true" />
-          <span>
-            {item.stock === 0
-              ? t("Out of stock")
-              : hasVariants
-                ? t("Choose options")
-                : added
-                  ? t("Added")
-                  : t("Add to cart")}
-          </span>
-        </button>
-      </div>
     </article>
   )
 }
@@ -481,7 +467,7 @@ export default function App({
   const filtered = catalogueProducts(PRODUCTS, catalogue).filter(
     (p) =>
       (tcat === "All" || p.category === tcat) &&
-      p.name.toLowerCase().includes(q.toLowerCase()) &&
+      [p.name, t(p.name)].some((name) => name.toLowerCase().includes(q.toLowerCase())) &&
       (searchCategory === "All Categories" ||
         p.category === searchCategory.split(" · ")[0] ||
         (searchCategory.startsWith("Earbuds") && p.category === "Audio")),
@@ -914,9 +900,9 @@ export default function App({
                 className="sidebar-featured-product"
                 href={"/products/" + featuredPhone.id + "/"}
               >
-                <img src={featuredPhone.image} alt={featuredPhone.name} onError={showProductImageFallback} />
+                <img src={featuredPhone.image} alt={t(featuredPhone.name)} onError={showProductImageFallback} />
                 <span>{t("In focus")}</span>
-                <h3>{featuredPhone.name}</h3>
+                <h3>{t(featuredPhone.name)}</h3>
                 <CardPrices product={featuredPhone} />
               </a>
             )}
@@ -1013,7 +999,7 @@ export default function App({
                   <img
                     src={p.image}
                     onError={showProductImageFallback}
-                    alt={p.name}
+                    alt={t(p.name)}
                     style={{
                       width: 54,
                       height: 54,
@@ -1035,7 +1021,7 @@ export default function App({
                         marginBottom: 3,
                       }}
                     >
-                      <a href={"/products/" + commerceId(p) + "/"}>{p.name}</a>
+                      <a href={"/products/" + commerceId(p) + "/"}>{t(p.name)}</a>
                     </div>
                     <CardPrices
                       product={catalogue.find(
@@ -1220,7 +1206,7 @@ export default function App({
                       <img
                         src={feature.product.image}
                         onError={showProductImageFallback}
-                        alt={feature.product.name}
+                        alt={t(feature.product.name)}
                       />
                       <div>
                         <small>{t("THE TECH EDIT")}</small>
@@ -1370,7 +1356,7 @@ export default function App({
                         <img
                           src={item.image}
                           onError={showProductImageFallback}
-                          alt={item.name}
+                          alt={t(item.name)}
                           className="deal-img"
                           style={{
                             width: 150,
@@ -1393,7 +1379,7 @@ export default function App({
                           }}
                         >
                           <a href={"/products/" + item.id + "/"}>
-                            {item.name}
+                            {t(item.name)}
                           </a>
                         </div>
                         <CardPrices product={item} showDiscount />

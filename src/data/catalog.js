@@ -487,9 +487,7 @@ export const caseProducts = [
 export const products = [
   ...phoneProducts,
   ...caseProducts,
-  ...verifiedInventory.filter(
-    ({ id }) => id !== "samsung-galaxy-tab-a11-plus-5g-128gb-gray",
-  ),
+  ...verifiedInventory,
   ...stockroomProducts,
 ].map((product) => {
   const price = cataloguePriceDefaults[product.id]

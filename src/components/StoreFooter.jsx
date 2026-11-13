@@ -149,7 +149,7 @@ export function StoreFooter({ logo, quiet = false }) {
           <h3>{t("Find us in Kampala")}</h3>
           <p>
             <MapPin size={15} />
-            <span>{settings.address}</span>
+            <span>{t(settings.address)}</span>
           </p>
           <div className="footer-contact-phones">
             <Phone size={14} />
@@ -160,7 +160,7 @@ export function StoreFooter({ logo, quiet = false }) {
               )}
             </span>
           </div>
-          {settings.hours && <p className="footer-hours">{settings.hours}</p>}
+          {settings.hours && <p className="footer-hours">{t(settings.hours)}</p>}
           <a className="footer-directions" href="/contact/">
             {t("Store details")}
             <ArrowUpRight size={13} />

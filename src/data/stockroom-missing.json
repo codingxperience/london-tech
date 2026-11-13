@@ -1,0 +1,482 @@
+[
+  {
+    "id": "phone-case-ravo-crystal-floral",
+    "sku": "LT-CASE-002",
+    "category": "accessories",
+    "name": "RAVO Crystal Floral Case for iPhone 18 Pro",
+    "nameAr": "غطاء رافو كريستالي مزخرف بالأزهار لآيفون 18 برو",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-clear-blue-floral",
+    "sku": "LT-CASE-003",
+    "category": "accessories",
+    "name": "Clear Blue Floral Phone Case",
+    "nameAr": "غطاء هاتف شفاف بأزهار زرقاء",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-purple-textured-magnetic",
+    "sku": "LT-CASE-004",
+    "category": "accessories",
+    "name": "Purple Textured Magnetic Phone Case",
+    "nameAr": "غطاء هاتف مغناطيسي أرجواني بملمس بارز",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-clear-ring-stand-iphone-18-pro-max",
+    "sku": "LT-CASE-005",
+    "category": "accessories",
+    "name": "Clear Ring Stand Case for iPhone 18 Pro Max",
+    "nameAr": "غطاء شفاف بحلقة تثبيت لآيفون 18 برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-clear-magnetic-ring-pro-max",
+    "sku": "LT-CASE-006",
+    "category": "accessories",
+    "name": "Clear Magnetic Ring Case for iPhone Pro Max",
+    "nameAr": "غطاء شفاف بحلقة مغناطيسية لآيفون برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-maxora-black-perforated-galaxy-s25-ultra",
+    "sku": "LT-CASE-007",
+    "category": "accessories",
+    "name": "Maxora Black Perforated Case for Galaxy S25 Ultra",
+    "nameAr": "غطاء ماكسورا أسود مثقّب لجالاكسي S25 ألترا",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-black-animal-outline",
+    "sku": "LT-CASE-008",
+    "category": "accessories",
+    "name": "Black Phone Case with Animal Outline",
+    "nameAr": "غطاء هاتف أسود برسم حيوان",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-dark-woven-texture",
+    "sku": "LT-CASE-009",
+    "category": "accessories",
+    "name": "Dark Woven Texture Phone Case",
+    "nameAr": "غطاء هاتف داكن بنقشة منسوجة",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-brown-ribbed-panel",
+    "sku": "LT-CASE-010",
+    "category": "accessories",
+    "name": "Brown Ribbed Panel Phone Case",
+    "nameAr": "غطاء هاتف بني بسطح مخدد",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-santa-barbara-striped-brown",
+    "sku": "LT-CASE-011",
+    "category": "accessories",
+    "name": "Santa Barbara Brown Striped Phone Case",
+    "nameAr": "غطاء هاتف سانتا باربرا بني مخطط",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-maxora-pink-glitter",
+    "sku": "LT-CASE-012",
+    "category": "accessories",
+    "name": "Maxora Pink Glitter Phone Case",
+    "nameAr": "غطاء هاتف ماكسورا وردي لامع",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-new-case-gray-ring",
+    "sku": "LT-CASE-013",
+    "category": "accessories",
+    "name": "New Case Gray Ring Phone Case",
+    "nameAr": "غطاء هاتف نيو كيس رمادي بحلقة",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-maxora-black-stand-ring",
+    "sku": "LT-CASE-014",
+    "category": "accessories",
+    "name": "Maxora Black Ring Stand Phone Case",
+    "nameAr": "غطاء هاتف ماكسورا أسود بحلقة تثبيت",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-daily-armor-iphone-17-pro-max",
+    "sku": "LT-CASE-015",
+    "category": "accessories",
+    "name": "Daily Armor Guard Case for iPhone 17 Pro Max",
+    "nameAr": "غطاء دايلي آرمور لآيفون 17 برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-navy-perforated-ring",
+    "sku": "LT-CASE-016",
+    "category": "accessories",
+    "name": "Navy Perforated Ring Phone Case",
+    "nameAr": "غطاء هاتف كحلي مثقّب بحلقة",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-kigc-floral-pattern",
+    "sku": "LT-CASE-017",
+    "category": "accessories",
+    "name": "KIGC Multicolour Floral Phone Case",
+    "nameAr": "غطاء هاتف KIGC مزخرف بأزهار متعددة الألوان",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-ipefet-navy-magnetic",
+    "sku": "LT-CASE-018",
+    "category": "accessories",
+    "name": "iPefet Navy Magnetic Phone Case",
+    "nameAr": "غطاء هاتف آي بيفت مغناطيسي كحلي",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-purple-perforated-case",
+    "sku": "LT-CASE-019",
+    "category": "accessories",
+    "name": "Purple Perforated Phone Case",
+    "nameAr": "غطاء هاتف أرجواني مثقّب",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-tadamall-black-textured",
+    "sku": "LT-CASE-020",
+    "category": "accessories",
+    "name": "Tadamall Black Textured Phone Case",
+    "nameAr": "غطاء هاتف تادامول أسود بملمس بارز",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-ipefet-pc37-burgundy",
+    "sku": "LT-CASE-021",
+    "category": "accessories",
+    "name": "iPefet PC-37 Burgundy Magnetic Phone Case",
+    "nameAr": "غطاء هاتف آي بيفت PC-37 مغناطيسي عنابي",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-mocome-clear-glitter",
+    "sku": "LT-CASE-022",
+    "category": "accessories",
+    "name": "Mocome Clear Glitter Phone Case",
+    "nameAr": "غطاء هاتف موكوم شفاف لامع",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-clear-pink-bow-iphone-16-pro-max",
+    "sku": "LT-CASE-023",
+    "category": "accessories",
+    "name": "Clear Pink Bow Case for iPhone 16 Pro Max",
+    "nameAr": "غطاء شفاف بفيونكة وردية لآيفون 16 برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-ravo-gold-bow-iphone-15-pro-max",
+    "sku": "LT-CASE-024",
+    "category": "accessories",
+    "name": "RAVO Gold Bow Case for iPhone 15 Pro Max",
+    "nameAr": "غطاء رافو بفيونكة ذهبية لآيفون 15 برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-maxora-dark-woven",
+    "sku": "LT-CASE-025",
+    "category": "accessories",
+    "name": "Maxora Dark Woven Texture Phone Case",
+    "nameAr": "غطاء هاتف ماكسورا داكن بنقشة منسوجة",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-smoke-butterfly-case",
+    "sku": "LT-CASE-026",
+    "category": "accessories",
+    "name": "Smoky Butterfly Phone Case",
+    "nameAr": "غطاء هاتف دخاني مزخرف بالفراشات",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-rewa-black-ripple",
+    "sku": "LT-CASE-027",
+    "category": "accessories",
+    "name": "REWA Black Ripple Silicone Phone Case",
+    "nameAr": "غطاء هاتف ريوا سيليكون أسود بنقشة متموجة",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-bigc-black-tactile",
+    "sku": "LT-CASE-028",
+    "category": "accessories",
+    "name": "BIGC Black Tactile Texture Phone Case",
+    "nameAr": "غطاء هاتف BIGC أسود بملمس بارز",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-ultra-slim-woven-a16",
+    "sku": "LT-CASE-029",
+    "category": "accessories",
+    "name": "Ultra Slim Woven Phone Case · A16 Label",
+    "nameAr": "غطاء هاتف رفيع بنقشة منسوجة، ملصق A16",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-blue-woven-bracket",
+    "sku": "LT-CASE-030",
+    "category": "accessories",
+    "name": "Blue Woven Texture Bracket Phone Case",
+    "nameAr": "غطاء هاتف أزرق بنقشة منسوجة وحامل",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-burgundy-clear-iphone-18-pro-max",
+    "sku": "LT-CASE-031",
+    "category": "accessories",
+    "name": "Burgundy Clear Ring Case for iPhone 18 Pro Max",
+    "nameAr": "غطاء شفاف عنابي بحلقة لآيفون 18 برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "phone-case-f350-rugged-iphone-18-pro-max",
+    "sku": "LT-CASE-032",
+    "category": "accessories",
+    "name": "F350 Rugged Ring Case for iPhone 18 Pro Max",
+    "nameAr": "غطاء F350 متين بحلقة لآيفون 18 برو ماكس",
+    "description": "Check your exact phone model with the store before ordering.",
+    "brand": "",
+    "price": null
+  },
+  {
+    "id": "usb-c-wall-charger-35w-label",
+    "sku": "LT-ACC-031",
+    "name": "USB-C Wall Charger · 35W Label",
+    "nameAr": "شاحن حائط USB-C، ملصق 35 واط",
+    "category": "accessories",
+    "brand": "",
+    "description": "The package is marked 35 W. Ask the store to confirm the plug and charging output before ordering.",
+    "price": null
+  },
+  {
+    "id": "usb-c-charger-and-cable-35w-label",
+    "sku": "LT-ACC-032",
+    "name": "USB-C Charger and Cable Set · 35W Label",
+    "nameAr": "طقم شاحن وكابل USB-C، ملصق 35 واط",
+    "category": "accessories",
+    "brand": "",
+    "description": "A two-pin USB-C adapter and a USB-C cable are shown on the package. Ask the store to confirm the charging output.",
+    "price": null
+  },
+  {
+    "id": "white-open-fit-wireless-earbuds",
+    "sku": "LT-AUD-026",
+    "name": "Open-Fit Wireless Earbuds · White",
+    "nameAr": "سماعات أذن لاسلكية مفتوحة، أبيض",
+    "category": "audio",
+    "brand": "",
+    "description": "White wireless earbuds with an open-fit design. Ask the store to confirm the model and charging case.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-round-black-gold-day-date",
+    "sku": "LT-WATCH-009",
+    "category": "wristwatches",
+    "name": "Black and Gold-Tone Round Day-Date Watch",
+    "nameAr": "ساعة دائرية سوداء وذهبية بعرض اليوم والتاريخ",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-round-brown-gold-day-date",
+    "sku": "LT-WATCH-010",
+    "category": "wristwatches",
+    "name": "Brown and Gold-Tone Round Day-Date Watch",
+    "nameAr": "ساعة دائرية بنية وذهبية بعرض اليوم والتاريخ",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-rectangular-gold-day-date",
+    "sku": "LT-WATCH-011",
+    "category": "wristwatches",
+    "name": "Gold-Tone Rectangular Day-Date Watch",
+    "nameAr": "ساعة مستطيلة ذهبية بعرض اليوم والتاريخ",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-rectangular-black-dial-bracelet",
+    "sku": "LT-WATCH-012",
+    "category": "wristwatches",
+    "name": "Black-Dial Rectangular Bracelet Watch",
+    "nameAr": "ساعة مستطيلة بمينا سوداء وسوار معدني",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-two-tone-black-dial-bracelet",
+    "sku": "LT-WATCH-013",
+    "category": "wristwatches",
+    "name": "Two-Tone Bracelet Watch with Black Dial",
+    "nameAr": "ساعة بسوار ثنائي اللون ومينا سوداء",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-gold-roman-dial-bracelet",
+    "sku": "LT-WATCH-014",
+    "category": "wristwatches",
+    "name": "Gold-Tone Roman Dial Bracelet Watch",
+    "nameAr": "ساعة ذهبية بأرقام رومانية وسوار معدني",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-black-roman-dial-bracelet",
+    "sku": "LT-WATCH-015",
+    "category": "wristwatches",
+    "name": "Black Roman Dial Bracelet Watch",
+    "nameAr": "ساعة بمينا سوداء وأرقام رومانية وسوار معدني",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-two-tone-black-gold-markers",
+    "sku": "LT-WATCH-016",
+    "category": "wristwatches",
+    "name": "Two-Tone Watch with Black Dial and Gold-Tone Markers",
+    "nameAr": "ساعة ثنائية اللون بمينا سوداء ومؤشرات ذهبية",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-dark-bracelet-copper-markers",
+    "sku": "LT-WATCH-017",
+    "category": "wristwatches",
+    "name": "Dark Bracelet Watch with Copper-Tone Markers",
+    "nameAr": "ساعة بسوار داكن ومؤشرات نحاسية",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-gold-tone-dual-display",
+    "sku": "LT-WATCH-018",
+    "category": "wristwatches",
+    "name": "Gold-Tone Dual-Display Bracelet Watch",
+    "nameAr": "ساعة ذهبية بعرض مزدوج وسوار معدني",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-gold-tone-three-subdial-black-strap",
+    "sku": "LT-WATCH-019",
+    "category": "wristwatches",
+    "name": "Gold-Tone Three-Subdial Watch with Black Strap",
+    "nameAr": "ساعة ذهبية بثلاثة أقراص فرعية وسوار أسود",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-gold-tone-fluted-day-date",
+    "sku": "LT-WATCH-020",
+    "category": "wristwatches",
+    "name": "Gold-Tone Day-Date Watch with Fluted Bezel",
+    "nameAr": "ساعة ذهبية بعرض اليوم والتاريخ وإطار مخدد",
+    "brand": "",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  },
+  {
+    "id": "lattafa-sakeena-edp-100ml",
+    "sku": "LT-SCENT-015",
+    "category": "perfumes",
+    "name": "Lattafa Sakeena Eau de Parfum · 100 ml",
+    "nameAr": "لطافة سكينة، أو دو بارفان، 100 مل",
+    "brand": "Lattafa",
+    "description": "A fruity floral fragrance with passion fruit and mandarin, a floral heart and a praline, toffee and vanilla base.",
+    "price": null
+  },
+  {
+    "id": "wristwatch-naviforce-black-silver-subdials",
+    "sku": "LT-WATCH-021",
+    "category": "wristwatches",
+    "name": "Naviforce Black Chronograph with Silver Subdials",
+    "nameAr": "ساعة نافيفورس كرونوغراف سوداء بأقراص فرعية فضية",
+    "brand": "Naviforce",
+    "description": "Ask the store to confirm the model, movement and finish before ordering.",
+    "price": null
+  }
+]

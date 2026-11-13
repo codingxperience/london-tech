@@ -541,9 +541,8 @@ export function Checkout() {
               <div className="collection-address">
                 <MapPin size={18} />
                 <p>
-                  {settings.address ||
-                    t("Collection details will be confirmed by the store.")}
-                  {settings.hours && <small>{settings.hours}</small>}
+                  {t(settings.address || "Collection details will be confirmed by the store.")}
+                  {settings.hours && <small>{t(settings.hours)}</small>}
                 </p>
               </div>
             ) : (

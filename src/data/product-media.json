@@ -1489,5 +1489,17 @@
       "src": "/assets/product-gallery/lt-kg56-bluetooth-neckband-headset-box-front.webp",
       "alt": "Front of the KG56 retail box, showing the black neckband and angular controls"
     }
+  ],
+  "lattafa-sakeena-edp-100ml": [
+    {
+      "src": "/assets/product-gallery/lattafa-sakeena-1.png",
+      "alt": "Lattafa Sakeena 100 ml bottle",
+      "source": "https://www.lattafa-usa.com/products/sakeena"
+    },
+    {
+      "src": "/assets/product-gallery/lattafa-sakeena-2.png",
+      "alt": "Lattafa Sakeena bottle and box",
+      "source": "https://www.lattafa-usa.com/products/sakeena"
+    }
   ]
 }

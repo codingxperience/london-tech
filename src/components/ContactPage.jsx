@@ -41,7 +41,7 @@ export function ContactPage() {
         >
           <div className="contact-location">
             <h2>{t("Visit the shop")}</h2>
-            <p className="contact-address">{settings.address}</p>
+            <p className="contact-address">{t(settings.address)}</p>
             <a className="button" href={maps} target="_blank" rel="noreferrer">
               {t("Get directions")} <ArrowUpRight size={16} />
             </a>
@@ -66,7 +66,7 @@ export function ContactPage() {
             <div>
               <h2>{t("Opening hours")}</h2>
               <p>
-                {settings.hours || t("Please call to confirm before you visit.")}
+                {t(settings.hours || "Please call to confirm before you visit.")}
               </p>
             </div>
           </div>

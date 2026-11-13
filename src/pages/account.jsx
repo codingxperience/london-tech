@@ -728,7 +728,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           <div className="order-detail-item" key={i}>
             <img src={p.image} alt="" />
             <span>
-              <a href={productPath(p)}>{p.name}</a>
+              <a href={productPath(p)}>{t(p.name)}</a>
               <small>
                 {[p.option, p.color].filter(Boolean).join(" · ")} · {t("Qty")}{" "}
                 {p.quantity}
@@ -770,7 +770,7 @@ function OrderDetail({ order: o, loaded, reload }) {
           <p>
             {o.fulfillment === "delivery"
               ? o.customer.address + ", " + o.customer.district
-              : settings.address}
+              : t(settings.address)}
           </p>
         </section>
         <section className="form-card">

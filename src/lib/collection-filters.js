@@ -50,14 +50,14 @@ export function scopeCollection(products, category) {
   return active.filter((p) => p.category === category)
 }
 
-export function selectCollection(products, filters) {
+export function selectCollection(products, filters, translate = (value) => value) {
+  const query = filters.query.trim().toLowerCase()
   return products
     .filter(
       (product) =>
-        (!filters.query.trim() ||
-          `${product.name} ${product.brand} ${product.sku}`
-            .toLowerCase()
-            .includes(filters.query.trim().toLowerCase())) &&
+        (!query ||
+          [product.name, translate(product.name), product.brand, product.sku]
+            .some((value) => value?.toLowerCase().includes(query))) &&
         (!filters.brands.length || filters.brands.includes(product.brand)) &&
         (!filters.inStock || product.stock > 0) &&
         (filters.min === "" ||

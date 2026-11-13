@@ -26,7 +26,7 @@ import {
   MapPin,
   Trash2,
   Heart,
-  ShoppingCart,
+  Plus,
 } from "lucide-react"
 
 import { useStore, cartKey, navigate } from "../store.jsx"
@@ -34,7 +34,6 @@ import { galleryImages } from "../lib/product-experience.js"
 import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
 import { ProductPhotoPlaceholder } from "./ProductPhotoPlaceholder.jsx"
 import { CardPrices } from "./CardPrices.jsx"
-import { WhatsAppIcon } from "./WhatsAppIcon.jsx"
 import { useLocale } from "../lib/locale.jsx"
 
 import {
@@ -83,7 +82,6 @@ export function ProductCard({ product: p, detailed = false }) {
   const wished = wishlist.includes(p.id)
   const added = cart.some((line) => line.id === p.id)
   const hasVariants = Boolean(p.options?.length || p.colors?.length)
-  const message = encodeURIComponent(`Hello London Tech, I’m interested in ${p.name}.`)
 
   return (
     <article className={"product-card pcard home-product-card" + (detailed ? " detailed-product-card" : "")}>
@@ -91,7 +89,7 @@ export function ProductCard({ product: p, detailed = false }) {
         className={`home-product-wishlist${wished ? " selected" : ""}`}
         type="button"
         aria-pressed={wished}
-        aria-label={t(wished ? "Remove {name} from wishlist" : "Save {name} to wishlist", { name: p.name })}
+        aria-label={t(wished ? "Remove {name} from wishlist" : "Save {name} to wishlist", { name: t(p.name) })}
         onClick={() => toggleWish(p.id)}
       >
         <Heart size={17} fill={wished ? "currentColor" : "none"} aria-hidden="true" />
@@ -106,32 +104,24 @@ export function ProductCard({ product: p, detailed = false }) {
         </a>
       </div>
       <div className="product-card-copy home-product-copy">
-        <h3><a href={href}>{p.name}</a></h3>
+        <h3><a href={href}>{t(p.name)}</a></h3>
         <div className="product-card-bottom">
           <CardPrices product={p} />
+          <IconButton
+            label={t(p.stock === 0 ? "{name} is out of stock" : hasVariants ? "Choose options for {name}" : added ? "Add another {name} to cart" : "Add {name} to cart", { name: t(p.name) })}
+            onClick={() => hasVariants ? navigate(href) : addCart(p)}
+            disabled={p.stock === 0}
+            className="card-add-button"
+          >
+            <Plus size={18} aria-hidden="true" />
+          </IconButton>
         </div>
       </div>
-      <div className="home-product-actions">
-        <a
-          className="home-product-chat"
-          href={`https://wa.me/256788341111?text=${message}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={t("Ask about {name} on WhatsApp", { name: p.name })}
-        >
-          <WhatsAppIcon size={16} />
-          <span>{t("Chat")}</span>
+      <div className="card-product-meta">
+        <a className="card-detail-link" href={href}>
+          {t("View details")}
+          <ArrowRight size={14} aria-hidden="true" />
         </a>
-        <button
-          className="home-product-add"
-          type="button"
-          disabled={p.stock === 0}
-          onClick={() => hasVariants ? navigate(href) : addCart(p)}
-          aria-label={t(p.stock === 0 ? "{name} is out of stock" : hasVariants ? "Choose options for {name}" : added ? "Add another {name} to cart" : "Add {name} to cart", { name: p.name })}
-        >
-          <ShoppingCart size={15} aria-hidden="true" />
-          <span>{p.stock === 0 ? t("Out of stock") : hasVariants ? t("Choose options") : added ? t("Added") : t("Add to cart")}</span>
-        </button>
       </div>
     </article>
   )
@@ -172,7 +162,7 @@ export function SearchDialog() {
   const results = query.trim()
     ? products
         .filter((p) =>
-          (p.name + " " + p.brand + " " + categoryName(p.category))
+          [p.name, t(p.name), p.brand, categoryName(p.category), t(categoryName(p.category))].join(" ")
             .toLowerCase()
             .includes(query.toLowerCase()),
         )
@@ -203,7 +193,7 @@ export function SearchDialog() {
             <img src={p.image} alt="" />
             <span>
               <small>{p.brand}</small>
-              <strong>{p.name}</strong>
+              <strong>{t(p.name)}</strong>
             </span>
             <CardPrices product={p} />
             <ArrowRight size={15} />

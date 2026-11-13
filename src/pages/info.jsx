@@ -42,7 +42,7 @@ function DefaultInfo({ page }) {
       sections: [
         [
           "Store collection",
-          `Arrange collection from ${settings.address}. Keep your order reference ready and call the store to confirm when your items are ready. Payment confirmation alone does not mean an item is ready for collection.`,
+          `Arrange collection from ${t(settings.address)}. Keep your order reference ready and call the store to confirm when your items are ready. Payment confirmation alone does not mean an item is ready for collection.`,
         ],
         [
           "Delivery arrangements",
@@ -202,7 +202,7 @@ function DefaultInfo({ page }) {
         ))}
         <section>
           <h2>{t("Talk to London Tech.")}</h2>
-          <p>{settings.address}</p>
+          <p>{t(settings.address)}</p>
           <a className="text-link" href={phoneLink(settings.phone)}>
             <Phone size={15} />
             {settings.phone}

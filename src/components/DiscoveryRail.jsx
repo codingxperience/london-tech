@@ -3,7 +3,8 @@ import { ChevronRight } from "lucide-react"
 import { useLocale } from "../lib/locale.jsx"
 
 export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
-  const { t } = useLocale()
+  const { t, language } = useLocale()
+  const rtl = language === "ar"
   const rail = useRef(null)
   const [canAdvance, setCanAdvance] = useState(false)
   const count = React.Children.count(children)
@@ -12,13 +13,9 @@ export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
     if (!element) return
     element.scrollLeft = 0
     const measure = () => {
-      const rtl = getComputedStyle(element).direction === "rtl"
-      const items = [...element.children]
-      const edge = items.at(-1)?.getBoundingClientRect()
-      const bounds = element.getBoundingClientRect()
-      setCanAdvance(
-        rtl ? Boolean(edge && edge.left < bounds.left - 2) : Boolean(edge && edge.right > bounds.right + 2),
-      )
+      const remaining =
+        element.scrollWidth - element.clientWidth - Math.abs(element.scrollLeft)
+      setCanAdvance(remaining > 2)
     }
     measure()
     const observer =
@@ -31,11 +28,10 @@ export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
       window.removeEventListener("resize", measure)
       element.removeEventListener("scroll", measure)
     }
-  }, [resetKey, count])
+  }, [resetKey, count, rtl])
   const move = (direction = 1) => {
     const element = rail.current
     if (!element) return
-    const rtl = getComputedStyle(element).direction === "rtl"
     element.scrollBy({
       left: direction * (rtl ? -1 : 1) * Math.max(150, element.clientWidth * 0.8),
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -51,17 +47,18 @@ export function DiscoveryRail({ id, labelledBy, resetKey, children }) {
         ref={rail}
         role="tabpanel"
         aria-labelledby={labelledBy}
+        dir={rtl ? "rtl" : "ltr"}
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.target !== event.currentTarget) return
           if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
             event.preventDefault()
-            move(event.key === "ArrowRight" ? 1 : -1)
+            move((event.key === "ArrowRight") !== rtl ? 1 : -1)
           }
           if (event.key === "Home" || event.key === "End") {
             event.preventDefault()
             event.currentTarget.scrollLeft =
-              event.key === "Home" ? 0 : event.currentTarget.scrollWidth
+              event.key === "Home" ? 0 : (rtl ? -1 : 1) * event.currentTarget.scrollWidth
           }
         }}
       >

@@ -8,6 +8,8 @@ import React, {
 import { readStorage, writeStorage } from "./api.js"
 import { displayNumber, setNumberDisplay } from "./number-format.js"
 import "../locale.css"
+import catalogueNames from "../data/catalogue-ar.json" with { type: "json" }
+import missingInventory from "../data/stockroom-missing.json" with { type: "json" }
 
 const preferenceKey = "lt.locale.v1"
 const arabic = {
@@ -975,6 +977,26 @@ Object.assign(arabic, {
   "Your wishlist.": "قائمة أمنياتك.",
   "Payment methods: cash on delivery, MTN Mobile Money, Airtel Money and Visa": "طرق الدفع: الدفع نقداً عند الاستلام، وMTN Mobile Money، وAirtel Money، وVisa",
 })
+Object.assign(arabic, {
+  "Hot deals, while they last.": "عروض مميزة حتى نفاد الكمية.",
+  "Your cart, wishlist, comparison list and recently viewed products are stored in your browser. A secure session cookie keeps you signed in. A random daily browser identifier helps count storefront visits once per day, without storing the pages you view. Browser Do Not Track and Global Privacy Control preferences are respected. You can clear browser storage or sign out using your account menu.": "تُحفظ سلة التسوق وقائمة الأمنيات وقائمة المقارنة والمنتجات التي شاهدتها مؤخراً في متصفحك. يحافظ ملف تعريف ارتباط آمن على تسجيل دخولك. يساعد معرّف عشوائي للمتصفح في إحصاء زيارة واحدة يومياً من دون حفظ الصفحات التي تتصفحها. نحترم إعدادات عدم التتبع والتحكم العالمي في الخصوصية. يمكنك مسح بيانات المتصفح أو تسجيل الخروج من قائمة حسابك.",
+  "Find your next everyday essential.": "اختر هاتفك للاستخدام اليومي.",
+  "Create, read and take it all with you.": "أنجز أعمالك واقرأ أينما ذهبت.",
+  "A little more music. A little less noise.": "موسيقى أكثر وضجيج أقل.",
+  "Explore watches for everyday wear.": "تصفح ساعات اليد للاستخدام اليومي.",
+  "The details that bring it together.": "ملحقات تكمل أجهزتك.",
+  "Fragrance for every day and every occasion.": "عطور لكل يوم ولكل مناسبة.",
+  "Arua Park, NYUMBA KUBUA building, second floor, shop FN:19": "أروى بارك، مبنى نيومبا كوبوا، الطابق الثاني، المتجر FN:19",
+  "A fruity floral fragrance with passion fruit and mandarin, a floral heart and a praline, toffee and vanilla base.": "عطر زهري فاكهي بفاكهة العاطفة واليوسفي، وقلب زهري وقاعدة من البرالين والتوفي والفانيليا.",
+  "Check your exact phone model with the store before ordering.": "تحقق من طراز هاتفك مع المتجر قبل الطلب.",
+  "Ask the store to confirm the model, movement and finish before ordering.": "اطلب من المتجر تأكيد الطراز وآلية الحركة والتشطيب قبل الطلب.",
+  "The package is marked 35 W. Ask the store to confirm the plug and charging output before ordering.": "تحمل العبوة ملصق 35 واط. تحقق من نوع القابس وقدرة الشحن مع المتجر قبل الطلب.",
+  "A two-pin USB-C adapter and a USB-C cable are shown on the package. Ask the store to confirm the charging output.": "تُظهر العبوة محول USB-C بقابس ثنائي وكابل USB-C. تحقق من قدرة الشحن مع المتجر.",
+  "White wireless earbuds with an open-fit design. Ask the store to confirm the model and charging case.": "سماعات أذن لاسلكية بيضاء بتصميم مفتوح. تحقق من الطراز وعلبة الشحن مع المتجر.",
+})
+Object.assign(arabic, catalogueNames)
+for (const { name, nameAr } of missingInventory) arabic[name] = nameAr
+
 const defaults = { language: "en", numberStyle: "latn" }
 const interpolate = (phrase, values = {}) =>
   Object.entries(values).reduce(

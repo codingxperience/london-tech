@@ -373,7 +373,7 @@ export function ProductSections({
               <figure className="detail-campaign">
                 <img
                   src={information.promotion.src}
-                  alt={information.promotion.alt}
+                  alt={t(information.promotion.alt)}
                   loading="lazy"
                   decoding="async"
                 />
@@ -383,7 +383,7 @@ export function ProductSections({
                   </a>
                   {information.video && (
                     <a href={information.video.url} target="_blank" rel="noreferrer">
-                      <PlayCircle size={17} /> {information.video.label}
+                      <PlayCircle size={17} /> {t(information.video.label)}
                     </a>
                   )}
                 </figcaption>
@@ -394,11 +394,11 @@ export function ProductSections({
                   <figure key={image.src}>
                     <img
                       src={image.src}
-                      alt={image.alt}
+                      alt={t(image.alt)}
                       loading="lazy"
                       decoding="async"
                     />
-                    <figcaption>{image.alt}</figcaption>
+                    <figcaption>{t(image.alt)}</figcaption>
                   </figure>
                 ))}
               </div>
@@ -429,8 +429,8 @@ export function ProductSections({
                 <a href={information.video.url} target="_blank" rel="noreferrer">
                   <PlayCircle size={22} />
                   <span>
-                    <strong>{information.video.label}</strong>
-                    <small>{information.video.credit} · {t("Opens in a new tab")}</small>
+                    <strong>{t(information.video.label)}</strong>
+                    <small>{t(information.video.credit)} · {t("Opens in a new tab")}</small>
                   </span>
                   <ArrowUpRight size={18} />
                 </a>
@@ -440,7 +440,7 @@ export function ProductSections({
                   <PlayCircle size={22} />
                   <span>
                     <strong>{network} · {code}</strong>
-                    <small>{credit} · {t("Opens in a new tab")}</small>
+                    <small>{t(credit)} · {t("Opens in a new tab")}</small>
                   </span>
                   <ArrowUpRight size={18} />
                 </a>
@@ -449,7 +449,7 @@ export function ProductSections({
                 <a href={url} key={url} target="_blank" rel="noreferrer">
                   <BookOpen size={22} />
                   <span>
-                    <strong>{label}</strong>
+                    <strong>{t(label)}</strong>
                     <small>
                       {t("Official manufacturer support · opens in a new tab")}
                     </small>
@@ -534,7 +534,7 @@ export function ProductSections({
               </a>
             </div>
             <div className="detail-questions">
-              {buyingQuestions(p, settings).map(([question, answer]) => (
+              {buyingQuestions(p, settings, t).map(([question, answer]) => (
                 <details key={question}>
                   <summary>
                     <CircleHelp size={18} />

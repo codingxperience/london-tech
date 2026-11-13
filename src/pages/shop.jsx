@@ -136,7 +136,7 @@ export function Product({ id }) {
             </a>
             <span>SKU {p.sku}</span>
           </div>
-          <h1>{p.name}</h1>
+          <h1>{t(p.name)}</h1>
           <div className="product-rating">
             {rating ? (
               <>
@@ -467,7 +467,7 @@ export function Compare() {
                     </IconButton>
                     <a href={productPath(p)}>
                       <img src={p.image} alt="" />
-                      <strong>{p.name}</strong>
+                      <strong>{t(p.name)}</strong>
                     </a>
                     <ProductOffer product={p} compact />
                   </th>

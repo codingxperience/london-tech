@@ -163,7 +163,7 @@ export function filterReviews(reviews, rating = "all", sort = "newest") {
     )
 }
 
-export function buyingQuestions(product, settings) {
+export function buyingQuestions(product, settings, t = (phrase, { address } = {}) => address ? phrase.replace("{address}", address) : phrase) {
   const categoryQuestion = {
     mobiles: [
       "Will this phone work with my SIM?",
@@ -206,9 +206,9 @@ export function buyingQuestions(product, settings) {
     [
       "What is the condition and warranty?",
       [
-        product.condition,
-        product.warranty ||
-          "Our team will confirm the condition and any applicable warranty for this item before payment.",
+        t(product.condition || ""),
+        t(product.warranty ||
+          "Our team will confirm the condition and any applicable warranty for this item before payment."),
       ]
         .filter(Boolean)
         .join(". "),
@@ -221,7 +221,7 @@ export function buyingQuestions(product, settings) {
     ],
     [
       "Can I collect my order from the shop?",
-      `Contact us to confirm collection at ${settings.address}. Please wait for the team to confirm availability and that your order is ready.`,
+      t("Contact us to confirm collection at {address}. Please wait for the team to confirm availability and that your order is ready.", { address: t(settings.address) }),
     ],
   ]
 }

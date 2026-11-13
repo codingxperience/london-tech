@@ -180,7 +180,7 @@ function RouterContent({ path }) {
       <div className="commerce-surface">
         {authDialog && (
           <Modal
-            title="Register / Sign in"
+            title={t("Register / Sign in")}
             className="auth-dialog"
             onClose={closeAuth}
           >

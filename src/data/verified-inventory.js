@@ -1,5 +1,6 @@
 import productMedia from "./product-media.json" with { type: "json" }
 import stockroomInventory from "./stockroom-inventory.json" with { type: "json" }
+import missingInventory from "./stockroom-missing.json" with { type: "json" }
 import { productImagePlaceholder } from "../lib/product-image.js"
 
 export const verifiedInventory = [
@@ -177,16 +178,17 @@ export const verifiedInventory = [
   },
 ].map(withCatalogueDefaults)
 
-export const stockroomProducts = stockroomInventory.map(withCatalogueDefaults)
+export const stockroomProducts = [...stockroomInventory, ...missingInventory].map(withCatalogueDefaults)
 
 function withCatalogueDefaults(product) {
-  const gallery = productMedia[product.id].map(({ src }) => src)
+  const gallery = (productMedia[product.id] || []).map(({ src }) => src)
   return {
     inTheBox: "",
+    specifications: [],
     ...product,
     image: gallery[0] || productImagePlaceholder,
     gallery,
-    priceConfirmed: true,
+    priceConfirmed: product.price != null,
     comparePrice: null,
     stock: null,
     active: true,

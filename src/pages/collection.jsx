@@ -54,7 +54,7 @@ export function Collection({ category = "shop" }) {
   const discoveryId = useId()
   const all = scopeCollection(products, category)
   const brands = [...new Set(all.map((p) => p.brand).filter(Boolean))].sort()
-  const filtered = selectCollection(all, filters)
+  const filtered = selectCollection(all, filters, t)
   const pages = Math.max(1, Math.ceil(filtered.length / 12)),
     page = Math.min(filters.page, pages)
   const pageNumbers =
@@ -285,8 +285,8 @@ export function Collection({ category = "shop" }) {
         ]}
       />
       <PageHeading title={t(title)}>
-        {categories.find((item) => item.id === category)?.description ||
-          t("Find the technology that fits your everyday.")}
+        {t(categories.find((item) => item.id === category)?.description ||
+          "Find the technology that fits your everyday.")}
       </PageHeading>
       <section
         className="collection-discovery"
@@ -321,7 +321,7 @@ export function Collection({ category = "shop" }) {
         <DiscoveryRail
           id={discoveryId + "-panel"}
           labelledBy={discoveryId + "-" + discovery}
-          resetKey={discovery}
+          resetKey={category + ":" + discovery}
         >
           {discovery === "recommended"
             ? recommended.map((item) => (
