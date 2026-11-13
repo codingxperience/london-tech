@@ -8,6 +8,8 @@ import { productImagePlaceholder, showProductImageFallback } from "./lib/product
 import { ProductPhotoPlaceholder } from "./components/ProductPhotoPlaceholder.jsx"
 import { StoreFooter } from "./components/StoreFooter.jsx"
 import { CardPrices } from "./components/CardPrices.jsx"
+import { StockAvailability } from "./components/ProductOffer.jsx"
+import { productOffer } from "./lib/offer-details.js"
 import { UtilityBanner } from "./components/UtilityBanner.jsx"
 import { TypewriterText } from "./components/MotionText"
 import { useState, useEffect, type ReactNode } from "react"
@@ -28,7 +30,7 @@ import {
   Gift,
   MapPin,
   Flame,
-  Sparkles,
+  PerfumeBottle,
   Grid3x3,
   LayoutGrid,
   Cpu,
@@ -136,7 +138,7 @@ const CATS: CategoryEntry[] = [
   { name: "Audio · الصوتيات", icon: <Headphones size={14} /> },
   { name: "Wristwatches · ساعات اليد", icon: <Watch size={14} /> },
   { name: "Accessories · الإكسسوارات", icon: <Cable size={14} /> },
-  { name: "Perfumes · العطور", icon: <Sparkles size={14} /> },
+  { name: "Perfumes · العطور", icon: <PerfumeBottle size={14} /> },
 ]
 
 const NAV_LINKS = [
@@ -287,7 +289,7 @@ function ProductCard({ id, showDiscount = false }: { id: string; showDiscount?: 
     .replace(/^0/, "256")
   const message = encodeURIComponent(`Hello London Tech, I have a question about ${item.name} (${item.sku}).`)
   return (
-    <article className="pcard home-product-card">
+    <article className={`pcard home-product-card${showDiscount ? " home-deal-card" : ""}`}>
       <div className="home-product-image">
         <a className="home-product-media-link" href={href} tabIndex={-1} aria-hidden="true">
           {item.image === productImagePlaceholder ? (
@@ -299,7 +301,8 @@ function ProductCard({ id, showDiscount = false }: { id: string; showDiscount?: 
       </div>
       <div className="home-product-copy">
         <h3><a href={href}>{t(item.name)}</a></h3>
-        <CardPrices product={item} showDiscount={showDiscount} />
+        <CardPrices product={item} showDiscount={showDiscount} compact={showDiscount} />
+        {showDiscount && <StockAvailability product={item} />}
         <div className="home-product-actions">
           <button
             className="home-product-add"
@@ -469,11 +472,7 @@ export default function App({
     (product: { id: string }) => product.id === "iphone-17-pro-max-cosmic-orange-512gb",
   )
   const dealProducts = catalogue.filter(
-    (product: any) =>
-      product.active !== false &&
-      product.price != null &&
-      product.comparePrice != null &&
-      product.comparePrice > product.price,
+    (product: any) => product.active !== false && productOffer(product).discounted,
   )
   const visibleDeals =
     dealProducts.length > 0
@@ -513,7 +512,6 @@ export default function App({
         .page-wrap    { display:flex; gap:24px; align-items:flex-start; max-width:1600px; margin:0 auto; padding:24px clamp(16px,3vw,48px); }
         .sidebar-col  { width:200px; flex-shrink:0; }
         .hero-grid    { display:grid; grid-template-columns:minmax(0,1fr) minmax(160px,22%); gap:16px; margin-bottom:20px; }
-        .deals-grid   { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; padding:20px; }
         .products-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; padding:20px; }
         .search-cat   { display:block; }
 
@@ -524,7 +522,6 @@ export default function App({
         @media (max-width:768px) {
           .sidebar-col  { display:none !important; }
           .hero-grid    { grid-template-columns:1fr !important; }
-          .deals-grid   { grid-template-columns:1fr !important; }
           .products-grid{ grid-template-columns:repeat(2,1fr) !important; }
           .search-cat   { display:none !important; }
           .nav-desktop  { display:none !important; }

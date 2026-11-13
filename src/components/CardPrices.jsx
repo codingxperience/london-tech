@@ -7,7 +7,7 @@ import {
 } from "../lib/number-format.js"
 import { productOffer } from "../lib/offer-details.js"
 
-export function CardPrices({ product, showDiscount = false }) {
+export function CardPrices({ product, showDiscount = false, compact = false }) {
   const { t, formatNumber, language } = useLocale()
   const offer = productOffer(product)
   const { price } = offer
@@ -17,15 +17,6 @@ export function CardPrices({ product, showDiscount = false }) {
   return (
     <div className="product-card-prices">
       <strong dir="ltr">{formatShillings(price)}</strong>
-      {offer.guide && <span className="guide-label">{t("Guide price")}</span>}
-      <span dir="ltr" title={t("Estimated equivalent in US dollars")}>
-        {language === "ar"
-          ? `${formatEstimatedDollars(price)} ${t("US dollars")}`
-          : `US ${formatEstimatedDollars(price)}`}
-      </span>
-      <span className="product-card-price-ar" dir="rtl" lang="ar">
-        {formatArabicShillings(price)}
-      </span>
       {showDiscount && offer.discounted && (
         <span className="card-sale-details">
           <del
@@ -36,15 +27,28 @@ export function CardPrices({ product, showDiscount = false }) {
           >
             {formatShillings(offer.originalPrice)}
           </del>
-          <strong
+          <span
             className="card-sale-discount"
             aria-label={t("Discount: {percent} percent", {
               percent: formatNumber(offer.discountPercent),
             })}
           >
             −{formatNumber(offer.discountPercent)}%
-          </strong>
+          </span>
         </span>
+      )}
+      {offer.guide && <span className="guide-label">{t("Guide price")}</span>}
+      {!compact && (
+        <>
+          <span dir="ltr" title={t("Estimated equivalent in US dollars")}>
+            {language === "ar"
+              ? `${formatEstimatedDollars(price)} ${t("US dollars")}`
+              : `US ${formatEstimatedDollars(price)}`}
+          </span>
+          <span className="product-card-price-ar" dir="rtl" lang="ar">
+            {formatArabicShillings(price)}
+          </span>
+        </>
       )}
     </div>
   )

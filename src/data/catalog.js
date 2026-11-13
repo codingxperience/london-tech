@@ -47,7 +47,7 @@ export const categories = [
   {
     id: "perfumes",
     name: "Perfumes",
-    icon: "Sparkles",
+    icon: "PerfumeBottle",
     description: "Fragrance for every day and every occasion.",
   },
 ]

@@ -20,7 +20,7 @@ import {
   Disc3,
   Backpack,
   Luggage,
-  Sparkles,
+  PerfumeBottle,
   ShieldCheck,
   PackageCheck,
   MapPin,
@@ -34,6 +34,7 @@ import { galleryImages } from "../lib/product-experience.js"
 import { productImagePlaceholder, showProductImageFallback } from "../lib/product-image.js"
 import { ProductPhotoPlaceholder } from "./ProductPhotoPlaceholder.jsx"
 import { CardPrices } from "./CardPrices.jsx"
+import { StockAvailability } from "./ProductOffer.jsx"
 import { useLocale } from "../lib/locale.jsx"
 
 import {
@@ -64,7 +65,7 @@ const icons = {
   Disc3,
   Backpack,
   Luggage,
-  Sparkles,
+  PerfumeBottle,
 }
 
 export function CategoryIcon({ category, size = 22 }) {
@@ -74,7 +75,7 @@ export function CategoryIcon({ category, size = 22 }) {
 
 export { PaymentMarks } from "./PaymentMarks.jsx"
 
-export function ProductCard({ product: p, detailed = false }) {
+export function ProductCard({ product: p, detailed = false, showDiscount = false }) {
   const { t } = useLocale()
   const { wishlist, toggleWish, addCart, cart } = useStore()
   const image = galleryImages(p)[0]?.src || p.image
@@ -94,8 +95,8 @@ export function ProductCard({ product: p, detailed = false }) {
       >
         <Heart size={17} fill={wished ? "currentColor" : "none"} aria-hidden="true" />
       </button>
-      <div className="product-card-media home-product-image">
-        <a href={href} className="home-product-media-link" tabIndex={-1} aria-hidden="true">
+      <div className="product-card-media">
+        <a href={href} className="collection-card-media-link" tabIndex={-1} aria-hidden="true">
           {image === productImagePlaceholder ? (
             <ProductPhotoPlaceholder category={p.category} />
           ) : (
@@ -106,7 +107,7 @@ export function ProductCard({ product: p, detailed = false }) {
       <div className="product-card-copy home-product-copy">
         <h3><a href={href}>{t(p.name)}</a></h3>
         <div className="product-card-bottom">
-          <CardPrices product={p} />
+          <CardPrices product={p} showDiscount={showDiscount} />
           <IconButton
             label={t(p.stock === 0 ? "{name} is out of stock" : hasVariants ? "Choose options for {name}" : added ? "Add another {name} to cart" : "Add {name} to cart", { name: t(p.name) })}
             onClick={() => hasVariants ? navigate(href) : addCart(p)}
@@ -118,6 +119,7 @@ export function ProductCard({ product: p, detailed = false }) {
         </div>
       </div>
       <div className="card-product-meta">
+        {showDiscount && <StockAvailability product={p} />}
         <a className="card-detail-link" href={href}>
           {t("View details")}
           <ArrowRight size={14} aria-hidden="true" />
@@ -127,11 +129,11 @@ export function ProductCard({ product: p, detailed = false }) {
   )
 }
 
-export function ProductGrid({ products, detailed = false }) {
+export function ProductGrid({ products, detailed = false, showDiscount = false }) {
   return (
     <div className="product-grid">
       {products.map((p) => (
-        <ProductCard key={p.id} product={p} detailed={detailed} />
+        <ProductCard key={p.id} product={p} detailed={detailed} showDiscount={showDiscount} />
       ))}
     </div>
   )

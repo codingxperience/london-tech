@@ -1,3 +1,5 @@
+import { productOffer } from "./offer-details.js"
+
 const sorts = ["featured", "name", "price-low", "price-high"]
 const price = (value) =>
   value !== "" &&
@@ -44,9 +46,7 @@ export function scopeCollection(products, category) {
   if (category === "samsung-galaxy-ultra-london")
     return active.filter((p) => /Galaxy.*Ultra/i.test(p.name))
   if (category === "hot-deals")
-    return active.filter(
-      (p) => p.price != null && p.comparePrice != null && p.comparePrice > p.price,
-    )
+    return active.filter((p) => productOffer(p).discounted)
   return active.filter((p) => p.category === category)
 }
 
