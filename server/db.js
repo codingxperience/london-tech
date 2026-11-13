@@ -10,6 +10,8 @@ import {
   adoptReferenceDetails,
   adoptReferencePrices,
   adoptStockroomCategories,
+  adoptStockroomGuidePrices,
+  adoptStockroomPhotos,
   adoptStockedPhones,
   adoptStockroomDetails,
   repairSeedCatalogue,
@@ -228,6 +230,8 @@ async function initialize() {
   await adoptReferenceDetails(db)
   await adoptStockedPhones(db)
   await adoptStockroomDetails(db)
+  await adoptStockroomPhotos(db)
+  await adoptStockroomGuidePrices(db)
   await adoptCataloguePrices(db)
   await adoptStockroomCategories(db)
   await retireUnlistedSeedProducts(db)

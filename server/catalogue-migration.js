@@ -8,6 +8,7 @@ import {
 } from "../src/data/catalog.js"
 import { cataloguePriceDefaults } from "../src/data/prices.js"
 import { stockroomProducts, verifiedInventory } from "../src/data/verified-inventory.js"
+import { productImagePlaceholder } from "../src/lib/product-image.js"
 import {
   referenceProducts,
   retiredReferenceSkus,
@@ -119,6 +120,55 @@ export async function adoptStockroomDetails(db) {
         )
       }
     }
+  })
+}
+
+/** Add supplied stockroom photos only where the database still has no photo. */
+export async function adoptStockroomPhotos(db) {
+  const listings = stockroomProducts
+    .filter(({ image, gallery }) => image !== productImagePlaceholder && gallery?.length)
+    .map(({ id, sku, image, gallery }) => ({ id, sku, image, gallery }))
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      "INSERT INTO catalogue_migrations(version) VALUES($1) ON CONFLICT DO NOTHING RETURNING version",
+      ["2026-11-13-stockroom-product-photos"],
+    )
+    if (!marker.rows.length) return 0
+    const result = await tx.query(
+      `UPDATE products AS p
+       SET data=p.data || jsonb_build_object('image', item.image, 'gallery', item.gallery), updated_at=NOW()
+       FROM jsonb_to_recordset($1::jsonb) AS item(id text, sku text, image text, gallery jsonb)
+       WHERE p.id=item.id AND p.data->>'sku'=item.sku AND p.data->>'active'='true'
+         AND (p.data->>'image' IS NULL OR p.data->>'image'=$2)
+         AND (p.data->'gallery' IS NULL OR p.data->'gallery'='[]'::jsonb)`,
+      [JSON.stringify(listings), productImagePlaceholder],
+    )
+    return result.affectedRows ?? result.rowCount
+  })
+}
+
+/** Fill blank prices with researched, unconfirmed stockroom guide prices. */
+export async function adoptStockroomGuidePrices(db) {
+  const listings = stockroomProducts
+    .filter(({ price, priceConfirmed }) => price != null && priceConfirmed === false)
+    .map(({ id, sku, price }) => ({ id, sku, price }))
+  return db.transaction(async (tx) => {
+    const marker = await tx.query(
+      "INSERT INTO catalogue_migrations(version) VALUES($1) ON CONFLICT DO NOTHING RETURNING version",
+      ["2026-11-13-stockroom-guide-prices"],
+    )
+    if (!marker.rows.length) return 0
+    const result = await tx.query(
+      `UPDATE products AS p
+       SET data=p.data || jsonb_build_object('price', listing.price, 'priceConfirmed', false), updated_at=NOW()
+       FROM jsonb_to_recordset($1::jsonb) AS listing(id text, sku text, price integer)
+       WHERE p.id=listing.id AND p.data->>'sku'=listing.sku
+         AND p.data->>'active'='true' AND p.data->>'priceConfirmed'='false'
+         AND (p.data->>'price' IS NULL OR p.data->>'price'=listing.price::text)
+         AND p.data->>'comparePrice' IS NULL`,
+      [JSON.stringify(listings)],
+    )
+    return result.affectedRows ?? result.rowCount
   })
 }
 

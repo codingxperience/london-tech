@@ -5,9 +5,27 @@ import { productImagePlaceholder } from "./product-image.js"
 const before = new Map(legacyProducts.map((product) => [product.id, product]))
 const after = new Map(products.map((product) => [product.id, product]))
 const same = (left, right) => JSON.stringify(left) === JSON.stringify(right)
-export const repairableProductIds = [...new Set([...before.keys(), ...Object.keys(supersededMedia)])]
+
+const stockroomPhotoReplacements = new Map()
+for (const { id, gallery } of products) {
+  const replacements = new Map()
+  for (const src of gallery || []) {
+    const match = src.match(/^\/assets\/stockroom\/white\/([^/]+)-white(-v2)?\.jpg$/)
+    if (!match) continue
+    const [, stem, revised] = match
+    replacements.set(`/assets/stockroom/${stem}.jpeg`, src)
+    if (revised) replacements.set(`/assets/stockroom/white/${stem}-white.jpg`, src)
+  }
+  if (replacements.size) stockroomPhotoReplacements.set(id, replacements)
+}
+
+export const repairableProductIds = [...new Set([
+  ...before.keys(), ...Object.keys(supersededMedia), ...stockroomPhotoReplacements.keys(),
+])]
 
 export function repairCatalogueImage(id, src) {
+  const whitePhoto = stockroomPhotoReplacements.get(id)?.get(src)
+  if (whitePhoto) return whitePhoto
   if (supersededMedia[id]?.includes(src))
     return after.get(id)?.image || productImagePlaceholder
   return src || productImagePlaceholder
@@ -15,6 +33,13 @@ export function repairCatalogueImage(id, src) {
 
 /** Repair only the repository's known seed media; actual merchant edits win. */
 export function repairCatalogueMedia(product) {
+  const replacements = stockroomPhotoReplacements.get(product.id)
+  if (replacements) {
+    const image = replacements.get(product.image) ?? product.image
+    const gallery = product.gallery?.map((src) => replacements.get(src) ?? src)
+    if (image !== product.image || gallery?.some((src, index) => src !== product.gallery[index]))
+      return { ...product, image, gallery }
+  }
   const previous = before.get(product.id)
   const current = after.get(product.id)
   const obsolete = supersededMedia[product.id]

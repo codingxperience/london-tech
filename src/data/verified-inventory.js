@@ -188,7 +188,7 @@ function withCatalogueDefaults(product) {
     ...product,
     image: gallery[0] || productImagePlaceholder,
     gallery,
-    priceConfirmed: product.price != null,
+    priceConfirmed: product.priceConfirmed ?? (product.price != null),
     comparePrice: null,
     stock: null,
     active: true,

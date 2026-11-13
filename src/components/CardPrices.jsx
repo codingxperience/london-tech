@@ -17,6 +17,7 @@ export function CardPrices({ product, showDiscount = false }) {
   return (
     <div className="product-card-prices">
       <strong dir="ltr">{formatShillings(price)}</strong>
+      {offer.guide && <span className="guide-label">{t("Guide price")}</span>}
       <span dir="ltr" title={t("Estimated equivalent in US dollars")}>
         {language === "ar"
           ? `${formatEstimatedDollars(price)} ${t("US dollars")}`
