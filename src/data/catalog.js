@@ -5,7 +5,7 @@ import launchOffers from "./launch-offers.json" with { type: "json" }
 import { onRequestPhoneIds, stockedPhones, stockedPhoneDetails } from "./phone-stock.js"
 import { stockroomProducts, verifiedInventory } from "./verified-inventory.js"
 
-import { cataloguePriceDefaults, guidePrices } from "./prices.js"
+import { cataloguePriceDefaults, guidePrices, phoneGuidePrices } from "./prices.js"
 import { formatShillings } from "../lib/number-format.js"
 
 export const categories = [
@@ -421,7 +421,7 @@ export const phoneProducts = stockedPhones.map(({ id }) => {
     stockedPhoneDetails.get(id)
   const previous = previousPhones.get(id)
   return {
-    price: null,
+    price: phoneGuidePrices[id] ?? null,
     priceConfirmed: false,
     comparePrice: null,
     stock: null,

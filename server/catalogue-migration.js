@@ -6,7 +6,7 @@ import {
   products,
   retiredPhoneSkus,
 } from "../src/data/catalog.js"
-import { cataloguePriceDefaults } from "../src/data/prices.js"
+import { cataloguePriceDefaults, phoneGuidePrices } from "../src/data/prices.js"
 import { restoredPhoneIds } from "../src/data/phone-stock.js"
 import { stockroomProducts, verifiedInventory } from "../src/data/verified-inventory.js"
 import { productImagePlaceholder } from "../src/lib/product-image.js"
@@ -71,6 +71,13 @@ export async function adoptReferencePrices(db) {
 
 export async function adoptCataloguePrices(db) {
   return fillSeedPrices(db, "2026-11-12-catalogue-prices", missingPrices)
+}
+
+export async function adoptPhoneGuidePrices(db) {
+  const listings = phoneProducts
+    .filter(({ id }) => Object.hasOwn(phoneGuidePrices, id))
+    .map(({ id, sku, price }) => ({ id, sku, price }))
+  return fillSeedPrices(db, "2026-11-13-phone-guide-prices", listings, false)
 }
 
 /** Refresh matching seed listings and keep merchant edits to price, stock and photos. */
@@ -247,7 +254,7 @@ export async function adoptStockroomCategories(db) {
   })
 }
 
-function fillSeedPrices(db, version, listings) {
+function fillSeedPrices(db, version, listings, priceConfirmed = true) {
   return db.transaction(async (tx) => {
     const marker = await tx.query(
       `INSERT INTO catalogue_migrations(version) VALUES($1)
@@ -258,14 +265,14 @@ function fillSeedPrices(db, version, listings) {
 
     const result = await tx.query(
       `UPDATE products AS p
-       SET data=p.data || jsonb_build_object('price', listing.price, 'priceConfirmed', true),
+       SET data=p.data || jsonb_build_object('price', listing.price, 'priceConfirmed', $2::boolean),
            updated_at=NOW()
        FROM jsonb_to_recordset($1::jsonb) AS listing(id text, sku text, price integer)
        WHERE p.id=listing.id AND p.data->>'sku'=listing.sku
          AND p.data->>'active'='true' AND p.data->>'priceConfirmed'='false'
-         AND (p.data->>'price' IS NULL OR p.data->>'price'=listing.price::text)
+         AND (p.data->>'price' IS NULL OR ($2::boolean AND p.data->>'price'=listing.price::text))
          AND p.data->>'comparePrice' IS NULL`,
-      [JSON.stringify(listings)],
+      [JSON.stringify(listings), priceConfirmed],
     )
     return result.affectedRows ?? result.rowCount
   })

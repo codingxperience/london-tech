@@ -108,6 +108,15 @@ export const guidePrices = {
   "dji-pocket-camera": 2650000,
 }
 
+// Guide prices from Uganda retailers. Confirm the store unit before payment.
+export const phoneGuidePrices = {
+  "honor-x9e-pro": 2700000,
+  "galaxy-s24": 2300000,
+  "galaxy-s24-ultra": 2950000,
+  "iphone-14-pro-max": 2550000,
+  "iphone-duo": 14000000,
+}
+
 // UGX prices for previously unpriced listings, based on local retail checks.
 export const cataloguePriceDefaults = {
   "iphone-17-pro-max-cosmic-orange-512gb": 6550000,
